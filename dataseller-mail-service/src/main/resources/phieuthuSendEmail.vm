@@ -1,0 +1,57 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<p>
+    Đây là thư được gửi từ ${userName}. <br/>
+    Chào bạn,<br/>
+    Gần đây VMS đã nhận được yêu cầu lập Phiếu Thu  và đang chờ xác nhận của bạn để xử lý. Bạn vui lòng đăng nhập vào hệ thống của VMS và xử lý phiếu thu này.<br/>
+</p>
+<p>Bên dưới là thông tin chi tiết của phiếu thu đang chờ xử lý:
+<table border="1" class="table">
+    <thead>
+    <tr>
+        <th class="text-left">Số Phiếu Thu</th>
+        <th class="text-center">Phòng Ban</th>
+        <th class="text-left">Người Lập</th>
+        <th class="text-left">Hồ sơ kế toán</th>
+        <th class="text-left">Lý Do Lập</th>
+        <th class="text-left">Mã Tài Khoản Nợ</th>
+        <th class="text-left">Mã Tài Khoản Có</th>
+        <th class="text-left">Số Tiền</th>
+        <th class="text-left">Ngày Lập</th>
+        <th class="text-left">Tình Trạng</th>
+    </tr>
+    </thead>
+        <tr>
+            <td class="text-left">$item.soPhieu</td>
+            <td class="text-center">${phong}</td>
+            <td class="text-left">$item.nguoiLap.displayName</td>
+            <td class="text-left">${hosoketoan}</td>
+            <td class="text-left">$item.lyDo</td>
+            <td class="text-left">$item.maSoTaiKhoanNo.tenTaiKhoan</td>
+            <td class="text-left">$item.maSoTaiKhoanCo.tenTaiKhoan</td>
+            <td class="text-left">${tongtien}</td>
+            <td class="text-left">${ngaylap}</td>
+            <td class="text-left">${tinhTrang}</td>
+        </tr>
+</table>
+    Thông tin nguồn chi phí:
+    <table border="1" class="table">
+        <thead>
+            <th class="text-left">Nguồn chi phí</th>
+            <th class="text-left">Số Tiền</th>
+        </thead>
+        <tbody>
+            #foreach($ncp in $item.accExpenseItemDTOList)
+            <tr>
+                <td class="text-left">${ncp.name}</td>
+                <td class="text-left">${ncp.tienToString}</td>
+            </tr>
+            #end
+        </tbody>
+    </table>
+</p>
+</body>
+</html>

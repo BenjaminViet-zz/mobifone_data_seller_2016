@@ -1,0 +1,79 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<p>
+    Đây là thư được gửi từ ${userName}. <br/>
+    Chào bạn,<br/>
+    Gần đây VMS đã nhận được yêu cầu tạo chứng từ ngân sách nhà nước và đang chờ xác nhận của bạn để xử lý. Bạn vui lòng đăng nhập vào hệ thống của VMS và xử lý chứng từ này.<br/>
+</p>
+<p>Bên dưới là thông tin chi tiết của chứng từ đang chờ xử lý:
+<table border="1" class="table">
+    <tr>
+        <th class="text-left">Người Lập</th>
+        <th class="text-left">Số chứng từ</th>
+        <th class="text-left">Loại chứng từ</th>
+        <th class="text-left">Mã chứng từ</th>
+        <th class="text-left">Số hợp đồng</th>
+        <th class="text-left">Theo thông báo</th>
+        <th class="text-left">Tháng năm thông báo</th>
+        <th class="text-left">Hồ sơ kế toán</th>
+        <th class="text-left">Số tờ khai</th>
+        <th class="text-left">Ngày tờ khai</th>
+        <th class="text-left">Đối tượng nộp tiền</th>
+        <th class="text-left">Địa chỉ</th>
+        <th class="text-left">Đối tượng nộp thuế</th>
+        <th class="text-left">Loại thuế</th>
+        <th class="text-left">Ngân hàng nộp</th>
+        <th class="text-left">Mã số thuế công ty</th>
+        <th class="text-left">Ngân hàng VMS</th>
+        <th class="text-left">Ký hiệu</th>
+        <th class="text-left">Ghi chú</th>
+        <th class="text-left">Tình Trạng</th>
+    </tr>
+    <tr>
+        <td class="text-left">${item.nguoiLap.displayName}</td>
+        <td class="text-left">${item.soChungTu}</td>
+        <td class="text-left">${item.loaiChungTu.name}</td>
+        <td class="text-left">${item.maSo}</td>
+        <td class="text-left">${item.soHopDong}</td>
+        <td class="text-left">${item.theoThongBao}</td>
+        <td class="text-left">${item.thangNamTBtam}</td>
+        <th class="text-left">${hosoketoan}</th>
+        <td class="text-left">${item.soToKhai}</td>
+        <td class="text-left">${item.ngayToKhaitam}</td>
+        <td class="text-left">${item.doiTuongNopTien}</td>
+        <td class="text-left">${item.diaChi}</td>
+        <td class="text-left">${item.msDoiTuongNguoiNopThue.tenDoiTuongNopThue}</td>
+        <td class="text-left">${item.loaiThue}</td>
+        <td class="text-left">${item.msNganHangNop.tenNganHangNop}</td>
+        <td class="text-left">${item.maSoThueCongTy}</td>
+        <td class="text-left">${item.msNganHangVMS.bankName}</td>
+        <td class="text-left">${item.kyHieu}</td>
+        <td class="text-left">${item.ghiChu}</td>
+        <td class="text-left">${tinhTrang}</td>
+    </tr>
+</table>
+Thông tin thuế:
+<table border="1" class="table">
+    <thead>
+    <th class="text-left">Mã số khoản nộp</th>
+    <th class="text-left">Kỳ thuế</th>
+    <th class="text-left">Số tiền</th>
+    <th class="text-left">Tên khoản nộp</th>
+    </thead>
+    <tbody>
+        #foreach($ctcc in $item.listChiTiet)
+            <tr>
+                <td>${ctcc.msKhoanNop.tenKhoanNop}</td>
+                <td>${ctcc.kyThue}</td>
+                <td>${ctcc.soTienToString}</td>
+                <td>${ctcc.tenKhoanNop}</td>
+            </tr>
+        #end
+    </tbody>
+</table>
+</p>
+</body>
+</html>

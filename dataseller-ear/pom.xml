@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- - Copyright 2013 Red Hat Inc. and/or its affiliates and other contributors. 
+	- - Licensed under the Apache License, Version 2.0 (the "License") - you 
+	may not use this file except in compliance with the License. - You may obtain 
+	a copy of the License at - http://www.apache.org/licenses/LICENSE-2.0 - Unless 
+	required by applicable law or agreed to in writing, software - distributed 
+	under the License is distributed on an "AS IS" BASIS, - WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. - See the License for 
+	the specific language governing permissions and - limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.benluck</groupId>
+		<artifactId>mobifone_data_seller_2016_oct</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>dataseller-ear</artifactId>
+	<packaging>ear</packaging>
+	<name>MobiFone Data Seller 2016 Oct - System EAR Module</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.benluck</groupId>
+			<artifactId>dataseller-common</artifactId>
+            <version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.benluck</groupId>
+			<artifactId>dataseller-core</artifactId>
+            <version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+        <dependency>
+            <groupId>com.benluck</groupId>
+            <artifactId>dataseller-mail-service</artifactId>
+            <type>ejb</type>
+            <version>${project.parent.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>com.benluck</groupId>
+			<artifactId>dataseller-core-logic</artifactId>
+            <version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
+        <dependency>
+            <groupId>com.benluck</groupId>
+            <artifactId>dataseller-core-logic-impl</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.benluck</groupId>
+            <artifactId>dataseller-web</artifactId>
+            <type>war</type>
+            <version>${project.version}</version>
+        </dependency>
+	</dependencies>
+	<build>
+        <finalName>dataseller-ear.ear</finalName>
+		<plugins>
+			<plugin>
+
+				<artifactId>maven-ear-plugin</artifactId>
+				<version>${version.ear.plugin}</version>
+				<configuration>
+					<!-- Tell Maven we are using Java EE 6 -->
+					<version>6</version>
+					<!-- Use Java EE ear libraries as needed. Java EE ear libraries are 
+						in easy way to package any libraries needed in the ear, and automatically 
+						have any modules (EJB-JARs and WARs) use them -->
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<modules>
+                        <webModule>
+                            <groupId>com.benluck</groupId>
+                            <artifactId>dataseller-web</artifactId>
+                            <contextRoot>/</contextRoot>
+                        </webModule>
+					</modules>
+                    <applicationXml>
+                        <!--${project.basedir}/src/main/resources/META-INF/application.xml-->
+                    </applicationXml>
+                    <generateApplicationXml>true</generateApplicationXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

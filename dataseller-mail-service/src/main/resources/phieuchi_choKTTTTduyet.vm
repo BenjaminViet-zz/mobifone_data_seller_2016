@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+    <p>
+    Gửi phòng kế toán trưởng,<br/>
+    Gần đây VMS đã nhận được yêu cầu lập Phiếu Chi và đang chờ xác nhận của Kế Toán Trưởng để xử lý. Bạn vui lòng đăng nhập vào hệ thống của VMS và xử lý Phiếu chi này.<br/>
+    </p>
+    <p>Bên dưới là thông tin chi tiết của Phiếu chi đang chờ xử lý:<br/>
+        <table border="1" class="table">
+            <thead>
+            <tr>
+                <th class="text-inline" style="width: 100px;">Số Phiếu Chi</th>
+                <th class="text-center text-inline" style="width: 100px;">Mã Hồ Sơ</th>
+                <th style="width: 100px;">Loại Chi</th>
+                <th class="text-center" style="width: 200px;">Phòng Ban</th>
+                <th style="width: 200px;">Người Lập</th>
+                <th style="width: 300px;">Lý Do Lập</th>
+                <th style="width: 100px;">Mã Tài Khoản Nợ</th>
+                <th style="width: 100px;">Mã Tài Khoản Có</th>
+                <th style="width: 100px;">Số Tiền</th>
+                <th style="width: 100px;">Ngày Lập</th>
+                <th style="width: 250px;">Tình Trạng</th>
+            </tr>
+            </thead>
+            #foreach($item in $items)
+                <tr>
+                    <td>$item.phieuChi.soPhieuChi</td>
+                    <td class="text-center">$item.phieuChi.hoSoKeToan.maHoSo</td>
+                    <td class="text-center">$item.phieuChi.dmLoaiChi.name</td>
+                    <td class="text-center">$item.phieuChi.department.name</td>
+                    <td>$item.phieuChi.nguoiLap.displayName</td>
+                    <td>$item.phieuChi.lyDo</td>
+                    <td>$item.phieuChi.maSoTaiKhoanNo.maTaiKhoan</td>
+                    <td>$item.phieuChi.maSoTaiKhoanCo.maTaiKhoan</td>
+                    <td>$item.phieuChi.soTien</td>
+                    <td>$item.phieuChi.createdDate</td>
+                    <td>Chờ Kế Toán Trưởng duyệt</td>
+                </tr>
+            #end
+        </table>
+    </p>
+</body>
+</html>

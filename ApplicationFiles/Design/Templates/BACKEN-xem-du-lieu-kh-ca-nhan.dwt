@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible"content="IE=edge">
+<meta name="viewport"content="width=device-width, initial-scale=1.0">
+<meta name="description"content="">
+<meta name="author"content="">
+<link rel="shortcut icon" href="file:///D|/Users/lmt/Google Drive/PropertyOnCloud/Tools and Library/Dreameaver Templates/docs-assets/ico/favicon.png">
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Navbar Template for Bootstrap</title>
+<!-- TemplateEndEditable -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"rel='stylesheet' type='text/css'/>
+<link rel="stylesheet" type="text/css" href="css/style-general.css">
+<link rel="stylesheet" type="text/css" href="css/style-mobifone.css">
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js?ver=1.7.2' type='text/javascript'>
+</script>
+<script src='http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js'>
+</script>
+<style>
+<!-- TemplateBeginEditable name="head"-->
+sadsadf
+<!-- TemplateEndEditable -->
+</style>
+
+</head>
+<body class="backen">
+<header class="margin-top-large">
+<div class="container">
+<div class="row">
+<div class="col-md-2">
+<div class="baner text-center">
+<a href="/"><img class="img-responsive img-center" src="images/logo_mobifone.png"></a>
+</div>
+</div>
+<div class="col-md-10">
+<nav class="margin-top-small">
+<ul class=" list-inline text-center ">
+<li class="hidden-xs"><a href="/" class="no-underline text-white">Trang chủ</a></li>
+<li><a href="#" class="no-underline text-white">Thể lệ chương trình</a></li>
+<li><a href="#" class="no-underline text-white">Cách thức đổi vé</a></li>
+<li><a href="#" class="no-underline text-white">Địa điểm đổi vé</a></li>
+<li><a href="#" class="no-underline text-white">Xem điểm/Đổi điểm</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<hr class="pull-left no-margin-top hidden-xs">
+</div>
+</header>
+<section class="content">
+<div class="container">
+<div class="row">
+<div class=" col-sm-offset-4 col-sm-8 col-xs-12">
+  <!-- TemplateBeginEditable name="content"-->
+  áafsfasfsaf
+<!-- TemplateEndEditable -->
+      </div>
+      </div>
+      </div>
+</section>
+<footer>
+<p class="text-center">Copyright 2014 - Mobifone</p>
+</footer>
+</body>
+</html>

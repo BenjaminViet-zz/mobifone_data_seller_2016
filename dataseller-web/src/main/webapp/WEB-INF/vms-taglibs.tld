@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <tlib-version>2.0</tlib-version>
+    <short-name>vms-taglibs</short-name>
+    <uri>http://www.banvien.com/vms-taglibs</uri>
+
+    <function>
+        <name>roundUp</name>
+        <function-class>com.benluck.vms.mobifonedataseller.common.utils.CommonUtil</function-class>
+        <function-signature>java.lang.String roundUp(java.lang.Double,int)</function-signature>
+    </function>
+
+    <function>
+        <name>urlEncode</name>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>encodeURIComponent</name>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-signature>java.lang.String encodeURIComponent(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>decodeURIComponent</name>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-signature>java.lang.String decodeURIComponent(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>decryptPassword</name>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-signature>java.lang.String decryptPassword(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>unEscapeHTML</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.StringUtil</function-class>
+        <function-signature>java.lang.String unEscapeHTML(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>escapeHTML</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.StringUtil</function-class>
+        <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>escapeJS</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.StringUtil</function-class>
+        <function-signature>java.lang.String escapeJS(java.lang.String)</function-signature>
+    </function>
+
+
+    <function>
+        <name>cleanHtmlTags</name>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-signature>java.lang.String cleanHtmlTags(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>replaceLineBreakChar</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.StringUtil</function-class>
+        <function-signature>java.lang.String replaceLineBreakChar(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getAppURL</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.RequestUtil</function-class>
+        <function-signature>java.lang.String getAppURL(javax.servlet.http.HttpServletRequest)</function-signature>
+    </function>
+
+    <function>
+        <name>compare2Double</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.WebCommonUtil</function-class>
+        <function-signature>java.lang.Integer compare2Double(java.lang.Double,java.lang.Double)</function-signature>
+    </function>
+
+    <function>
+        <name>isAlphabet</name>
+        <function-class>com.benluck.vms.mobifonedataseller.common.utils.CommonUtil</function-class>
+        <function-signature>boolean isAlphabet(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>isAndroidTablet</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.MobileUtil</function-class>
+        <function-signature>boolean isAndroidTablet(javax.servlet.ServletRequest)</function-signature>
+    </function>
+
+    <function>
+        <name>convertDateToString</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.MobileUtil</function-class>
+        <function-signature>java.lang.String convertDateToString(java.util.Date,java.lang.String))</function-signature>
+    </function>
+</taglib>

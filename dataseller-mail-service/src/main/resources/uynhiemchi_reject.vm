@@ -1,0 +1,57 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<p>
+    Gửi ${userName} <br/>
+    Gần đây VMS đã nhận được quyết định từ chối
+    #if ($rejectUserRole == "KTTTT")
+        duyệt từ Kế Toán Trưởng
+    #elseif ($rejectUserRole == "BGD")
+        ký từ Ban Giám Đốc
+    #end
+    của Ủy Nhiệm Chi này. Bạn vui lòng đăng nhập vào hệ thống của VMS và thực hiện chỉnh sửa lại Ủy Nhiệm Chi này.<br/>
+</p>
+<p>Bên dưới là thông tin chi tiết của Ủy Nhiệm Chi bị từ chối:<br/>
+    <table border="1" class="table">
+        <thead>
+        <tr>
+            <th class="text-inline" style="width: 100px;">Số Ủy Nhiệm Chi</th>
+            <th class="text-center text-inline" style="width: 100px;">Mã Hồ Sơ</th>
+            <th style="width: 100px;">Loại Chi</th>
+            <th class="text-center" style="width: 200px;">Phòng Ban</th>
+            <th sttyle="width: 300px;">Lý Do Lập</th>
+            <th style="width: 100px;">Mã Tài Khoản Nợ</th>
+            <th style="width: 100px;">Mã Tài Khoản Có</th>
+            <th style="width: 100px;">Số Tiền</th>
+            <th style="width: 100px;">Ngày Lập</th>
+            <th style="width: 100px;">Ngày Bị Từ Chối</th>
+            <th style="width: 300px;">Lý Do Từ Chối</th>
+            <th style="width: 250px;">Tình Trạng</th>
+        </tr>
+        </thead>
+        #foreach($item in $items)
+            <tr>
+                <td>$item.uyNhiemChi.souyNhiemChi</td>
+                <td class="text-center">$item.uyNhiemChi.department.name</td>
+                <td>$item.uyNhiemChi.lyDo</td>
+                <td>$item.uyNhiemChi.maSoTaiKhoanNo.maTaiKhoan</td>
+                <td>$item.uyNhiemChi.maSoTaiKhoanCo.maTaiKhoan</td>
+                <td>$item.uyNhiemChi.soTien</td>
+                <td>$item.uyNhiemChi.createdDate</td>
+                <td>$item.ngayXuLy</td>
+                <td>$item.noiDungXuLy</td>
+                <td>
+                    #if ($rejectUserRole == "KTTTT")
+                        Từ chối duyệt từ Kế Toán Trưởng
+                    #elseif ($rejectUserRole == "BGD")
+                        Từ  chối ký Ban Giám Đốc
+                    #end
+                </td>
+            </tr>
+        #end
+    </table>
+</p>
+</body>
+</html>

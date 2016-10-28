@@ -1,0 +1,66 @@
+.calendar{
+    height: 30px;
+}
+
+#right_navigation_bar li,
+#viewScoreHistoryNavTab li{
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    background: none;
+}
+
+#viewScoreHistoryNavTab li.active{
+    position: relative;
+    bottom: -1px;
+}
+
+.viewScoreContent{
+    padding-top: 10px;
+}
+
+#historyContainer{
+    padding-top: 10px;
+}
+
+/***   Page total  ***/
+.home-total{
+    background:url(/themes/kenhphanphoi/images/bg-total-home-new.jpg) top center;
+    background-size:cover;
+}
+.home-total a{
+    display: inline-block;
+}
+.home-total img{
+    max-height:650px;
+}
+
+.img-canhan{
+    margin:0 0 0 50px;
+}
+
+.text-note{
+    color: red;
+    font-size: 12px;
+}
+
+#khcnLink,
+#kppLink{
+    float: left;
+}
+
+.nowrap{
+    white-space: nowrap;
+}
+
+.auto_break{
+    white-space: pre-line;
+    word-break: break-all;
+}
+.mobifone_slogan{
+    width: 367px;
+    height: 94px;
+    margin: 0px auto;
+    position: relative;
+    top: 100px;
+}

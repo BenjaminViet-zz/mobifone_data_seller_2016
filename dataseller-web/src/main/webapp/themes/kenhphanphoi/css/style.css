@@ -1,0 +1,63 @@
+/* CSS Document */
+h4{
+	color: #63b5f8;}
+.box-border {
+border-radius: 7px;
+}
+.text-white {
+color: white !important;
+}
+.padding-round-small {
+padding: 5px !important;
+}
+.display-inline {
+display: inline-block;
+}
+h1, h2, h3, h4, h5, nav {
+font-family: Tahoma, Geneva, sans-serif;
+}
+h5, .h5 {
+font-size: 16px;
+font-weight:700;
+}
+.example-two {
+  border-radius: 10px;
+  border: 2px solid #428bca;
+  width:100%;
+}
+ul{
+	padding-left:0px;
+}
+ul li{
+	margin: 5px 0;
+background: url(http://1.bp.blogspot.com/-BlXyqO7zxzc/U_Vfsug1tkI/AAAAAAAAC1o/JT5LDgpkAb0/s320/right-arrow.png) left top no-repeat;
+padding: 5px 0 5px 20px;
+list-style:none;
+color:#000;
+font-size:15.5px;
+}
+table ul li{
+	margin-top: 0;
+	padding-top:0;
+}
+p{
+font-size:15.5px;
+}
+@media screen and (max-width:800px) {
+ul li{
+font-size:14px;
+}
+}
+@media screen and (max-width:700px) {
+h1{
+		font-size:21px;
+}
+ul li, ul{
+	margin:0;
+}
+h5, .h5 {
+	margin:10px auto 5px;
+}
+
+
+}

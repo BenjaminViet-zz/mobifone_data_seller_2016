@@ -1,0 +1,1 @@
+deploy ear-assembly.ear --force

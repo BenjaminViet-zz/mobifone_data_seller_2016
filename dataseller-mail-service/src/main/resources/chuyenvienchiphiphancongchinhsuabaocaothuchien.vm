@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css">
+        #maincontent div span.title{
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div id="header" class="clearfix">
+    <div class="center">
+        <div id="branding">
+            <img src="${rootUrl}/themes/images/logo.png"/>
+        </div>
+    </div>
+    <div class="right"></div>
+</div>
+<br /><br />
+<div id="maincontent" style="min-height: 270px; text-align: left; padding-left: 100px;">
+    <div id="content">
+        <div id="main">
+            Xin chào, ${tenNhanVien}.<br/>
+            (Ông/Bà) ${tenChuyenVienChiPhi} đã yêu cầu bạn thực hiện chỉnh sửa lại báo cáo thực hiện tháng ${month} năm ${year}.<br/>
+            Dưới đây là thông tin yêu cầu chỉnh sửa:<br/>
+            <div style="margin-left: 20px;">
+                <strong>${noiDung}</strong>
+            </div><br/>
+            Bạn cần phải login vào hệ thống web chi phí và chỉnh sửa lại báo cáo này theo yêu cầu trước khi Chuyên viên chi phí gửi báo cáo tổng hợp cho lãnh đạo đơn vị xem xét.
+            <br/><br/>
+            Cảm ơn,<br/>
+            VMS Team Service.
+        </div
+        <div class="clearfix"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="core-data" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/MobiFoneDataSellerDS</jta-data-source>
+        <mapping-file>hbm_bk/namedQuery.hbm.xml</mapping-file>
+        <class>com.benluck.vms.mobifonedataseller.domain.VmsUserGroupEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.DepartmentEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.RoleEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.UserEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.UserPasswordEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.VmsUserRoleEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.UserGroupRoleEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.GiftEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.StockAgentEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.GiftDeliveryAgentHistoryEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.GiftDeliveryThueBaoEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.GiftDeliveryThueBaoHistoryEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.ShopCodeChiNhanhEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.ChiNhanhEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.MoneyExchangeBranchEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.MoneyExchangeBranchHistoryEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.GiftAgentTransferHistoryEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.DMChuongTrinhEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.BranchMappingEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.ActionLogEntity</class>
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.default_schema" value="mobifone_data_seller_2016" />
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.default_batch_fetch_size" value="20"/>
+            <property name="hibernate.jdbc.fetch_size" value="20"/>
+            <property name="hibernate.jdbc.batch_size" value="20"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.dialect" value="com.benluck.vms.mobifonedataseller.dialect.VMSOracleDialect"/>
+            <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+            <property name="jboss.entity.manager.jndi.name" value="java:jboss/vmsPromotionEntityManager"/>
+            <property name="jboss.entity.manager.factory.jndi.name" value="java:jboss/vmsPromotionEntityManagerFactory"/>
+
+        </properties>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <validation-mode>CALLBACK</validation-mode>
+    </persistence-unit>
+</persistence>

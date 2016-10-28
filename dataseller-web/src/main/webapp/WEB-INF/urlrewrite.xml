@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<urlrewrite>	
+    <!-- Login URL -->
+    <rule>
+        <from>^/administrator</from>
+        <to type="forward">/login.html?type=0</to>
+    </rule>
+    <rule>
+        <from>^/version</from>
+        <to type="forward">/serverinfo.html</to>
+    </rule>
+
+    <rule>
+        <from>^/@(.*)$</from>
+        <to type="forward">/login.html?curlId=$1</to>
+    </rule>
+
+
+</urlrewrite>
+

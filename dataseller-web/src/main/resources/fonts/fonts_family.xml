@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+     
+    <fontFamily name="Arial">
+        <normal>fonts/arial.ttf</normal>
+        <bold>fonts/arialbd.ttf</bold>
+        <italic>fonts/ariali.ttf</italic>
+        <boldItalic>fonts/arialbi.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <!--
+        <locales>
+            <locale>en_US</locale>
+            <locale>de_DE</locale>
+        </locales>
+        -->
+    </fontFamily>
+    <fontFamily name="SansSerif">
+        <normal>fonts/Aller_Rg.ttf</normal>
+        <bold>fonts/Aller_Bd.ttf</bold>
+        <italic>fonts/Aller_It.ttf</italic>
+        <boldItalic>fonts/Aller_BdIt.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <!--
+        <locales>
+            <locale>en_US</locale>
+            <locale>de_DE</locale>
+        </locales>
+        -->
+    </fontFamily>
+
+    <fontFamily name="Times-Roman">
+        <normal>fonts/times.ttf</normal>
+        <bold>fonts/timesbd.ttf</bold>
+        <italic>fonts/timesi.ttf</italic>
+        <boldItalic>fonts/timesbi.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <!--
+        <locales>
+            <locale>en_US</locale>
+            <locale>de_DE</locale>
+        </locales>
+        -->
+    </fontFamily>
+
+    <fontFamily name="Times New Roman">
+        <normal>fonts/times.ttf</normal>
+        <bold>fonts/timesbd.ttf</bold>
+        <italic>fonts/timesi.ttf</italic>
+        <boldItalic>fonts/timesbi.ttf</boldItalic>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <!--
+        <locales>
+            <locale>en_US</locale>
+            <locale>de_DE</locale>
+        </locales>
+        -->
+    </fontFamily>
+     
+</fontFamilies>

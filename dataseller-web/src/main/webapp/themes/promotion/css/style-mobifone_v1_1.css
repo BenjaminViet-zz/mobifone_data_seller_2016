@@ -1,0 +1,226 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;	
+}
+h1, h2, h3, h4, h5, nav {
+	font-family: Tahoma, Geneva, sans-serif;
+}
+article{
+	background-color: rgba(255,255,255,.6);
+	padding:12px 48px;	
+}
+/********Header - Nav************/
+nav {
+	float: right;
+	margin-top:24px;
+}
+nav li:first-child, .bg-red{
+	background: #e74041;
+}
+nav li:nth-child(2) {
+	background: #8ac041;
+}
+nav li:nth-child(3) {
+	background: #de3285;
+}
+nav li:nth-child(4) {
+	background: #f79422;
+}
+nav li:nth-child(5) {
+	background: #53bbe2;
+}
+nav li:nth-child(6),.bg-blue {
+	background: #39F !important;
+}
+nav li {
+	display: inline-block;
+	text-align: center;
+	-webkit-transform: skew(-20deg);
+	-moz-transform: skew(-20deg);
+	-ms-transform: skew(-20deg);
+	-o-transform: skew(-20deg);
+	transform: skew(-20deg);
+	-webkit-transition: background 0.2s;
+	-moz-transition: background 0.2s;
+	-ms-transition: background 0.2s;
+	-o-transition: background 0.2s;
+	transition: background 0.2s;
+}
+nav li a {
+	display: block;
+	text-decoration: none;
+	padding: 5px 10px;
+	-webkit-transform: skew(20deg) !important;
+	-moz-transform: skew(20deg) !important;
+	-ms-transform: skew(20deg) !important;
+	-o-transform: skew(20deg) !important;
+	transform: skew(20deg) !important;
+	font-weight:bold;
+	font-size:15px;
+}
+nav li:hover {
+	background: #025091;	
+}
+nav li a:hover {
+	opacity:1;
+}
+nav li.active{
+	background-color: white !important;		
+}
+nav li.active a{
+	color: black !important;
+}
+header hr {
+	width: 99.2%;
+	border-top: 1px solid #c3c3bb;
+}
+nav li.active a{
+	opacity:1;
+	
+}
+.banner img{
+	min-width:150px;
+}
+/*********Body***********/
+.bg-blue a:hover{
+	color: black !important;	
+}
+.container{
+	max-width:1150px;
+}
+/*********Footer***********/
+footer {
+	background: rgba(255,255,255,1);
+	padding: 16px 0 4px;
+	color: #979185;
+}
+footer img{
+	position:fixed;
+	bottom:10px;
+	right:10px;
+	z-index:9;
+}
+/***Home page***/
+.home-page {
+	background: url(../images/2-bg-home-desktop-768.jpg) top center no-repeat;
+	background-size:cover;
+}
+.content {
+	position: relative;
+	min-height:650px;
+}
+.img-left {
+	position: absolute;
+	top: 0;
+}
+/***Home page***/
+.sub-page {
+	background: url(../images/bg.jpg) top center no-repeat;
+	background-size:cover;
+}
+.maincolor{
+	color:#0060af;
+}
+.bg-maincolor{
+	background:#63b5f8;
+}
+.backround-red{
+	background:red;
+	border-radius:8px;
+}
+/******Backen*********/
+.calendar{
+	width:30px;
+	display:inline-block
+}
+.nav .active a, .nav .active a:hover{
+	background-color:rgba(255,255,255,.3);
+}
+@media screen and (max-width:1200px) {
+nav li a {
+	font-size:14px;
+}
+nav {
+	margin-top:12px;
+}
+
+.sub-page {
+	background-size: auto;
+}
+}
+@media screen and (max-width:800px) {
+header hr {
+	width: 94%;
+	margin-left: 14px;
+}
+nav {
+	float: none;
+}
+nav li a {
+font-weight:500;
+}
+.home-page {
+	background: url(../images/2-bg-home-tablet-doc.jpg) top center no-repeat;
+}
+.content {
+	min-height:805px;
+}
+}
+@media screen and (max-width:700px) {
+	article{
+	padding:1px 8px;
+	margin-top:5px;	
+}
+nav ul {
+	margin-left: 0;
+}
+nav li {
+	display: inline-block;
+	text-align: center;
+	width: 49%;
+	margin: 2px 0.3% !important;
+	-webkit-transform: skew(0deg);
+	-moz-transform: skew(0deg);
+	-ms-transform: skew(0deg);
+	-o-transform: skew(0deg);
+	transform: skew(0deg);
+}
+nav li a {
+	display: block;
+	text-decoration: none;
+	padding: 5px 10px;
+	font-size: 12px;
+	-webkit-transform: skew(0deg) !important;
+	-moz-transform: skew(0deg) !important;
+	-ms-transform: skew(0deg) !important;
+	-o-transform: skew(0deg) !important;
+	transform: skew(0deg) !important;
+}
+header {
+	margin-top: 12px !important;
+}
+header .baner {
+	text-align: left !important;
+}
+header img {
+	max-width: 100px !important;
+}
+.content {
+min-height: 420px;
+}
+.sub-page {
+	background: url(../images/bg-sub-mobile.jpg) top center no-repeat;
+}
+}
+@media screen and (max-width:582px) {
+nav li {
+	margin: 2px 0.1% !important;
+}
+.home-page {
+	background: url(../images/2-bg-mobile-home.jpg) top center no-repeat;
+}
+}
+@media screen and (max-width:360px) {
+ nav li {
+ margin: 2px 0 !important;
+}
+}

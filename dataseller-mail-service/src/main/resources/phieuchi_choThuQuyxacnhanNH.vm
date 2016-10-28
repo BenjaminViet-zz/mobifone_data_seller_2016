@@ -1,0 +1,39 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<p>
+    Gửi Thủ Quỹ Trung Tâm,<br/>
+    Gần đây VMS đã nhận được yêu cầu lập Phiếu Chi và đang chờ xác nhận Ngân Hàng của Thủ Quỹ để hoàn tất quy trình xử lý phiếu chi này. Bạn vui lòng đăng nhập vào hệ thống của VMS và xác nhận lại.<br/>
+</p>
+<p>Bên dưới là thông tin chi tiết của Phiếu chi đang chờ xác nhận Ngân hàng:<br/>
+    <table border="1" class="table">
+        <thead>
+        <tr>
+            <th class="text-inline" style="width: 100px;">Số Phiếu Chi</th>
+            <th class="text-center text-inline" style="width: 100px;">Mã Hồ Sơ</th>
+            <th style="width: 100px;">Loại Chi</th>
+            <th class="text-center" style="width: 200px;">Phòng Ban</th>
+            <th style="width: 100px;">Mã Tài Khoản Nợ</th>
+            <th style="width: 100px;">Mã Tài Khoản Có</th>
+            <th style="width: 100px;">Số Tiền</th>
+            <th style="width: 150px;">Tình Trạng</th>
+        </tr>
+        </thead>
+        #foreach($item in $items)
+            <tr>
+                <td>$item.phieuchi.soPhieuChi</td>
+                <td class="text-center">$item.phieuchi.hoSoKeToan.maHoSo</td>
+                <td class="text-center">$item.phieuchi.dmLoaiChi.name</td>
+                <td class="text-center">$item.phieuchi.department.name</td>
+                <td>$item.phieuchi.maSoTaiKhoanNo.maTaiKhoan</td>
+                <td>$item.phieuchi.maSoTaiKhoanCo.maTaiKhoan</td>
+                <td>$item.phieuchi.soTien</td>
+                <td>Chờ Thủ Quỹ xác nhận NH</td>
+            </tr>
+        #end
+    </table>
+</p>
+</body>
+</html>
