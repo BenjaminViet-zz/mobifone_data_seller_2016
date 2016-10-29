@@ -87,6 +87,11 @@ public class MyUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("UserProcessingFilter.usernameNotFound:" + username);
 
         }
+
+        if(account.getStatus() == Constants.USER_INACTIVE){
+            throw new LockedException("locked_account");
+        }
+
         if (account.getStatus() == null) {
             throw new UsernameNotFoundException("UserProcessingFilter.usernameNotFound:" + username + ".Status is NULL");
         }else if (!account.getStatus().equals(Constants.USER_ACTIVE)) {

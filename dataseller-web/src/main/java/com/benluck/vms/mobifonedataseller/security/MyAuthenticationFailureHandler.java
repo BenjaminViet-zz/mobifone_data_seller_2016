@@ -66,6 +66,12 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
                 request.getRequestDispatcher(localDefaultFailureUrl).forward(request, response);
             } else {
 
+                if(exception.getMessage().equals("locked_account")){
+                    localDefaultFailureUrl += "?error=3";
+                }else{
+                    localDefaultFailureUrl += "?error=1";
+                }
+
                 logger.debug("Redirecting to " + localDefaultFailureUrl);
                 redirectStrategy.sendRedirect(request, response, localDefaultFailureUrl);
             }

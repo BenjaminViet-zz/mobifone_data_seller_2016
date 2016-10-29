@@ -84,6 +84,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         userEntity.setDisplayName(pojo.getDisplayName());
         userEntity.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
         userEntity.setLastModified(new Timestamp(System.currentTimeMillis()));
+        userEntity.setStatus(pojo.getStatus());
         this.userService.update(userEntity);
     }
 

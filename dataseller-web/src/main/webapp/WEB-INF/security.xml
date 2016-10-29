@@ -94,7 +94,7 @@
 		<beans:property name="defaultTargetUrl" value="/logon"/>
 	</beans:bean>
 	<beans:bean id="myAuthenticationFailureHandler" class="com.benluck.vms.mobifonedataseller.security.MyAuthenticationFailureHandler">
-		<beans:property name="defaultFailureUrl" value="/login.jsp?error=1"/>
+		<beans:property name="defaultFailureUrl" value="/login.jsp"/>
 		<beans:property name="allowSessionCreation" value="false"/>
 	</beans:bean>
     <!-- Override the default password-encoder (SHA) by Triple DES -->

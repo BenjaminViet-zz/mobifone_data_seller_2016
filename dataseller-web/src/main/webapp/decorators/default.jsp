@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible"content="IE=edge">
     <meta name="description"content="">
     <meta name="author"content="">
-    <title>Mobifone :: | Q-Student </title>
+    <title>Mobifone :: | Data Code </title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/style-general_v1.1.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/style-mobifone_v1.12.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/bootstrap.min.css"/>"/>

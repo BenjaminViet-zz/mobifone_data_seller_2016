@@ -28,6 +28,9 @@
                             <c:when test="${param.error == 2}">
                                 <fmt:message key="login.error.sessionexpired"/>
                             </c:when>
+                            <c:when test="${param.error == 3}">
+                                <fmt:message key="login.error.locked_account"/>
+                            </c:when>
                         </c:choose>
                     </small>
                 </c:if>
