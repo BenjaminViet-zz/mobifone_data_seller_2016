@@ -12,22 +12,9 @@
     </decorator>
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>
-        <pattern>/cuahangmobifone/*</pattern>
-        <pattern>/tongdai/*</pattern>
-        <pattern>/chinhanh/*</pattern>
-        <pattern>/baocao/*</pattern>
-    </decorator>
-    <decorator name="kenhphanphoi" page="kenhphanphoi.jsp">
-        <pattern>/kenhphanphoi/*</pattern>
     </decorator>
     <decorator name="login" page="login.jsp">
         <pattern>/login*</pattern>
         <pattern>/forgotpwd*</pattern>
-    </decorator>
-    <decorator name="thuebao_ptm_kpp_2015" page="2015/thuebao_ptm_2015.jsp">
-        <pattern>/thuebaophattrienmoi/kenhphanphoi*</pattern>
-    </decorator>
-    <decorator name="q_student_and_q_teen" page="2015/student_q_teen.jsp">
-        <pattern>/q-teen-q-student*</pattern>
     </decorator>
 </decorators>

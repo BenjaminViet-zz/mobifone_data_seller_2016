@@ -29,7 +29,7 @@
         <div class="signinpanel">
             <decorator:body/>
             <div id="footer" class="signup-footer">
-                <jsp:include page="/common/login_footer.jsp"/>
+                <jsp:include page="/common/login/login_footer.jsp"/>
             </div>
         </div>
     </section>

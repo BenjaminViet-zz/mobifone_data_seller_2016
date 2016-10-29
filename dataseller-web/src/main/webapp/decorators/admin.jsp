@@ -49,7 +49,7 @@
         <h1><span>[</span> Mobifone <span>]</span></h1>
     </div><!-- logopanel -->
 
-    <jsp:include page="/common/admin_nav.jsp"></jsp:include>
+    <jsp:include page="/common/admin/admin_nav.jsp"></jsp:include>
 </div><!-- leftpanel -->
 
 <div class="mainpanel">
@@ -61,7 +61,7 @@
 
 
         <div class="header-right">
-            <jsp:include page="/common/admin_header.jsp"/>
+            <jsp:include page="/common/admin/admin_header.jsp"/>
         </div><!-- header-right -->
 
     </div><!-- headerbar -->

@@ -2,5 +2,5 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ include file="/common/taglibs.jsp"%>
 
-<c:redirect url="/chuong-trinh.html"/>
+<c:redirect url="/home.html"/>
 
