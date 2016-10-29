@@ -62,16 +62,10 @@ public interface UserGroupManagementLocalBean {
     Integer deleteItems(String[] checkList);
 
     /**
-     * Get list all of UserGroup in DB.
-     * @return A list of UserGroupDTO.
-     */
-    List<UserGroupDTO> findAll();
-
-    /**
      * Get a list of UserGroupDTO for accessing.
      * @return A list of UserGroupDTO.
      */
-    List<UserGroupDTO> findAll4Access();
+    List<UserGroupDTO> findAll();
 
     /**
      * Retrive UserGroupDTO by unique code.

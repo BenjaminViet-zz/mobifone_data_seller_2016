@@ -17,7 +17,7 @@
 
 
     <bean id="userSecurityAdvice" class="com.benluck.vms.mobifonedataseller.security.MyUserDetailService">
-        <property name="userManagementLocalBean" ref="userManagementSessionEJB"/>
+        <property name="userService" ref="userManagementSessionEJB"/>
     </bean>
 
     <bean id="propertyConfigurer" class="com.benluck.vms.mobifonedataseller.util.MyPropertyConfigurer">

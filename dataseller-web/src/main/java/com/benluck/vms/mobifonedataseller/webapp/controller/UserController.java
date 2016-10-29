@@ -23,7 +23,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.ejb.DuplicateKeyException;
@@ -31,9 +30,6 @@ import javax.ejb.ObjectNotFoundException;
 import javax.ejb.RemoveException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +38,9 @@ import java.util.Map;
 public class UserController extends ApplicationObjectSupport {
 
     @Autowired
-    private UserManagementLocalBean usersManagementLocalBean;
+    private UserManagementLocalBean userService;
     @Autowired
-    private UserGroupManagementLocalBean userGroupManagementLocalBean;
+    private UserGroupManagementLocalBean userGroupService;
     @Autowired
     private UserValidator validator;
 
@@ -57,17 +53,17 @@ public class UserController extends ApplicationObjectSupport {
 
     }
 
-    @RequestMapping("/admin/userList.html")
+    @RequestMapping("/admin/user/list.html")
 	public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY)UserCommand command, HttpServletRequest request) throws RemoveException {
         ModelAndView mav = new ModelAndView("/user/list");
-        String crudaction = command.getCrudaction();
-        if (StringUtils.isNotBlank(crudaction)){
-            if(crudaction.equals("delete")){
+        String action = command.getCrudaction();
+        if (StringUtils.isNotBlank(action)){
+            if(action.equals("delete")){
                 if(command.getPojo().getUserId() != null){
                     boolean hasRelatedToData = false;
                     if(!hasRelatedToData){
                         try{
-                            this.usersManagementLocalBean.deleteById(command.getPojo().getUserId());
+//                            this.userService.deleteById(command.getPojo().getUserId());
                             mav.addObject(Constants.ALERT_TYPE, "success");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
                         }catch (Exception e){
@@ -79,20 +75,20 @@ public class UserController extends ApplicationObjectSupport {
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.msg.no_user_id"));
                     }
                 }
-            }else if (crudaction.equals("find")){
+            }else if (action.equals(Constants.ACTION_SEARCH)){
                 executeSearch(command, request);
             }
         }
         executeSearch(command, request);
 
-        List<UserGroupDTO> userGroupList = this.userGroupManagementLocalBean.findAll4Access();
+        List<UserGroupDTO> userGroupList = this.userGroupService.findAll();
         mav.addObject("userGroupList", userGroupList);
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
 	}
 
-    @RequestMapping(value = {"/admin/editUserInfo.html"})
+    @RequestMapping(value = {"/admin/profile.html", "/user/profile.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
                              BindingResult bindingResult) throws DuplicateKeyException {
         ModelAndView mav = new ModelAndView("user/edit");
@@ -104,11 +100,11 @@ public class UserController extends ApplicationObjectSupport {
                     validator.validate(command, bindingResult);
                     if (!bindingResult.hasErrors()){
                         if (pojo.getUserId() == null ){
-                            pojo = this.usersManagementLocalBean.addItem(command.getPojo());
+//                            pojo = this.userService.addItem(command.getPojo());
                             mav.addObject(Constants.ALERT_TYPE, "success");
                             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                         } else {
-                            pojo = this.usersManagementLocalBean.updateItem(command.getPojo());
+//                            pojo = this.userService.updateItem(command.getPojo());
                             mav.addObject(Constants.ALERT_TYPE, "success");
                             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
@@ -127,38 +123,38 @@ public class UserController extends ApplicationObjectSupport {
         }
         if (pojo.getUserId()!= null){
             try{
-                pojo = this.usersManagementLocalBean.findById(command.getPojo().getUserId());
+                pojo = this.userService.findById(command.getPojo().getUserId());
                 pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
                 command.setPojo(pojo);
             } catch (Exception e){
                 log.error(e.getMessage(), e);
             }
         }
-        List<UserGroupDTO> userGroups = this.userGroupManagementLocalBean.findAll4Access();
+        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
         mav.addObject("userGroups", userGroups);
         mav.addObject(Constants.FORM_MODEL_KEY, command);
         return mav;
     }
 
     /**
-     * Perform searching related data for this view and put them to the model.
-     * @param bean
+     * Fetch uset list by properties
+     * @param model
      * @param request
      */
-    private void executeSearch(UserCommand bean, HttpServletRequest request){
-        RequestUtil.initSearchBean(request, bean);
+    private void executeSearch(UserCommand model, HttpServletRequest request){
+        RequestUtil.initSearchBean(request, model);
         Map<String, Object> properties = new HashMap<String, Object>();
-        UserDTO pojo = bean.getPojo();
+        UserDTO pojo = model.getPojo();
         if (StringUtils.isNotBlank(pojo.getUserName())){
             properties.put("userName", pojo.getUserName());
         }
         if (StringUtils.isNotBlank(pojo.getDisplayName())){
             properties.put("displayName", pojo.getDisplayName());
         }
-        Object [] result = this.usersManagementLocalBean.search(properties, bean.getSortExpression(), bean.getSortDirection(), bean.getFirstItem(), bean.getMaxPageItems());
-        bean.setTotalItems(Integer.valueOf(result[0].toString()));
-        bean.setListResult((List<UserDTO>)result[1]);
-        bean.setMaxPageItems(bean.getMaxPageItems());
+        Object [] result = this.userService.searchByProperties(properties, model.getSortExpression(), model.getSortDirection(), model.getFirstItem(), model.getMaxPageItems());
+        model.setTotalItems(Integer.valueOf(result[0].toString()));
+        model.setListResult((List<UserDTO>)result[1]);
+        model.setMaxPageItems(model.getMaxPageItems());
     }
 
     @RequestMapping(value ={"/admin/thongtincanhan.html","/cuahangmobifone/thongtincanhan.html","/chinhanh/thongtincanhan.html","/tongdai/thongtincanhan.html"})
@@ -171,7 +167,7 @@ public class UserController extends ApplicationObjectSupport {
             try{
                 validator.validate(command, bindingResult);
                 if (!bindingResult.hasErrors()){
-                    this.usersManagementLocalBean.updateProfile(command.getPojo());
+//                    this.userService.updateProfile(command.getPojo());
                     mav.addObject(Constants.ALERT_TYPE, "success");
                     mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                 }
@@ -182,7 +178,7 @@ public class UserController extends ApplicationObjectSupport {
         }
         if (userId != null && userId > 0){
             try{
-                pojo = this.usersManagementLocalBean.findById(userId);
+                pojo = this.userService.findById(userId);
                 pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
                 command.setPojo(pojo);
             }catch (Exception e){

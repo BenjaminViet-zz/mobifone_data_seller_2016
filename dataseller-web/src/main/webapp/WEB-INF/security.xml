@@ -82,7 +82,7 @@
     </beans:bean>
     
 	<beans:bean id="myAuthenticationFilter" class="com.benluck.vms.mobifonedataseller.security.AuthenticationProcessingFilterExtends">
-		<!--<beans:property name="filterProcessessUrl" value="/j_security_check"></beans:property>-->
+		<beans:property name="filterProcessesUrl" value="/j_security_check"></beans:property>
 		<beans:property name="authenticationManager" ref="authenticationManager"></beans:property>
 		<beans:property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler"></beans:property>
 		<beans:property name="authenticationFailureHandler" ref="myAuthenticationFailureHandler"></beans:property>

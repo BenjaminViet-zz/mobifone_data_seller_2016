@@ -52,7 +52,7 @@ public class AjaxTimeoutRedirectFilter extends GenericFilterBean
 		{   try{
                 if(request.getAttribute("LOGIN") != null && request.getAttribute("LOGIN").toString().equals(true)){
                     HttpServletResponse resp = (HttpServletResponse) response;
-                    resp.sendRedirect("redirect:/dasboard.html");
+                    resp.sendRedirect("redirect:/dashboard.html");
                     return;
                 }
             }catch (Exception e){}

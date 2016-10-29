@@ -3,25 +3,9 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <security:authorize ifAnyGranted="ADMIN">
-    <c:redirect url="/admin/userList.html"/>
+    <%--<c:redirect url="/admin/dashboard.html"/>--%>
+    <c:redirect url="/admin/user/list.html"/>
 </security:authorize>
-
-<security:authorize ifAnyGranted="NHANVIEN">
-    <c:redirect url="/cuahangmobifone/tracuutheomaphieu.html"/>
-</security:authorize>
-
-<security:authorize ifAnyGranted="TONGDAI">
-    <c:redirect url="/tongdai/tracuuthongtinthuebao.html"/>
-</security:authorize>
-
-<security:authorize ifAnyGranted="CHINHANH">
-    <c:redirect url="/chinhanh/thuebaophattrienmoi/danhmucdiembanhang.html"/>
-</security:authorize>
-<security:authorize ifAnyGranted="BAOCAO">
-    <c:redirect url="/baocao/thuebaophattrienmoi/baocaotinnhandangkygoidbh.html"/>
-</security:authorize>
-<security:authorize ifNotGranted="NHANVIEN,ADMIN">
-    <c:redirect url="/tich-diem-cuoc-goi-nhan-voucher/trang-chu.html"/>
-</security:authorize>
+<c:redirect url="/dashboard.html"/>
 
 

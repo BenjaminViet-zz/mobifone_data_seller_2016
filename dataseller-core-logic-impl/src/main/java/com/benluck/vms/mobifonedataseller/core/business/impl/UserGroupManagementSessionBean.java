@@ -69,17 +69,6 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public List<UserGroupDTO> findAll() {
-        List<UserGroupDTO> listResult = new ArrayList<UserGroupDTO>();
-        List<UserGroupEntity> entities = this.userGroupLocalBean.findAll();
-        for (UserGroupEntity entity : entities){
-            UserGroupDTO userGroupDTO = DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class);
-            listResult.add(userGroupDTO);
-        }
-        return listResult;
-    }
-
-    @Override
-    public List<UserGroupDTO> findAll4Access() {
         List<UserGroupEntity> entityList = this.userGroupLocalBean.findAll4Access();
         List<UserGroupDTO> dtoList = new ArrayList<UserGroupDTO>();
         for (UserGroupEntity entity : entityList){

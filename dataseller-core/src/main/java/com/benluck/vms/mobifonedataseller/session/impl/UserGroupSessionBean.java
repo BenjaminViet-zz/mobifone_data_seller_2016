@@ -23,7 +23,7 @@ public class UserGroupSessionBean extends AbstractSessionBean<UserGroupEntity, L
 
     @Override
     public UserGroupEntity findUserGroupByCode(String code) {
-        StringBuilder sqlQueryClause = new StringBuilder("from UserGroupEntity where code = :code");
+        StringBuilder sqlQueryClause = new StringBuilder("FROM UserGroupEntity where code = :code");
         Query query = entityManager.createQuery(sqlQueryClause.toString());
         query.setParameter("code", code);
         List<UserGroupEntity> entityList = (List<UserGroupEntity>)query.getResultList();
@@ -37,11 +37,8 @@ public class UserGroupSessionBean extends AbstractSessionBean<UserGroupEntity, L
     public List<UserGroupEntity> findAll4Access() {
         StringBuilder sqlQueryClause = new StringBuilder();
         List<String> codes = new ArrayList<String>();
-        codes.add(Constants.USERGROUP_NV);
-        codes.add(Constants.USERGROUP_TD);
-        codes.add(Constants.USERGROUP_CN);
         codes.add(Constants.USERGROUP_ADMIN);
-        codes.add(Constants.USERGROUP_BAOCAO);
+        codes.add(Constants.USERGROUP_KHDN);
         sqlQueryClause.append(" from UserGroupEntity e where e.code in (:codes) order by e.code ");
         Query query = entityManager.createQuery(sqlQueryClause.toString());
         query.setParameter("codes", codes);

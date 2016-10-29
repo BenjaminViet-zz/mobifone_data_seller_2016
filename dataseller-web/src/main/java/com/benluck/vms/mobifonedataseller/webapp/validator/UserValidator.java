@@ -7,6 +7,7 @@ import com.benluck.vms.mobifonedataseller.webapp.command.UserCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
@@ -25,9 +26,10 @@ import javax.ejb.ObjectNotFoundException;
  */
 @Component
 public class UserValidator extends ApplicationObjectSupport implements Validator {
-    private transient final Log log = LogFactory.getLog(getClass());
+    private Logger logger = Logger.getLogger(UserValidator.class);
+
     @Autowired
-    private UserManagementLocalBean managementLocalBean;
+    private UserManagementLocalBean userService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -76,7 +78,7 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
     private void checkUniqueCode(UserCommand command, Errors errors) {
         if(StringUtils.isNotBlank(command.getPojo().getUserName())){
             try{
-                UserDTO dto = managementLocalBean.findByCode(command.getPojo().getUserName());
+                UserDTO dto = userService.findByUsername(command.getPojo().getUserName());
                 if(command.getPojo().getUserId() != null){
                     if(!dto.getUserId().equals(command.getPojo().getUserId())){
                         errors.rejectValue("pojo.userName", "label.user_name.errors_duplicated");
@@ -86,7 +88,7 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
                         errors.rejectValue("pojo.userName", "label.user_name.errors_duplicated");
                     }
                 }
-            }catch (ObjectNotFoundException oe){}
+            }catch (ObjectNotFoundException one){}
         }
     }
 }

@@ -37,9 +37,9 @@ public class HomeController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/dasboard.html"})
+    @RequestMapping(value = {"/admin/dashboard.html", "/dashboard.html"})
     public ModelAndView checkLogin(){
-        return new ModelAndView("/logon");
+        return new ModelAndView("/admin/dashboard");
     }
 
     @RequestMapping("/tich-diem-cuoc-goi-nhan-voucher/trang-chu.html")

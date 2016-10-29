@@ -32,10 +32,10 @@ public class MyUserDetailService implements UserDetailsService {
     protected UserCache userCache = null;
 
     @Autowired
-    private UserManagementLocalBean userManagementLocalBean;
+    private UserManagementLocalBean userService;
 
-    public void setUserManagementLocalBean(UserManagementLocalBean userManagementLocalBean) {
-        this.userManagementLocalBean = userManagementLocalBean;
+    public void setUserService(UserManagementLocalBean userService) {
+        this.userService = userService;
     }
 
     /**
@@ -77,8 +77,8 @@ public class MyUserDetailService implements UserDetailsService {
         UserDTO account = null;
         List<RoleDTO> roleDTOs = null;
         try {
-            account = userManagementLocalBean.findByUsername(username);
-            roleDTOs = userManagementLocalBean.findRoleOfUser(account.getUserId());
+            account = userService.findByUsername(username);
+            roleDTOs = userService.loadRolesByUserId(account.getUserId());
         } catch (Exception e) {
             log.error("Could not load user info for login with username:" + username + ". Exception: " + e.getMessage(), e);
         }

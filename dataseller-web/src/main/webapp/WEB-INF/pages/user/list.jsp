@@ -5,10 +5,13 @@
     <title><fmt:message key="admin.user_list.heading_page" /></title>
     <meta name="menu" content="<fmt:message key="admin.user_list.heading_page" />"/>
 </head>
-<c:url var="formUrl" value="/admin/userList.html"/>
+
+<c:url var="formUrl" value="/admin/user/list.html"/>
 <c:url var="viewUrl" value="/admin/user/view.html"/>
-<c:url var="editUrl" value="/admin/editUserInfo.html"/>
-<c:url var="importUrl" value="/admin/importUserFile.html"/>
+<c:url var="editUrl" value="/admin/user/edit.html"/>
+<c:url var="addUrl" value="/admin/user/add.html"/>
+<c:url var="importUrl" value="/admin/user/import.html"/>
+
 <div class="pageheader">
     <h2><i class="fa fa-edit"></i><fmt:message key="admin.user_list.heading_page" /></h2>
 
@@ -51,36 +54,6 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label"><fmt:message key="label.chi_nhanh" /></label>
-                                <div class="col-sm-8">
-                                    <form:select id="chiNhanhMenu" path="pojo.chiNhanhId" onchange="javascript: ajaxGetDepartmentList();" >
-                                        <option value=""><fmt:message key="label.all" /></option>
-                                        <c:forEach items="${chiNhanhList}" var="chiNhanhVar">
-                                            <option <c:if test="${item.pojo.chiNhanhId eq chiNhanhVar.chiNhanhId}">selected="true"</c:if> value="${chiNhanhVar.chiNhanhId}">${chiNhanhVar.name}</option>
-                                        </c:forEach>
-                                    </form:select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label"><fmt:message key="label.ten_cua_hang" /></label>
-                                <div class="col-sm-8">
-                                    <form:select id="cuaHangMenu" path="pojo.department.departmentId">
-                                        <option value=""><fmt:message key="label.all" /></option>
-                                        <c:forEach items="${departmentList}" var="cuaHang">
-                                            <option <c:if test="${item.pojo.department.departmentId eq cuaHang.departmentId}">selected="true"</c:if> value="${cuaHang.departmentId}">${cuaHang.name}</option>
-                                        </c:forEach>
-                                    </form:select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="form-group">
                                 <label class="col-sm-4 control-label">Tên đăng nhập</label>
                                 <div class="col-sm-8">
                                     <form:input path="pojo.userName" cssClass="form-control" />
@@ -98,7 +71,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <a class="btn btn-info" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
-                                <button type="reset" class="btn btn-info"><fmt:message key="label.reset" /></button>
+                                <a class="btn btn-info" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
                             </div>
                         </div>
                     </div>
@@ -113,19 +86,16 @@
                                 <display:column headerClass="table_header" sortable="false" titleKey="label.stt" >
                                     ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                                 </display:column>
-                                <display:column headerClass="table_header" property="tenChiNhanh" sortable="false" titleKey="label.chi_nhanh" class="nowrap" style="20%"/>
-                                <display:column headerClass="table_header" property="department.name" sortable="false" titleKey="label.cua_hang" style="20%"/>
                                 <display:column headerClass="table_header" property="userName" sortName="userName" sortable="true" titleKey="label.username" style="20%"/>
                                 <display:column headerClass="table_header" property="displayName" sortName="displayName" sortable="true" titleKey="label.fullname" style="20%"/>
-                                <display:column headerClass="table_header_center" property="mobileNumber" sortName="mobileNumber" sortable="true" titleKey="label.so_dt" style="20%"/>
                                 <display:column headerClass="table_header_center" property="userGroup.name" sortable="false" class="text-center" titleKey="label.usergroup" />
                                 <display:column headerClass="table_header_center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="10%">
                                     <c:choose>
                                         <c:when test = "${tableList.status eq 1}">
-                                            Hoạt động
+                                            <ftm:message key="label.active" />
                                         </c:when>
                                         <c:otherwise>
-                                            Không hoạt động
+                                            <ftm:message key="label.inactive" />
                                         </c:otherwise>
                                     </c:choose>
                                 </display:column>
@@ -139,7 +109,7 @@
                             <input type="hidden" name="crudaction" value="find"/>
                         </div>
                     </div>
-               </div>
+                </div>
             </form:form>
         </div>
     </div>
@@ -167,31 +137,16 @@
         $('#listForm').submit();
     }
 
+    function resetForm(){
+        $("input").val('');
+        selectFirstItemSelect2('#userGroupMenu');
+    }
+
     function deleteUser(userId){
         bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
             if(r){
                 document.location.href = '${formUrl}?pojo.userId=' + userId + '&crudaction=delete';
             }
         });
-    }
-
-    function ajaxGetDepartmentList(){
-        $('#cuaHangMenu').find('option:not(:first-child)').remove();
-        selectFirstItemSelect2('#cuaHangMenu');
-        if($('#chiNhanhMenu').val() != ''){
-            $.ajax({
-                url: '<c:url value="/ajax/cuahangmobifone/getDeprtmentListByChiNhanh.html" />',
-                type: 'get',
-                dataType: 'json',
-                data: {chiNhanh: $('#chiNhanhMenu').val()},
-                success: function(res){
-                    if(res.departmentList != null){
-                        $(res.departmentList).each(function(index, el){
-                            $('#cuaHangMenu').append("<option value=" +el.departmentId+ ">" +el.name+ "</option>");
-                        });
-                    }
-                }
-            });
-        }
     }
 </script>
