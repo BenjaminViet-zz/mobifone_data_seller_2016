@@ -13,16 +13,25 @@ import java.util.List;
  * Time: 3:22 PM
  * To change this template use File | Settings | File Templates.
  */
-@Table(name = "Vms_User")
+@Table(name = "MOBI_DATA_USER")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 public class UserEntity {
     private Long userId;
+    private String userName;
+    private String displayName;
+    private Integer status;
+    private String password;
+    private Timestamp createdDate;
+    private Timestamp lastModified;
+    private Timestamp lastLogin;
+    private UserGroupEntity userGroup;
+    private List<RoleEntity> roles;
 
     @Column(name = "USERID")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VMS_USER_SEQ")
-    @SequenceGenerator(name="VMS_USER_SEQ", sequenceName="VMS_USER_SEQ", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBI_DATA_USER_SEQ")
+    @SequenceGenerator(name="MOBI_DATA_USER_SEQ", sequenceName="MOBI_DATA_USER_SEQ", allocationSize=1)
     public Long getUserId() {
         return userId;
     }
@@ -30,28 +39,6 @@ public class UserEntity {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-
-    private String userName;
-
-    private String displayName;
-
-    private String email;
-
-    private Integer status;
-
-    private String mobileNumber;
-
-    private String password;
-
-    private String lastTemporaryPassword;
-
-    private Timestamp lastExpiredTime;
-
-    private DepartmentEntity department;
-
-    private Timestamp createdDate;
-
-    private Timestamp modifiedDate;
 
     @Column(name = "USERNAME")
     @Basic
@@ -73,16 +60,6 @@ public class UserEntity {
         this.displayName = displayName;
     }
 
-    @Column(name = "EMAIL")
-    @Basic
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Column(name = "STATUS")
     @Basic
     public Integer getStatus() {
@@ -91,16 +68,6 @@ public class UserEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    @Column(name = "MOBILENUMBER")
-    @Basic
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
     }
 
     @Column(name = "PASSWORD")
@@ -113,37 +80,6 @@ public class UserEntity {
         this.password = password;
     }
 
-    @Column(name = "LASTTEMPORARYPASS")
-    @Basic
-    public String getLastTemporaryPassword() {
-        return lastTemporaryPassword;
-    }
-
-    public void setLastTemporaryPassword(String lastTemporaryPassword) {
-        this.lastTemporaryPassword = lastTemporaryPassword;
-    }
-
-    @Column(name = "LASTEXPIREDTIME")
-    @Basic
-    public Timestamp getLastExpiredTime() {
-        return lastExpiredTime;
-    }
-
-    public void setLastExpiredTime(Timestamp lastExpiredTime) {
-        this.lastExpiredTime = lastExpiredTime;
-    }
-
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="DEPARTMENTID")
-    public DepartmentEntity getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(DepartmentEntity department) {
-        this.department = department;
-    }
-
-
     @Column(name = "CREATEDDATE")
     @Basic
     public Timestamp getCreatedDate() {
@@ -154,54 +90,81 @@ public class UserEntity {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "MODIFIEDDATE")
+    @Column(name = "LASTMODIFIED")
     @Basic
-    public Timestamp getModifiedDate() {
-        return modifiedDate;
+    public Timestamp getLastModified() {
+        return lastModified;
     }
 
-    public void setModifiedDate(Timestamp modifiedDate) {
-        this.modifiedDate = modifiedDate;
+    public void setLastModified(Timestamp lastModified) {
+        this.lastModified = lastModified;
     }
 
-    private List<RoleEntity> roles;
+    @Column(name = "LASTLOGIN")
+    @Basic
+    public Timestamp getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Timestamp lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USERGROUPID", referencedColumnName = "USERGROUPID")
+    public UserGroupEntity getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroupEntity userGroup) {
+        this.userGroup = userGroup;
+    }
+
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable
             (
-                    name="VMS_USER_ROLE",
-                    joinColumns={ @JoinColumn(name="userid", referencedColumnName="userid") },
-                    inverseJoinColumns={ @JoinColumn(name="roleid", referencedColumnName="roleid", unique=true)}
+                        name="MOBI_DATA_USER_ROLE",
+                    joinColumns={ @JoinColumn(name="USERID", referencedColumnName="USERID") },
+                    inverseJoinColumns={ @JoinColumn(name="ROLEID", referencedColumnName="ROLEID", unique=true)}
             )
     public List<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleEntity> vmsRoles) {
-        this.roles = vmsRoles;
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
     }
 
-    private VmsUserGroupEntity userGroup;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @javax.persistence.JoinColumn(name = "usergroupid", referencedColumnName = "usergroupid", nullable = false)
-    public VmsUserGroupEntity getUserGroup() {
-        return userGroup;
+        UserEntity that = (UserEntity) o;
+
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
+        if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
+        if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
+        if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+
+        return true;
     }
 
-    public void setUserGroup(VmsUserGroupEntity userGroup) {
-        this.userGroup = userGroup;
-    }
-
-    private ChiNhanhEntity chiNhanh;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHINHANHID", referencedColumnName = "CHINHANHID")
-    public ChiNhanhEntity getChiNhanh() {
-        return chiNhanh;
-    }
-
-    public void setChiNhanh(ChiNhanhEntity chiNhanh) {
-        this.chiNhanh = chiNhanh;
+    @Override
+    public int hashCode() {
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
+        result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
+        result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 }

@@ -4,10 +4,10 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.RoleManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserRoleManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.RoleDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserRoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserRoleDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
-import com.benluck.vms.mobifonedataseller.webapp.command.command2014.RoleCommand;
+import com.benluck.vms.mobifonedataseller.webapp.command.RoleCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,26 +46,9 @@ public class UserRoleController extends ApplicationObjectSupport {
     @RequestMapping(value={"/userRole/list.html"})
     public ModelAndView list(RoleCommand command, HttpServletRequest request) throws ObjectNotFoundException, DuplicateKeyException {
         ModelAndView mav = new ModelAndView("/userRole/list");
-        String crudaction = command.getCrudaction();
-        if(StringUtils.isNotBlank(crudaction) && "save-update".equals(crudaction))
-        {
-            if((command.getCheckList()!=null && command.getCheckList().length> 0)|| (command.getDeleteList() != null && command.getDeleteList().length> 0))
-            {
-                UserRoleDTO userRoleDTO = new UserRoleDTO();
-                userRoleDTO.setUserID(command.getUserID());
-                userRoleDTO.setRoleID(command.getCheckList());
-                userRoleDTO.setDeleteRole(command.getDeleteList());
-                userRoleManagementLocalBean.updateItem(userRoleDTO);
-                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
-            }
-            else
-            {
-                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("userProfile.nothingtoupdate"));
-            }
-        }
         List<RoleDTO> listRole = null;
-        if(command.getUserID() != null){
-             listRole = userRoleManagementLocalBean.findRoleOfUser(command.getUserID());
+        if(command.getSelectedUserId() != null){
+             listRole = userRoleManagementLocalBean.findRoleOfUser(command.getSelectedUserId());
         }
         mav.addObject("listChecked", listRole);
         referenceData(mav, command);

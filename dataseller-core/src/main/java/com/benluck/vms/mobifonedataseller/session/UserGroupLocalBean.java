@@ -1,6 +1,6 @@
 package com.benluck.vms.mobifonedataseller.session;
 
-import com.benluck.vms.mobifonedataseller.domain.VmsUserGroupEntity;
+import com.benluck.vms.mobifonedataseller.domain.UserGroupEntity;
 
 import java.util.List;
 
@@ -11,18 +11,18 @@ import java.util.List;
  * Time: 3:07 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface UserGroupLocalBean extends GenericSessionBean<VmsUserGroupEntity, Long> {
+public interface UserGroupLocalBean extends GenericSessionBean<UserGroupEntity, Long> {
 
     /**
      * Retrieve UserGroupEntity by unique code.
      * @param code
      * @return UserGroupEntity
      */
-    VmsUserGroupEntity findUserGroupByCode(String code);
+    UserGroupEntity findUserGroupByCode(String code);
 
     /**
      * Get list of UserGroupEntity for accessing.
      * @return A list of UserGroupEntity.
      */
-    List<VmsUserGroupEntity> findAll4Access();
+    List<UserGroupEntity> findAll4Access();
 }

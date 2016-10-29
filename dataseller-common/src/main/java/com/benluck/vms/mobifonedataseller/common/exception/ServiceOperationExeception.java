@@ -2,7 +2,7 @@ package com.benluck.vms.mobifonedataseller.common.exception;
 
 /**
  * Created with IntelliJ IDEA.
- * User: hieu
+ * User: benluck
  * Date: 11/16/13
  * Time: 3:53 PM
  * To change this template use File | Settings | File Templates.

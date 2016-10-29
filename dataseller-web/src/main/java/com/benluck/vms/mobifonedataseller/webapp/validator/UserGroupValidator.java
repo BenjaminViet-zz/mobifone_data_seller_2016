@@ -1,8 +1,8 @@
 package com.benluck.vms.mobifonedataseller.webapp.validator;
 
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserGroupDTO;
-import com.benluck.vms.mobifonedataseller.webapp.command.command2014.UserGroupCommand;
+import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
+import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

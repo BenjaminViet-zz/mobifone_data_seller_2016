@@ -1,6 +1,6 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
 
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: benluck
+ * User: viennh
  * Date: 2/19/14
  * Time: 9:06 AM
  * To change this template use File | Settings | File Templates.
@@ -34,8 +34,8 @@ public interface RoleManagementLocalBean {
      * Perform updating Role information to the DB.
      * @param roleDTO
      * @return RoleDTO
-     * @throws ObjectNotFoundException
-     * @throws DuplicateKeyException
+     * @throws javax.ejb.ObjectNotFoundException
+     * @throws javax.ejb.DuplicateKeyException
      */
     RoleDTO updateItem(RoleDTO roleDTO) throws ObjectNotFoundException, DuplicateKeyException;
 
@@ -43,7 +43,7 @@ public interface RoleManagementLocalBean {
      * Perform inserting new Role to the DB.
      * @param roleDTO
      * @return RoleDTO
-     * @throws DuplicateKeyException
+     * @throws javax.ejb.DuplicateKeyException
      */
     RoleDTO addItem(RoleDTO roleDTO) throws DuplicateKeyException;
 
@@ -51,7 +51,7 @@ public interface RoleManagementLocalBean {
      * Retrive Role by roleId
      * @param roleId
      * @return RoleDTO
-     * @throws ObjectNotFoundException
+     * @throws javax.ejb.ObjectNotFoundException
      */
     RoleDTO findById(Long roleId) throws ObjectNotFoundException;
 

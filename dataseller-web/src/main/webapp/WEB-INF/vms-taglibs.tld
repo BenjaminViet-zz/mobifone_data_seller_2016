@@ -19,25 +19,25 @@
 
     <function>
         <name>urlEncode</name>
-        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.MobiFoneTaglibs</function-class>
         <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>encodeURIComponent</name>
-        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.MobiFoneTaglibs</function-class>
         <function-signature>java.lang.String encodeURIComponent(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>decodeURIComponent</name>
-        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.MobiFoneTaglibs</function-class>
         <function-signature>java.lang.String decodeURIComponent(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>decryptPassword</name>
-        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.MobiFoneTaglibs</function-class>
         <function-signature>java.lang.String decryptPassword(java.lang.String)</function-signature>
     </function>
 
@@ -62,7 +62,7 @@
 
     <function>
         <name>cleanHtmlTags</name>
-        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.VMSTaglibs</function-class>
+        <function-class>com.benluck.vms.mobifonedataseller.webapp.taglibs.MobiFoneTaglibs</function-class>
         <function-signature>java.lang.String cleanHtmlTags(java.lang.String)</function-signature>
     </function>
 

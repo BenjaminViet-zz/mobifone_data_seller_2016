@@ -11,7 +11,7 @@ import java.util.Map;
  * /**
  * Exception thrown when a mail sending error is encountered.
  * Can register failed messages with their exceptions.
- * User: hieu
+ * User: benluck
  * Date: 12/5/13
  * Time: 11:46 AM
  * To change this template use File | Settings | File Templates.

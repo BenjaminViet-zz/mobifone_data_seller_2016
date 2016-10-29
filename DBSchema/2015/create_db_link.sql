@@ -1,1 +1,0 @@
-create public database link MKITDW_CSDBL_DBL connect to MKITDW_CSDBL_DBL identified by "123456" using 'banvien.com:1522/ORCL';

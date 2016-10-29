@@ -2,8 +2,8 @@ package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.common.utils.DozerSingletonMapper;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserGroupDTO;
-import com.benluck.vms.mobifonedataseller.domain.VmsUserGroupEntity;
+import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
+import com.benluck.vms.mobifonedataseller.domain.UserGroupEntity;
 import com.benluck.vms.mobifonedataseller.session.UserGroupLocalBean;
 
 import javax.ejb.*;
@@ -25,7 +25,7 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
     public Object[] search(Map<String, Object> properties, String sortExpression, String sortDirection, int firstItem, int maxPageItems) {
         Object[] res = userGroupLocalBean.searchByProperties(properties, sortExpression, sortDirection , firstItem , maxPageItems);
         List<UserGroupDTO> dtos = new ArrayList<UserGroupDTO>();
-        for (VmsUserGroupEntity entity : (List<VmsUserGroupEntity>)res[1]) {
+        for (UserGroupEntity entity : (List<UserGroupEntity>)res[1]) {
             dtos.add(DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class));
         }
         res[1] = dtos;
@@ -34,21 +34,16 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public UserGroupDTO updateItem(UserGroupDTO userGroupDTO) throws ObjectNotFoundException, DuplicateKeyException {
-        VmsUserGroupEntity dbItem = this.userGroupLocalBean.findById(userGroupDTO.getUserGroupId());
+        UserGroupEntity dbItem = this.userGroupLocalBean.findById(userGroupDTO.getUserGroupId());
         if (dbItem == null) throw new ObjectNotFoundException("Not found user group " + userGroupDTO.getUserGroupId());
-        VmsUserGroupEntity pojo = DozerSingletonMapper.getInstance().map(userGroupDTO, VmsUserGroupEntity.class);
-        pojo.setModifiedDate(new Timestamp(System.currentTimeMillis()));
-        pojo.setCreatedDate(dbItem.getCreatedDate());
+        UserGroupEntity pojo = DozerSingletonMapper.getInstance().map(userGroupDTO, UserGroupEntity.class);
         return DozerSingletonMapper.getInstance().map(this.userGroupLocalBean.update(pojo), UserGroupDTO.class);
     }
 
     @Override
     public UserGroupDTO addItem(UserGroupDTO userGroupDTO) throws DuplicateKeyException {
-        VmsUserGroupEntity pojo = DozerSingletonMapper.getInstance().map(userGroupDTO, VmsUserGroupEntity.class);
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        pojo.setCreatedDate(now);
-        pojo.setModifiedDate(now);
-        return  DozerSingletonMapper.getInstance().map(this.userGroupLocalBean.save(pojo), UserGroupDTO.class);
+        UserGroupEntity userGroupEntity = DozerSingletonMapper.getInstance().map(userGroupDTO, UserGroupEntity.class);
+        return  DozerSingletonMapper.getInstance().map(this.userGroupLocalBean.save(userGroupEntity), UserGroupDTO.class);
     }
 
     @Override
@@ -75,8 +70,8 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
     @Override
     public List<UserGroupDTO> findAll() {
         List<UserGroupDTO> listResult = new ArrayList<UserGroupDTO>();
-        List<VmsUserGroupEntity> entities = this.userGroupLocalBean.findAll();
-        for (VmsUserGroupEntity entity : entities){
+        List<UserGroupEntity> entities = this.userGroupLocalBean.findAll();
+        for (UserGroupEntity entity : entities){
             UserGroupDTO userGroupDTO = DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class);
             listResult.add(userGroupDTO);
         }
@@ -85,9 +80,9 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public List<UserGroupDTO> findAll4Access() {
-        List<VmsUserGroupEntity> entityList = this.userGroupLocalBean.findAll4Access();
+        List<UserGroupEntity> entityList = this.userGroupLocalBean.findAll4Access();
         List<UserGroupDTO> dtoList = new ArrayList<UserGroupDTO>();
-        for (VmsUserGroupEntity entity : entityList){
+        for (UserGroupEntity entity : entityList){
             dtoList.add(DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class));
         }
         return dtoList;
@@ -95,7 +90,7 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public UserGroupDTO findByCode(String code) throws ObjectNotFoundException {
-        VmsUserGroupEntity entity = this.userGroupLocalBean.findEqualUnique("code", code);
+        UserGroupEntity entity = this.userGroupLocalBean.findEqualUnique("code", code);
         if (entity == null) throw new ObjectNotFoundException("Not found User Group has Code "+code);
         return DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class);
     }

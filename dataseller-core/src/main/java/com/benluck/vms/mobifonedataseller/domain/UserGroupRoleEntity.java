@@ -11,16 +11,18 @@ import javax.persistence.*;
  * Time: 3:22 PM
  * To change this template use File | Settings | File Templates.
  */
-@Table(name = "VMS_USERGROUP_ROLE")
+@Table(name = "MOBI_DATA_USERGROUP_ROLE")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 public class UserGroupRoleEntity {
     private Long userGroupRoleId;
+    private UserGroupEntity userGroup;
+    private RoleEntity role;
 
     @Column(name = "USERGROUPROLEID")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "VMS_USERGROUP_ROLE_SEQ")
-    @SequenceGenerator(name="VMS_USERGROUP_ROLE_SEQ", sequenceName="VMS_USERGROUP_ROLE_SEQ", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBI_DATA_USERGROUP_ROLE_SEQ")
+    @SequenceGenerator(name="MOBI_DATA_USERGROUP_ROLE_SEQ", sequenceName="MOBI_DATA_USERGROUP_ROLE_SEQ", allocationSize=1)
     public Long getUserRoleId() {
         return userGroupRoleId;
     }
@@ -29,29 +31,26 @@ public class UserGroupRoleEntity {
         this.userGroupRoleId = userGroupRoleId;
     }
 
-    private VmsUserGroupEntity userGroup;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="USERGROUPID")
-    public VmsUserGroupEntity getUserGroup() {
+    public UserGroupEntity getUserGroup() {
         return userGroup;
     }
 
-    public void setUserGroup(VmsUserGroupEntity userGroup) {
+    public void setUserGroup(UserGroupEntity userGroup) {
         this.userGroup = userGroup;
     }
 
-    private RoleEntity vmsRole;
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="ROLEID")
-    public RoleEntity getVmsRole() {
-        return vmsRole;
+    public RoleEntity getRole() {
+        return role;
     }
 
-    public void setVmsRole(RoleEntity vmsRole) {
-        this.vmsRole = vmsRole;
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
+
 
     @Override
     public boolean equals(Object o) {

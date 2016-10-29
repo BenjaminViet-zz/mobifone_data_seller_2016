@@ -1,7 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.RoleDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
@@ -85,15 +85,6 @@ public interface UserManagementLocalBean {
      * @return
      * @throws ObjectNotFoundException
      */
-    UserDTO findByMobileNumber(String phoneNumber) throws ObjectNotFoundException;
-
-    /**
-     * Retrieve user data by email.
-     * @param email
-     * @return
-     * @throws ObjectNotFoundException
-     */
-    UserDTO findByEmail(String email) throws ObjectNotFoundException;
 
     /**
      * Update user profile.
@@ -127,26 +118,9 @@ public interface UserManagementLocalBean {
     Object[] saveImport(List<UserDTO> listUsers);
 
     /**
-     *
-     * @param dto
-     * @param serverIP
-     * @param userGroupCode
-     * @throws ObjectNotFoundException
-     * @throws DuplicateKeyException
-     */
-    void saveUserInfoAndGenerateVerifyLoginCode(UserDTO dto, String serverIP, String userGroupCode) throws ObjectNotFoundException, DuplicateKeyException;
-
-    /**
      * Delete user from DB by userId.
      * @param userId
      * @throws RemoveException
      */
     void deleteById(Long userId) throws RemoveException;
-
-    /**
-     * Verify if the user related to other process before deleting.
-     * @param userId
-     * @return
-     */
-    Boolean checkIfHasRelatedToData(Long userId);
 }

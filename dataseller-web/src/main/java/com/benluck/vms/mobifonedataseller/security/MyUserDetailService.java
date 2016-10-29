@@ -2,8 +2,8 @@ package com.benluck.vms.mobifonedataseller.security;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.RoleDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.security.util.MyUserDetail;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -100,7 +100,7 @@ public class MyUserDetailService implements UserDetailsService {
         //this line of code is used to check whether the user has login or not
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for(RoleDTO roleDTO : roleDTOs) {
-            authorities.add(new SimpleGrantedAuthority(roleDTO.getRole()));
+            authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
         }
         if(account.getUserGroup() != null) {
             authorities.add(new SimpleGrantedAuthority(account.getUserGroup().getCode()));
@@ -109,17 +109,6 @@ public class MyUserDetailService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(Constants.LOGON_ROLE));
 
         MyUserDetail loginUser = new MyUserDetail(username, account.getPassword(), true, true, true, true, authorities);
-        if(account.getDepartment() != null) {
-            loginUser.setDepartmentId(account.getDepartment().getDepartmentId());
-            loginUser.setShopCode(account.getDepartment().getCode());
-        }
-        if(account.getChiNhanh() != null && account.getChiNhanh().getChiNhanhId() != null){
-//            loginUser.setChiNhanhId(account.getChiNhanh().getChiNhanhId());
-            loginUser.setMappingDBLinkBranchId(account.getChiNhanh().getChiNhanhId());
-            if(account.getChiNhanh().getBranchId() != null){
-                loginUser.setBranchId(account.getChiNhanh().getBranchId());
-            }
-        }
         BeanUtils.copyProperties(account, loginUser);
         return loginUser;
     }

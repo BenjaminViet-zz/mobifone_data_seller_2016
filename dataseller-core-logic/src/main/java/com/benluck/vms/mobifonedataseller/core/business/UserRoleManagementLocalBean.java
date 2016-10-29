@@ -1,8 +1,8 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
 
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.RoleDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserRoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserRoleDTO;
 
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;

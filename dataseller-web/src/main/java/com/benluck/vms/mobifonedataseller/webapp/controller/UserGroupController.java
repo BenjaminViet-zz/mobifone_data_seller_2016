@@ -3,10 +3,10 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserGroupDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
-import com.benluck.vms.mobifonedataseller.webapp.command.command2014.UserGroupCommand;
+import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserGroupValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;

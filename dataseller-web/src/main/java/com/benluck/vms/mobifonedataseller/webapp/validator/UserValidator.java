@@ -1,10 +1,9 @@
 package com.benluck.vms.mobifonedataseller.webapp.validator;
 
 
-import com.benluck.vms.mobifonedataseller.common.utils.CommonUtil;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.UserDTO;
-import com.benluck.vms.mobifonedataseller.webapp.command.command2014.UserCommand;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
+import com.benluck.vms.mobifonedataseller.webapp.command.UserCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,8 +39,6 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
         UserCommand command = (UserCommand)o;
         trimmingField(command);
         checkRequiredFields(command, errors);
-        validateEmail(command, errors);
-        validatePhoneNumber(command, errors);
         checkUniqueCode(command, errors);
     }
 
@@ -69,12 +66,6 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
         if(StringUtils.isNotBlank(command.getPojo().getPassword())){
             command.getPojo().setPassword(command.getPojo().getPassword().trim());
         }
-        if(StringUtils.isNotBlank(command.getPojo().getEmail())){
-            command.getPojo().setEmail(command.getPojo().getEmail().trim());
-        }
-        if(StringUtils.isNotBlank(command.getPojo().getMobileNumber())){
-            command.getPojo().setMobileNumber(command.getPojo().getMobileNumber().trim());
-        }
     }
 
     /**
@@ -96,60 +87,6 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
                     }
                 }
             }catch (ObjectNotFoundException oe){}
-        }
-
-        if(StringUtils.isNotBlank(command.getPojo().getEmail())){
-            try{
-                UserDTO dto1 = this.managementLocalBean.findByEmail(command.getPojo().getEmail());
-                if(command.getPojo().getUserId() != null){
-                    if(!command.getPojo().getEmail().equals(dto1.getEmail())){
-                        errors.rejectValue("pojo.email", "label.email.errors_duplicated");
-                    }
-                }else{
-                    errors.rejectValue("pojo.email", "label.email.errors_duplicated");
-                }
-            }catch (ObjectNotFoundException oe){}
-        }
-
-        if(StringUtils.isNotBlank(command.getPojo().getMobileNumber())){
-            try{
-                UserDTO dto = managementLocalBean.findByMobileNumber(command.getPojo().getMobileNumber());
-                if(command.getPojo().getUserId() != null){
-                    if(!dto.getUserId().equals(command.getPojo().getUserId())){
-                        errors.rejectValue("pojo.mobileNumber", "label.phone_number.errors_duplicated");
-                    }
-                }else{
-                    if(dto != null){
-                        errors.rejectValue("pojo.mobileNumber", "label.phone_number.errors_duplicated");
-                    }
-                }
-            }catch (ObjectNotFoundException oe){}
-        }
-    }
-
-    /**
-     * Validate format of the email in the model for CRUD actions.
-     * @param command
-     * @param errors
-     */
-    private void validateEmail(UserCommand command, Errors errors) {
-        if(StringUtils.isNotBlank(command.getPojo().getEmail())){
-            if(!CommonUtil.isValidEmail(command.getPojo().getEmail())){
-                errors.rejectValue("pojo.email", "admin.edit_user.invalid_email");
-            }
-        }
-    }
-
-    /**
-     * Validate format of phone number in the model.
-     * @param command
-     * @param errors
-     */
-    private void validatePhoneNumber(UserCommand command, Errors errors) {
-        if(StringUtils.isNotBlank(command.getPojo().getMobileNumber())){
-            if(!command.getPojo().getMobileNumber().matches("^0{1}\\d{9,10}$")){
-                errors.rejectValue("pojo.mobileNumber", "admin.edit_user.invalid_tel");
-            }
         }
     }
 }

@@ -1,10 +1,7 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
-import com.benluck.vms.mobifonedataseller.core.business.DepartmentManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.promotionDTO2014.DepartmentDTO;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
-import com.benluck.vms.mobifonedataseller.webapp.command.command2014.DepartmentCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +21,6 @@ import java.util.List;
  */
 @Controller
 public class HomeController extends ApplicationObjectSupport {
-    @Autowired
-    DepartmentManagementLocalBean departmentManagementLocalBean;
 
     @RequestMapping(value={"/", "/index*", "index.html", "/chuong-trinh.html", "/home.html"})
     public ModelAndView home(){
@@ -93,14 +89,11 @@ public class HomeController extends ApplicationObjectSupport {
     public ModelAndView cachThucDoiQua_Q_Student(){
         return new ModelAndView("/2015/q_student_and_q_teen/cachthucdoi");
     }
+
     @RequestMapping(value = "/q-teen-q-student/dia-diem-doi-qua.html")
-    public ModelAndView điaiemDoiQua_Q_Student(DepartmentCommand bean, HttpServletRequest request){
+    public ModelAndView điaiemDoiQua_Q_Student(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/2015/q_student_and_q_teen/diadiemdoi");
-
-        RequestUtil.initSearchBean(request, bean);
-
-        List<DepartmentDTO> departmentList = this.departmentManagementLocalBean.findAll();
-        mav.addObject("departmentList", departmentList);
+        mav.addObject("departmentList", new ArrayList<>());
 
         return mav;
     }
