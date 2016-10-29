@@ -78,7 +78,7 @@
                                         <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required" cssStyle="width: 250px;">
                                             <form:option value=""><fmt:message key="label.select" /></form:option>
                                             <c:forEach items="${userGroups}" var="userGroup">
-                                                <option <c:if test="${userGroup.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.name}</option>
+                                                <option <c:if test="${userGroup.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.description}</option>
                                             </c:forEach>
                                         </form:select>
                                         <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
@@ -107,13 +107,13 @@
         <div class="panel-footer">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
+                    <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>&nbsp;
                     <button id="btnSave" class="btn btn-primary">
                         <c:choose>
                             <c:when test="${not empty item.pojo.userId}"><fmt:message key="label.update" /></c:when>
                             <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                         </c:choose>
-                    </button>&nbsp;
-                    <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>
+                    </button>
                 </div>
             </div>
         </div>

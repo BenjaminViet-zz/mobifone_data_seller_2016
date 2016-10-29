@@ -10,6 +10,7 @@
 <c:url var="viewUrl" value="/admin/user/view.html"/>
 <c:url var="editUrl" value="/admin/user/edit.html"/>
 <c:url var="addUrl" value="/admin/user/add.html"/>
+<c:url var="authorizeUrl" value="/admin/user/authorize.html"/>
 
 <div class="pageheader">
     <h2><i class="fa fa-edit"></i><fmt:message key="admin.user_list.heading_page" /></h2>
@@ -42,7 +43,7 @@
                                     <form:select id="userGroupMenu" path="pojo.userGroup.userGroupId" >
                                         <option value=""><fmt:message key="label.all" /></option>
                                         <c:forEach items="${userGroupList}" var="userGroup">
-                                            <option <c:if test="${item.pojo.userGroup.userGroupId eq userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.name}</option>
+                                            <option <c:if test="${item.pojo.userGroup.userGroupId eq userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.description}</option>
                                         </c:forEach>
                                     </form:select>
                                 </div>
@@ -84,9 +85,9 @@
                                 <display:column headerClass="table_header" sortable="false" titleKey="label.stt" >
                                     ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                                 </display:column>
-                                <display:column headerClass="table_header" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
+                                <display:column headerClass="table_header" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="10%"/>
                                 <display:column headerClass="table_header" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="20%"/>
-                                <display:column headerClass="table_header_center" property="userGroup.name" sortable="false" class="text-center" titleKey="user.label.usergroup" />
+                                <display:column headerClass="table_header_center" property="userGroup.description" sortable="false" class="" titleKey="user.label.usergroup" />
                                 <display:column headerClass="table_header_center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="10%">
                                     <c:choose>
                                         <c:when test = "${tableList.status eq 1}">
@@ -97,9 +98,10 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </display:column>
-                                <display:column headerClass="table_header_center" class="text-center" titleKey="label.action" style="width:10%;">
+                                <display:column headerClass="table_header_center" class="text-center" titleKey="label.action" style="width:20%;">
                                     <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="Sửa"><i class="icon-edit">Sửa</i></a>
                                     | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><ftm:message key="label.delete" /></a>
+                                    | <a class="tip-top" onclick="javascript: authorizeUser(${tableList.userId});"><ftm:message key="label.authorize" /></a>
                                 </display:column>
                                 <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                                 <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>

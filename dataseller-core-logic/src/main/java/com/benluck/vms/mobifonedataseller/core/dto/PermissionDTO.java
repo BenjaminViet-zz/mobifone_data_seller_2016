@@ -9,20 +9,19 @@ import java.io.Serializable;
  * Time: 3:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RoleDTO implements Serializable {
+public class PermissionDTO implements Serializable {
     private static final long serialVersionUID = 3178424492638277823L;
 
-    private Long roleId;
+    private Long permissionId;
     private String code;
-    private String name;
     private String description;
 
-    public Long getRoleId() {
-        return roleId;
+    public Long getPermissionId() {
+        return permissionId;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setPermissionId(Long permissionId) {
+        this.permissionId = permissionId;
     }
 
     public String getCode() {
@@ -31,14 +30,6 @@ public class RoleDTO implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {

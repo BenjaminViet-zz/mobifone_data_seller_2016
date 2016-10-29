@@ -5,10 +5,9 @@
         <jta-data-source>java:jboss/datasources/MobiFoneDataSellerDS</jta-data-source>
         <!--<mapping-file>hbm_bk/namedQuery.hbm.xml</mapping-file>-->
         <class>com.benluck.vms.mobifonedataseller.domain.UserGroupEntity</class>
-        <class>com.benluck.vms.mobifonedataseller.domain.RoleEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.PermissionEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UserEntity</class>
-        <class>com.benluck.vms.mobifonedataseller.domain.UserRoleEntity</class>
-        <class>com.benluck.vms.mobifonedataseller.domain.UserGroupRoleEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

@@ -1,6 +1,6 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
-import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 
 import javax.ejb.DuplicateKeyException;
@@ -31,7 +31,7 @@ public interface UserManagementLocalBean {
 
     Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems, String whereClause);
 
-    List<RoleDTO> loadRolesByUserId(Long userId);
+    List<PermissionDTO> loadPermissionsByUserId(Long userId);
 
     void updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException;
 

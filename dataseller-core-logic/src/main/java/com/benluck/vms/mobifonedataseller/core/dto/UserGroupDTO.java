@@ -14,7 +14,6 @@ public class UserGroupDTO implements Serializable {
     private static final long serialVersionUID = 5738387028325118615L;
 
     private Long userGroupId;
-    private String name;
     private String code;
     private String description;
 
@@ -24,14 +23,6 @@ public class UserGroupDTO implements Serializable {
 
     public void setUserGroupId(Long userGroupId) {
         this.userGroupId = userGroupId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCode() {

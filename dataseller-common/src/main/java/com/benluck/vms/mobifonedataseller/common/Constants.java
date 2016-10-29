@@ -78,9 +78,6 @@ public class Constants {
     public static final String LOGON_ROLE = "LOGON";
 
 
-
-
-
     /**
      * The name of the available roles list, common.a request-scoped attribute
      * when adding/editing common.a user.
@@ -116,6 +113,9 @@ public class Constants {
      */
     public static final int USER_INACTIVE = 0;
     public static final int USER_ACTIVE = 1;
+
+    public static final int USER_NOT_LDAP = 0;
+    public static final int USER_LDAP = 1;
 
     public static final String MOBI_DATA_REMEMBER_ME_COOKIE_KEY = "MOBI_DATA_REMEMBER_ME_COOKIE_KEY";
 

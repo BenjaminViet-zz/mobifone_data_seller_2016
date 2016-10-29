@@ -2,7 +2,7 @@ package com.benluck.vms.mobifonedataseller.security;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.security.util.MyUserDetail;
 import org.apache.log4j.Logger;
@@ -75,10 +75,10 @@ public class MyUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException, DataAccessException {
         UserDTO account = null;
-        List<RoleDTO> roleDTOs = null;
+        List<PermissionDTO> roleDTOs = null;
         try {
             account = userService.findByUsername(username);
-            roleDTOs = userService.loadRolesByUserId(account.getUserId());
+            roleDTOs = userService.loadPermissionsByUserId(account.getUserId());
         } catch (Exception e) {
             log.error("Could not load user info for login with username:" + username + ". Exception: " + e.getMessage(), e);
         }
@@ -104,7 +104,7 @@ public class MyUserDetailService implements UserDetailsService {
 
         //this line of code is used to check whether the user has login or not
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for(RoleDTO roleDTO : roleDTOs) {
+        for(PermissionDTO roleDTO : roleDTOs) {
             authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
         }
         if(account.getUserGroup() != null) {

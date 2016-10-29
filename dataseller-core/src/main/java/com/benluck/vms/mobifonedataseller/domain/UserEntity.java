@@ -25,8 +25,9 @@ public class UserEntity {
     private Timestamp createdDate;
     private Timestamp lastModified;
     private Timestamp lastLogin;
+    private Integer isLDAP;
     private UserGroupEntity userGroup;
-    private List<RoleEntity> roles;
+    private List<PermissionEntity> roles;
 
     @Column(name = "USERID")
     @Id
@@ -110,6 +111,16 @@ public class UserEntity {
         this.lastLogin = lastLogin;
     }
 
+    @Column(name = "ISLDAP")
+    @Basic
+    public Integer getLDAP() {
+        return isLDAP;
+    }
+
+    public void setLDAP(Integer LDAP) {
+        isLDAP = LDAP;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERGROUPID", referencedColumnName = "USERGROUPID")
     public UserGroupEntity getUserGroup() {
@@ -118,22 +129,6 @@ public class UserEntity {
 
     public void setUserGroup(UserGroupEntity userGroup) {
         this.userGroup = userGroup;
-    }
-
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable
-            (
-                        name="MOBI_DATA_USER_ROLE",
-                    joinColumns={ @JoinColumn(name="USERID", referencedColumnName="USERID") },
-                    inverseJoinColumns={ @JoinColumn(name="ROLEID", referencedColumnName="ROLEID", unique=true)}
-            )
-    public List<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleEntity> roles) {
-        this.roles = roles;
     }
 
     @Override
@@ -151,6 +146,7 @@ public class UserEntity {
         if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
         if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (isLDAP != null ? !isLDAP.equals(that.isLDAP) : that.isLDAP != null) return false;
 
         return true;
     }
@@ -165,6 +161,7 @@ public class UserEntity {
         result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
         result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (isLDAP != null ? isLDAP.hashCode() : 0);
         return result;
     }
 }

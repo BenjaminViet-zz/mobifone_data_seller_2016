@@ -39,7 +39,6 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
      */
     private void checkRequiredFields(UserGroupCommand command, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.code", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.code")}, "non-empty value required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.name", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.name")}, "non-empty value required.");
     }
 
     /**
@@ -49,9 +48,6 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
     private void trimmingField(UserGroupCommand command) {
         if(StringUtils.isNotBlank(command.getPojo().getCode())){
             command.getPojo().setCode(command.getPojo().getCode().trim());
-        }
-        if(StringUtils.isNotBlank(command.getPojo().getName())){
-            command.getPojo().setName(command.getPojo().getName().trim());
         }
     }
 

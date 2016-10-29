@@ -1,7 +1,6 @@
 package com.benluck.vms.mobifonedataseller.core.dto;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,19 +9,19 @@ import java.sql.Timestamp;
  * Time: 3:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UserGroupRoleDTO implements Serializable {
+public class UserGroupPermissionDTO implements Serializable {
     private static final long serialVersionUID = -6049133268813011847L;
 
-    private Long userGroupRoleId;
+    private Long userGroupPermissionId;
     private UserGroupDTO userGroup;
-    private RoleDTO role;
+    private PermissionDTO permission;
 
-    public Long getUserGroupRoleId() {
-        return userGroupRoleId;
+    public Long getUserGroupPermissionId() {
+        return userGroupPermissionId;
     }
 
-    public void setUserGroupRoleId(Long userGroupRoleId) {
-        this.userGroupRoleId = userGroupRoleId;
+    public void setUserGroupPermissionId(Long userGroupPermissionId) {
+        this.userGroupPermissionId = userGroupPermissionId;
     }
 
     public UserGroupDTO getUserGroup() {
@@ -33,12 +32,12 @@ public class UserGroupRoleDTO implements Serializable {
         this.userGroup = userGroup;
     }
 
-    public RoleDTO getRole() {
-        return role;
+    public PermissionDTO getPermission() {
+        return permission;
     }
 
-    public void setRole(RoleDTO role) {
-        this.role = role;
+    public void setPermission(PermissionDTO permission) {
+        this.permission = permission;
     }
 }
 

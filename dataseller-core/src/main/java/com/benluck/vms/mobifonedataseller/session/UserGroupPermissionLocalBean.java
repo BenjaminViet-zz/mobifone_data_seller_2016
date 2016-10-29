@@ -1,6 +1,6 @@
 package com.benluck.vms.mobifonedataseller.session;
 
-import com.benluck.vms.mobifonedataseller.domain.RoleEntity;
+import com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,5 +9,5 @@ import com.benluck.vms.mobifonedataseller.domain.RoleEntity;
  * Time: 3:08 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface RoleLocalBean extends GenericSessionBean<RoleEntity, Long> {
+public interface UserGroupPermissionLocalBean extends GenericSessionBean<UserGroupPermissionEntity, Long> {
 }

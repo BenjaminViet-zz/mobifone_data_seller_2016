@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 public class UserGroupEntity {
     private Long userGroupId;
-    private String name;
     private String code;
     private String description;
 
@@ -33,16 +32,6 @@ public class UserGroupEntity {
 
     public void setUserGroupId(Long userGroupId) {
         this.userGroupId = userGroupId;
-    }
-
-    @Column(name = "NAME")
-    @Basic
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Column(name = "CODE")
@@ -70,7 +59,6 @@ public class UserGroupEntity {
     public int hashCode() {
         int result = userGroupId != null ? userGroupId.hashCode() : 0;
         result = 31 * result + (code != null ? code.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
@@ -83,7 +71,6 @@ public class UserGroupEntity {
         UserGroupEntity that = (UserGroupEntity) o;
 
         if (userGroupId != null ? !userGroupId.equals(that.userGroupId) : that.userGroupId != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
 

@@ -1,12 +1,12 @@
 package com.benluck.vms.mobifonedataseller.core.business.impl;
 
-import com.benluck.vms.mobifonedataseller.beanUtil.RoleBeanUtil;
+import com.benluck.vms.mobifonedataseller.beanUtil.PermissionBeanUtil;
 import com.benluck.vms.mobifonedataseller.beanUtil.UserBeanUtil;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.security.DesEncrypterUtils;
 import com.benluck.vms.mobifonedataseller.common.utils.DozerSingletonMapper;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.RoleDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.domain.*;
 import com.benluck.vms.mobifonedataseller.session.*;
@@ -23,7 +23,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     @EJB
     private UserLocalBean userService;
     @EJB
-    private UserRoleLocalBean userRoleService;
+    private PermissionLocalBean permissionService;
 
     public UserManagementSessionBean() {
     }
@@ -46,15 +46,8 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     @Override
     public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems, String whereClause) {
         Object[] resultObject = this.userService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems, whereClause);
-        List<UserDTO> dtoList = new ArrayList<UserDTO>();
-
-        List<UserEntity> entityList = (List<UserEntity>) resultObject[1];
-        if(entityList.size() > 0){
-            for (UserEntity entity : entityList){
-                dtoList.add(UserBeanUtil.entity2DTO(entity));
-            }
-            resultObject[1] = dtoList;
-        }
+        List<UserDTO> dtoList = UserBeanUtil.entityList2DTOList((List<UserEntity>) resultObject[1]);
+        resultObject[1] = dtoList;
         return resultObject;
     }
 
@@ -65,16 +58,8 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     }
 
     @Override
-    public List<RoleDTO> loadRolesByUserId(Long userId) {
-        List<UserRoleEntity> entityList = this.userRoleService.findProperty("user.userId", userId);
-        if(entityList.size() > 0){
-            List<RoleDTO> roleDTOList = new ArrayList<RoleDTO>();
-            for (UserRoleEntity entity : entityList){
-                roleDTOList.add(RoleBeanUtil.entity2DTO(entity.getRole()));
-            }
-            return roleDTOList;
-        }
-        return new ArrayList<RoleDTO>();
+    public List<PermissionDTO> loadPermissionsByUserId(Long userId) {
+        return PermissionBeanUtil.entityList2DTOList(this.permissionService.findPermissionByUserId(userId));
     }
 
     @Override
@@ -100,6 +85,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         entity.setPassword(DesEncrypterUtils.getInstance().encrypt(dto.getPassword()));
         entity.setDisplayName(dto.getDisplayName());
         entity.setStatus(Constants.USER_ACTIVE);
+        entity.setLDAP(Constants.USER_NOT_LDAP);
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
         UserGroupEntity userGroupEntity = new UserGroupEntity();

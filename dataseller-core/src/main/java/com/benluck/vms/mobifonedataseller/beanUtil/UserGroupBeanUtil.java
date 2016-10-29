@@ -15,7 +15,6 @@ public class UserGroupBeanUtil {
         UserGroupDTO dto = new UserGroupDTO();
         dto.setUserGroupId(entity.getUserGroupId());
         dto.setCode(entity.getCode());
-        dto.setName(entity.getName());
         dto.setDescription(entity.getDescription());
         return dto;
     }
