@@ -164,8 +164,9 @@ nav li {
 	min-height: 320px;
 	margin-bottom: 40px;
 }
-@media screen and (max-width:360px) {
- nav li {
- margin: 2px 0;
 }
+@media screen and (max-width:360px) {
+	 nav li {
+	 	margin: 2px 0;
+	}
 }

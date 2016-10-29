@@ -1,5 +1,7 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    /*font-family: Arial, Helvetica, sans-serif;*/
+    font-family: 'Lato', sans-serif !important;
+    position: relative;
 }
 
 h1, h2, h3, h4, h5, nav {
@@ -8,7 +10,7 @@ h1, h2, h3, h4, h5, nav {
 
 article {
     background-color: rgba(255, 255, 255, .9);
-    padding: 12px 48px;
+    padding: 12px 48px 50px;
 }
 
 /********Header - Nav************/
@@ -39,6 +41,14 @@ nav li:nth-child(5) {
 
 nav li:nth-child(6) {
     background: #39F;
+}
+
+#kpp_navigation_bar li {
+    font-family: 'Lato', sans-serif
+}
+
+#kpp_navigation_bar li a {
+    font-size: 15px !important;
 }
 
 nav li {
@@ -112,6 +122,25 @@ nav li.active a {
     max-width: 1150px;
 }
 
+.bg-dot {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+}
+
+.twoxtwo {
+    background: url(../images/gridtile.png) fixed;
+}
+
+.q_student_q_teen_2015_home_page i.fa {
+    color: #3A90CA;
+    font-size: 18px;
+}
+
 /*********Footer***********/
 footer {
     bottom: 0;
@@ -141,7 +170,7 @@ footer img {
     background-size: cover;
 }
 
-#promotion_home_img{
+#promotion_home_img {
     background: url(../images/thuebaoptm_2015/bg-home-ptm.png) 60% -150px no-repeat;
     width: 100%;
     height: 768px;
@@ -203,6 +232,10 @@ table>tbody>tr>td:nth-child(4) {
     white-space: pre;
 }
 
+table tr td {
+    vertical-align: middle !important;
+}
+
 /***   Page total  ***/
 .home-total {
     background: url(../images/bg-total-home-new.jpg) top center;
@@ -225,17 +258,20 @@ table>tbody>tr>td:nth-child(4) {
     margin: 0px 0 0 -75px;
 }
 
-.ul-thele-q-student li{
-    background: url(https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/bullet-blue.png) 0px -6px no-repeat;
-   list-style: none;
-   padding-top: 0px;
-   padding-bottom:2px;
-   padding-left: 27;
+.ul-thele-q-student li {
+    /*background: url(https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/bullet-blue.png) 0px -6px no-repeat;*/
+    margin-left: 15px;
+    list-style: none;
+    padding-top: 0px;
+    padding-bottom: 2px;
+    padding-left: 27px;
 }
-.ul-thele-q-student li p{
+
+.ul-thele-q-student li p {
     margin: 0px;
 }
-.q-student-thankcaption{
+
+.q-student-thankcaption {
     border: 3px solid;
     border-radius: 25px;
     text-align: center;
@@ -251,7 +287,7 @@ table>tbody>tr>td:nth-child(4) {
     margin-left: 23px;
 }
 
-.the_le{
+.the_le {
     font-size: 15.5px;
 }
 
@@ -262,7 +298,7 @@ table>tbody>tr>td:nth-child(4) {
     top: 320px;
 }
 
-.table_goi_khuyen_khich th, .table_goi_khuyen_khich td{
+.table_goi_khuyen_khich th, .table_goi_khuyen_khich td {
     text-align: center;
 }
 
@@ -271,38 +307,38 @@ table>tbody>tr>td:nth-child(4) {
     background-color: #f1f1f1 !important;
 }
 
-.table_goi_khuyen_khich tbody tr td:first-child{
+.table_goi_khuyen_khich tbody tr td:first-child {
     text-align: left;
     padding-left: 20px;
 }
 
-.q_student_q_teen_2015_home_page{
-    background: url(/themes/mobifonedata/images/bg_2.png) top center no-repeat;
+.q_student_q_teen_2015_home_page {
+    /*background: url(/themes/mobifonedata/images/bg_2.png) top center no-repeat;
     background-attachment: fixed;
-    background-size: cover;
+    background-size: cover;*/
 }
 
-.q_student_q_teen_2015_home_img{
+.q_student_q_teen_2015_home_img {
     background: url(/themes/mobifonedata/images/bg_4.png) top center no-repeat;
     width: 100%;
     height: 768px;
 }
 
-.q_teen_q_student_left_img{
+.q_teen_q_student_left_img {
     background: url(/themes/mobifonedata/images/bg_5.png) top center no-repeat;
     width: 603px;
     height: 724px;
     position: absolute;
 }
 
-.footer_q_teen_q_student{
+.footer_q_teen_q_student {
     width: 100%;
     height: 47px;
     position: fixed;
     bottom: 35px;
 }
 
-.no-margin{
+.no-margin {
     margin: 0px !important;
 }
 
@@ -473,9 +509,10 @@ table>tbody>tr>td:nth-child(4) {
     }
 
     /*.home-page {*/
-        /*background: url(../images/bg-full-finail-DL.png) top center no-repeat;*/
+    /*background: url(../images/bg-full-finail-DL.png) top center no-repeat;*/
     /*}*/
 }
+
 @media screen and (max-width:500px) {
     /***   Page total  ***/
     .img-canhan {
@@ -486,6 +523,7 @@ table>tbody>tr>td:nth-child(4) {
         margin: 0px 0 0 90px;
     }
 }
+
 @media screen and (max-width:360px) {
     nav li {
         margin: 2px 0 !important;

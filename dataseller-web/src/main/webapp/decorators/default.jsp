@@ -14,10 +14,12 @@
     <meta name="description"content="">
     <meta name="author"content="">
     <title>Mobifone :: | Data Code </title>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/font-awesome/css/font-awesome.min.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/style-general_v1.1.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/style-mobifone_v1.12.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/bootstrap.min.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/style.css"/>">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/admin/css/jquery-ui-1.10.3.css"/>"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/kpp_v1.6.css"/>">
 
