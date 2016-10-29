@@ -43,8 +43,8 @@ public class UserSessionBean extends AbstractSessionBean<UserEntity, Long> imple
 
     @Override
     public UserEntity findByUserName(String userName) throws ObjectNotFoundException {
-        Query query = entityManager.createQuery("FROM UserEntity u WHERE upper(u.userName) = :userName");
-        query.setParameter("userName", userName.toUpperCase());
+        Query query = entityManager.createQuery("FROM UserEntity u WHERE lower(u.userName) = lower(:userName)");
+        query.setParameter("userName", userName);
         try{
             return (UserEntity)query.getSingleResult();
         }catch (Exception e) {

@@ -25,8 +25,8 @@ CREATE TABLE MOBI_DATA_USER
    Status                 NUMBER(24,0)                            NULL,
    UserGroupID            NUMBER(24,0)                            NOT NULL,
    CreatedDate            TIMESTAMP                      NOT NULL,
-   LastModified           TIMESTAMP                      NULL,
-   LastLogin              TIMESTAMP                       NOT NULL,
+   LastModified           TIMESTAMP,
+   LastLogin              TIMESTAMP,
 
    CONSTRAINT "MOBI_DATA_USER_USERNAME_UQ" UNIQUE (Username),
    CONSTRAINT "MOBI_DATA_USER_USERGROUP_FK" FOREIGN KEY(UserGroupID) REFERENCES MOBI_DATA_USERGROUP(UserGroupID)

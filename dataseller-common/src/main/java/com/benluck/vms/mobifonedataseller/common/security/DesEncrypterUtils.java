@@ -114,7 +114,7 @@ public final class DesEncrypterUtils {
 	}
 
     public static void main(String[] args) {
-        getInstance().decrypt("FBDjAINBepQ=");
+        getInstance().encrypt("123456");
     }
 
 }
