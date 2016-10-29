@@ -38,12 +38,6 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
 			HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
         String myLocalLogoutSuccessUrl = this.logoutSuccessUrl;
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            if (authority.getAuthority().equals(Constants.USERGROUP_KHDN)) {
-                myLocalLogoutSuccessUrl = "/tich-diem-cuoc-goi-nhan-voucher/xem-diem-doi-qua.html";
-                break;
-            }
-        }
 
 		Cookie terminate = new Cookie(Constants.MOBI_DATA_REMEMBER_ME_COOKIE_KEY, null);
 		String contextPath = request.getContextPath();

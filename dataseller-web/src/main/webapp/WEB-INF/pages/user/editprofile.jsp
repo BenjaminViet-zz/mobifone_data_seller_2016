@@ -19,7 +19,7 @@
 <security:authorize ifAnyGranted="TONGDAI">
     <c:set var="prefix" value="/tongdai" />
 </security:authorize>
-<c:url var="formUrl" value="${prefix}/thongtincanhan.html"/>
+<c:url var="formUrl" value="${prefix}/profile.html"/>
 
 <body>
 <div class="contentpanel">
@@ -97,7 +97,7 @@
                                     <i class="icon-edit"> </i>
                                     <fmt:message key="label.update"/>
                                 </a>
-                                <a href="${prefix}/thongtincanhan.html" class="btn btn-info">
+                                <a href="${prefix}/profile.html" class="btn btn-info">
                                     <i class="icon-backward"></i>
                                     <fmt:message key="label.huy"/>
                                 </a>

@@ -4,8 +4,12 @@
     <title><fmt:message key="admin.edit_user.heading_page" /></title>
     <meta name="menu" content="<fmt:message key="admin.edit_user.heading_page" />"/>
 </head>
-<c:url var="backUrl" value="/admin/userList.html"/>
-<c:url var="formUrl" value="/admin/editUserInfo.html"/>
+<c:url var="backUrl" value="/admin/user/list.html"/>
+<c:url var="formUrl" value="/admin/user/add.html"/>
+
+<c:if test="${pojo.userId != null}">
+    <c:url var="formUrl" value="/admin/user/edit.html"/>
+</c:if>
 
 <body>
 <div class="pageheader">
@@ -69,50 +73,6 @@
                             </div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label"><fmt:message key="user.label.email" /></label>
-                                    <div class="col-sm-8">
-                                        <form:input id="email" path="pojo.email" cssClass=" form-control nohtml"></form:input>
-                                        <form:errors for="email" path="pojo.email" cssClass="error-inline-validate"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label"><fmt:message key="label.mobile" /></label>
-                                    <div class="col-sm-8">
-                                        <form:input id="phoneNumber" path="pojo.mobileNumber" cssClass="nohtml validate_phone_number form-control"></form:input>
-                                        <form:errors for="phoneNumber" path="pojo.mobileNumber" cssClass="error-inline-validate"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label"><fmt:message key="label.chi_nhanh" /></label>
-                                    <div class="col-sm-8">
-                                        <form:select id="chiNhanhMenu" path="pojo.chiNhanh.chiNhanhId" cssStyle="width: 250px;" onchange="javascript: ajaxGetDepartmentList();">
-                                            <form:option value=""><fmt:message key="label.select" /></form:option>
-                                            <c:forEach items="${chiNhanhList}" var="chiNhanhVar">
-                                                <option <c:if test="${chiNhanhVar.chiNhanhId eq item.pojo.chiNhanh.chiNhanhId}">selected="true"</c:if> value="${chiNhanhVar.chiNhanhId}">${chiNhanhVar.name}</option>
-                                            </c:forEach>
-                                        </form:select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label"><fmt:message key="label.ten_cua_hang" /></label>
-                                    <div class="col-sm-8">
-                                        <form:select id="cuaHangMenu" path="pojo.department.departmentId" cssStyle="width: 250px;">
-                                            <form:option value=""><fmt:message key="label.select" /></form:option>
-                                            <c:forEach items="${listDepartments}" var="department">
-                                                <option <c:if test="${department.departmentId eq item.pojo.department.departmentId}">selected="true"</c:if> value="${department.departmentId}">${department.name}</option>
-                                            </c:forEach>
-                                        </form:select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
                                     <label class="col-sm-2 control-label"><fmt:message key="user.label.usergroup" /></label>
                                     <div class="col-sm-8">
                                         <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required" cssStyle="width: 250px;">
@@ -153,7 +113,7 @@
                             <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                         </c:choose>
                     </button>&nbsp;
-                    <a href="<c:url value="/admin/userList.html"/>" class="btn btn-info"><fmt:message key="label.huy" /></a>
+                    <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>
                 </div>
             </div>
         </div>
@@ -172,34 +132,6 @@
                 $("#formEdit").submit();
             }
         });
-
-        jQuery.validator.addClassRules('validate_phone_number', {
-            validatePhoneNumber: true
-        });
-
-        jQuery.validator.addMethod("validatePhoneNumber", function () {
-            return validatePhoneNumber($.trim($('#phoneNumber').val()));
-        }, "<fmt:message key="user.msg.invalid_phone_number"/>");
     });
-
-    function ajaxGetDepartmentList(){
-        $('#cuaHangMenu').find('option:not(:first-child)').remove();
-        selectFirstItemSelect2('#cuaHangMenu');
-        if($('#chiNhanhMenu').val() != ''){
-            $.ajax({
-                url: '<c:url value="/ajax/cuahangmobifone/getDeprtmentListByChiNhanh.html" />',
-                type: 'get',
-                dataType: 'json',
-                data: {chiNhanh: $('#chiNhanhMenu').val()},
-                success: function(res){
-                    if(res.departmentList != null){
-                        $(res.departmentList).each(function(index, el){
-                            $('#cuaHangMenu').append("<option value=" +el.departmentId+ ">" +el.name+ "</option>");
-                        });
-                    }
-                }
-            });
-        }
-    }
 </script>
 </body>

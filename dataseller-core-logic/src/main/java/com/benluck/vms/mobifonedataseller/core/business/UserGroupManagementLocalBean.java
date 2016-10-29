@@ -17,6 +17,12 @@ import java.util.Map;
  */
 @Local
 public interface UserGroupManagementLocalBean {
+
+    List<UserGroupDTO> findAll();
+
+
+//    ============
+
     /**
      * Get list of UserGroup by properties.
      * @param properties
@@ -60,12 +66,6 @@ public interface UserGroupManagementLocalBean {
      * @return
      */
     Integer deleteItems(String[] checkList);
-
-    /**
-     * Get a list of UserGroupDTO for accessing.
-     * @return A list of UserGroupDTO.
-     */
-    List<UserGroupDTO> findAll();
 
     /**
      * Retrive UserGroupDTO by unique code.

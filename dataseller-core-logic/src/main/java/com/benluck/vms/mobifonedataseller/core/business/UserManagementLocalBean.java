@@ -24,8 +24,18 @@ public interface UserManagementLocalBean {
      * @throws ObjectNotFoundException
      */
     UserDTO findByUsername(String username) throws ObjectNotFoundException;
+
     UserDTO findById(Long userId) throws ObjectNotFoundException;
+
     UserDTO findEqualUnique(String key, String value) throws ObjectNotFoundException;
-    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
+
+    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems, String whereClause);
+
     List<RoleDTO> loadRolesByUserId(Long userId);
+
+    void updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException;
+
+    void deleteItemById(Long userId) throws RemoveException;
+
+    void addItem(UserDTO dto) throws DuplicateKeyException;
 }

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
@@ -63,7 +64,7 @@ public class UserController extends ApplicationObjectSupport {
                     boolean hasRelatedToData = false;
                     if(!hasRelatedToData){
                         try{
-//                            this.userService.deleteById(command.getPojo().getUserId());
+                            this.userService.deleteItemById(command.getPojo().getUserId());
                             mav.addObject(Constants.ALERT_TYPE, "success");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
                         }catch (Exception e){
@@ -79,6 +80,7 @@ public class UserController extends ApplicationObjectSupport {
                 executeSearch(command, request);
             }
         }
+
         executeSearch(command, request);
 
         List<UserGroupDTO> userGroupList = this.userGroupService.findAll();
@@ -88,53 +90,52 @@ public class UserController extends ApplicationObjectSupport {
         return mav;
 	}
 
-    @RequestMapping(value = {"/admin/profile.html", "/user/profile.html"})
+    @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
-                             BindingResult bindingResult) throws DuplicateKeyException {
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView("user/edit");
         String crudaction = command.getCrudaction();
         UserDTO pojo = command.getPojo();
-        if (StringUtils.isNotBlank(crudaction)){
-            if(crudaction.equals("insert-update")){
-                try{
+
+        try{
+            if (StringUtils.isNotBlank(crudaction)){
+                if(crudaction.equals("insert-update")){
                     validator.validate(command, bindingResult);
                     if (!bindingResult.hasErrors()){
                         if (pojo.getUserId() == null ){
-//                            pojo = this.userService.addItem(command.getPojo());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                            this.userService.addItem(command.getPojo());
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                         } else {
-//                            pojo = this.userService.updateItem(command.getPojo());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                            this.userService.updateItem(command.getPojo());
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        command.setPojo(pojo);
-                    }else{
-                        pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
+                        return new ModelAndView("redirect:/admin/user/list.html");
                     }
-
-                } catch (Exception e){
-                    log.error(e.getMessage(), e);
-                    mav.addObject(Constants.ALERT_TYPE, "danger");
-                    mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.keynotfound"));
                 }
-            }
-
-        }
-        if (pojo.getUserId()!= null){
-            try{
+            }else if(pojo.getUserId() != null){
                 pojo = this.userService.findById(command.getPojo().getUserId());
                 pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
                 command.setPojo(pojo);
-            } catch (Exception e){
-                log.error(e.getMessage(), e);
             }
+        }catch (ObjectNotFoundException one){
+            logger.error("Can not get profile of UserId: " + pojo.getUserId());
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.keynotfound"));
+        }catch (DuplicateKeyException dle){
+            logger.error("Duplicated UserId: " + pojo.getUserId());
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
-        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
-        mav.addObject("userGroups", userGroups);
-        mav.addObject(Constants.FORM_MODEL_KEY, command);
-        return mav;
+
+            List<UserGroupDTO> userGroups = this.userGroupService.findAll();
+            mav.addObject("userGroups", userGroups);
+            mav.addObject(Constants.FORM_MODEL_KEY, command);
+            return mav;
     }
+
 
     /**
      * Fetch uset list by properties
@@ -151,23 +152,27 @@ public class UserController extends ApplicationObjectSupport {
         if (StringUtils.isNotBlank(pojo.getDisplayName())){
             properties.put("displayName", pojo.getDisplayName());
         }
-        Object [] result = this.userService.searchByProperties(properties, model.getSortExpression(), model.getSortDirection(), model.getFirstItem(), model.getMaxPageItems());
+
+        StringBuilder whereClause = new StringBuilder();
+        whereClause.append("A.userId != " + SecurityUtils.getLoginUserId());
+
+        Object [] result = this.userService.searchByProperties(properties, model.getSortExpression(), model.getSortDirection(), model.getFirstItem(), model.getMaxPageItems(), whereClause.toString());
         model.setTotalItems(Integer.valueOf(result[0].toString()));
         model.setListResult((List<UserDTO>)result[1]);
         model.setMaxPageItems(model.getMaxPageItems());
     }
 
-    @RequestMapping(value ={"/admin/thongtincanhan.html","/cuahangmobifone/thongtincanhan.html","/chinhanh/thongtincanhan.html","/tongdai/thongtincanhan.html"})
+    @RequestMapping(value ={"/admin/profile.html","/profile.html"})
     public ModelAndView editProfile(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws ObjectNotFoundException {
+
         ModelAndView mav = new ModelAndView("/user/editprofile");
         String crudaction = command.getCrudaction();
-        UserDTO pojo = command.getPojo();
-        Long userId = SecurityUtils.getLoginUserId();
+
         if (StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")){
             try{
                 validator.validate(command, bindingResult);
                 if (!bindingResult.hasErrors()){
-//                    this.userService.updateProfile(command.getPojo());
+                    this.userService.updateItem(command.getPojo());
                     mav.addObject(Constants.ALERT_TYPE, "success");
                     mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                 }
@@ -176,16 +181,8 @@ public class UserController extends ApplicationObjectSupport {
                 mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.exception"));
             }
         }
-        if (userId != null && userId > 0){
-            try{
-                pojo = this.userService.findById(userId);
-                pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
-                command.setPojo(pojo);
-            }catch (Exception e){
-                log.error(e.getMessage(), e);
-            }
-        }
-        command.setPojo(pojo);
+
+        command.setPojo(this.userService.findById(SecurityUtils.getLoginUserId()));
         mav.addObject(Constants.FORM_MODEL_KEY, command);
 
         return mav;

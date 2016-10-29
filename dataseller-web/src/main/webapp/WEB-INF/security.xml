@@ -60,7 +60,7 @@
     </authentication-manager>
 
     <beans:bean id="myLogoutSuccessHandler" class="com.benluck.vms.mobifonedataseller.security.MyLogoutSuccessHandler">
-		<beans:property name="logoutSuccessUrl" value="/"></beans:property>
+		<beans:property name="logoutSuccessUrl" value="/login"></beans:property>
 	</beans:bean>
 
     <beans:bean id="myRememberMeAuthenticationFilter" class=

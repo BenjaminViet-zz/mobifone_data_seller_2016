@@ -10,7 +10,6 @@
 <c:url var="viewUrl" value="/admin/user/view.html"/>
 <c:url var="editUrl" value="/admin/user/edit.html"/>
 <c:url var="addUrl" value="/admin/user/add.html"/>
-<c:url var="importUrl" value="/admin/user/import.html"/>
 
 <div class="pageheader">
     <h2><i class="fa fa-edit"></i><fmt:message key="admin.user_list.heading_page" /></h2>
@@ -20,8 +19,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="panel-btns">
-                <a class="btn btn-primary" style="margin-top:-10px" href="${importUrl}"> <fmt:message key="label.button.import"/></a>
-                <a class="btn btn-primary" style="margin-top:-10px" href="${editUrl}"> <fmt:message key="label.button.them"/></a>
+                <a class="btn btn-primary" style="margin-top:-10px" href="${addUrl}"> <fmt:message key="label.button.them"/></a>
             </div>
             <h4 class="panel-title"><fmt:message key="admin.user_list.heading_page" /></h4>
         </div>
@@ -86,9 +84,9 @@
                                 <display:column headerClass="table_header" sortable="false" titleKey="label.stt" >
                                     ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                                 </display:column>
-                                <display:column headerClass="table_header" property="userName" sortName="userName" sortable="true" titleKey="label.username" style="20%"/>
-                                <display:column headerClass="table_header" property="displayName" sortName="displayName" sortable="true" titleKey="label.fullname" style="20%"/>
-                                <display:column headerClass="table_header_center" property="userGroup.name" sortable="false" class="text-center" titleKey="label.usergroup" />
+                                <display:column headerClass="table_header" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
+                                <display:column headerClass="table_header" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="20%"/>
+                                <display:column headerClass="table_header_center" property="userGroup.name" sortable="false" class="text-center" titleKey="user.label.usergroup" />
                                 <display:column headerClass="table_header_center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="10%">
                                     <c:choose>
                                         <c:when test = "${tableList.status eq 1}">
