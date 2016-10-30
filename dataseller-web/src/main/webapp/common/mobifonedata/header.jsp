@@ -14,7 +14,7 @@
             <div class="col-lg-2 col-md-2">
                 <div class="banner text-center"> <a href="<c:url value="/home.html" />"><img class="img-responsive img-center" src="<c:url value="/themes/mobifonedata/images/logo.png"/>"></a></div>
             </div>
-            <div class="col-lg-9 col-md-10">
+            <div class="col-lg-10 col-md-10">
                 <nav class="margin-top-small">
                     <ul id="kpp_navigation_bar" class=" list-inline text-center ">
                         <!-- Class Active sẽ dựa vào trang hiện tại-->
@@ -25,6 +25,6 @@
                 </nav>
             </div>
         </div>
-        <hr class="pull-left no-margin-top hidden-xs">
+        <%--<hr class="pull-left no-margin-top hidden-xs">--%>
     </div>
 </header>
