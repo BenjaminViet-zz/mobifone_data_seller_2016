@@ -1,0 +1,9 @@
+.action-bar{
+    width: 100%;
+    padding: 10px 0px;
+    text-align: right;
+}
+
+.form-group.last{
+    margin-bottom: 0px;
+}
