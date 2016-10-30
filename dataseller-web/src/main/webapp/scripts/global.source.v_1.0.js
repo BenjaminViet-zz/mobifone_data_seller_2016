@@ -195,37 +195,24 @@ $(document).ready(function() {
         });
     } catch(error){}
 
-    // password field
-    $("#btnShowHide").click(function(){
-        if($(this).html() == "Show"){
-            $(this).html("Hide");
-            var mval = $("#pwd").val();
-            $("#pwd").remove();
-            $("<input type='text' class='required' name='pojo.password' id='pwd'>").val(mval).attr("style", "width:160px").insertBefore("#btnShowHide");
-
-        }else{
-            $(this).html("Show");
-            var mval = $("#pwd").val();
-            $("#pwd").remove();
-            $("<input type='password' class='required' name='pojo.password' id='pwd'>").val(mval).attr("style", "width:160px").insertBefore("#btnShowHide");
-        }
-    });
-
     $('.not_allow_input').keydown(function(event){
         event.preventDefault();
     });
 
     $("#btnShowHidePassword").click(function () {
-        if ($(this).html() == "Xem") {
-            $(this).html("Ẩn");
+        var $el = $(this),
+            $input = $el.parent().find('input').eq(0);
+        var className = $input.attr('class');
+        if ($el.html() == "Xem") {
+            $el.html("Ẩn");
             var c = $("#password").val();
             $("#password").remove();
-            $("<input type='text' class='required nohtml form-control' name='pojo.password' id='password'>").val(c).attr("style", "width:160px").insertBefore("#btnShowHidePassword")
+            $("<input type='text' class='" + className + "' name='pojo.password' id='password'>").val(c).attr("style", "width:160px").insertBefore("#btnShowHidePassword")
         } else {
-            $(this).html("Xem");
+            $el.html("Xem");
             var c = $("#password").val();
             $("#password").remove();
-            $("<input type='password' class='required nohtml form-control' name='pojo.password' id='password'>").val(c).attr("style", "width:160px").insertBefore("#btnShowHidePassword")
+            $("<input type='password' class='" + className + "' name='pojo.password' id='password'>").val(c).attr("style", "width:160px").insertBefore("#btnShowHidePassword")
         }
     });
 

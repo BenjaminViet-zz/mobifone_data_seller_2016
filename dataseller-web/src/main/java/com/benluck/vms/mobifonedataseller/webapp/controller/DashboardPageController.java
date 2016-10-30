@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class DashboardPageController {
     private Logger logger = Logger.getLogger(DashboardPageController.class);
 
-    @RequestMapping(value = {"/admin/dashboard.html", "/dashboard.html"})
+    @RequestMapping(value = {"/admin/dashboard.html"})
     public ModelAndView checkLogin(){
         if(SecurityUtils.userHasAuthority(Constants.ADMIN_ROLE)){
             return new ModelAndView("/admin/dashboard");

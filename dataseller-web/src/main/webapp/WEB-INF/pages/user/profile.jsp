@@ -1,29 +1,15 @@
 <%@ include file="/common/taglibs.jsp"%>
-<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <head>
-    <title><fmt:message key="admin.edit_user.heading_page" /></title>
-    <meta name="menu" content="<fmt:message key="admin.edit_user.heading_page" />"/>
+    <title><fmt:message key="user.profile.heading_page" /></title>
+    <meta name="menu" content="<fmt:message key="user.profile.heading_page" />"/>
 </head>
-<c:url var="backUrl" value="/admin/user/list.html"/>
-<c:url var="formUrl" value="/admin/user/add.html"/>
 
-<c:if test="${pojo.userId != null}">
-    <c:url var="formUrl" value="/admin/user/edit.html"/>
-</c:if>
-
-<div class="page-title">
-    <div class="title_left">
-        <h3>
-            <c:choose>
-                <c:when test="${not empty item.pojo.userId}">
-                    <fmt:message key="admin.edit_user.label.edit_user" />
-                </c:when>
-                <c:otherwise><fmt:message key="admin.edit_user.label.add_user" /></c:otherwise>
-            </c:choose>
-        </h3>
-    </div>
-</div>
-<div class="clearfix"></div>
+<c:set var="prefix" value="" />
+<security:authorize ifAnyGranted="ADMIN">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="backUrl" value="${prefix}/dashboard.html"/>
+<c:url var="formUrl" value="${prefix}/profile.html"/>
 
 <c:if test="${!empty messageResponse}">
     <div class="row">
@@ -39,7 +25,6 @@
         </div>
     </div>
 </c:if>
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
@@ -100,12 +85,9 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>&nbsp;
+                            <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.home_back" /></a>&nbsp;
                             <button id="btnSave" class="btn btn-primary">
-                                <c:choose>
-                                    <c:when test="${not empty item.pojo.userId}"><fmt:message key="label.update" /></c:when>
-                                    <c:otherwise><fmt:message key="label.save" /></c:otherwise>
-                                </c:choose>
+                                <fmt:message key="label.update" />
                             </button>
                         </div>
                     </div>

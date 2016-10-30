@@ -1,3 +1,4 @@
+<%@ page import="com.benluck.vms.mobifonedataseller.security.util.SecurityUtils" %>
 <%@ include file="/common/taglibs.jsp" %>
 
 <c:set var="prefix" value="" />
@@ -16,18 +17,14 @@
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                        aria-expanded="false">
-                        <img src="<c:url value="/themes/newteample/content/images/img.jpg" />" alt="">John Doe
+                        <img src="<c:url value="/themes/newteample/content/images/img.jpg" />" alt=""><%=SecurityUtils.getPrincipal().getDisplayName()%>
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="javascript:;"> Profile</a></li>
-                        <li>
-                            <a href="javascript:;">
-                                <span class="badge bg-red pull-right">50%</span>
-                                <span>Settings</span>
-                            </a>
-                        </li>
-                        <li><a href="javascript:;">Help</a></li>
+                        <li><a href="<c:url value="${prefix}/profile.html"/>"> <fmt:message key="user.profile" /> </a></li>
+                        <security:authorize ifAnyGranted="ADMIN">
+                            <li><a href="<c:url value="${prefix}/dashboard.html"/>"><fmt:message key="user.dashboard_warning_page" /> </a></li>
+                        </security:authorize>
                         <li><a href="logout.jsp"><i class="fa fa-sign-out pull-right"></i><fmt:message key="logout" /></a></li>
                     </ul>
                 </li>

@@ -28,6 +28,7 @@ public class AbstractCommand<E> implements Serializable {
 	private String crudaction;
 	private String sessionId;
 	private String tableId = "tableList";
+    private String errorMessage;
 
 	private int page = 1;
 	protected E pojo;
@@ -175,5 +176,13 @@ public class AbstractCommand<E> implements Serializable {
 
     public void setReportMaxPageItems(int reportMaxPageItems) {
         this.reportMaxPageItems = reportMaxPageItems;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

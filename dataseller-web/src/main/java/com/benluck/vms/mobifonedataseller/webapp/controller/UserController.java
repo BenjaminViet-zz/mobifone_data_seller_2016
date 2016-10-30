@@ -130,10 +130,10 @@ public class UserController extends ApplicationObjectSupport {
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
 
-            List<UserGroupDTO> userGroups = this.userGroupService.findAll();
-            mav.addObject("userGroups", userGroups);
-            mav.addObject(Constants.FORM_MODEL_KEY, command);
-            return mav;
+        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
+        mav.addObject("userGroups", userGroups);
+        mav.addObject(Constants.FORM_MODEL_KEY, command);
+        return mav;
     }
 
 
@@ -160,32 +160,6 @@ public class UserController extends ApplicationObjectSupport {
         model.setTotalItems(Integer.valueOf(result[0].toString()));
         model.setListResult((List<UserDTO>)result[1]);
         model.setMaxPageItems(model.getMaxPageItems());
-    }
-
-    @RequestMapping(value ={"/admin/profile.html","/profile.html"})
-    public ModelAndView editProfile(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws ObjectNotFoundException {
-
-        ModelAndView mav = new ModelAndView("/user/editprofile");
-        String crudaction = command.getCrudaction();
-
-        if (StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")){
-            try{
-                validator.validate(command, bindingResult);
-                if (!bindingResult.hasErrors()){
-                    this.userService.updateItem(command.getPojo());
-                    mav.addObject(Constants.ALERT_TYPE, "success");
-                    mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
-                }
-            } catch (Exception e) {
-                mav.addObject(Constants.ALERT_TYPE, "danger");
-                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.exception"));
-            }
-        }
-
-        command.setPojo(this.userService.findById(SecurityUtils.getLoginUserId()));
-        mav.addObject(Constants.FORM_MODEL_KEY, command);
-
-        return mav;
     }
 }
 

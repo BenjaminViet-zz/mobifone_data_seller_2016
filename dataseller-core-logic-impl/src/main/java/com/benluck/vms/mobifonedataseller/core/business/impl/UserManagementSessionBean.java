@@ -36,11 +36,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
 
     @Override
     public UserDTO findById(Long userId) throws ObjectNotFoundException {
-        UserEntity entity = userService.findById(userId);
-        if (entity == null){
-            throw new ObjectNotFoundException("Not found user  "+ userId);
-        }
-        return  DozerSingletonMapper.getInstance().map(entity, UserDTO.class);
+        return UserBeanUtil.entity2DTO(userService.findById(userId));
     }
 
     @Override
