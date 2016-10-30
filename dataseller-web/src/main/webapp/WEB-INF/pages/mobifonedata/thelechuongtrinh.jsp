@@ -6,8 +6,8 @@
             <div class=" col-xs-12">
                 <article id="q-student-the-le-chuong-trinh">
                     <!-- InstanceBeginEditable name="Content" -->
-                    <div class="text-center"><h1 class="text-red margin-bottom-large"><b>Nội dung gói cước</b></h1></div>
-                    <h5 class="bg-red box-border text-white padding-round-small display-inline">a)	Nội dung gói cước bán buôn Data:</h5>
+                    <div class="text-center"><h2 class="text-red margin-bottom-large text-uppercase"><b>Nội dung chương trình</b></h2></div>
+                    <h5 class="text-red padding-round-small display-inline text-uppercase">Nội dung gói cước bán buôn Data:</h5>
                     <p><i class="fa fa-info-circle" aria-hidden="true"></i> Nội dung gói cước:</p>
                     <table class="table">
                         <thead>
@@ -43,7 +43,7 @@
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Gói cước chỉ được thực hiện đăng ký tại cửa hang trên form đấu nối, không đăng ký bằng SMS, USSD, web/wap;</p></li>
                     </ul>
 
-                    <h5 class="bg-red box-border text-white padding-round-small display-inline">b)	Data_code:</h5>
+                    <h5 class="text-red padding-round-small display-inline text-uppercase">Data_code:</h5>
                     <p><i class="fa fa-info-circle" aria-hidden="true"></i> Được cung cấp cho khách hang dưới dạng file excel có bảo mật, trong đó:</p>
                     <ul class="ul-thele-q-student">
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Serial data_code: gồm 12 chữ số;</p></li>
@@ -53,7 +53,7 @@
                     <p><i class="fa fa-info-circle" aria-hidden="true"></i> Hiệu lực sử dụng của data_code: không quá 60 ngày kể từ khi danh sách data_code  được cập nhật vào hệ thống quản lý mã thẻ.</p>
                     <p><i class="fa fa-info-circle" aria-hidden="true"></i> Các mệnh giá, dung lượng và thời hạn sử dụng data_code bao gồm:</p>
                     <ul class="ul-thele-q-student">
-                        <li><p><i class="fa fa-check" aria-hidden="true"></i> Các gói khai trên IN:</p></li>
+                        <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên IN</b>:</p></li>
                     </ul>
                     <table class="table text-center">
                         <thead>
@@ -147,7 +147,7 @@
                     </table>
 
                     <ul class="ul-thele-q-student">
-                        <li><p><i class="fa fa-check" aria-hidden="true"></i> Các gói khai trên PCRF:</p></li>
+                        <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên PCRF</b>:</p></li>
                     </ul>
 
                     <table class="table text-center">

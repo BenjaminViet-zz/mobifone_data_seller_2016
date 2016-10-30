@@ -19,7 +19,7 @@
                     <ul id="kpp_navigation_bar" class=" list-inline text-center ">
                         <!-- Class Active sẽ dựa vào trang hiện tại-->
                         <li id="kppHomePage" class="hidden-xs"><a href="<c:url value="/home.html" />" class="no-underline text-white">Trang chủ</a></li>
-                        <li id="kppTheLeCt"><a href="<c:url value="/noi-dung-chuong-trinh.html"/> " class="no-underline text-white">Nội dung gói cước</a></li>
+                        <li id="kppTheLeCt"><a href="<c:url value="/noi-dung-chuong-trinh.html"/> " class="no-underline text-white">Nội dung chương trình</a></li>
                         <li id="howToExchangePage"><a href="<c:url value="/quy-tac-su-dung.html" />" class="no-underline text-white">Quy tắc sử dụng</a></li>
                     </ul>
                 </nav>

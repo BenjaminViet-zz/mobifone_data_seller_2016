@@ -9,19 +9,19 @@
 
 /*===  Padding  ===*/
 .no-padding {
-	padding: 0px !important;
+	padding: 0 !important;
 }
 .no-padding-top {
-	padding-top: 0px !important;
+	padding-top: 0 !important;
 }
 .no-padding-bottom{
-	padding-bottom: 0px !important;
+	padding-bottom: 0 !important;
 }
 .no-padding-left{
-	padding-left: 0px !important;
+	padding-left: 0 !important;
 }
 .no-padding-right{
-	padding-right: 0px !important;
+	padding-right: 0 !important;
 }
 .padding-round-larger {
 	padding: 48px !important;
@@ -100,19 +100,19 @@
 }
 /*===  Margin  ===*/
 .no-margin {
-	margin: 0px !important;
+	margin: 0 !important;
 }
 .no-margin-top {
-	margin-top: 0px !important;
+	margin-top: 0 !important;
 }
 .no-margin-bottom{
-	margin-bottom: 0px !important;
+	margin-bottom: 0 !important;
 }
 .no-margin-left{
-	margin-left: 0px !important;
+	margin-left: 0 !important;
 }
 .no-margin-right{
-	margin-right: 0px !important;
+	margin-right: 0 !important;
 }
 .margin-top-larger {
 	margin-top: 48px;
@@ -177,22 +177,22 @@
 
 /*===  Border  ===*/
 .no-border{
-	border: 0px;
+	border: 0;
 }
 .no-border-right{
-	border-right: 0px !important;
+	border-right: 0 !important;
 }
 .no-border-left{
-	border-left: 0px !important;
+	border-left: 0 !important;
 }
 .no-border-top{
-	border-top: 0px !important;
+	border-top: 0 !important;
 }
 .no-border-bottom{
-	border-bottom: 0px !important;
+	border-bottom: 0 !important;
 }
 .no-border-radius{
-	border-radius: 0px !important;
+	border-radius: 0 !important;
 }
 .border-round{
 	border:1px solid #ddd;
@@ -328,7 +328,8 @@
     color: #fff !important;
 }
 
-@media screen and (max-width:800px){
-	img.img-center{
-	display:initial !important;
+@media screen and (max-width:800px) {
+	img.img-center {
+		display: initial !important;
+	}
 }
