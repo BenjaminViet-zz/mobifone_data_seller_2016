@@ -38,9 +38,9 @@
     <link href="<c:url value="/themes/admin/css/admin_v1.0.css" />" rel="stylesheet">
 
     <!-- jQuery -->
-    <script src="<c:url value="/themes/newteample/vendors/jquery/dist/jquery.min.js" />"></script>
+    <script src="<c:url value="/themes/admin/js/jquery-1.11.1.min.js" />"></script>
     <script src="<c:url value="/themes/admin/js/bootbox.min.js"/>"></script>
-    <script src="<c:url value="/themes/admin/js/jquery.validate.source.v_1.1.js"/>"></script>
+    <script src="<c:url value="/themes/admin/js/jquery.validate.js"/>"></script>
     <script src="<c:url value="/scripts/global.source.v_1.0.js"/>"></script>
     <decorator:head/>
 </head>

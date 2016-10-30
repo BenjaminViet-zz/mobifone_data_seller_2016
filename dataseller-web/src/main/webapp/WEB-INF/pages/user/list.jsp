@@ -28,7 +28,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_content">
-                    <div class="alert alert-${alertType}">
+                    <div class="alert alert-${alertType} no-bottom">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                             ${messageResponse}
                     </div>

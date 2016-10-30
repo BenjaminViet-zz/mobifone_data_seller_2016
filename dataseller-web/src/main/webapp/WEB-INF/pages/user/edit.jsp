@@ -30,7 +30,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_content">
-                    <div class="alert alert-${alertType}">
+                    <div class="alert alert-${alertType} no-bottom">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                             ${messageResponse}
                     </div>
@@ -68,7 +68,7 @@
                             <fmt:message key="user.label.password" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:password id="password" path="pojo.password" cssClass="required nohtml form-control"></form:password>
+                            <form:password id="password" path="pojo.password" cssClass="required nohtml form-control has-attach-add-on"></form:password>
                             <span class="add-on-attach" id="btnShowHidePassword">Xem</span>
                             <form:errors for="password" path="pojo.password" cssClass="error-inline-validate"/>
                         </div>
