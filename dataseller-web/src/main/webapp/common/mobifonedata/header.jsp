@@ -7,6 +7,7 @@
 --%>
 <%@ include file="/common/taglibs.jsp" %>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+<div class="scrollTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></div>
 <div class="bg-dot twoxtwo"></div>
 <header class="padding-top-large">
     <div class="container">
