@@ -27,7 +27,6 @@ public class UserEntity {
     private Timestamp lastLogin;
     private Integer isLDAP;
     private UserGroupEntity userGroup;
-    private List<PermissionEntity> roles;
 
     @Column(name = "USERID")
     @Id
