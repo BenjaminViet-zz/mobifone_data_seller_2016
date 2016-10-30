@@ -8,7 +8,7 @@
             <div class="col-md-12 text-center">
                 <p class="text-center">2016 &copy; All Rights Reserved - Mobifone</p>
             </div>
-            <div class="col-md-12 text-center">
+            <%--<div class="col-md-12 text-center">
                 <ul class="social-icons list-inline">
                     <li><a href="#" data-original-title="Facebook" class="social_facebook rounded-x"></a></li>
                     <li><a href="#" data-original-title="Twitter" class="social_twitter rounded-x"></a></li>
@@ -16,7 +16,7 @@
                     <li><a href="#" data-original-title="Pinterest" class="social_pinterest rounded-x"></a></li>
                     <li><a href="#" data-original-title="Linkedin" class="social_linkedin rounded-x"></a></li>
                 </ul>
-            </div>
+            </div>--%>
         </div>
     </div>
     <%--<a href="<c:url value="/thuebaophattrienmoi/kenhphanphoi/trang-chu.html" />"><img src="<c:url value="/themes/mobifonedata/images/40x40.png" />" alt=""></a>--%>
