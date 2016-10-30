@@ -22,6 +22,7 @@ public class UserDTO implements Serializable {
     private Timestamp lastModified;
     private Timestamp lastLogin;
     private UserGroupDTO userGroup;
+    private Integer isLDAP;
 
     public Long getUserId() {
         return userId;
@@ -93,5 +94,13 @@ public class UserDTO implements Serializable {
 
     public void setUserGroup(UserGroupDTO userGroup) {
         this.userGroup = userGroup;
+    }
+
+    public Integer getLDAP() {
+        return isLDAP;
+    }
+
+    public void setLDAP(Integer LDAP) {
+        isLDAP = LDAP;
     }
 }

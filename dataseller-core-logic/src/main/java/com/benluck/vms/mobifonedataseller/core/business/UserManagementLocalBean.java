@@ -33,9 +33,11 @@ public interface UserManagementLocalBean {
 
     List<PermissionDTO> loadPermissionsByUserId(Long userId);
 
-    void updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException;
+    UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException;
 
     void deleteItemById(Long userId) throws RemoveException;
 
-    void addItem(UserDTO dto) throws DuplicateKeyException;
+    UserDTO addItem(UserDTO dto) throws DuplicateKeyException;
+
+    void updatePasswordUserLDAP(String userName, String rawPassword) throws ObjectNotFoundException, DuplicateKeyException;
 }

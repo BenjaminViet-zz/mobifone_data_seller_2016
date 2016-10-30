@@ -99,6 +99,8 @@
 	</beans:bean>
     <!-- Override the default password-encoder (SHA) by Triple DES -->
     <beans:bean id="passwordEncoder" class="com.benluck.vms.mobifonedataseller.security.MyPasswordEncoder">
+        <beans:property name="userService" ref="userManagementSessionEJB"/>
+        <beans:property name="ldapUserLookup" ref="ldapUserLookup" />
     </beans:bean>
 
 	<!-- ExceptionTranslationFilter: Handles any AccessDeniedException and AuthenticationException thrown within the filter chain.-->

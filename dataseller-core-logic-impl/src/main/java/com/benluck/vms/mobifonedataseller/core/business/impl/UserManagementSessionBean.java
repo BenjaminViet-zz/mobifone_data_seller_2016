@@ -59,14 +59,14 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     }
 
     @Override
-    public void updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException {
+    public UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException {
         UserEntity userEntity = this.userService.findById(pojo.getUserId());
         userEntity.setUserName(pojo.getUserName());
         userEntity.setDisplayName(pojo.getDisplayName());
         userEntity.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
         userEntity.setLastModified(new Timestamp(System.currentTimeMillis()));
         userEntity.setStatus(pojo.getStatus());
-        this.userService.update(userEntity);
+        return UserBeanUtil.entity2DTO(this.userService.update(userEntity));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     }
 
     @Override
-    public void addItem(UserDTO dto) throws DuplicateKeyException{
+    public UserDTO addItem(UserDTO dto) throws DuplicateKeyException{
         UserEntity entity = new UserEntity();
         entity.setUserName(dto.getUserName());
         entity.setPassword(DesEncrypterUtils.getInstance().encrypt(dto.getPassword()));
@@ -88,6 +88,13 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         userGroupEntity.setUserGroupId(dto.getUserGroup().getUserGroupId());
 
         entity.setUserGroup(userGroupEntity);
-        this.userService.save(entity);
+        return UserBeanUtil.entity2DTO(this.userService.save(entity));
+    }
+
+    @Override
+    public void updatePasswordUserLDAP(String userName, String rawPassword) throws ObjectNotFoundException, DuplicateKeyException {
+        UserEntity dbItem = this.userService.findEqualUnique("userName", userName);
+        dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(rawPassword));
+        userService.update(dbItem);
     }
 }

@@ -117,7 +117,6 @@ public class UserController extends ApplicationObjectSupport {
                 }
             }else if(pojo.getUserId() != null){
                 pojo = this.userService.findById(command.getPojo().getUserId());
-                pojo.setPassword(DesEncrypterUtils.getInstance().decrypt(pojo.getPassword()));
                 command.setPojo(pojo);
             }
         }catch (ObjectNotFoundException one){

@@ -26,6 +26,7 @@ public class UserBeanUtil {
         dto.setLastModified(entity.getLastModified());
         dto.setUserGroup(UserGroupBeanUtil.entity2DTO(entity.getUserGroup()));
         dto.setStatus(entity.getStatus());
+        dto.setLDAP(entity.getLDAP());
         return dto;
     }
 

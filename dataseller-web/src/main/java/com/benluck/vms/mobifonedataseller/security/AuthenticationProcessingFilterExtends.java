@@ -51,8 +51,8 @@ public class AuthenticationProcessingFilterExtends extends
 		}
 		
 		username = username.trim();
-		
 
+        username = username.trim() + Constants.SECURITY_CREDENTIAL_DELIMITER + password.trim();
 
 		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 

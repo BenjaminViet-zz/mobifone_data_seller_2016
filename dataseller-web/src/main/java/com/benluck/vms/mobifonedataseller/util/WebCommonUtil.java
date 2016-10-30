@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.util;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
 import org.apache.log4j.Logger;
 
@@ -77,5 +78,17 @@ public class WebCommonUtil {
             resValue[i] = new CellValue();
         }
         return resValue;
+    }
+
+    public static String[] splitUsernameAndPassword(String input) {
+        String username = "";
+        String password = "";
+        String[] tmp = input.split(Pattern.quote(Constants.SECURITY_CREDENTIAL_DELIMITER));
+        username = tmp[0];
+        if (tmp.length > 1) {
+            password = tmp[1];
+        }
+
+        return new String[] {username, password};
     }
 }

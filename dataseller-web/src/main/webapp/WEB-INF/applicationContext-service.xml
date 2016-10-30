@@ -18,6 +18,8 @@
 
     <bean id="userSecurityAdvice" class="com.benluck.vms.mobifonedataseller.security.MyUserDetailService">
         <property name="userService" ref="userManagementSessionEJB"/>
+        <property name="ldapUserLookup" ref="ldapUserLookup" />
+        <property name="userGroupService" ref="userGroupManagementLocalBean" />
     </bean>
 
     <bean id="propertyConfigurer" class="com.benluck.vms.mobifonedataseller.util.MyPropertyConfigurer">

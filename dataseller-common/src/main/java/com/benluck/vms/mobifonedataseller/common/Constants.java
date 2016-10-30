@@ -20,6 +20,11 @@ public class Constants {
 
     public static final int REPORT_MAXPAGEITEMS = 100;
 
+    /**
+     * Spring Credential delimiter.
+     */
+    public static final String SECURITY_CREDENTIAL_DELIMITER = "${SEC_CRED}";
+
 
     //~ Static fields/initializers =============================================
 
@@ -128,6 +133,7 @@ public class Constants {
 
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
+    public static final String USERGROUP_VMS_USER = "VMS_USER";
 
     public static final String ALERT_TYPE = "alertType";
 
