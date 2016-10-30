@@ -247,6 +247,31 @@ $(document).ready(function() {
     $('.nav-parent').on('click', function(){
         checkResizeHeightOfParentPopup(this);
     });
+
+
+
+
+
+    /*-------------------------------------*/
+    /* Scroll TOP*/
+    /*-------------------------------------*/
+    $(window).scroll(function(){
+        if ( $(this).scrollTop() > 100 ){
+            $('.scrollTop').fadeIn();
+        } else {
+            $('.scrollTop').fadeOut();
+        }
+    });
+
+    // Trigger scroll to top
+    $('.scrollTop').on('click', function(){
+        $('html, body').animate({scrollTop: 0}, 800);
+        return false;
+    });
+
+    /*-------------------------------------*/
+    /* Scroll TOP*/
+    /*-------------------------------------*/
 });
 
 function checkResizeHeightOfParentPopup(el){
