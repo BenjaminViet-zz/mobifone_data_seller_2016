@@ -29,22 +29,22 @@
             <div class="menu_section">
                 <h3><%=SecurityUtils.getPrincipal().getDisplayName()%></h3>
                 <ul class="nav side-menu">
-                    <li><a><i class="fa fa-home"></i> <fmt:message key="user.manager" /> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-user-o" aria-hidden="true"></i> <fmt:message key="user.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/user/list.html" />"><fmt:message key="user.manager.list" /></a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-edit"></i> <fmt:message key="usergroup.manager" /> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-lock" aria-hidden="true"></i> <fmt:message key="usergroup.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/usergroup/list.html" />"><fmt:message key="usergroup.manager.list" /></a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-desktop"></i> <fmt:message key="package_data.manager" /> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-database" aria-hidden="true"></i> <fmt:message key="package_data.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/package_data/list.html" />"><fmt:message key="package_data.manager.list" /></a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-table"></i> <fmt:message key="khdn.manager"/> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-users" aria-hidden="true"></i> <fmt:message key="khdn.manager"/> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/vendor/list.html"/> "><fmt:message key="khdn.manager.list"/></a></li>
                         </ul>
@@ -59,7 +59,7 @@
                             <li><a href="<c:url value="${prefix}/order/list.html"/> "><fmt:message key="order.manager.list" /></a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-clone"></i> <fmt:message key="report.manager" /> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-pie-chart" aria-hidden="true"></i> <fmt:message key="report.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/report/tong_hop_chi_phi_phat_trien_duy_tri.html"/> "><fmt:message key="report.baocaotonghopchiphiphattrien_duytri" /></a></li>
                             <li><a href="<c:url value="${prefix}/report/chi_tiet_chi_phi_phat_trien_duy_tri.html"/> "><fmt:message key="report.baocaochitietchiphiphattrien_duytri" /></a></li>
