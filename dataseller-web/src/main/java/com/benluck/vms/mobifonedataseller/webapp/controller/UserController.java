@@ -152,6 +152,9 @@ public class UserController extends ApplicationObjectSupport {
         if (StringUtils.isNotBlank(pojo.getDisplayName())){
             properties.put("displayName", pojo.getDisplayName());
         }
+        if (pojo.getUserGroup() != null && pojo.getUserGroup().getUserGroupId() != null){
+            properties.put("userGroup.userGroupId", pojo.getUserGroup().getUserGroupId());
+        }
 
         StringBuilder whereClause = new StringBuilder();
         whereClause.append("A.userId != " + SecurityUtils.getLoginUserId());
