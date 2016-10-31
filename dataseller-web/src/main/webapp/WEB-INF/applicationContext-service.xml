@@ -13,6 +13,8 @@
 
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" id="userManagementSessionEJB"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserGroupManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" id="userGroupManagementLocalBean"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PermissionManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" id="permissionManagementLocalBean"/>
+
     <jee:local-slsb jndi-name="java:app/dataseller-mail-service-1.0/EmailSessionBeanEJB!com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" business-interface="com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" id="emailLocalBean"/>
 
 

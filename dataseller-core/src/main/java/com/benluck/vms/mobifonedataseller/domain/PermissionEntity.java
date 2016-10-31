@@ -18,6 +18,9 @@ public class PermissionEntity {
     private Long permissionId;
     private String code;
     private String description;
+    private Integer permissionGroupNumber;
+    private Integer permissionGroupOrder;
+    private Integer orderNo;
 
     @Column(name = "PERMISSIONID")
     @Id
@@ -47,10 +50,40 @@ public class PermissionEntity {
         return description;
     }
 
+
     public void setDescription(String description) {
         this.description = description;
     }
 
+    @Column(name = "PERMISSION_GROUP_NUMBER")
+    @Basic
+    public Integer getPermissionGroupNumber() {
+        return permissionGroupNumber;
+    }
+
+    public void setPermissionGroupNumber(Integer permissionGroupNumber) {
+        this.permissionGroupNumber = permissionGroupNumber;
+    }
+
+    @Column(name = "PERMISSION_GROUP_ORDER")
+    @Basic
+    public Integer getPermissionGroupOrder() {
+        return permissionGroupOrder;
+    }
+
+    public void setPermissionGroupOrder(Integer permissionGroupOrder) {
+        this.permissionGroupOrder = permissionGroupOrder;
+    }
+
+    @Column(name = "ORDERNO")
+    @Basic
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -62,6 +95,9 @@ public class PermissionEntity {
         if (permissionId != null ? !permissionId.equals(that.permissionId) : that.permissionId != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (permissionGroupNumber != null ? !permissionGroupNumber.equals(that.permissionGroupNumber) : that.permissionGroupNumber != null) return false;
+        if (permissionGroupOrder != null ? !permissionGroupOrder.equals(that.permissionGroupOrder) : that.permissionGroupOrder != null) return false;
+        if (orderNo != null ? !orderNo.equals(that.orderNo) : that.orderNo != null) return false;
 
         return true;
     }
@@ -71,6 +107,9 @@ public class PermissionEntity {
         int result = permissionId != null ? permissionId.hashCode() : 0;
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (permissionGroupNumber != null ? permissionGroupNumber.hashCode() : 0);
+        result = 31 * result + (permissionGroupOrder != null ? permissionGroupOrder.hashCode() : 0);
+        result = 31 * result + (orderNo != null ? orderNo.hashCode() : 0);
         return result;
     }
 }

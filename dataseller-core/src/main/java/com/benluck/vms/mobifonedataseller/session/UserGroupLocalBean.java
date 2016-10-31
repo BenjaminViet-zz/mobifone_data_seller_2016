@@ -14,15 +14,10 @@ import java.util.List;
 public interface UserGroupLocalBean extends GenericSessionBean<UserGroupEntity, Long> {
 
     /**
-     * Retrieve UserGroupEntity by unique code.
-     * @param code
-     * @return UserGroupEntity
-     */
-    UserGroupEntity findUserGroupByCode(String code);
-
-    /**
      * Get list of UserGroupEntity for accessing.
      * @return A list of UserGroupEntity.
      */
     List<UserGroupEntity> findAll4Access();
+
+    Boolean checkInUse(Long userGroupId);
 }

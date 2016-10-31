@@ -4,6 +4,7 @@ import com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity;
 import com.benluck.vms.mobifonedataseller.session.UserGroupPermissionLocalBean;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,5 +16,12 @@ import javax.ejb.Stateless;
 @Stateless(name = "UserGroupPermissionSessionEJB")
 public class UserGroupPermissionSessionBean extends AbstractSessionBean<UserGroupPermissionEntity, Long> implements UserGroupPermissionLocalBean {
     public UserGroupPermissionSessionBean() {
+    }
+
+    @Override
+    public void deleteByUserGroupId(Long userGroupId) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" DELETE FROM UserGroupPermissionEntity WHERE userGroup.userGroupId = :userGroupId ");
+        entityManager.createQuery(sqlQuery.toString()).setParameter("userGroupId", userGroupId).executeUpdate();
     }
 }

@@ -15,6 +15,9 @@ public class PermissionDTO implements Serializable {
     private Long permissionId;
     private String code;
     private String description;
+    private Integer permissionGroupNumber;
+    private Integer permissionGroupOrder;
+    private Integer orderNo;
 
     public Long getPermissionId() {
         return permissionId;
@@ -38,5 +41,29 @@ public class PermissionDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getPermissionGroupNumber() {
+        return permissionGroupNumber;
+    }
+
+    public void setPermissionGroupNumber(Integer permissionGroupNumber) {
+        this.permissionGroupNumber = permissionGroupNumber;
+    }
+
+    public Integer getPermissionGroupOrder() {
+        return permissionGroupOrder;
+    }
+
+    public void setPermissionGroupOrder(Integer permissionGroupOrder) {
+        this.permissionGroupOrder = permissionGroupOrder;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
     }
 }

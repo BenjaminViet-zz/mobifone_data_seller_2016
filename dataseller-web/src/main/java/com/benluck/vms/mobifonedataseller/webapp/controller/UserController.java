@@ -56,24 +56,18 @@ public class UserController extends ApplicationObjectSupport {
 
     @RequestMapping("/admin/user/list.html")
 	public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY)UserCommand command, HttpServletRequest request) throws RemoveException {
-        ModelAndView mav = new ModelAndView("/user/list");
+        ModelAndView mav = new ModelAndView("/admin/user/list");
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
             if(action.equals("delete")){
                 if(command.getPojo().getUserId() != null){
-                    boolean hasRelatedToData = false;
-                    if(!hasRelatedToData){
-                        try{
-                            this.userService.deleteItemById(command.getPojo().getUserId());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
-                        }catch (Exception e){
-                            mav.addObject(Constants.ALERT_TYPE, "info");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
-                        }
-                    }else{
+                    try{
+                        this.userService.deleteItemById(command.getPojo().getUserId());
+                        mav.addObject(Constants.ALERT_TYPE, "success");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                    }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.msg.no_user_id"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
@@ -82,9 +76,6 @@ public class UserController extends ApplicationObjectSupport {
         }
 
         executeSearch(command, request);
-
-        List<UserGroupDTO> userGroupList = this.userGroupService.findAll();
-        mav.addObject("userGroupList", userGroupList);
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
@@ -94,7 +85,7 @@ public class UserController extends ApplicationObjectSupport {
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
-        ModelAndView mav = new ModelAndView("user/edit");
+        ModelAndView mav = new ModelAndView("/admin/user/edit");
         String crudaction = command.getCrudaction();
         UserDTO pojo = command.getPojo();
 
@@ -116,8 +107,7 @@ public class UserController extends ApplicationObjectSupport {
                     }
                 }
             }else if(pojo.getUserId() != null){
-                pojo = this.userService.findById(command.getPojo().getUserId());
-                command.setPojo(pojo);
+                command.setPojo(this.userService.findById(command.getPojo().getUserId()));
             }
         }catch (ObjectNotFoundException one){
             logger.error("Can not get profile of UserId: " + pojo.getUserId());

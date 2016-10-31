@@ -19,6 +19,9 @@ public class PermissionBeanUtil {
         dto.setPermissionId(entity.getPermissionId());
         dto.setCode(entity.getCode());
         dto.setDescription(entity.getDescription());
+        dto.setPermissionGroupNumber(entity.getPermissionGroupNumber());
+        dto.setPermissionGroupOrder(entity.getPermissionGroupOrder());
+        dto.setOrderNo(entity.getOrderNo());
         return dto;
     }
 

@@ -2,15 +2,16 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserGroupValidator;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -20,63 +21,103 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class UserGroupController extends ApplicationObjectSupport {
-    private transient final Log log = LogFactory.getLog(getClass());
+    private transient final Logger logger = Logger.getLogger(UserGroupController.class);
 
     @Autowired
-    private UserGroupManagementLocalBean userGroupManagementLocalBean;
+    private UserGroupManagementLocalBean userGroupService;
+    @Autowired
+    private
+    PermissionManagementLocalBean permissionService;
 
     @Autowired
-    private UserGroupValidator userGroupValidator;
+    private UserGroupValidator validator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Date.class, new CustomDateEditor());
     }
 
-    @RequestMapping("/admin/usergroup/edit.html")
-    public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand usergroupCommand, BindingResult bindingResult, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/usergroup/edit");
-        String crudaction = usergroupCommand.getCrudaction();
-        UserGroupDTO pojo = usergroupCommand.getPojo();
-        if(StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")) {
-            try {
-                userGroupValidator.validate(usergroupCommand, bindingResult);
+    @RequestMapping(value = {"/admin/usergroup/edit.html", "/admin/usergroup/add.html"})
+    public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) {
+        ModelAndView mav = new ModelAndView("/admin/usergroup/edit");
+        String crudaction = command.getCrudaction();
+        UserGroupDTO pojo = command.getPojo();
+
+        try {
+            if(StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")) {
+                validator.validate(command, bindingResult);
                 if(!bindingResult.hasErrors()) {
                     if(pojo.getUserGroupId() != null && pojo.getUserGroupId() > 0) {
-                        pojo = this.userGroupManagementLocalBean.updateItem(usergroupCommand.getPojo());
-                        mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                        this.userGroupService.updateItem(command.getPojo());
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update.successful"));
                     } else {
-                        pojo = this.userGroupManagementLocalBean.addItem(usergroupCommand.getPojo());
-                        mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                        this.userGroupService.addItem(command.getPojo());
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add.successful"));
                     }
-                    mav.addObject("success", true);
-                    usergroupCommand.setPojo(pojo);
-
                 }
-            }catch(Exception e) {
-                logger.error(e.getMessage(), e);
-                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("general.exception.msg"));
+            }else if (command.getPojo().getUserGroupId() != null){
+                command.setPojo(this.userGroupService.findById(command.getPojo().getUserGroupId()));
             }
+        }catch(Exception e) {
+            logger.error(e.getMessage(), e);
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("general.exception.msg"));
         }
-        if(!bindingResult.hasErrors()&& usergroupCommand.getPojo().getUserGroupId() != null && usergroupCommand.getPojo().getUserGroupId() > 0) {
-            try {
-                UserGroupDTO itemObj = this.userGroupManagementLocalBean.findById(pojo.getUserGroupId());
-                usergroupCommand.setPojo(itemObj);
-            }
-            catch (Exception e) {
-                logger.error("Could not found user group " + usergroupCommand.getPojo().getUserGroupId(), e);
-            }
-        }
-        mav.addObject(Constants.FORM_MODEL_KEY, usergroupCommand);
+
+        mav.addObject("permissionDTOList", this.permissionService.findAllAndSort());
+        mav.addObject(Constants.FORM_MODEL_KEY, command);
         return mav;
+    }
+
+    @RequestMapping(value = {"/admin/usergroup/list.html"})
+    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command, HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("/admin/usergroup/list");
+        String action = command.getCrudaction();
+        if (StringUtils.isNotBlank(action)){
+            if(action.equals("delete")){
+                if(command.getPojo().getUserGroupId() != null){
+                    try{
+                        this.userGroupService.deleteItem(command.getPojo().getUserGroupId());
+                        mav.addObject(Constants.ALERT_TYPE, "success");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
+                    }catch (Exception e){
+                        mav.addObject(Constants.ALERT_TYPE, "info");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.can_not_delete_user_group"));
+                    }
+                }
+            }
+        }
+
+        executeSearch(command, request);
+        mav.addObject("page", command.getPage() - 1);
+        mav.addObject(Constants.LIST_MODEL_KEY, command);
+        return mav;
+    }
+
+    /**
+     * Fetch UserGroup list by properties
+     * @param command
+     * @param command
+     */
+    private void executeSearch(UserGroupCommand command,HttpServletRequest request){
+        RequestUtil.initSearchBean(request, command);
+
+        Object [] result = this.userGroupService.searchByProperties(new HashMap<String, Object>(), command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
+        command.setTotalItems(Integer.valueOf(result[0].toString()));
+        command.setListResult((List<UserGroupDTO>)result[1]);
+        command.setMaxPageItems(command.getMaxPageItems());
     }
 }

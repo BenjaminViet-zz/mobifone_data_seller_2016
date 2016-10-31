@@ -3,10 +3,11 @@ CREATE TABLE MOBI_DATA_PERMISSION
    PermissionID           NUMBER(24,0)                  NOT NULL PRIMARY KEY,
    Code                   VARCHAR(50)                   NOT NULL,
    Description            VARCHAR2(250 CHAR)            NULL,
-   Permission_Type_Value  INTEGER                       NOT NULL,
+   Permission_Group_Number  INTEGER                     NOT NULL,
+   Permission_Group_Order   INTEGER                     NOT NULL,
    OrderNo                INTEGER                       NOT NULL,
    CONSTRAINT "MOBI_DATA_PERMISSION_UQ" UNIQUE (Code),
-   CONSTRAINT "MOBI_DATA_OTYPE_ONO_UQ"  UNIQUE (Permission_Type_Value, OrderNo)
+   CONSTRAINT "MOBI_DATA_OTYPE_ONO_UQ"  UNIQUE (Permission_Group_Order, Permission_Group_Number, OrderNo)
 )  TABLESPACE "USERS";
 
 CREATE TABLE MOBI_DATA_USERGROUP

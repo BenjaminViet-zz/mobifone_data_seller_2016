@@ -4,8 +4,7 @@ import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocal
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
@@ -13,11 +12,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import javax.ejb.ObjectNotFoundException;
+
 @Component
 public class UserGroupValidator extends ApplicationObjectSupport implements Validator {
-    private transient final Log log = LogFactory.getLog(getClass());
+    private transient final Logger logger = Logger.getLogger(UserGroupValidator.class);
     @Autowired
-    private UserGroupManagementLocalBean userGroupManagementLocalBean;
+    private UserGroupManagementLocalBean userGroupService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -39,6 +40,7 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
      */
     private void checkRequiredFields(UserGroupCommand command, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.code", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.code")}, "non-empty value required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.description", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.description")}, "non-empty value required.");
     }
 
     /**
@@ -49,6 +51,9 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
         if(StringUtils.isNotBlank(command.getPojo().getCode())){
             command.getPojo().setCode(command.getPojo().getCode().trim());
         }
+        if(StringUtils.isNotBlank(command.getPojo().getDescription())){
+            command.getPojo().setDescription(command.getPojo().getDescription().trim());
+        }
     }
 
     /**
@@ -58,16 +63,17 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
      */
     private void checkUniqueCode(UserGroupCommand command, Errors errors) {
         String code = command.getPojo().getCode();
-        if(StringUtils.isNotBlank(code)){
-            try{
-                UserGroupDTO dto = userGroupManagementLocalBean.findByCode(code);
-                if(dto != null && ! dto.getUserGroupId().equals(command.getPojo().getUserGroupId())){
+        try{
+            UserGroupDTO dto = userGroupService.findByCode(command.getPojo().getCode());
+            if(command.getPojo().getUserGroupId() != null){
+                if(!dto.getUserGroupId().equals(command.getPojo().getUserGroupId())){
                     errors.rejectValue("pojo.code", "errors.duplicated");
                 }
-            }catch (Exception e)
-            {
-                log.error(e.getMessage(), e);
+            }else{
+                if(dto != null){
+                    errors.rejectValue("pojo.code", "errors.duplicated");
+                }
             }
-        }
+        }catch (ObjectNotFoundException one){}
     }
 }

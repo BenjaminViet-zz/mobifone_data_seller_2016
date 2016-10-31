@@ -45,7 +45,7 @@ public class ProfileController extends ApplicationObjectSupport{
     @RequestMapping(value ={"/admin/profile.html","/user/profile.html"})
     public ModelAndView editProfile(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws ObjectNotFoundException {
 
-        ModelAndView mav = new ModelAndView("/user/profile");
+        ModelAndView mav = new ModelAndView("/admin/user/profile");
         String crudaction = command.getCrudaction();
 
         if (StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")){

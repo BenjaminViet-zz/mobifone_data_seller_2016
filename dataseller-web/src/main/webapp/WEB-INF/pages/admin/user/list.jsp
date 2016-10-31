@@ -7,7 +7,6 @@
 </head>
 
 <c:url var="formUrl" value="/admin/user/list.html"/>
-<c:url var="viewUrl" value="/admin/user/view.html"/>
 <c:url var="editUrl" value="/admin/user/edit.html"/>
 <c:url var="addUrl" value="/admin/user/add.html"/>
 
@@ -118,24 +117,6 @@
     </div>
 </div>
 <script language="javascript" type="text/javascript">
-    $(document).ready(function(){
-        // active tab
-        setActiveMenu4Admin('#dmNguoiDungTab');
-
-        $(".deleteLink").click(function(){
-            var id = $(this).attr("id");
-            bootbox.confirm('<fmt:message key="delete.confirm.message.title"/>', '<fmt:message key="delete.confirm.message.content"/>', function(r) {
-                if(r){
-                    if(id != null && id != undefined){
-                        $("<input type='hidden' name='checkList' value='"+id+"'>").appendTo($("#listForm"));
-                        $("#crudaction").val("delete");
-                        $("#listForm").submit();
-                    }
-                }
-            });
-        });
-    });
-
     function submitForm(){
         $('#listForm').submit();
     }

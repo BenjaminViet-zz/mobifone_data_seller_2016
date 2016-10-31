@@ -30,8 +30,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
 
     @Override
     public UserDTO findByUsername(String username) throws ObjectNotFoundException {
-        UserEntity entity = userService.findByUserName(username);
-        return DozerSingletonMapper.getInstance().map(entity, UserDTO.class);
+        return UserBeanUtil.entity2DTO(userService.findByUserName(username));
     }
 
     @Override
@@ -49,8 +48,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
 
     @Override
     public UserDTO findEqualUnique(String key, String value) throws ObjectNotFoundException{
-        UserEntity entity = this.userService.findEqualUnique(key, value);
-        return UserBeanUtil.entity2DTO(entity);
+        return UserBeanUtil.entity2DTO(this.userService.findEqualUnique(key, value));
     }
 
     @Override

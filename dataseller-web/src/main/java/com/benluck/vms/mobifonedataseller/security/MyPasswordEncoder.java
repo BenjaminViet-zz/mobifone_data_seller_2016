@@ -32,16 +32,16 @@ public class MyPasswordEncoder implements PasswordEncoder {
 			throws DataAccessException {
 		return DesEncrypterUtils.getInstance().encrypt(password);
 	}
-    public boolean isPasswordValid(String encPass, String rawPass, Object salt)
+    public boolean isPasswordValid(String userNamePass, String rawPass, Object salt)
             throws DataAccessException {
         boolean res = false;
         if(StringUtils.isNotEmpty(rawPass)) {
-            String[] userPassArr = WebCommonUtil.splitUsernameAndPassword(encPass);
+            String[] userPassArr = WebCommonUtil.splitUsernameAndPassword(userNamePass);
             String userName = userPassArr[0];
-            String encryptPass = userPassArr[1];
+            String descryptDBPass = userPassArr[1];
 
             String encPass2 = DesEncrypterUtils.getInstance().encrypt(rawPass);
-            res = encryptPass.equals(encPass2);
+            res = descryptDBPass.equals(rawPass);
 
             if(Config.getInstance().getProperty("LDAP_login").equals("true")){
                 if(!res){

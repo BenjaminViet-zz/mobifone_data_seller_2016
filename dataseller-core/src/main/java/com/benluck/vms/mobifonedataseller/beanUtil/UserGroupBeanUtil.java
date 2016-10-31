@@ -3,6 +3,9 @@ package com.benluck.vms.mobifonedataseller.beanUtil;
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.domain.UserGroupEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
@@ -17,5 +20,13 @@ public class UserGroupBeanUtil {
         dto.setCode(entity.getCode());
         dto.setDescription(entity.getDescription());
         return dto;
+    }
+
+    public static List<UserGroupDTO> entityList2DTOList(List<UserGroupEntity> entityList){
+        List<UserGroupDTO> dtoList = new ArrayList<UserGroupDTO>();
+        for (UserGroupEntity entity : entityList){
+            dtoList.add(UserGroupBeanUtil.entity2DTO(entity));
+        }
+        return dtoList;
     }
 }

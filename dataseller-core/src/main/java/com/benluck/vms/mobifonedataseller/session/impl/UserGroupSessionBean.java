@@ -22,26 +22,23 @@ public class UserGroupSessionBean extends AbstractSessionBean<UserGroupEntity, L
     }
 
     @Override
-    public UserGroupEntity findUserGroupByCode(String code) {
-        StringBuilder sqlQueryClause = new StringBuilder("FROM UserGroupEntity where code = :code");
-        Query query = entityManager.createQuery(sqlQueryClause.toString());
-        query.setParameter("code", code);
-        List<UserGroupEntity> entityList = (List<UserGroupEntity>)query.getResultList();
-        if(entityList.size() > 0){
-            return entityList.get(0);
-        }
-        return null;
+    public List<UserGroupEntity> findAll4Access() {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" FROM UserGroupEntity ug WHERE ug.code != :code ");
+        Query query = entityManager.createQuery(sqlQuery.toString());
+        query.setParameter("code", Constants.ADMIN_ROLE);
+        return  (List<UserGroupEntity>)query.getResultList();
     }
 
     @Override
-    public List<UserGroupEntity> findAll4Access() {
-        StringBuilder sqlQueryClause = new StringBuilder();
-        List<String> codes = new ArrayList<String>();
-        codes.add(Constants.USERGROUP_ADMIN);
-        codes.add(Constants.USERGROUP_KHDN);
-        sqlQueryClause.append(" from UserGroupEntity e where e.code in (:codes) order by e.code ");
-        Query query = entityManager.createQuery(sqlQueryClause.toString());
-        query.setParameter("codes", codes);
-        return  (List<UserGroupEntity>)query.getResultList();
+    public Boolean checkInUse(Long userGroupId) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT COUNT(ug.userGroupId) FROM UserGroupEntity ug WHERE EXISTS (SELECT 1 FROM UserEntity u WHERE u.usereGroup.userGroupId = ug.userGroupId) ");
+        Query query = entityManager.createQuery(sqlQuery.toString());
+        Integer count = Integer.valueOf(query.getSingleResult().toString());
+        if (count.intValue() > 0){
+            return true;
+        }
+        return false;
     }
 }

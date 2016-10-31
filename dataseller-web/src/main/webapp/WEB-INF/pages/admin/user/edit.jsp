@@ -119,7 +119,6 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#password').val('${item.pojo.password}');
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
                 $("#formEdit").submit();

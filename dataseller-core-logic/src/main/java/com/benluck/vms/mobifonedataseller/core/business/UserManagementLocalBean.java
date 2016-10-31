@@ -37,7 +37,7 @@ public interface UserManagementLocalBean {
 
     void deleteItemById(Long userId) throws RemoveException;
 
-    UserDTO addItem(UserDTO dto) throws DuplicateKeyException;
+    UserDTO addItem(UserDTO pojo) throws DuplicateKeyException;
 
     void updatePasswordUserLDAP(String userName, String rawPassword) throws ObjectNotFoundException, DuplicateKeyException;
 }

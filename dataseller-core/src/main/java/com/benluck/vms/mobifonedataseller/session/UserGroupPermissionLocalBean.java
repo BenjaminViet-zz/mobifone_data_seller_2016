@@ -10,4 +10,5 @@ import com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity;
  * To change this template use File | Settings | File Templates.
  */
 public interface UserGroupPermissionLocalBean extends GenericSessionBean<UserGroupPermissionEntity, Long> {
+    void deleteByUserGroupId(Long userGroupId);
 }

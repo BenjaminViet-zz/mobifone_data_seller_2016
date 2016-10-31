@@ -12,5 +12,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface PermissionLocalBean extends GenericSessionBean<PermissionEntity,Long> {
+
     List<PermissionEntity> findPermissionByUserId(Long userId);
+
+    List<PermissionEntity> findAllAndSort();
 }
