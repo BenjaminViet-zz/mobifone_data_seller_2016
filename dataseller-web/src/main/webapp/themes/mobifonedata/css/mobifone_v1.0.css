@@ -1,3 +1,132 @@
+#viewScoreHistoryNavTab li{
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    background: none;
+}
+
+#viewScoreHistoryNavTab li.active{
+    position: relative;
+    bottom: -1px;
+}
+
+.viewScoreContent .calendar {
+    position: inherit !important;
+    height: 30px !important;
+    width: 30px !important;
+    display: inline-block;
+    margin-top: 3px;
+}
+
+#content404 {
+    background: white;
+}
+
+.viewScoreContent{
+    padding-top: 10px;
+}
+
+.traCuuBtn {
+    margin-top: 10px;
+}
+
+.nowrap{
+    white-space: nowrap;
+}
+
+.clear{
+    clear: both;
+}
+
+#nav-bar li.active a, #nav-bar li.active a:hover {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+th.text-center{
+    vertical-align: middle !important;
+}
+
+.auto_break{
+    white-space: pre-line !important;
+    word-break: break-all !important;
+}
+
+.mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_dragger .mCSB_dragger_bar{
+    height: 10px !important;
+}
+
+.mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_draggerRail{
+    height: 10px !important;
+    margin-top: 6px !important;
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover{
+    background-color: #008000 !important;
+}
+
+.mCSB_scrollTools_horizontal{
+    position: absolute !important;
+    top: -5px !important;
+}
+.mCSB_container{
+    top: 10px !important;
+}
+
+#qStudentLink,
+#kppLink{
+    float: left;
+}
+
+.row{
+    margin-top: 10px; !important;
+}
+
+.form-group .control-label{
+    margin-top: 5px;
+}
+
+.form-group .control-label.font-size-small{
+    margin-top: 7px;
+}
+
+article {
+   min-height: 700px;
+}
+
+select, input{
+    width: 200px !important;
+}
+
+.icon_calendar {
+    padding-left: 35px !important;
+}
+
+.form-control.option{
+    max-width: 250px;
+}
+
+.seperator {
+    height: 10px;
+    width: 2px;
+    background-color: black;
+    border: 1px solid #cccccc;
+    margin: 0px 10px;
+}
+
+.info_label {
+    color: #c9302C;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.info_user{
+    float: left;
+}
+
+.tblUserInfoKQTH_2015 tbody tr td:first-child{
+    text-align: right;
+}
+
 body {
     /*font-family: Arial, Helvetica, sans-serif;*/
     font-family: 'Lato', sans-serif !important;
@@ -677,3 +806,81 @@ table tr td {
     }
 }
 
+/* CSS Document */
+h4 {
+    color: #63b5f8;
+}
+
+.box-border {
+    border-radius: 7px;
+}
+
+.text-white {
+    color: white !important;
+}
+
+.padding-round-small {
+    padding: 5px !important;
+}
+
+.display-inline {
+    display: inline-block;
+}
+
+h1, h2, h3, h4, h5, nav {
+    /*font-family: Tahoma, Geneva, sans-serif;*/
+    font-family: 'Lato', sans-serif;
+}
+
+h5, .h5 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.example-two {
+    border-radius: 10px;
+    border: 2px solid #428bca;
+    width: 100%;
+}
+
+ul {
+    padding-left: 0px;
+}
+
+ul li {
+    margin: 5px 0;
+    /*background: url(http://1.bp.blogspot.com/-BlXyqO7zxzc/U_Vfsug1tkI/AAAAAAAAC1o/JT5LDgpkAb0/s320/right-arrow.png) left top no-repeat;*/
+    padding: 5px 0 5px 20px;
+    list-style: none;
+    color: #000;
+    font-size: 15.5px;
+}
+
+table ul li {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+p {
+    font-size: 15.5px;
+}
+
+@media screen and (max-width:800px) {
+    ul li {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:700px) {
+    h1 {
+        font-size: 21px;
+    }
+
+    ul li, ul {
+        margin: 0;
+    }
+
+    h5, .h5 {
+        margin: 10px auto 5px;
+    }
+}
