@@ -1,7 +1,10 @@
 <%@ page import="com.benluck.vms.mobifonedataseller.security.util.SecurityUtils" %>
 <%@ include file="/common/taglibs.jsp" %>
 
-<c:set var="prefix" value="/admin" />
+<c:set var="prefix" value="/user" />
+<security:authorize ifAnyGranted="ADMIN">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
 
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">

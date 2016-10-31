@@ -4,7 +4,7 @@
     <meta name="menu" content="<fmt:message key="user.profile.heading_page" />"/>
 </head>
 
-<c:set var="prefix" value="" />
+<c:set var="prefix" value="/user" />
 <security:authorize ifAnyGranted="ADMIN">
     <c:set var="prefix" value="/admin" />
 </security:authorize>

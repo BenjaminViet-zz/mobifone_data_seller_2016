@@ -42,7 +42,7 @@ public class ProfileController extends ApplicationObjectSupport{
     private ProfileValidator validator;
 
 
-    @RequestMapping(value ={"/admin/profile.html","/profile.html"})
+    @RequestMapping(value ={"/admin/profile.html","/user/profile.html"})
     public ModelAndView editProfile(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws ObjectNotFoundException {
 
         ModelAndView mav = new ModelAndView("/user/profile");

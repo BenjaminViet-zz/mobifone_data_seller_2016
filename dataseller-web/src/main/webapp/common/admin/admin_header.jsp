@@ -1,7 +1,7 @@
 <%@ page import="com.benluck.vms.mobifonedataseller.security.util.SecurityUtils" %>
 <%@ include file="/common/taglibs.jsp" %>
 
-<c:set var="prefix" value="" />
+<c:set var="prefix" value="/user" />
 <security:authorize ifAnyGranted="ADMIN">
     <c:set var="prefix" value="/admin" />
 </security:authorize>

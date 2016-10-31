@@ -21,11 +21,8 @@
         <custom-filter ref="ajaxTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
 
         <intercept-url pattern="/admin/**" access="ADMIN" />
-        <intercept-url pattern="/login*" access="ADMIN,NHANVIEN,TONGDAI,CHINHANH" />
-        <intercept-url pattern="/cuahangmobifone/**" access="NHANVIEN,TONGDAI,ADMIN" />
-        <intercept-url pattern="/tongdai/**" access="TONGDAI" />
-        <intercept-url pattern="/chinhanh/**" access="CHINHANH,ADMIN" />
-        <intercept-url pattern="/baocao/**" access="BAOCAO" />
+        <intercept-url pattern="/user/**" access="LOGON" />
+        <intercept-url pattern="/login*" access="ADMIN,LOGON" />
 
         <intercept-url pattern="/logon/**" access="LOGON" />
 
