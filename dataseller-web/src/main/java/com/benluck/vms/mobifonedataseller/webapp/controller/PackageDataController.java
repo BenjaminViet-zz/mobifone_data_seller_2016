@@ -18,4 +18,9 @@ public class PackageDataController {
     public ModelAndView list(){
         return new ModelAndView("/admin/packagedata/list");
     }
+
+    /*@RequestMapping( value = {"/admin/package_data/add.html", "/package_data/add.html"} )
+    public ModelAndView add() {
+        return new ModelAndView("/admin/packagedata/add");
+    }*/
 }

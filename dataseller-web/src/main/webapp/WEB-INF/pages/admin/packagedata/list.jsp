@@ -11,15 +11,11 @@
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 
+<%--<c:url var="addUrl" value="/admin/package_data/add.html"/>--%>
+
 <div class="page-title">
     <div class="title_left">
         <h3><fmt:message key="admin.data_code_list.heading_page" /></h3>
-    </div>
-
-    <div class="title_right">
-        <div class="action-bar">
-            <a class="btn btn-primary" href="${addUrl}"> <fmt:message key="label.button.them"/></a>
-        </div>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -97,7 +93,7 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
+                            <%--<a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>--%>
                             <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
                         </div>
                     </div>
@@ -124,22 +120,18 @@
                             <a href="">Thời gian sử dụng</a></th>
                         <th class="table_header text-center sortable">Số lần gia hạn</th>
                         <th class="table_header text-center">TK</th>
-                        <th class="table_header text-center">Thao tác</th>
+
                     </tr>
                     </thead>
                     <tbody>
-                        <tr class="odd">
+                        <tr>
                             <td style="width: 5%;"></td>
-                            <td style="width: 10%"></td>
-                            <td style="width: 10%"></td>
+                            <td style="width: 15%"></td>
+                            <td style="width: 15%"></td>
                             <td style="width: 30%"></td>
                             <td style="width: 15%"></td>
                             <td style="width: 10%"></td>
                             <td style="width: 10%"></td>
-                            <td style="width:10%;">
-                                <a href="/admin/user/edit.html?pojo.userId=2" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                                <a class="tip-top"><fmt:message key="label.delete" /></a>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -147,3 +139,12 @@
         </div>
     </div>
 </div>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        function resetForm(){
+            $("input").val('');
+            selectFirstItemSelect2('#chonGoiCuoc');
+        }
+    })
+</script>
