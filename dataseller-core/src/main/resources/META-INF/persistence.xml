@@ -8,6 +8,10 @@
         <class>com.benluck.vms.mobifonedataseller.domain.PermissionEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UserEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.PackageDataEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.KHDNEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.OrderEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.OrderHistoryEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

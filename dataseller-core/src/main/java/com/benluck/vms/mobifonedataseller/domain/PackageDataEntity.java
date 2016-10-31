@@ -11,7 +11,7 @@ import javax.persistence.*;
  * Time: 22:23
  * To change this template use File | Settings | File Templates.
  */
-@Table(name = "MOBI_DATA_PERMISSION")
+@Table(name = "MOBI_DATA_PACKAGE_DATA")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 public class PackageDataEntity {

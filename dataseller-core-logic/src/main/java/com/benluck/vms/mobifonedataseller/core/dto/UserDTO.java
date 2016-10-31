@@ -24,6 +24,14 @@ public class UserDTO implements Serializable {
     private UserGroupDTO userGroup;
     private Integer isLDAP;
 
+    public UserDTO(){}
+
+    public UserDTO(Long userId, String userName, String displayName){
+        this.userId = userId;
+        this.userName = userName;
+        this.displayName = displayName;
+    }
+
     public Long getUserId() {
         return userId;
     }

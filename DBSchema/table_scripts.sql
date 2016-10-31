@@ -74,11 +74,13 @@ CREATE TABLE MOBI_DATA_ORDER
    PackageDataID          NUMBER(24,0)                  NOT NULL,
    Quantity               Integer                       NOT NULL,
    UnitPrice              Float                         NOT NULL,
-   IssueDate              TIMESTAMP                     NOT NULL,
+   IssuedDate             TIMESTAMP                     NOT NULL,
    ShippingDate           TIMESTAMP                     NOT NULL,
    Status                 INTEGER                       NOT NULL,
    CreatedDate            TIMESTAMP                     NOT NULL,
-   LastModified           TIMESTAMP                     NOT NULL
+   LastModified           TIMESTAMP                     NOT NULL,
+   CreatedBy              NUMBER(24,0)                  NOT NULL,
+   CONSTRAINT "MOBI_DATA_ORDER_CREATED_BY_FK" FOREIGN KEY(CREATEDBY) REFERENCES MOBI_DATA_USER(USERID)
 )  TABLESPACE "USERS";
 
 CREATE TABLE MOBI_DATA_ORDER_HISTORY
@@ -90,6 +92,8 @@ CREATE TABLE MOBI_DATA_ORDER_HISTORY
    OriginalData           CLOB                          NOT NULL,
    NewData                CLOB                          NOT NULL,
    CreatedDate            TIMESTAMP                     NOT NULL,
+   CreatedBy              NUMBER(24,0)                  NOT NULL,
+   CONSTRAINT "MOBI_DATA_OH_CREATEDBY_FK" FOREIGN KEY (CREATEDBY) REFERENCES MOBI_DATA_USER(USERID),
    CONSTRAINT "MOBI_DATA_ORDER_HIS_ORDER_FK" FOREIGN KEY(OrderID) REFERENCES MOBI_DATA_ORDER(OrderID),
    CONSTRAINT "MOBI_DATA_ORDER_USER_FK" FOREIGN KEY(UserID) REFERENCES MOBI_DATA_USER(UserID)
 )  TABLESPACE "USERS";
