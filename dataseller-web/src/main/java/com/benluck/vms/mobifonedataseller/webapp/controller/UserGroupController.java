@@ -54,22 +54,36 @@ public class UserGroupController extends ApplicationObjectSupport {
         String crudaction = command.getCrudaction();
         UserGroupDTO pojo = command.getPojo();
 
+        List<PermissionDTO> permissionDTOList = this.permissionService.findAll();
+
         try {
             if(StringUtils.isNotBlank(crudaction) && crudaction.equals("insert-update")) {
                 validator.validate(command, bindingResult);
                 if(!bindingResult.hasErrors()) {
                     if(pojo.getUserGroupId() != null && pojo.getUserGroupId() > 0) {
-                        this.userGroupService.updateItem(command.getPojo());
+                        this.userGroupService.updateItem(command.getPojo(), command.getCheckList());
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update.successful"));
                     } else {
-                        this.userGroupService.addItem(command.getPojo());
+                        this.userGroupService.addItem(command.getPojo(), command.getCheckList());
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add.successful"));
                     }
+                    return new ModelAndView("redirect:/admin/usergroup/list.html");
                 }
             }else if (command.getPojo().getUserGroupId() != null){
-                command.setPojo(this.userGroupService.findById(command.getPojo().getUserGroupId()));
+                command.setPojo(this.userGroupService.findAndFetchPermissionListById(command.getPojo().getUserGroupId()));
+
+                if(command.getPojo().getPermissionList() != null && command.getPojo().getPermissionList().size() > 0){
+                    for (PermissionDTO permissionDTO : permissionDTOList){
+                        for (PermissionDTO dbPermissionDTO : command.getPojo().getPermissionList()){
+                            if(permissionDTO.getPermissionId().equals(dbPermissionDTO.getPermissionId())){
+                                permissionDTO.setChecked(true);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }catch(Exception e) {
             logger.error(e.getMessage(), e);
@@ -77,7 +91,7 @@ public class UserGroupController extends ApplicationObjectSupport {
             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("general.exception.msg"));
         }
 
-        mav.addObject("permissionDTOList", this.permissionService.findAllAndSort());
+        mav.addObject("permissionDTOList", permissionDTOList);
         mav.addObject(Constants.FORM_MODEL_KEY, command);
         return mav;
     }

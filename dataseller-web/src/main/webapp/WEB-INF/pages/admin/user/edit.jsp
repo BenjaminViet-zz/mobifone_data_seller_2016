@@ -100,7 +100,7 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>&nbsp;
+                            <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
                             <button id="btnSave" class="btn btn-primary">
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.userId}"><fmt:message key="label.update" /></c:when>

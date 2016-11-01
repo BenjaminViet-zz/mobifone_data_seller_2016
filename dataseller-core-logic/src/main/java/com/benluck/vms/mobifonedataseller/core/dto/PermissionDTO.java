@@ -15,9 +15,7 @@ public class PermissionDTO implements Serializable {
     private Long permissionId;
     private String code;
     private String description;
-    private Integer permissionGroupNumber;
-    private Integer permissionGroupOrder;
-    private Integer orderNo;
+    private Boolean isChecked = false;
 
     public Long getPermissionId() {
         return permissionId;
@@ -43,27 +41,11 @@ public class PermissionDTO implements Serializable {
         this.description = description;
     }
 
-    public Integer getPermissionGroupNumber() {
-        return permissionGroupNumber;
+    public Boolean getChecked() {
+        return isChecked;
     }
 
-    public void setPermissionGroupNumber(Integer permissionGroupNumber) {
-        this.permissionGroupNumber = permissionGroupNumber;
-    }
-
-    public Integer getPermissionGroupOrder() {
-        return permissionGroupOrder;
-    }
-
-    public void setPermissionGroupOrder(Integer permissionGroupOrder) {
-        this.permissionGroupOrder = permissionGroupOrder;
-    }
-
-    public Integer getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Integer orderNo) {
-        this.orderNo = orderNo;
+    public void setChecked(Boolean checked) {
+        isChecked = checked;
     }
 }

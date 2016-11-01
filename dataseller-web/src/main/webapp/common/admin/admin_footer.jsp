@@ -47,6 +47,9 @@
 <script src="<c:url value="/themes/newteample/vendors/moment/min/moment.min.js" />"></script>
 <script src="<c:url value="/themes/newteample/vendors/bootstrap-daterangepicker/daterangepicker.js" />"></script>
 
+<!-- Switchery -->
+<script src="<c:url value="/themes/newteample/vendors/switchery/dist/switchery.min.js" />"></script>
+
 <!-- Custom Theme Scripts -->
 <script src="<c:url value="/themes/newteample/content/js/custom.js" />"></script>
 

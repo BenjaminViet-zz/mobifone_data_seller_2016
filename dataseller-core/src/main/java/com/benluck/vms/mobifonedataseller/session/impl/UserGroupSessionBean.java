@@ -33,8 +33,8 @@ public class UserGroupSessionBean extends AbstractSessionBean<UserGroupEntity, L
     @Override
     public Boolean checkInUse(Long userGroupId) {
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" SELECT COUNT(ug.userGroupId) FROM UserGroupEntity ug WHERE EXISTS (SELECT 1 FROM UserEntity u WHERE u.usereGroup.userGroupId = ug.userGroupId) ");
-        Query query = entityManager.createQuery(sqlQuery.toString());
+        sqlQuery.append(" SELECT COUNT(ug.userGroupId) FROM UserGroupEntity ug WHERE ug.userGroupId = :userGroupId AND EXISTS (SELECT 1 FROM UserEntity u WHERE u.userGroup.userGroupId = ug.userGroupId) ");
+        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("userGroupId", userGroupId);
         Integer count = Integer.valueOf(query.getSingleResult().toString());
         if (count.intValue() > 0){
             return true;

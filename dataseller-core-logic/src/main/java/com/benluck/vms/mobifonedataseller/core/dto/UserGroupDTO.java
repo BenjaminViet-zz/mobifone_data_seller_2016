@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.core.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +17,7 @@ public class UserGroupDTO implements Serializable {
     private Long userGroupId;
     private String code;
     private String description;
+    private List<PermissionDTO> permissionList;
 
     public Long getUserGroupId() {
         return userGroupId;
@@ -39,5 +41,13 @@ public class UserGroupDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<PermissionDTO> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<PermissionDTO> permissionList) {
+        this.permissionList = permissionList;
     }
 }

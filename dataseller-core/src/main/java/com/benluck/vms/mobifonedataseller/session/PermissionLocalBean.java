@@ -14,6 +14,4 @@ import java.util.List;
 public interface PermissionLocalBean extends GenericSessionBean<PermissionEntity,Long> {
 
     List<PermissionEntity> findPermissionByUserId(Long userId);
-
-    List<PermissionEntity> findAllAndSort();
 }

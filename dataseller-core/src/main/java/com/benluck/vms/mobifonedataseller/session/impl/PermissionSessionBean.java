@@ -28,12 +28,4 @@ public class PermissionSessionBean extends AbstractSessionBean<PermissionEntity,
         query.setParameter("userId", userId);
         return (List<PermissionEntity>) query.getResultList();
     }
-
-    @Override
-    public List<PermissionEntity> findAllAndSort() {
-        StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" FROM PermissionEntity p ")
-                .append(" ORDER BY p.permissionGroupOrder, p.permissionGroupNumber, p.orderNo ASC ");
-        return (List<PermissionEntity>)entityManager.createQuery(sqlQuery.toString()).getResultList();
-    }
 }

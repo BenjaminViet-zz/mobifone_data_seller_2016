@@ -25,6 +25,9 @@
     <!-- bootstrap-daterangepicker -->
     <link href="<c:url value="/themes/newteample/vendors/bootstrap-daterangepicker/daterangepicker.css" />" rel="stylesheet">
 
+    <!-- Switchery -->
+    <link href="<c:url value="/themes/newteample/vendors/switchery/dist/switchery.min.css" />" rel="stylesheet">
+
     <!-- Datatables -->
     <%--<link href="<c:url value="/themes/newteample/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" />" rel="stylesheet">--%>
     <%--<link href="<c:url value="/themes/newteample/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" />" rel="stylesheet">--%>

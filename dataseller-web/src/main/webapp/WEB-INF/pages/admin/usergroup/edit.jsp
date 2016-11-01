@@ -47,7 +47,7 @@
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">
-                            <fmt:message key="label.full_name" />
+                            <fmt:message key="usergroup.label.code" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:input id="code" path="pojo.code" cssClass="required nohtml form-control"></form:input>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
-                            <fmt:message key="label.user_name" />
+                            <fmt:message key="usergroup.label.description" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:input id="description" path="pojo.description" cssClass="required nohtml form-control"></form:input>
@@ -65,48 +65,32 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
-                            <fmt:message key="permission.list" />
+                            <fmt:message key="usergroup.permission" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <c:if test="${permissionDTOList.size() > 0}">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th><fmt:message key="permission.group_name" /></th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:set var="lastPermissionGroupNumber" value="${-1}" />
-                                    <c:forEach items="${permissionDTOList}" var="permision" varStatus="status">
-                                        <c:if test="${lastPermissionGroupNumber == -1}">
-                                            <tr>
-                                            <td><fmt:message key="permission.group.${permision.permissionGroupNumber}" /></td>
-                                            <td>${permision.description}
-                                        </c:if>
-                                        <c:if test="${lastPermissionGroupNumber != permision.permissionGroupNumber}">
-                                            </td>
-                                            </tr>
-                                            <tr>
-                                            <td><fmt:message key="permission.group.${permision.permissionGroupNumber}" /></td>
-                                            <td>${permision.description}
-                                        </c:if>
-                                        <c:if test="${lastPermissionGroupNumber == permision.permissionGroupNumber}">
-                                            ${permision.description}
-                                        </c:if>
-                                        <c:if test="${status.count == permissionDTOList.size()}">
-                                            </tr>
-                                        </c:if>
-                                        <c:set var="lastPermissionGroupNumber" value="${permision.permissionGroupNumber}" />
+                            <div class="">
+                                <ul class="to_do">
+                                    <c:forEach items="${permissionDTOList}" var="permission">
+                                        <li>
+                                            <p>
+                                                <c:choose>
+                                                    <c:when test="${permission.checked}">
+                                                        <input name="checkList" type="checkbox" class="flat" checked="true" value="${permission.permissionId}"> ${permission.description}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <input name="checkList" type="checkbox" class="flat" value="${permission.permissionId}"> ${permission.description}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </p>
+                                        </li>
                                     </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a href="${backUrl}" class="btn btn-info"><fmt:message key="label.huy" /></a>&nbsp;
+                            <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
                             <button id="btnSave" class="btn btn-primary">
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.userGroupId}"><fmt:message key="label.update" /></c:when>
@@ -129,6 +113,10 @@
             if($('#formEdit').valid()){
                 $("#formEdit").submit();
             }
+        });
+
+        $("input[type='checkbox'][class='js-switch']").change(function(){
+            $(this).closest('tr').find("input[type='hidden']")
         });
     });
 </script>

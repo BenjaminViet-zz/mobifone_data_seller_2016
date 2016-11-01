@@ -25,11 +25,11 @@ public interface UserGroupManagementLocalBean {
 
     void deleteItem(Long userGroupId) throws RemoveException;
 
-    void updateItem(UserGroupDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
+    void updateItem(UserGroupDTO pojo, String[] permissionIdArr) throws ObjectNotFoundException, DuplicateKeyException;
 
-    void addItem(UserGroupDTO pojo) throws DuplicateKeyException;
+    void addItem(UserGroupDTO pojo, String[] permissionIdArr) throws DuplicateKeyException;
 
-    UserGroupDTO findById(Long userGroupId) throws ObjectNotFoundException;
+    UserGroupDTO findAndFetchPermissionListById(Long userGroupId) throws ObjectNotFoundException;
 
     UserGroupDTO findByCode(String code) throws ObjectNotFoundException;
 }
