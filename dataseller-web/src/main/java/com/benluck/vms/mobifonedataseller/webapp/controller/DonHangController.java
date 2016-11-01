@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class DonHangController {
 
-    @RequestMapping(value = {"/admin/donhang/list.html", "/donhang/list.html"} )
+    @RequestMapping(value = {"/admin/order/list.html", "/order/list.html"} )
     public ModelAndView list(){
         return new ModelAndView("/admin/donhang/list");
     }
