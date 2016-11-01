@@ -1,32 +1,32 @@
-<%@ taglib prefix="ft" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: thaihoang
-  Date: 10/31/2016
-  Time: 11:59 PM
+  Date: 11/1/2016
+  Time: 10:14 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="ft" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
-
 <head>
-    <title><fmt:message key="admin.donhang.label.heading" /></title>
-    <meta name="menu" content="<fmt:message key="admin.donhang.label.heading" />"/>
+    <title><fmt:message key="packagedata.list.heading" /></title>
+    <meta name="menu" content="<fmt:message key="packagedata.list.heading" />"/>
 </head>
 
-<c:url var="addUrl" value="/admin/order/add.html"/>
+<%--<c:url var="addUrl" value="/admin/vendor/add.html"/>--%>
+
 
 <div class="page-title">
     <div class="title_left">
-        <h3><fmt:message key="admin.data_code_list.heading_page" /></h3>
+        <h3><fmt:message key="admin.cost.heading_page" /></h3>
     </div>
 
-    <div class="title_right">
+    <%--<div class="title_right">
         <div class="action-bar">
             <a class="btn btn-primary" href="${addUrl}"> <fmt:message key="label.button.them"/></a>
         </div>
-    </div>
+    </div>--%>
 
 </div>
 <div class="clearfix"></div>

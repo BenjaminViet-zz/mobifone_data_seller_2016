@@ -5,20 +5,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Created by thaihoang on 10/31/2016.
+ * Created by thaihoang on 11/1/2016.
  */
-
 @Controller
-public class DonHangController {
+public class KHDNController {
 
-    @RequestMapping(value = {"/admin/order/list.html", "/order/list.html"} )
+    @RequestMapping( value = {"/admin/vendor/list.html", "/vendor/list.html"})
     public ModelAndView list(){
-        return new ModelAndView("/admin/donhang/list");
+        return new ModelAndView("/admin/khdn/list");
     }
 
-    @RequestMapping(value = {"/admin/order/add.html", "/order/add.html"} )
+    @RequestMapping( value={"/admin/vendor/add.html"} )
     public ModelAndView add(){
         return new ModelAndView("/admin/donhang/add");
     }
-
 }
