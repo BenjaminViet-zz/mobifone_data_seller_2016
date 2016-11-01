@@ -46,6 +46,7 @@ CREATE TABLE MOBI_DATA_PACKAGE_DATA
    Name                   Varchar2(100)                 NOT NULL,
    Value                  Float                         NOT NULL,
    Volume                 Varchar(500)                  NOT NULL,
+   DurationText           Varchar2(200 Char)            NOT NULL,
    Duration               Integer                       NOT NULL,
    NumberOfExtend         Integer                       NOT NULL,
    TK                     Varchar(50)                   NOT NULL,

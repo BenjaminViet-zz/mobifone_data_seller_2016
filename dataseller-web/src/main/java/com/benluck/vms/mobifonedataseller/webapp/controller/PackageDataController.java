@@ -1,8 +1,20 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.webapp.command.PackageDataCommand;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,14 +25,24 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class PackageDataController {
+    private Logger logger = Logger.getLogger(PackageDataController.class);
+
+    @Autowired
+    private PackageDataManagementLocalBean packageDataService;
 
     @RequestMapping(value = {"/admin/package_data/list.html", "/package_data/list.html"})
-    public ModelAndView list(){
-        return new ModelAndView("/admin/packagedata/list");
+    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCommand command, HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("/admin/packagedata/list");
+        executeSearch(command, request);
+        mav.addObject(Constants.LIST_MODEL_KEY, command);
+        return mav;
     }
 
-    /*@RequestMapping( value = {"/admin/package_data/add.html", "/package_data/add.html"} )
-    public ModelAndView add() {
-        return new ModelAndView("/admin/packagedata/add");
-    }*/
+    private void executeSearch(PackageDataCommand command, HttpServletRequest request){
+        RequestUtil.initSearchBean(request, command);
+        Object[] resultObject = packageDataService.findByProperties(new HashMap<String, Object>(), command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
+        command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
+        command.setListResult((List<PackageDataDTO>)resultObject[1]);
+        command.setMaxPageItems(command.getMaxPageItems());
+    }
 }

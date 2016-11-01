@@ -17,6 +17,7 @@ public class PackageDataDTO implements Serializable {
     private Double value;
     private String volume;
     private Integer duration;
+    private String durationText;
     private Integer numberOfExtend;
     private String tk;
 
@@ -58,6 +59,14 @@ public class PackageDataDTO implements Serializable {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    public String getDurationText() {
+        return durationText;
+    }
+
+    public void setDurationText(String durationText) {
+        this.durationText = durationText;
     }
 
     public Integer getNumberOfExtend() {

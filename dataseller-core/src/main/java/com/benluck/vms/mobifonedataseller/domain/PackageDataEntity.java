@@ -20,6 +20,7 @@ public class PackageDataEntity {
     private Double value;
     private String volume;
     private Integer duration;
+    private String durationText;
     private Integer numberOfExtend;
     private String tk;
 
@@ -73,6 +74,16 @@ public class PackageDataEntity {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    @Column(name = "DURATIONTEXT")
+    @Basic
+    public String getDurationText() {
+        return durationText;
+    }
+
+    public void setDurationText(String durationText) {
+        this.durationText = durationText;
     }
 
     @Column(name = "NUMBEROFEXTEND")

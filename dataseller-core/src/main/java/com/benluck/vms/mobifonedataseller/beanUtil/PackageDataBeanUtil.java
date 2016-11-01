@@ -21,6 +21,7 @@ public class PackageDataBeanUtil {
         dto.setValue(entity.getValue());
         dto.setVolume(entity.getVolume());
         dto.setDuration(entity.getDuration());
+        dto.setDurationText(entity.getDurationText());
         dto.setNumberOfExtend(entity.getNumberOfExtend());
         dto.setTk(entity.getTk());
         return dto;

@@ -15,5 +15,6 @@ import java.util.List;
  */
 @Local
 public interface PermissionManagementLocalBean {
+
     List<PermissionDTO> findAll();
 }
