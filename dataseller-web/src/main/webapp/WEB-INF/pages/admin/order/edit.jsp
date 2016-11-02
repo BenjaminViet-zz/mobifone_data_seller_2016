@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: thaihoang
-  Date: 11/1/2016
-  Time: 9:41 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
@@ -14,8 +7,8 @@
 </c:if>
 
 <head>
-    <title>${titlePage}</title>
-    <meta name="menu" content="${titlePage}"/>
+    <title><fmt:message key="${titlePage}" /></title>
+    <meta name="menu" content="<fmt:message key="${titlePage}" />"/>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -53,7 +46,7 @@
                             <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control required">
                                 <option value=""><fmt:message key="label.all" /></option>
                                 <c:forEach items="${packageDataList}" var="packageData">
-                                    <option <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
+                                    <option data-unitPrice="${packageData.value}" <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
                                 </c:forEach>
                             </form:select>
                         </div>
@@ -81,7 +74,7 @@
                             <div class="control-group">
                                 <div class="controls">
                                     <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                        <input type="text" class="form-control has-feedback-left data_picker" id="issuedDate" aria-describedby="inputSuccess2Status4">
+                                        <input type="text" class="form-control has-feedback-left data_picker" name="issuedDate" id="issuedDate" aria-describedby="inputSuccess2Status4">
                                         <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                         <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                                     </div>
@@ -95,7 +88,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="controls">
                                 <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                    <input type="text" class="form-control has-feedback-left data_picker" id="shippingDate" aria-describedby="inputSuccess2Status4">
+                                    <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" id="shippingDate" aria-describedby="inputSuccess2Status4">
                                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                         <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                                 </div>
@@ -138,6 +131,14 @@
             if($('#formEdit').valid()){
                 $("#formEdit").submit();
             }
+        });
+
+        $('option:not(:first-child)', '#packageData').each(function(idx, el){
+            $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
+        });
+
+        $('#packageData').on('change', function(){
+            $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
         });
     });
 </script>

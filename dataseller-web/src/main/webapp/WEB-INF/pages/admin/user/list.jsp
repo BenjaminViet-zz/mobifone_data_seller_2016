@@ -122,7 +122,7 @@
     }
 
     function resetForm(){
-        $("input").val('');
+        $("input[type='text']").val('');
         selectFirstItemSelect2('#userGroupMenu');
     }
 

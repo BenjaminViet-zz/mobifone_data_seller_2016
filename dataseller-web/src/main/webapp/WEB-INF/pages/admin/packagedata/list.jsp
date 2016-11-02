@@ -150,7 +150,7 @@
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
         function resetForm(){
-            $("input").val('');
+            $("input[type='text']").val('');
             selectFirstItemSelect2('#chonGoiCuoc');
         }
     })

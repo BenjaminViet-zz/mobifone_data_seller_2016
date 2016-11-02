@@ -77,6 +77,7 @@
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                         </div>
                     </div>
+                    <input type="hidden" name="crudaction" value="search" />
                 </form:form>
             </div>
         </div>
@@ -89,16 +90,40 @@
             <div class="x_content">
                 <c:choose>
                     <c:when test="${item.crudaction == 'search'}">
-                        <display:table class="table table-striped table-bordered text-center">
-                            <display:column headerClass="table_header text-center" sortable="true" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.KHDN" style="width: 15%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 10%" />
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.quantity" style="width: 10%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.UnitPrice" style="width: 10%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.shippingDate" style="width: 10%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.status" style="width: 10%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.CreatedDate" style="width: 15%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.LastModified" style="width: 15%"/>
+                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" sortable="true" style="width: 3%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                            <display:column headerClass="table_header text-center" property="khdn.name" sortable="true" titleKey="admin.donhang.label.KHDN" style="width: 25%"/>
+                            <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 15%"/>
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.quantity" style="width: 10%" >
+                                <fmt:formatNumber type="number" value="${tableList.quantity}" />
+                            </display:column>
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.UnitPrice" style="width: 10%">
+                                <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
+                            </display:column>
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.issueDate" style="width: 10%">
+                                <fmt:formatDate value="${tableList.issueDate}" pattern="${datePattern}" />
+                            </display:column>
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.shippingDate" style="width: 10%">
+                                <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
+                            </display:column>
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.CreatedDate" style="width: 10%">
+                                <fmt:formatDate value="${tableList.createdDate}" pattern="${datePattern}" />
+                            </display:column>
+                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.status" style="width: 7%">
+                                <c:choose>
+                                    <c:when test="${tableList.status eq Constants.ORDER_STATUS_PROCESSING}">
+                                        <fmt:message key="label.in_progress" />
+                                    </c:when>
+                                    <c:when test="${tableList.status eq Constants.ORDER_STATUS_FINISH}">
+                                        <fmt:message key="label.finish" />
+                                    </c:when>
+                                </c:choose>
+                            </display:column>
+                            <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                            <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                         </display:table>
                     </c:when>
                     <c:otherwise>
@@ -109,3 +134,15 @@
         </div>
     </div>
 </div>
+
+
+<script language="javascript" type="text/javascript">
+    function resetForm(){
+        $("input[type='text']").val('');
+        selectFirstItemSelect2('#userGroupMenu');
+    }
+
+    function submitForm(){
+        $('#listForm').submit();
+    }
+</script>
