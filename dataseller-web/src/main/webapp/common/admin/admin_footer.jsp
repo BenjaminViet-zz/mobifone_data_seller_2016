@@ -53,6 +53,19 @@
 <!-- Custom Theme Scripts -->
 <script src="<c:url value="/themes/newteample/content/js/custom.js" />"></script>
 
+<!-- bootstrap-daterangepicker -->
+<script>
+    $(document).ready(function() {
+        $('.data_picker').daterangepicker({
+            singleDatePicker: true,
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
+        });
+    });
+</script>
+<!-- /bootstrap-daterangepicker -->
+
 <!-- Flot -->
 <script>
     $(document).ready(function () {

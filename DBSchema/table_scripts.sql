@@ -76,7 +76,6 @@ CREATE TABLE MOBI_DATA_ORDER
    ShippingDate           TIMESTAMP                     NOT NULL,
    Status                 INTEGER                       NOT NULL,
    CreatedDate            TIMESTAMP                     NOT NULL,
-   LastModified           TIMESTAMP                     NOT NULL,
    CreatedBy              NUMBER(24,0)                  NOT NULL,
    CONSTRAINT "MOBI_DATA_ORDER_CREATED_BY_FK" FOREIGN KEY(CREATEDBY) REFERENCES MOBI_DATA_USER(USERID)
 )  TABLESPACE "USERS";

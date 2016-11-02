@@ -137,4 +137,6 @@ public class Constants {
 
     public static final String ALERT_TYPE = "alertType";
 
+    public static final Integer ORDER_STATUS_PROCESSING = 0;
+    public static final Integer ORDER_STATUS_FINISH = 1;
 }

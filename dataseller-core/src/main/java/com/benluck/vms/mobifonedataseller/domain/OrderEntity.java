@@ -25,7 +25,6 @@ public class OrderEntity {
     private Timestamp shippingDate;
     private Integer status;
     private Timestamp createdDate;
-    private Timestamp lastModified;
     private UserEntity CreatedBy;
 
     @Column(name = "ORDERID")
@@ -120,16 +119,6 @@ public class OrderEntity {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "LASTMODIFIED")
-    @Basic
-    public Timestamp getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Timestamp lastModified) {
-        this.lastModified = lastModified;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CREATEDBY", referencedColumnName = "USERID")
     public UserEntity getCreatedBy() {
@@ -149,7 +138,6 @@ public class OrderEntity {
         result = 31 * result + (shippingDate != null ? shippingDate.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
-        result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
         return result;
     }
 
@@ -167,7 +155,6 @@ public class OrderEntity {
         if (shippingDate != null ? !shippingDate.equals(that.shippingDate) : that.shippingDate != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
-        if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
 
         return true;
     }

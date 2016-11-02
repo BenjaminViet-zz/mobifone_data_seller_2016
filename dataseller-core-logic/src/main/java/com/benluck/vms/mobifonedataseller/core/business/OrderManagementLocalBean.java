@@ -1,6 +1,10 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
+import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
+
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
+import javax.ejb.ObjectNotFoundException;
 import java.util.Map;
 
 /**
@@ -14,4 +18,10 @@ import java.util.Map;
 public interface OrderManagementLocalBean {
 
     Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
+
+    OrderDTO findById(Long orderId) throws ObjectNotFoundException;
+
+    void addItem(OrderDTO pojo) throws DuplicateKeyException;
+
+    void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 }

@@ -22,7 +22,6 @@ public class OrderDTO implements Serializable{
     private Timestamp shippingDate;
     private Integer status;
     private Timestamp createdDate;
-    private Timestamp lastModified;
     private UserDTO createdBy;
 
     public Long getOrderId() {
@@ -95,14 +94,6 @@ public class OrderDTO implements Serializable{
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public Timestamp getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(Timestamp lastModified) {
-        this.lastModified = lastModified;
     }
 
     public UserDTO getCreatedBy() {

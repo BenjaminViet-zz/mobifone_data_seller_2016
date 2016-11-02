@@ -8,6 +8,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OrderValidator;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
@@ -16,7 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.ejb.DuplicateKeyException;
+import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -68,13 +72,51 @@ public class OrderController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
-    @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html"} )
-    public ModelAndView add(){
-        return new ModelAndView("/admin/order/add");
-    }
-
     private void preferenceData(ModelAndView mav){
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
+    }
+
+    @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html",
+                            "/admin/order/edit.html", "/user/order/edit.html"})
+    public ModelAndView updateOrCreateOrder(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
+                                            BindingResult bindingResult,
+                                            RedirectAttributes redirectAttributes){
+        ModelAndView mav = new ModelAndView("/admin/order/edit");
+        String crudaction = command.getCrudaction();
+
+        OrderDTO pojo = command.getPojo();
+        try{
+            if (StringUtils.isNotBlank(crudaction)){
+                if(crudaction.equals("insert-update")){
+                    validator.validate(command, bindingResult);
+                    if (!bindingResult.hasErrors()){
+                        if (pojo.getOrderId() == null ){
+                            this.orderService.addItem(command.getPojo());
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                        } else {
+                            this.orderService.updateItem(command.getPojo());
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                        }
+                        return new ModelAndView("redirect:/admin/user/list.html");
+                    }
+                }
+            }else if(pojo.getOrderId() != null){
+                command.setPojo(this.orderService.findById(command.getPojo().getOrderId()));
+            }
+        }catch (ObjectNotFoundException one){
+            logger.error("Can not get profile of UserId: " + pojo.getOrderId());
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.keynotfound"));
+        }catch (DuplicateKeyException dle){
+            logger.error("Duplicated UserId: " + pojo.getOrderId());
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
+        }
+
+        preferenceData(mav);
+        return mav;
     }
 }
