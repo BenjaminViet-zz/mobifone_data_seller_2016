@@ -65,8 +65,8 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required form-control" cssStyle="width: 250px;">
                                 <form:option value=""><fmt:message key="label.select" /></form:option>
-                                <c:forEach items="${userGroups}" var="userGroup">
-                                    <option <c:if test="${userGroup.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.description}</option>
+                                <c:forEach items="${userGroups}" var="KHDN">
+                                    <option <c:if test="${KHDN.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${KHDN.userGroupId}">${KHDN.description}</option>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
