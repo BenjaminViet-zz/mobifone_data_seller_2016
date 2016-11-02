@@ -137,6 +137,15 @@ public class Constants {
 
     public static final String ALERT_TYPE = "alertType";
 
+//    Order Constants
     public static final Integer ORDER_STATUS_PROCESSING = 0;
     public static final Integer ORDER_STATUS_FINISH = 1;
+
+    public static final Integer ORDER_ACTIVE_STATUS_ALIVE = 0;
+    public static final Integer ORDER_ACTIVE_STATUS_DIE = 1;
+
+//    Order History Constants
+    public static final Integer ORDER_HISTORY_OPERATOR_CREATED = 0;
+    public static final Integer ORDER_HISTORY_OPERATOR_UPDATED = 1;
+    public static final Integer ORDER_HISTORY_OPERATOR_DELETED = 2;
 }

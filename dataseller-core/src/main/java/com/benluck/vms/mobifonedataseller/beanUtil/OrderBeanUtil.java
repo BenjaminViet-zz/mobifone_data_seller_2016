@@ -22,10 +22,12 @@ public class OrderBeanUtil {
         dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
         dto.setQuantity(entity.getQuantity());
         dto.setUnitPrice(entity.getUnitPrice());
-        dto.setIssueDate(entity.getIssueDate());
+        dto.setIssuedDate(entity.getIssuedDate());
         dto.setShippingDate(entity.getShippingDate());
-        dto.setStatus(entity.getStatus());
+        dto.setOrderStatus(entity.getOrderStatus());
+        dto.setActiveStatus(entity.getActiveStatus());
         dto.setCreatedDate(entity.getCreatedDate());
+        dto.setLastModified(entity.getLastModified());
         dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
         return dto;
     }

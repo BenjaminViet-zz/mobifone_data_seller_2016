@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
 import javax.ejb.ObjectNotFoundException;
+import javax.ejb.RemoveException;
 import java.util.Map;
 
 /**
@@ -24,4 +25,6 @@ public interface OrderManagementLocalBean {
     void addItem(OrderDTO pojo) throws DuplicateKeyException;
 
     void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
+
+    void deleteItem(Long orderId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException;
 }

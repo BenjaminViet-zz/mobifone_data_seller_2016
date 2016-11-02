@@ -20,8 +20,11 @@ public class OrderHistoryBeanUtil {
         dto.setOrderHistoryId(entity.getOrderHistoryId());
         dto.setOrder(OrderBeanUtil.entity2DTO(entity.getOrder()));
         dto.setOperator(entity.getOperator());
-        dto.setOriginalData(entity.getOriginalData());
-        dto.setNewData(entity.getNewData());
+        dto.setQuantity(entity.getQuantity());
+        dto.setUnitPrice(entity.getUnitPrice());
+        dto.setIssuedDate(entity.getIssuedDate());
+        dto.setShippingDate(entity.getShippingDate());
+        dto.setOrderStatus(entity.getOrderStatus());
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
         return dto;

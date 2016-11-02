@@ -74,25 +74,34 @@ CREATE TABLE MOBI_DATA_ORDER
    UnitPrice              Float                         NOT NULL,
    IssuedDate             TIMESTAMP                     NOT NULL,
    ShippingDate           TIMESTAMP                     NOT NULL,
-   Status                 INTEGER                       NOT NULL,
    CreatedDate            TIMESTAMP                     NOT NULL,
+   LastModified           TIMESTAMP                     NULL,
    CreatedBy              NUMBER(24,0)                  NOT NULL,
-   CONSTRAINT "MOBI_DATA_ORDER_CREATED_BY_FK" FOREIGN KEY(CREATEDBY) REFERENCES MOBI_DATA_USER(USERID)
+   OrderStatus            INTEGER                       NOT NULL,
+   ActiveStatus           INTEGER                       NOT NULL,
+   CONSTRAINT "MOBI_DATA_ORDER_CREATED_BY_FK" FOREIGN KEY(CREATEDBY) REFERENCES MOBI_DATA_USER(USERID),
+   CONSTRAINT "MOBI_DATA_ORDER_KHDN_FK" FOREIGN KEY(KHDNID) REFERENCES MOBI_DATA_KHDN(KHDNID),
+   CONSTRAINT "MOBI_DATA_ORDER_PACKAGEDATA_FK" FOREIGN KEY(KHDNID) REFERENCES MOBI_DATA_PACKAGE_DATA(PACKAGEDATAID)
 )  TABLESPACE "USERS";
 
 CREATE TABLE MOBI_DATA_ORDER_HISTORY
 (
    OrderHistoryID         NUMBER(24,0)                  NOT NULL PRIMARY KEY,
    OrderID                NUMBER(24,0)                  NOT NULL,
-   UserId                 NUMBER(24,0)                  NOT NULL,
+   KHDNID                 NUMBER(24,0)                  NOT NULL,
+   PackageDataID          NUMBER(24,0)                  NOT NULL,
    Operator               INTEGER                       NOT NULL,
-   OriginalData           CLOB                          NOT NULL,
-   NewData                CLOB                          NOT NULL,
+   Quantity               Integer                       NOT NULL,
+   UnitPrice              Float                         NOT NULL,
+   IssuedDate             TIMESTAMP                     NOT NULL,
+   ShippingDate           TIMESTAMP                     NOT NULL,
+   OrderStatus            INTEGER                       NOT NULL,
    CreatedDate            TIMESTAMP                     NOT NULL,
    CreatedBy              NUMBER(24,0)                  NOT NULL,
    CONSTRAINT "MOBI_DATA_OH_CREATEDBY_FK" FOREIGN KEY (CREATEDBY) REFERENCES MOBI_DATA_USER(USERID),
    CONSTRAINT "MOBI_DATA_ORDER_HIS_ORDER_FK" FOREIGN KEY(OrderID) REFERENCES MOBI_DATA_ORDER(OrderID),
-   CONSTRAINT "MOBI_DATA_ORDER_USER_FK" FOREIGN KEY(UserID) REFERENCES MOBI_DATA_USER(UserID)
+   CONSTRAINT "MOBI_DATA_ORDERHIS_KHDN_FK" FOREIGN KEY(KHDNID) REFERENCES MOBI_DATA_KHDN(KHDNID),
+   CONSTRAINT "MOBI_DATA_ORDERHIS_PACKDATA_FK" FOREIGN KEY(KHDNID) REFERENCES MOBI_DATA_PACKAGE_DATA(PACKAGEDATAID)
 )  TABLESPACE "USERS";
 
 CREATE SEQUENCE  MOBI_DATA_USERGROUP_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 4 CACHE 20 NOORDER  NOCYCLE ;

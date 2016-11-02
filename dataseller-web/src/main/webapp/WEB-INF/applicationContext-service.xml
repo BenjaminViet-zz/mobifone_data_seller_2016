@@ -17,6 +17,7 @@
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PackageDataManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" id="packageDataManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/OrderManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean" id="orderManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/KHDNManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean" id="khdnManagementLocalBean"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/OrderHistoryManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLocalBean" id="orderHistoryManagementLocalBean"/>
 
     <jee:local-slsb jndi-name="java:app/dataseller-mail-service-1.0/EmailSessionBeanEJB!com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" business-interface="com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" id="emailLocalBean"/>
 
