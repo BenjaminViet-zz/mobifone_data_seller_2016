@@ -46,7 +46,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
-                <form id="listForm" name="listForm" class="form-horizontal form-label-left" action="" method="post" autocomplete="off">
+                <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
                         </label>
@@ -73,11 +73,11 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                             <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
+                            <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                         </div>
                     </div>
-                </form>
+                </form:form>
             </div>
         </div>
     </div>
