@@ -243,8 +243,8 @@ span.valid {
 }
 
 .form-control {
-    display: inline !important;
-    padding: 6px !important;
+    /*display: inline !important;
+    padding: 6px !important;*/
 }
 
 .mCSB_scrollTools_horizontal {

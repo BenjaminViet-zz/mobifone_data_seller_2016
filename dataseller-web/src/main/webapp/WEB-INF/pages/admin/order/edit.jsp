@@ -70,29 +70,19 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDate"><fmt:message key="admin.donhang.label.issueDate" />
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="control-group">
-                                <div class="controls">
-                                    <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                        <input type="text" class="form-control has-feedback-left data_picker" name="issuedDate" id="issuedDate" aria-describedby="inputSuccess2Status4">
-                                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                        <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
+                            <input type="text" class="form-control has-feedback-left data_picker" name="issuedDate" id="issuedDate" aria-describedby="inputSuccess2Status4">
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                            <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shippingDate"><fmt:message key="admin.donhang.label.shippingDate" />
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="controls">
-                                <div class="col-md-11 xdisplay_inputx form-group has-feedback">
-                                    <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" id="shippingDate" aria-describedby="inputSuccess2Status4">
-                                    <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
-                                        <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
-                                </div>
-                            </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
+                            <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" id="shippingDate" aria-describedby="inputSuccess2Status4">
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
                     </div>
                     <div class="form-group">
