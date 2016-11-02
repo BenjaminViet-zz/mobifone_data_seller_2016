@@ -18,9 +18,14 @@ import java.sql.Timestamp;
 public class OrderHistoryEntity {
     private Long orderHistoryId;
     private OrderEntity order;
+    private KHDNEntity khdn;
+    private PackageDataEntity packageData;
     private Integer operator;
-    private String originalData;
-    private String newData;
+    private Integer quantity;
+    private Double unitPrice;
+    private Timestamp issuedDate;
+    private Timestamp shippingDate;
+    private Integer orderStatus;
     private Timestamp createdDate;
     private UserEntity createdBy;
 
@@ -56,28 +61,6 @@ public class OrderHistoryEntity {
         this.operator = operator;
     }
 
-    @Column(name = "ORIGINALDATA")
-    @Basic
-    @Lob
-    public String getOriginalData() {
-        return originalData;
-    }
-
-    public void setOriginalData(String originalData) {
-        this.originalData = originalData;
-    }
-
-    @Column(name = "NEWDATA")
-    @Basic
-    @Lob
-    public String getNewData() {
-        return newData;
-    }
-
-    public void setNewData(String newData) {
-        this.newData = newData;
-    }
-
     @Column(name = "CREATEDDATE")
     @Basic
     public Timestamp getCreatedDate() {
@@ -98,12 +81,85 @@ public class OrderHistoryEntity {
         this.createdBy = createdBy;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "KHDNID", referencedColumnName = "KHDNID")
+    public KHDNEntity getKhdn() {
+        return khdn;
+    }
+
+    public void setKhdn(KHDNEntity khdn) {
+        this.khdn = khdn;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PACKAGEDATAID", referencedColumnName = "PACKAGEDATAID")
+    public PackageDataEntity getPackageData() {
+        return packageData;
+    }
+
+    public void setPackageData(PackageDataEntity packageData) {
+        this.packageData = packageData;
+    }
+
+    @Column(name = "QUANTITY")
+    @Basic
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    @Column(name = "UNITPRICE")
+    @Basic
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    @Column(name = "ISSUEDDATE")
+    @Basic
+    public Timestamp getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(Timestamp issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    @Column(name = "SHIPPINGDATE")
+    @Basic
+    public Timestamp getShippingDate() {
+        return shippingDate;
+    }
+
+    public void setShippingDate(Timestamp shippingDate) {
+        this.shippingDate = shippingDate;
+    }
+
+    @Column(name = "ORDERSTATUS")
+    @Basic
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     @Override
     public int hashCode() {
         int result = orderHistoryId != null ? orderHistoryId.hashCode() : 0;
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
-        result = 31 * result + (originalData != null ? originalData.hashCode() : 0);
-        result = 31 * result + (newData != null ? newData.hashCode() : 0);
+        result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
+        result = 31 * result + (unitPrice != null ? unitPrice.hashCode() : 0);
+        result = 31 * result + (issuedDate != null ? issuedDate.hashCode() : 0);
+        result = 31 * result + (shippingDate != null ? shippingDate.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
         return result;
     }
@@ -117,8 +173,11 @@ public class OrderHistoryEntity {
 
         if (orderHistoryId != null ? !orderHistoryId.equals(that.orderHistoryId) : that.orderHistoryId != null) return false;
         if (operator != null ? !operator.equals(that.operator) : that.operator != null) return false;
-        if (originalData != null ? !originalData.equals(that.originalData) : that.originalData != null) return false;
-        if (newData != null ? !newData.equals(that.newData) : that.newData != null) return false;
+        if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
+        if (unitPrice != null ? !unitPrice.equals(that.unitPrice) : that.unitPrice != null) return false;
+        if (issuedDate != null ? !issuedDate.equals(that.issuedDate) : that.issuedDate != null) return false;
+        if (shippingDate != null ? !shippingDate.equals(that.shippingDate) : that.shippingDate != null) return false;
+        if (orderStatus != null ? !orderStatus.equals(that.orderStatus) : that.orderStatus != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
 
         return true;

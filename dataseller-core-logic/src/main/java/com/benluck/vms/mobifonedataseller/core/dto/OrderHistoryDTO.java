@@ -15,9 +15,14 @@ public class OrderHistoryDTO implements Serializable{
 
     private Long orderHistoryId;
     private OrderDTO order;
+    private KHDNDTO khdn;
+    private PackageDataDTO packageData;
     private Integer operator;
-    private String originalData;
-    private String newData;
+    private Integer quantity;
+    private Double unitPrice;
+    private Timestamp issuedDate;
+    private Timestamp shippingDate;
+    private Integer orderStatus;
     private Timestamp createdDate;
     private UserDTO createdBy;
 
@@ -45,20 +50,60 @@ public class OrderHistoryDTO implements Serializable{
         this.operator = operator;
     }
 
-    public String getOriginalData() {
-        return originalData;
+    public KHDNDTO getKhdn() {
+        return khdn;
     }
 
-    public void setOriginalData(String originalData) {
-        this.originalData = originalData;
+    public void setKhdn(KHDNDTO khdn) {
+        this.khdn = khdn;
     }
 
-    public String getNewData() {
-        return newData;
+    public PackageDataDTO getPackageData() {
+        return packageData;
     }
 
-    public void setNewData(String newData) {
-        this.newData = newData;
+    public void setPackageData(PackageDataDTO packageData) {
+        this.packageData = packageData;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public Timestamp getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(Timestamp issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public Timestamp getShippingDate() {
+        return shippingDate;
+    }
+
+    public void setShippingDate(Timestamp shippingDate) {
+        this.shippingDate = shippingDate;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Timestamp getCreatedDate() {

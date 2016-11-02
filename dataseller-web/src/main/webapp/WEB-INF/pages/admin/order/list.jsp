@@ -11,7 +11,7 @@
 <security:authorize ifAnyGranted="ADMIN">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
-<c:url var="addUrl" value="${prefix}/order/add.html"/>
+<c:url var="editUrl" value="${prefix}/order/add.html"/>
 <c:url var="formUrl" value="${prefix}/order/list.html"/>
 
 <div class="page-title">
@@ -21,7 +21,7 @@
 
     <div class="title_right">
         <div class="action-bar">
-            <a class="btn btn-primary" href="${addUrl}"> <fmt:message key="label.button.them"/></a>
+            <a class="btn btn-primary" href="${editUrl}"> <fmt:message key="label.button.them"/></a>
         </div>
     </div>
 
@@ -95,8 +95,8 @@
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                             <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" sortable="true" style="width: 3%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                            <display:column headerClass="table_header text-center" property="khdn.name" sortable="true" titleKey="admin.donhang.label.KHDN" style="width: 25%"/>
-                            <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 15%"/>
+                            <display:column headerClass="table_header text-center" property="khdn.name" sortable="true" titleKey="admin.donhang.label.KHDN" style="width: 15%"/>
+                            <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 10%"/>
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.quantity" style="width: 10%" >
                                 <fmt:formatNumber type="number" value="${tableList.quantity}" />
                             </display:column>
@@ -122,6 +122,12 @@
                                     </c:when>
                                 </c:choose>
                             </display:column>
+                            <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:10%;">
+                                <c:if test="${tableList.status ne Constants.ORDER_STATUS_FINISH}">
+                                    <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                                    | <a class="tip-top" onclick="javascript: deleteOrder(${tableList.orderId});"><fmt:message key="label.delete" /></a>
+                                </c:if>
+                            </display:column>
                             <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                             <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                         </display:table>
@@ -144,5 +150,13 @@
 
     function submitForm(){
         $('#listForm').submit();
+    }
+
+    function deleteOrder(userId){
+        bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+            if(r){
+                document.location.href = '${formUrl}?pojo.orderId=' + userId + '&crudaction=delete';
+            }
+        });
     }
 </script>

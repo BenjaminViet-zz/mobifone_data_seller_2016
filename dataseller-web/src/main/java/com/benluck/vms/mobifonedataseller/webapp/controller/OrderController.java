@@ -60,8 +60,26 @@ public class OrderController extends ApplicationObjectSupport{
                              HttpServletRequest request,
                              BindingResult bindingResult){
         ModelAndView mav = new ModelAndView("/admin/order/list");
-        executeSearch(command, request);
-        preferenceData(mav);
+        String action = command.getCrudaction();
+
+        if (StringUtils.isNotBlank(action)){
+            if(action.equals("delete")){
+                if(command.getPojo().getOrderId() != null){
+                    try{
+                        this.orderService.deleteItem(command.getPojo().getOrderId());
+                        mav.addObject(Constants.ALERT_TYPE, "success");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                    }catch (Exception e){
+                        mav.addObject(Constants.ALERT_TYPE, "info");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
+                    }
+                }
+            }else if (action.equals(Constants.ACTION_SEARCH)){
+                executeSearch(command, request);
+                preferenceData(mav);
+            }
+        }
+
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
@@ -143,7 +161,7 @@ public class OrderController extends ApplicationObjectSupport{
      */
     private void convertDate2Timestamp(OrderCommand command){
         if(command.getIssuedDate() != null){
-            command.getPojo().setIssueDate(DateUtil.dateToTimestamp(command.getIssuedDate(), Constants.VI_DATE_FORMAT));
+            command.getPojo().setIssuedDate(DateUtil.dateToTimestamp(command.getIssuedDate(), Constants.VI_DATE_FORMAT));
         }
         if(command.getShippingDate() != null){
             command.getPojo().setShippingDate(DateUtil.dateToTimestamp(command.getShippingDate(), Constants.VI_DATE_FORMAT));

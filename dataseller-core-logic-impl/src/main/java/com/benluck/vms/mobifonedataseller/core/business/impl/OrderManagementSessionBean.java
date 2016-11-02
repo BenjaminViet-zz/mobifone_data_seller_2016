@@ -1,18 +1,16 @@
 package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.beanUtil.OrderBeanUtil;
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
-import com.benluck.vms.mobifonedataseller.domain.KHDNEntity;
-import com.benluck.vms.mobifonedataseller.domain.OrderEntity;
-import com.benluck.vms.mobifonedataseller.domain.PackageDataEntity;
-import com.benluck.vms.mobifonedataseller.domain.UserEntity;
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.domain.*;
+import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
 
-import javax.ejb.DuplicateKeyException;
-import javax.ejb.EJB;
-import javax.ejb.ObjectNotFoundException;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +27,8 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
     @EJB
     private OrderLocalBean orderService;
+    @EJB
+    private OrderHistoryLocalBean orderHistoryService;
 
     public OrderManagementSessionBean() {
     }
@@ -48,6 +48,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
     @Override
     public void addItem(OrderDTO pojo) throws DuplicateKeyException {
+
         OrderEntity entity = new OrderEntity();
 
         KHDNEntity khdnEntity = new KHDNEntity();
@@ -64,10 +65,13 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
         entity.setQuantity(pojo.getQuantity());
         entity.setUnitPrice(pojo.getUnitPrice());
-        entity.setIssueDate(pojo.getIssueDate());
+        entity.setIssuedDate(pojo.getIssuedDate());
         entity.setShippingDate(pojo.getShippingDate());
-        entity.setStatus(pojo.getStatus());
+        entity.setOrderStatus(pojo.getOrderStatus());
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        entity.setOrderStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+
+        createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
         this.orderService.save(entity);
     }
 
@@ -75,17 +79,84 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     public void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
         OrderEntity dbItem = this.orderService.findById(pojo.getCreatedBy().getUserId());
 
-        createdOrderHistory(dbItem);
+        if(!dbItem.getKhdn().getKHDNId().equals(pojo.getKhdn().getKHDNId())){
+            KHDNEntity khdnEntity = new KHDNEntity();
+            khdnEntity.setKHDNId(pojo.getKhdn().getKHDNId());
+            dbItem.setKhdn(khdnEntity);
+        }
 
-        dbItem.setStatus(pojo.getStatus());
+        if(!dbItem.getPackageData().getPackageDataId().equals(pojo.getPackageData().getPackageDataId())){
+            PackageDataEntity packageDataEntity = new PackageDataEntity();
+            packageDataEntity.setPackageDataId(pojo.getPackageData().getPackageDataId());
+            dbItem.setPackageData(packageDataEntity);
+        }
+
         dbItem.setQuantity(pojo.getQuantity());
         dbItem.setUnitPrice(pojo.getUnitPrice());
-        dbItem.setIssueDate(pojo.getIssueDate());
+        dbItem.setIssuedDate(pojo.getIssuedDate());
         dbItem.setShippingDate(pojo.getShippingDate());
+        dbItem.setOrderStatus(pojo.getOrderStatus());
+        dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
         this.orderService.update(dbItem);
+
+        createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
     }
 
-    private void createdOrderHistory(OrderEntity orderEntity){
+    private void createdOrderHistory(OrderDTO pojo, Integer operator, OrderEntity dbItem) throws DuplicateKeyException{
+        OrderHistoryEntity entity = new OrderHistoryEntity();
 
+        if(dbItem != null){
+            entity.setOrder(dbItem);
+        }else{
+            OrderEntity orderEntity = new OrderEntity();
+            orderEntity.setOrderId(pojo.getOrderId());
+            entity.setOrder(orderEntity);
+        }
+
+        KHDNEntity khdnEntity = new KHDNEntity();
+        khdnEntity.setKHDNId(pojo.getKhdn().getKHDNId());
+        entity.setKhdn(khdnEntity);
+
+        PackageDataEntity packageDataEntity = new PackageDataEntity();
+        packageDataEntity.setPackageDataId(pojo.getPackageData().getPackageDataId());
+        entity.setPackageData(packageDataEntity);
+
+        UserEntity createdBy = new UserEntity();
+        createdBy.setUserId(pojo.getCreatedBy().getUserId());
+        entity.setCreatedBy(createdBy);
+
+        entity.setOperator(operator);
+        entity.setQuantity(pojo.getQuantity());
+        entity.setUnitPrice(pojo.getUnitPrice());
+        entity.setIssuedDate(pojo.getIssuedDate());
+        entity.setShippingDate(pojo.getShippingDate());
+        entity.setOrderStatus(pojo.getOrderStatus());
+        entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        this.orderHistoryService.save(entity);
+    }
+
+    @Override
+    public void deleteItem(Long orderId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException {
+        OrderEntity dbItem = this.orderService.findById(orderId);
+        dbItem.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_DIE);
+
+        OrderDTO pojo = new OrderDTO();
+        pojo.setOrderId(dbItem.getOrderId());
+
+        KHDNDTO khdndto = new KHDNDTO();
+        khdndto.setKHDNId(dbItem.getKhdn().getKHDNId());
+        pojo.setKhdn(khdndto);
+
+        PackageDataDTO packageDataDTO = new PackageDataDTO();
+        packageDataDTO.setPackageDataId(dbItem.getPackageData().getPackageDataId());
+        pojo.setPackageData(packageDataDTO);
+
+        pojo.setQuantity(dbItem.getQuantity());
+        pojo.setUnitPrice(dbItem.getUnitPrice());
+        pojo.setIssuedDate(dbItem.getIssuedDate());
+        pojo.setShippingDate(dbItem.getShippingDate());
+        pojo.setOrderStatus(dbItem.getOrderStatus());
+
+        createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_DELETED, null);
     }
 }

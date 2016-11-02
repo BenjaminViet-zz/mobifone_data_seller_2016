@@ -90,9 +90,9 @@
                             <fmt:message key="admin.donhang.label.status" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select cssClass="form-control" id="status" path="pojo.status" cssStyle="width: 150px;">
-                                <option <c:if test="${Constants.ORDER_STATUS_PROCESSING eq item.pojo.status}">selected="true"</c:if> value="1"><fmt:message key="label.in_progress" /></option>
-                                <option <c:if test="${Constants.ORDER_STATUS_FINISH eq item.pojo.status}">selected="true"</c:if> value="0"><fmt:message key="label.finish" /></option>
+                            <form:select cssClass="form-control" id="status" path="pojo.orderStatus" cssStyle="width: 150px;">
+                                <option <c:if test="${Constants.ORDER_STATUS_PROCESSING eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_PROCESSING}"><fmt:message key="label.in_progress" /></option>
+                                <option <c:if test="${Constants.ORDER_STATUS_FINISH eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_FINISH}"><fmt:message key="label.finish" /></option>
                             </form:select>
                         </div>
                     </div>

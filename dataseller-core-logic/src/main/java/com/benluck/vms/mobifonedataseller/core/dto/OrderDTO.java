@@ -18,10 +18,12 @@ public class OrderDTO implements Serializable{
     private PackageDataDTO packageData;
     private Integer quantity;
     private Double unitPrice;
-    private Timestamp issueDate;
+    private Timestamp issuedDate;
     private Timestamp shippingDate;
-    private Integer status;
+    private Integer orderStatus;
+    private Integer activeStatus;
     private Timestamp createdDate;
+    private Timestamp lastModified;
     private UserDTO createdBy;
 
     public Long getOrderId() {
@@ -64,14 +66,6 @@ public class OrderDTO implements Serializable{
         this.unitPrice = unitPrice;
     }
 
-    public Timestamp getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Timestamp issueDate) {
-        this.issueDate = issueDate;
-    }
-
     public Timestamp getShippingDate() {
         return shippingDate;
     }
@@ -80,12 +74,28 @@ public class OrderDTO implements Serializable{
         this.shippingDate = shippingDate;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Timestamp getIssuedDate() {
+        return issuedDate;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setIssuedDate(Timestamp issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public Integer getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public Integer getActiveStatus() {
+        return activeStatus;
+    }
+
+    public void setActiveStatus(Integer activeStatus) {
+        this.activeStatus = activeStatus;
     }
 
     public Timestamp getCreatedDate() {
@@ -102,5 +112,13 @@ public class OrderDTO implements Serializable{
 
     public void setCreatedBy(UserDTO createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Timestamp getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Timestamp lastModified) {
+        this.lastModified = lastModified;
     }
 }

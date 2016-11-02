@@ -21,10 +21,12 @@ public class OrderEntity {
     private PackageDataEntity packageData;
     private Integer quantity;
     private Double unitPrice;
-    private Timestamp issueDate;
+    private Timestamp issuedDate;
     private Timestamp shippingDate;
-    private Integer status;
+    private Integer orderStatus;
+    private Integer activeStatus;
     private Timestamp createdDate;
+    private Timestamp lastModified;
     private UserEntity CreatedBy;
 
     @Column(name = "ORDERID")
@@ -81,12 +83,12 @@ public class OrderEntity {
 
     @Column(name = "ISSUEDDATE")
     @Basic
-    public Timestamp getIssueDate() {
-        return issueDate;
+    public Timestamp getIssuedDate() {
+        return issuedDate;
     }
 
-    public void setIssueDate(Timestamp issueDate) {
-        this.issueDate = issueDate;
+    public void setIssuedDate(Timestamp issuedDate) {
+        this.issuedDate = issuedDate;
     }
 
     @Column(name = "SHIPPINGDATE")
@@ -99,14 +101,14 @@ public class OrderEntity {
         this.shippingDate = shippingDate;
     }
 
-    @Column(name = "STATUS")
+    @Column(name = "ORDERSTATUS")
     @Basic
-    public Integer getStatus() {
-        return status;
+    public Integer getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     @Column(name = "CREATEDDATE")
@@ -129,15 +131,37 @@ public class OrderEntity {
         CreatedBy = createdBy;
     }
 
+    @Column(name = "LASTMODIFIED")
+    @Basic
+    public Timestamp getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Timestamp lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    @Column(name = "ACTIVESTATUS")
+    @Basic
+    public Integer getActiveStatus() {
+        return activeStatus;
+    }
+
+    public void setActiveStatus(Integer activeStatus) {
+        this.activeStatus = activeStatus;
+    }
+
     @Override
     public int hashCode() {
         int result = orderId != null ? orderId.hashCode() : 0;
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
         result = 31 * result + (unitPrice != null ? unitPrice.hashCode() : 0);
-        result = 31 * result + (issueDate != null ? issueDate.hashCode() : 0);
+        result = 31 * result + (issuedDate != null ? issuedDate.hashCode() : 0);
         result = 31 * result + (shippingDate != null ? shippingDate.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
+        result = 31 * result + (activeStatus != null ? activeStatus.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
+        result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
         return result;
     }
 
@@ -151,10 +175,12 @@ public class OrderEntity {
         if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
         if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
         if (unitPrice != null ? !unitPrice.equals(that.unitPrice) : that.unitPrice != null) return false;
-        if (issueDate != null ? !issueDate.equals(that.issueDate) : that.issueDate != null) return false;
+        if (issuedDate != null ? !issuedDate.equals(that.issuedDate) : that.issuedDate != null) return false;
         if (shippingDate != null ? !shippingDate.equals(that.shippingDate) : that.shippingDate != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (orderStatus != null ? !orderStatus.equals(that.orderStatus) : that.orderStatus!= null) return false;
+        if (activeStatus != null ? !activeStatus.equals(that.activeStatus) : that.activeStatus!= null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
+        if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
 
         return true;
     }
