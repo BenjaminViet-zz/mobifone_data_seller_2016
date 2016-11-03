@@ -50,6 +50,9 @@ public class OrderHistoryController extends ApplicationObjectSupport{
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("order.orderId", command.getPojo().getOrder().getOrderId());
 
+        command.setSortExpression("createdDate");
+        command.setSortDirection("2");  // sort DESC
+
         Object[] objectResult = this.orderHistoryService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
         command.setTotalItems(Integer.valueOf(objectResult[0].toString()));
         command.setListResult((List<OrderHistoryDTO>)objectResult[1]);
