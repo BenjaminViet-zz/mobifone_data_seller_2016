@@ -67,12 +67,12 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         entity.setUnitPrice(pojo.getUnitPrice());
         entity.setIssuedDate(pojo.getIssuedDate());
         entity.setShippingDate(pojo.getShippingDate());
-        entity.setOrderStatus(pojo.getOrderStatus());
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        entity.setOrderStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        entity.setOrderStatus(pojo.getOrderStatus());
+        entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        entity = this.orderService.save(entity);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
-        this.orderService.save(entity);
     }
 
     @Override

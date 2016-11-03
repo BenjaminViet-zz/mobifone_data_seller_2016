@@ -19,6 +19,8 @@ public class OrderHistoryBeanUtil {
         OrderHistoryDTO dto = new OrderHistoryDTO();
         dto.setOrderHistoryId(entity.getOrderHistoryId());
         dto.setOrder(OrderBeanUtil.entity2DTO(entity.getOrder()));
+        dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
+        dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
         dto.setOperator(entity.getOperator());
         dto.setQuantity(entity.getQuantity());
         dto.setUnitPrice(entity.getUnitPrice());

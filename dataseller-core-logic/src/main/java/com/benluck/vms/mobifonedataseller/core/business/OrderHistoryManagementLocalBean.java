@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
 import javax.ejb.Local;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,4 +12,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface OrderHistoryManagementLocalBean {
+
+    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 }
