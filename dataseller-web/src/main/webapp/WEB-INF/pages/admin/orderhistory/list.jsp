@@ -79,6 +79,7 @@
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="search" />
+                    <input type="hidden" name="pojo.order.orderId" value="${item.pojo.order.orderId}" />
                 </form:form>
             </div>
         </div>
@@ -114,13 +115,13 @@
                     <display:column headerClass="table_header text-center" property="createdBy.displayName" class="text-center" titleKey="label.modifiedBy" style="width: 10%" />
                     <display:column headerClass="table_header text-center" titleKey="label.operation" class="text-center" style="width: 14%">
                         <c:choose>
-                            <c:when test="${tableList.orderStatus eq Constants.ORDER_HISTORY_OPERATOR_CREATED}">
+                            <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_CREATED}">
                                 <fmt:message key="orderhistory.operator.created" />
                             </c:when>
-                            <c:when test="${tableList.orderStatus eq Constants.ORDER_HISTORY_OPERATOR_UPDATED}">
+                            <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_UPDATED}">
                                 <fmt:message key="orderhistory.operator.updated" />
                             </c:when>
-                            <c:when test="${tableList.orderStatus eq Constants.ORDER_HISTORY_OPERATOR_DELETED}">
+                            <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_DELETED}">
                                 <fmt:message key="orderhistory.operator.deleted" />
                             </c:when>
                         </c:choose>

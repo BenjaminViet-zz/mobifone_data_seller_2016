@@ -1,7 +1,9 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderHistoryDTO;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderHistoryCommand;
@@ -32,6 +34,10 @@ public class OrderHistoryController extends ApplicationObjectSupport{
 
     @Autowired
     private OrderHistoryManagementLocalBean orderHistoryService;
+    @Autowired
+    private PackageDataManagementLocalBean packageDataService;
+    @Autowired
+    private KHDNManagementLocalBean KHDNService;
 
     @RequestMapping(value = {"/admin/orderhistory/list.html", "/user/orderhistory/list.html"})
     public ModelAndView history(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderHistoryCommand command,
@@ -40,21 +46,35 @@ public class OrderHistoryController extends ApplicationObjectSupport{
         ModelAndView mav = new ModelAndView("/admin/orderhistory/list");
 
         executeSearch(command, request);
+        preferenceData(mav);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
+    private void preferenceData(ModelAndView mav){
+        mav.addObject("packageDataList", packageDataService.findAll());
+        mav.addObject("KHDNList", KHDNService.findAll());
+    }
+
     private void executeSearch(OrderHistoryCommand command, HttpServletRequest request){
         RequestUtil.initSearchBean(request, command);
+        OrderHistoryDTO pojo = command.getPojo();
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("order.orderId", command.getPojo().getOrder().getOrderId());
 
         command.setSortExpression("createdDate");
-        command.setSortDirection("2");  // sort DESC
+        command.setSortDirection("1");  // sort DESC
+
+        if(pojo.getKhdn() != null && pojo.getKhdn().getKHDNId() != null){
+            properties.put("khdn.KHDNId", pojo.getKhdn().getKHDNId());
+        }
+        if(pojo.getPackageData() != null && pojo.getPackageData().getPackageDataId() != null){
+            properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
+        }
 
         Object[] objectResult = this.orderHistoryService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
         command.setTotalItems(Integer.valueOf(objectResult[0].toString()));
-        command.setListResult((List<OrderHistoryDTO>)objectResult[1]);
+        command.setListResult((List<OrderHistoryDTO>) objectResult[1]);
     }
 }

@@ -77,7 +77,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
     @Override
     public void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
-        OrderEntity dbItem = this.orderService.findById(pojo.getCreatedBy().getUserId());
+        OrderEntity dbItem = this.orderService.findById(pojo.getOrderId());
 
         if(!dbItem.getKhdn().getKHDNId().equals(pojo.getKhdn().getKHDNId())){
             KHDNEntity khdnEntity = new KHDNEntity();
