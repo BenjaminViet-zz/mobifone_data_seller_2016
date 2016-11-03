@@ -104,7 +104,7 @@
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice" style="width: 7%">
                                 <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
                             </display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issuedDate" style="width: 7%">
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate" style="width: 7%">
                                 <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
                             </display:column>
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="shippingDate" titleKey="admin.donhang.label.shippingDate" style="width: 7%">

@@ -214,6 +214,9 @@ span.valid {
     color: #000000;
 }
 
+ul.to_do,
+.form-group input[type='number'],
+.form-group input[type='number'],
 .form-group input[type='text'],
 .form-group input[type='password'],
 .form-group select,
@@ -251,8 +254,10 @@ span.valid {
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
     border-left-width: 0;
-    margin-left: -5px;
     position: absolute;
+    left: calc(60% - 2px);
+    top: 0;
+    cursor: pointer;
 }
 
 .select2-container .select2-choice {
@@ -344,4 +349,61 @@ span.valid {
 
 .sidebar-footer {
     height: 40px;
+}
+
+table th.sortable {
+    position: relative;
+}
+
+th.sortable:after {
+    content: "\e150";
+    position: absolute;
+    opacity: .2;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    opacity: 0.5;
+}
+
+.sortable.sorted.order1:after {
+    content: "\e155";
+    position: absolute;
+    opacity: .2;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    opacity: 0.5;
+}
+
+.sortable.sorted.order2:after {
+    content: "\e156";
+    position: absolute;
+    opacity: .2;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    opacity: 0.5;
+}
+
+th.sortable > a {
+    width: 100%;
+    display: block;
+}
+
+.line_separator {
+    display: block;
+    width: 60%;
+    margin: 2px auto;
+    border-top: 1px solid #ddd;
+    position: relative;
+}
+
+table tr td {
+    vertical-align: middle !important;
 }

@@ -118,25 +118,10 @@
                     <display:column headerClass="table_header text-center" sortName="value" sortable="true" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
                         ${tableList.value}
                     </display:column>
-                    <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
-                        <c:choose>
-                            <c:when test="${tableList.volume.indexOf('|') > -1 }">
-                                <c:set var="dataStrArr" value="${fn:split(tableList.volume, '|')}"/>
-                                <c:forEach items="${dataStrArr}" var="dataStr" varStatus="count">
-                                    <c:if test="${count.index > 0}">
-                                        <span class="line_separator" ></span>
-                                    </c:if>
-                                    <div class="text-center">
-                                        ${dataStr}
-                                    </div>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                ${tableList.volume}
-                            </c:otherwise>
-                        </c:choose>
+                    <display:column headerClass="table_header text-center" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
+
                     </display:column>
-                    <display:column headerClass="table_header text-center" property="durationText" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
+                    <display:column headerClass="table_header text-center" property="durationText" sortable="true" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
                     <display:column headerClass="table_header text-center" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
                     <display:column headerClass="table_header text-center" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 7%" />
                     <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
@@ -149,6 +134,19 @@
 
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
+
+        var str = $('#tableList').text();
+        var replaceWith = '<span class="line_separator"></span>'
+        if (str.indexOf('|') == -1) {
+            // will not be triggered because str has |.
+            //alert('string not found');
+        } else {
+            $("td:contains('|')").addClass('breakTwoLines');
+            var newString = $('td.breakTwoLines').text();
+            var result = newString.replace('|', replaceWith);
+            $('td.breakTwoLines').html(result);
+        }
+
         function resetForm(){
             $("input[type='text']").val('');
             selectFirstItemSelect2('#chonGoiCuoc');

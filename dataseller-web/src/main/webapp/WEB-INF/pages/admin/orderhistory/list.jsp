@@ -103,7 +103,7 @@
                     <display:column headerClass="table_header text-center" class="text-center" titleKey="admin.donhang.label.UnitPrice" style="width: 8%">
                         <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
                     </display:column>
-                    <display:column headerClass="table_header text-center" class="text-center" titleKey="admin.donhang.label.issuedDate" style="width: 9%">
+                    <display:column headerClass="table_header text-center" class="text-center" titleKey="admin.donhang.label.issueDate" style="width: 9%">
                         <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
                     </display:column>
                     <display:column headerClass="table_header text-center" class="text-center" titleKey="admin.donhang.label.shippingDate" style="width: 9%">
