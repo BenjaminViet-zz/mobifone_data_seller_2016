@@ -214,13 +214,6 @@ span.valid {
     color: #000000;
 }
 
-.viewScoreContent .calendar {
-    position: inherit !important;
-    height: 30px !important;
-    width: 30px !important;
-    display: inline-block;
-}
-
 .form-group input[type='text'],
 .form-group input[type='password'],
 .form-group select,
@@ -240,11 +233,6 @@ span.valid {
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar:hover {
     background-color: #008000 !important;
-}
-
-.form-control {
-    /*display: inline !important;
-    padding: 6px !important;*/
 }
 
 .mCSB_scrollTools_horizontal {

@@ -1,164 +1,201 @@
 body {
-	font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 h1, h2, h3, h4, h5, nav {
-	font-family: Tahoma, Geneva, sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
 }
+
+
 /********Header - Nav************/
 nav {
-	float: right;
+    float: right;
 }
+
 nav li:first-child {
-	background: #e74041;
+    background: #e74041;
 }
+
 nav li:nth-child(2) {
-	background: #8ac041;
+    background: #8ac041;
 }
+
 nav li:nth-child(3) {
-	background: #de3285;
+    background: #de3285;
 }
+
 nav li:nth-child(4) {
-	background: #f79422;
+    background: #f79422;
 }
+
 nav li:nth-child(5) {
-	background: #53bbe2;
+    background: #53bbe2;
 }
+
 nav li:nth-child(6) {
-	background: #39F;
+    background: #39F;
 }
+
 nav li {
-	display: inline-block;
-	text-align: center;
-	-webkit-transform: skew(-20deg);
-	-moz-transform: skew(-20deg);
-	-ms-transform: skew(-20deg);
-	-o-transform: skew(-20deg);
-	transform: skew(-20deg);
-	-webkit-transition: background 0.2s;
-	-moz-transition: background 0.2s;
-	-ms-transition: background 0.2s;
-	-o-transition: background 0.2s;
-	transition: background 0.2s;
+    display: inline-block;
+    text-align: center;
+    -webkit-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -ms-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+    transform: skew(-20deg);
+    -webkit-transition: background 0.2s;
+    -moz-transition: background 0.2s;
+    -ms-transition: background 0.2s;
+    -o-transition: background 0.2s;
+    transition: background 0.2s;
 }
+
 nav li a {
-	display: block;
-	text-decoration: none;
-	padding: 5px 10px;
-	-webkit-transform: skew(20deg) !important;
-	-moz-transform: skew(20deg) !important;
-	-ms-transform: skew(20deg) !important;
-	-o-transform: skew(20deg) !important;
-	transform: skew(20deg) !important;
+    display: block;
+    text-decoration: none;
+    padding: 5px 10px;
+    -webkit-transform: skew(20deg) !important;
+    -moz-transform: skew(20deg) !important;
+    -ms-transform: skew(20deg) !important;
+    -o-transform: skew(20deg) !important;
+    transform: skew(20deg) !important;
 }
+
 nav li:hover {
-	background: #000;
+    background: #000;
 }
+
 header hr {
-	width: 99.2%;
-	border-top: 1px solid #c3c3bb;
+    width: 99.2%;
+    border-top: 1px solid #c3c3bb;
 }
+
 /*********Body***********/
 .container {
-	max-width: 970px;
+    max-width: 970px;
 }
+
 /*********Footer***********/
 footer {
-	background: #dddfdb;
-	padding: 17px 0 14px;
-	color: #979185;
+    background: #dddfdb;
+    padding: 17px 0 14px;
+    color: #979185;
 }
+
 /***Home page***/
 .home-page {
-	background: url(../images/mobie.png) top center no-repeat;
+    background: url(../images/mobie.png) top center no-repeat;
 }
+
 .content {
-	min-height: 545px;
+    min-height: 545px;
 }
+
 .content {
-	position: relative;
+    position: relative;
 }
+
 .img-left {
-	position: absolute;
-	top: 0;
+    position: absolute;
+    top: 0;
 }
+
 /***Home page***/
 .sub-page {
-	background: url(../images/bg-sub.jpg) top center no-repeat;
+    background: url(../images/bg-sub.jpg) top center no-repeat;
 }
+
 /******Backen*********/
-.view-detail .calendar{
-	width:20px;
-	display:inline-block
+.view-detail .calendar {
+    width: 20px;
+    display: inline-block
 }
-@media screen and (max-width:800px) {
-header hr {
-	width: 94%;
-	margin-left: 14px;
+
+@media screen and (max-width: 800px) {
+    header hr {
+        width: 94%;
+        margin-left: 14px;
+    }
+
+    nav {
+        float: none;
+    }
+
+    .home-page {
+        background: url(../images/mobie-bg-800.jpg) top center no-repeat;
+    }
+
+    .home-page .content {
+        min-height: 820px;
+    }
 }
-nav {
-	float: none;
+
+@media screen and (max-width: 700px) {
+    nav ul {
+        margin-left: 0;
+    }
+
+    nav li {
+        display: inline-block;
+        text-align: center;
+        width: 49%;
+        margin: 2px 0.3%;
+        -webkit-transform: skew(0deg);
+        -moz-transform: skew(0deg);
+        -ms-transform: skew(0deg);
+        -o-transform: skew(0deg);
+        transform: skew(0deg);
+    }
+
+    nav li a {
+        display: block;
+        text-decoration: none;
+        padding: 5px 10px;
+        font-size: 12px;
+        -webkit-transform: skew(0deg) !important;
+        -moz-transform: skew(0deg) !important;
+        -ms-transform: skew(0deg) !important;
+        -o-transform: skew(0deg) !important;
+        transform: skew(0deg) !important;
+    }
+
+    .home-page {
+        background: url(../images/111.png) top center no-repeat;
+    }
+
+    header {
+        margin-top: 12px !important;
+    }
+
+    header .baner {
+        text-align: left !important;
+    }
+
+    header img {
+        max-width: 100px !important;
+    }
 }
-.home-page {
-	background: url(../images/mobie-bg-800.jpg) top center no-repeat;
+
+@media screen and (max-width: 520px) {
+    nav li {
+        margin: 2px 0.2%;
+    }
+
+    .home-page {
+        background: url(../images/521.png) top center no-repeat;
+    }
+
+    .home-page .content {
+        background: url(../images/home-mobile_03.png) bottom center;
+        background-repeat: no-repeat;
+        min-height: 320px;
+        margin-bottom: 40px;
+    }
 }
-.home-page .content {
-	min-height: 820px;
-}
-}
-@media screen and (max-width:700px) {
-nav ul {
-	margin-left: 0;
-}
-nav li {
-	display: inline-block;
-	text-align: center;
-	width: 49%;
-	margin: 2px 0.3%;
-	-webkit-transform: skew(0deg);
-	-moz-transform: skew(0deg);
-	-ms-transform: skew(0deg);
-	-o-transform: skew(0deg);
-	transform: skew(0deg);
-}
-nav li a {
-	display: block;
-	text-decoration: none;
-	padding: 5px 10px;
-	font-size: 12px;
-	-webkit-transform: skew(0deg) !important;
-	-moz-transform: skew(0deg) !important;
-	-ms-transform: skew(0deg) !important;
-	-o-transform: skew(0deg) !important;
-	transform: skew(0deg) !important;
-}
-.home-page {
-	background: url(../images/111.png) top center no-repeat;
-}
-header {
-	margin-top: 12px !important;
-}
-header .baner {
-	text-align: left !important;
-}
-header img {
-	max-width: 100px !important;
-}
-}
-@media screen and (max-width:520px) {
-nav li {
-	margin: 2px 0.2%;
-}
-.home-page {
-	background: url(../images/521.png) top center no-repeat;
-}
-.home-page .content {
-	background: url(../images/home-mobile_03.png) bottom center;
-	background-repeat: no-repeat;
-	min-height: 320px;
-	margin-bottom: 40px;
-}
-@media screen and (max-width:360px) {
- nav li {
- margin: 2px 0;
-}
+
+@media screen and (max-width: 360px) {
+    nav li {
+        margin: 2px 0;
+    }
 }

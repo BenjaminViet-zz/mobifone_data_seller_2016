@@ -132,16 +132,13 @@
                                 <td>DATA5</td>
                             </tr>
                             <tr>
-                                <td rowspan="2">8</td>
-                                <td rowspan="2">DataQT35B(*)</td>
-                                <td rowspan="2">35.000</td>
-                                <td>1.536MB truy cập IP ngoài Facebook</td>
-                                <td rowspan="2">31 ngày</td>
-                                <td rowspan="2">11</td>
-                                <td rowspan="2">DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>Miễn phí truy cập IP Facebook</td>
+                                <td>8</td>
+                                <td>DataQT35B(*)</td>
+                                <td>35.000</td>
+                                <td>1.536MB truy cập IP ngoài Facebook<span class="line_separator"></span>Miễn phí truy cập IP Facebook</td>
+                                <td>31 ngày</td>
+                                <td>11</td>
+                                <td>DATA5</td>
                             </tr>
                         </tbody>
                     </table>
@@ -227,17 +224,15 @@
                             <td>N/A</td>
                         </tr>
                         <tr>
-                            <td rowspan="2">8</td>
-                            <td rowspan="2">DataQT35A(*)</td>
-                            <td rowspan="2">35.000</td>
-                            <td>1.536MB truy cập IP ngoài Facebook</td>
-                            <td rowspan="2">31 ngày</td>
-                            <td rowspan="2">11</td>
-                            <td rowspan="2">N/A</td>
+                            <td>8</td>
+                            <td>DataQT35A(*)</td>
+                            <td>35.000</td>
+                            <td>1.536MB truy cập IP ngoài Facebook<span class="line_separator"></span>Miễn phí truy cập IP Facebook</td>
+                            <td>31 ngày</td>
+                            <td>11</td>
+                            <td>N/A</td>
                         </tr>
-                        <tr>
-                            <td>Miễn phí truy cập IP Facebook</td>
-                        </tr>
+
                         </tbody>
                     </table>
 
