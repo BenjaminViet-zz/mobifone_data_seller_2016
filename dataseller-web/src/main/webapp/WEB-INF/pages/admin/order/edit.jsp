@@ -68,6 +68,14 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="total"><fmt:message key="admin.donhang.label.total" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="total" type="number" class="form-control form-control" />
+                            <form:errors for="unitPrice" path="pojo.total" cssClass="error-inline-validate"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDate"><fmt:message key="admin.donhang.label.issueDate" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
@@ -108,7 +116,7 @@
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
-                    <form:hidden path="pojo.orderId" />
+                    <form:hidden id="orderId" path="pojo.orderId" />
                 </form:form>
             </div>
         </div>
@@ -133,5 +141,7 @@
         $('#packageData').on('change', function(){
             $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
         });
+        
+        $('#orderId').data("remainingBalance", '${remainingBalance}');
     });
 </script>

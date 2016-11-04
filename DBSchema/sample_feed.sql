@@ -16,6 +16,6 @@ INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(4, 'DataQT8B', '8000', '600MB', '03 ng
 INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(5, 'DataQT10B', '10000', '1000MB', '10 ngày', 10, 0, 'DATA5');
 INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(6, 'DataQT50B', '50000', '1500MB', '31 ngày', 31, 0, 'DATA5');
 INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(7, 'DataQT70B', '70000', '2000MB', '31 ngày', 31, 0, 'DATA5');
-INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(8, 'DataQT35B(*)', '35000', '1.536MB truy cập IP ngoài Facebook|Miễn phí truy cập IP Facebook', '31 ngày', 31, 11, 'DATA5');
+INSERT INTO MOBI_DATA_PACKAGE_DATA VALUES(8, 'DataQT35B(*)', '35000', '1.536MB truy cập IP ngoài Facebook{delimiter_line}Miễn phí truy cập IP Facebook', '31 ngày', 31, 11, 'DATA5');
 
 commit;

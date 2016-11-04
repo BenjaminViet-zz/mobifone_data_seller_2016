@@ -6,6 +6,7 @@ import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.domain.*;
 import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
@@ -34,8 +35,8 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems) {
-        Object[] resultObject = this.orderService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems);
+    public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems, String whereClause) {
+        Object[] resultObject = this.orderService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems, whereClause);
         List<OrderDTO> orderDTOList = OrderBeanUtil.entityList2DTOList((List<OrderEntity>)resultObject[1]);
         resultObject[1] = orderDTOList;
         return resultObject;
@@ -136,7 +137,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public void deleteItem(Long orderId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException {
+    public void deleteItem(Long orderId, Long modifiedByUserId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException {
         OrderEntity dbItem = this.orderService.findById(orderId);
         dbItem.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_DIE);
 
@@ -150,6 +151,10 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         PackageDataDTO packageDataDTO = new PackageDataDTO();
         packageDataDTO.setPackageDataId(dbItem.getPackageData().getPackageDataId());
         pojo.setPackageData(packageDataDTO);
+
+        UserDTO modifiedBy = new UserDTO();
+        modifiedBy.setUserId(modifiedByUserId);
+        pojo.setCreatedBy(modifiedBy);
 
         pojo.setQuantity(dbItem.getQuantity());
         pojo.setUnitPrice(dbItem.getUnitPrice());

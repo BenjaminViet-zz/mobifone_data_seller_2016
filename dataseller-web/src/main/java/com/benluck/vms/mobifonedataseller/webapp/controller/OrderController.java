@@ -66,29 +66,31 @@ public class OrderController extends ApplicationObjectSupport{
             if(action.equals("delete")){
                 if(command.getPojo().getOrderId() != null){
                     try{
-                        this.orderService.deleteItem(command.getPojo().getOrderId());
+                        this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
                         mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
                 executeSearch(command, request);
-                preferenceData(mav);
             }
         }
+
+        preferenceData(mav);
 
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
     private void executeSearch(OrderCommand command, HttpServletRequest request){
-        RequestUtil.initSearchBean(request, command);
-
         OrderDTO pojo = command.getPojo();
+
+        RequestUtil.initSearchBean(request, command);
         Map<String, Object> properties = new HashMap<String, Object>();
+
         if(pojo.getKhdn() != null && pojo.getKhdn().getKHDNId() != null){
             properties.put("khdn.KHDNId", pojo.getKhdn().getKHDNId());
         }
@@ -96,7 +98,9 @@ public class OrderController extends ApplicationObjectSupport{
             properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
         }
 
-        Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
+        StringBuilder whereClause = new StringBuilder("A.activeStatus != " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
+
+        Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems(), whereClause.toString());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<OrderDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());
@@ -152,7 +156,12 @@ public class OrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav);
+        mav.addObject("remainingBalance", calculateRemainingBalance());
         return mav;
+    }
+
+    private Double calculateRemainingBalance(){
+        return new Double(100);
     }
 
     /**

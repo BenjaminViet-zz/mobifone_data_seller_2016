@@ -18,6 +18,7 @@ public class OrderDTO implements Serializable{
     private PackageDataDTO packageData;
     private Integer quantity;
     private Double unitPrice;
+    private Double total;
     private Timestamp issuedDate;
     private Timestamp shippingDate;
     private Integer orderStatus;
@@ -120,5 +121,13 @@ public class OrderDTO implements Serializable{
 
     public void setLastModified(Timestamp lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 }
