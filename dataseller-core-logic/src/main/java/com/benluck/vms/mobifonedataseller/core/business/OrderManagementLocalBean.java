@@ -18,7 +18,17 @@ import java.util.Map;
 @Local
 public interface OrderManagementLocalBean {
 
-    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
+    /**
+     * Only fetch Orders which has ActiveStatus still alive
+     * @param properties
+     * @param sortExpression
+     * @param sortDirection
+     * @param offset
+     * @param limitItems
+     * @param whereClause
+     * @return
+     */
+    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems, String whereClause);
 
     OrderDTO findById(Long orderId) throws ObjectNotFoundException;
 
@@ -26,5 +36,13 @@ public interface OrderManagementLocalBean {
 
     void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 
+    /**
+     * Not delete Order, just update it to status 'DIE' and create an delete history for this.
+     * @param orderId
+     * @param modifiedByUserId
+     * @throws ObjectNotFoundException
+     * @throws DuplicateKeyException
+     * @throws RemoveException
+     */
     void deleteItem(Long orderId, Long modifiedByUserId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException;
 }

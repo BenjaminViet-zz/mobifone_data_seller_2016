@@ -118,9 +118,7 @@
                     <display:column headerClass="table_header text-center" sortName="value" sortable="true" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
                         ${tableList.value}
                     </display:column>
-                    <display:column headerClass="table_header text-center" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
-
-                    </display:column>
+                    <display:column headerClass="table_header text-center" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" />
                     <display:column headerClass="table_header text-center" property="durationText" sortable="true" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
                     <display:column headerClass="table_header text-center" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
                     <display:column headerClass="table_header text-center" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 7%" />
@@ -137,13 +135,13 @@
 
         var str = $('#tableList').text();
         var replaceWith = '<span class="line_separator"></span>'
-        if (str.indexOf('|') == -1) {
+        if (str.indexOf('{delimiter_line}') == -1) {
             // will not be triggered because str has |.
             //alert('string not found');
         } else {
-            $("td:contains('|')").addClass('breakTwoLines');
+            $("td:contains('{delimiter_line}')").addClass('breakTwoLines');
             var newString = $('td.breakTwoLines').text();
-            var result = newString.replace('|', replaceWith);
+            var result = newString.replace('{delimiter_line}', replaceWith);
             $('td.breakTwoLines').html(result);
         }
 

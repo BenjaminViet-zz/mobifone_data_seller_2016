@@ -86,10 +86,11 @@ public class OrderController extends ApplicationObjectSupport{
     }
 
     private void executeSearch(OrderCommand command, HttpServletRequest request){
-        RequestUtil.initSearchBean(request, command);
-
         OrderDTO pojo = command.getPojo();
+
+        RequestUtil.initSearchBean(request, command);
         Map<String, Object> properties = new HashMap<String, Object>();
+
         if(pojo.getKhdn() != null && pojo.getKhdn().getKHDNId() != null){
             properties.put("khdn.KHDNId", pojo.getKhdn().getKHDNId());
         }
@@ -97,7 +98,9 @@ public class OrderController extends ApplicationObjectSupport{
             properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
         }
 
-        Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
+        StringBuilder whereClause = new StringBuilder("A.activeStatus != " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
+
+        Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems(), whereClause.toString());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<OrderDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());
