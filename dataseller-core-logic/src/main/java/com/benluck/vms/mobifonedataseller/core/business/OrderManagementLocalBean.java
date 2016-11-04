@@ -26,5 +26,5 @@ public interface OrderManagementLocalBean {
 
     void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 
-    void deleteItem(Long orderId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException;
+    void deleteItem(Long orderId, Long modifiedByUserId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException;
 }

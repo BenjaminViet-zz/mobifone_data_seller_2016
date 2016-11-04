@@ -66,19 +66,20 @@ public class OrderController extends ApplicationObjectSupport{
             if(action.equals("delete")){
                 if(command.getPojo().getOrderId() != null){
                     try{
-                        this.orderService.deleteItem(command.getPojo().getOrderId());
+                        this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
                         mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
                 executeSearch(command, request);
-                preferenceData(mav);
             }
         }
+
+        preferenceData(mav);
 
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
