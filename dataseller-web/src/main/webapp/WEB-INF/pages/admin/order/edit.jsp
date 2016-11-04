@@ -55,7 +55,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="quantity" type="number" path="pojo.quantity" cssClass="form-control required form-control" ></form:input>
+                            <form:input id="quantity" type="number" path="pojo.quantity" cssClass="form-control required form-control money" ></form:input>
                             <form:errors for="quantity" path="pojo.quantity" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="unitPrice" type="number" path="pojo.unitPrice" cssClass="form-control required form-control" ></form:input>
+                            <form:input id="unitPrice" type="number" path="pojo.unitPrice" cssClass="form-control required form-control money" ></form:input>
                             <form:errors for="unitPrice" path="pojo.unitPrice" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -117,6 +117,9 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
+        jQueryMask();
+
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
                 $("#formEdit").submit();

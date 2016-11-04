@@ -351,49 +351,53 @@ ul.to_do,
     height: 40px;
 }
 
+table th.sortable > a,
 table th.sortable {
     position: relative;
 }
 
-th.sortable:after {
+th.sortable>a:after {
     content: "\e150";
-    position: absolute;
-    opacity: .2;
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: block;
+    position: relative;
+    display: inline-block;
     font-family: 'Glyphicons Halflings';
     opacity: 0.5;
+    left: 0;
+    margin-left: 5px;
+    top: 3px;
 }
 
-.sortable.sorted.order1:after {
+.sortable.sorted.order1>a:after {
     content: "\e155";
-    position: absolute;
-    opacity: .2;
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: block;
+    position: relative;
+    display: inline-block;
     font-family: 'Glyphicons Halflings';
     opacity: 0.5;
+    left: 0;
+    margin-left: 5px;
+    top: 3px;
 }
 
-.sortable.sorted.order2:after {
+th.sortable>a:hover:after {
+    opacity: .8;
+    color: #23527c;
+}
+
+.sortable.sorted.order2>a:after {
     content: "\e156";
-    position: absolute;
-    opacity: .2;
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: block;
+    position: relative;
+    display: inline-block;
     font-family: 'Glyphicons Halflings';
     opacity: 0.5;
+    left: 0;
+    margin-left: 5px;
+    top: 3px;
 }
 
 th.sortable > a {
-    width: 100%;
-    display: block;
+    width: 95%;
+    display: inline-block;
+    height: 100%;
 }
 
 .line_separator {
@@ -406,4 +410,9 @@ th.sortable > a {
 
 table tr td {
     vertical-align: middle !important;
+}
+
+.form-group #userGroup,
+.form-group input {
+    display: inline-block;
 }

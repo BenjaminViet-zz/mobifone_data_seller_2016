@@ -95,23 +95,23 @@
                                        partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
-                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 3%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" titleKey="admin.donhang.label.DN" style="width: 20%"/>
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 4%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" titleKey="admin.donhang.label.DN" style="width: 13%"/>
                             <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 8%"/>
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity" style="width: 7%" >
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity" style="width: 8%" >
                                 <fmt:formatNumber type="number" value="${tableList.quantity}" />
                             </display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice" style="width: 7%">
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice" style="width: 10%">
                                 <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
                             </display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate" style="width: 7%">
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate" style="width: 10%">
                                 <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
                             </display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="shippingDate" titleKey="admin.donhang.label.shippingDate" style="width: 7%">
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="shippingDate" titleKey="admin.donhang.label.shippingDate" style="width: 10%">
                                 <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
                             </display:column>
-                            <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 12%" />
-                            <display:column headerClass="table_header text-center" titleKey="admin.donhang.label.status" style="width: 9%">
+                            <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 10%" />
+                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.status" style="width: 12%">
                                 <c:choose>
                                     <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
                                         <fmt:message key="label.in_progress" />
@@ -121,7 +121,7 @@
                                     </c:when>
                                 </c:choose>
                             </display:column>
-                            <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:20%;">
+                            <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">
                                 <a href="${historyUrl}?pojo.order.orderId=${tableList.orderId}" class="tip-top" title="<fmt:message key="label.view_history" />"><fmt:message key="label.view_history" /></a>
                                 <c:if test="${tableList.orderStatus ne Constants.ORDER_STATUS_FINISH}">
                                     | <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>

@@ -44,6 +44,7 @@
     <script src="<c:url value="/themes/admin/js/jquery-1.11.1.min.js" />"></script>
     <script src="<c:url value="/themes/admin/js/bootbox.min.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/jquery.validate.js"/>"></script>
+    <script src="<c:url value="/themes/admin/js/jquery.mask.min.js"/>"></script>
     <script src="<c:url value="/scripts/global.source.v_1.0.js"/>"></script>
     <decorator:head/>
 </head>

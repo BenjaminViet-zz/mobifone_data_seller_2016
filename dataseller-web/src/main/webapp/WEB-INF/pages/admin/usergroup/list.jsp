@@ -46,7 +46,7 @@
                                id="tableList" pagesize="${items.maxPageItems}" export="false"
                                class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                    <display:column headerClass="table_header text-center" sortable="false" titleKey="label.stt" class="text-center" style="width: 5%;" >
+                    <display:column headerClass="table_header text-center" sortable="true" titleKey="label.stt" class="text-center" style="width: 5%;" >
                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                     </display:column>
                     <display:column headerClass="table_header text-center" property="code" sortName="userName" sortable="true" titleKey="usergroup.label.code" style="20%"/>
@@ -55,8 +55,8 @@
                         <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                         | <a class="tip-top" onclick="javascript: deleteUserGroup(${tableList.userGroupId});"><fmt:message key="label.delete" /></a>
                     </display:column>
-                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nhom_quyen" /></display:setProperty>
+                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nhom_quyen" /></display:setProperty>
                 </display:table>
                 <input type="hidden" name="crudaction" value="find"/>
             </div>
