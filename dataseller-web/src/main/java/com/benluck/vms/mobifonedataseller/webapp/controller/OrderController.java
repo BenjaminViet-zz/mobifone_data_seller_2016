@@ -152,7 +152,12 @@ public class OrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav);
+        mav.addObject("remainingBalance", calculateRemainingBalance());
         return mav;
+    }
+
+    private Double calculateRemainingBalance(){
+        return new Double(100);
     }
 
     /**
