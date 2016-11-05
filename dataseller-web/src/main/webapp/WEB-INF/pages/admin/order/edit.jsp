@@ -12,7 +12,7 @@
 </head>
 
 <c:set var="prefix" value="/user" />
-<security:authorize ifAnyGranted="ADMIN">
+<security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 

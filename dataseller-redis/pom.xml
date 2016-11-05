@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mobifone_data_seller_2016_oct</artifactId>
+        <groupId>com.benluck</groupId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <name>MobiFone Data Seller 2016 Oct - Redis</name>
+    <packaging>jar</packaging>
+
+    <artifactId>dataseller-redis</artifactId>
+
+    <dependencies>
+        <!--redis-->
+        <!-- Redis Java Binding-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!-- Spring Data Redis -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring.data.redis.version}</version>
+        </dependency>
+    </dependencies>
+</project>

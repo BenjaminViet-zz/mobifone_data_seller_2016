@@ -2,7 +2,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 
 <c:set var="prefix" value="/user" />
-<security:authorize ifAnyGranted="ADMIN">
+<security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 
@@ -22,7 +22,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">
                         <li><a href="<c:url value="${prefix}/profile.html"/>"> <fmt:message key="user.profile" /> </a></li>
-                        <security:authorize ifAnyGranted="ADMIN">
+                        <security:authorize access="hasAnyAuthority('ADMIN')">
                             <li><a href="<c:url value="${prefix}/dashboard.html"/>"><fmt:message key="user.dashboard_warning_page" /> </a></li>
                         </security:authorize>
                         <li><a href="logout.jsp"><i class="fa fa-sign-out pull-right"></i><fmt:message key="logout" /></a></li>

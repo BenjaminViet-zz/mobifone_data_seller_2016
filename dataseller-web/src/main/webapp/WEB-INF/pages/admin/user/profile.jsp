@@ -5,7 +5,7 @@
 </head>
 
 <c:set var="prefix" value="/user" />
-<security:authorize ifAnyGranted="ADMIN">
+<security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 <c:url var="backUrl" value="${prefix}/dashboard.html"/>

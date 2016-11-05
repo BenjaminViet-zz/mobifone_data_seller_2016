@@ -4,7 +4,7 @@
     <title><fmt:message key="login.title"/></title>
 </head>
 <body>
-    <form name="loginForm" action="<c:url value="/j_security_check"/>" method="post">
+    <form name="loginForm" action="<c:url value="/perform_login"/>" method="post">
         <h4 class="nomargin"><fmt:message key="login"/></h4>
         <p class="mt5 mb20"><fmt:message key="page.login.info"/></p>
 

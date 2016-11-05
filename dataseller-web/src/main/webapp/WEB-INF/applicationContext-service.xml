@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" id="userManagementSessionEJB"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" id="userManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserGroupManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" id="userGroupManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PermissionManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" id="permissionManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PackageDataManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" id="packageDataManagementLocalBean"/>
@@ -23,7 +23,7 @@
 
 
     <bean id="userSecurityAdvice" class="com.benluck.vms.mobifonedataseller.security.MyUserDetailService">
-        <property name="userService" ref="userManagementSessionEJB"/>
+        <property name="userService" ref="userManagementLocalBean"/>
         <property name="ldapUserLookup" ref="ldapUserLookup" />
         <property name="userGroupService" ref="userGroupManagementLocalBean" />
     </bean>

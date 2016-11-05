@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ include file="/common/taglibs.jsp"%>
 
-<security:authorize ifAnyGranted="ADMIN">
+<security:authorize access="hasAuthority('ADMIN')">
     <%--<c:redirect url="/admin/dashboard.html"/>--%>
     <c:redirect url="/admin/user/list.html"/>
 </security:authorize>

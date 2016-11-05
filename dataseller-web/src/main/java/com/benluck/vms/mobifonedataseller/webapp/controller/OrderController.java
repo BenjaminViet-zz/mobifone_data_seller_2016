@@ -98,7 +98,7 @@ public class OrderController extends ApplicationObjectSupport{
             properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
         }
 
-        StringBuilder whereClause = new StringBuilder("A.activeStatus != " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        StringBuilder whereClause = new StringBuilder("A.activeStatus = " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
 
         Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems(), whereClause.toString());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));

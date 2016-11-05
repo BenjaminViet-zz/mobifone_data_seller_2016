@@ -1,3 +1,4 @@
+<%@ page import="com.benluck.vms.mobifonedataseller.common.Constants" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
@@ -74,6 +75,7 @@
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                         </div>
                     </div>
+                    <input type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>"/>
                 </form:form>
             </div>
         </div>
@@ -111,7 +113,6 @@
                     <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                     <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                 </display:table>
-                <input type="hidden" name="crudaction" value="find"/>
             </div>
         </div>
     </div>
@@ -129,7 +130,7 @@
     function deleteUser(userId){
         bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
             if(r){
-                document.location.href = '${formUrl}?pojo.userId=' + userId + '&crudaction=delete';
+                document.location.href = '${formUrl}?pojo.userId=' + userId + '&crudaction=<%=Constants.ACTION_DELETE%>';
             }
         });
     }

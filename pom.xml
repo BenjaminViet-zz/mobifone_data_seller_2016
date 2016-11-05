@@ -14,6 +14,7 @@
 		<module>dataseller-core</module>
         <module>dataseller-core-logic</module>
         <module>dataseller-core-logic-impl</module>
+        <module>dataseller-redis</module>
 		<module>dataseller-web</module>
         <module>dataseller-ear</module>
     </modules>
@@ -23,11 +24,13 @@
         <jboss.bom.version>1.0.4.Final</jboss.bom.version>
         <version.java>1.7</version.java>
         <!-- Spring version -->
-        <version.spring>4.1.4.RELEASE</version.spring>
+        <version.spring>4.1.6.RELEASE</version.spring>
+        <version.expression.spring>4.1.6.RELEASE</version.expression.spring>
         <version.surefire.plugin>2.10</version.surefire.plugin>
         <version.ejb.plugin>2.3</version.ejb.plugin>
         <version.ear.plugin>2.6</version.ear.plugin>
 
+        <spring.security.version>4.0.1.RELEASE</spring.security.version>
 
         <commons.fileupload.version>1.2.1</commons.fileupload.version>
         <commons.io.version>1.3.2</commons.io.version>
@@ -35,6 +38,10 @@
         <springmodules.validation.version>0.8</springmodules.validation.version>
         <jsp.version>2.1</jsp.version>
         <servlet.version>2.5</servlet.version>
+
+        <!--Redis-->
+        <jedis.version>2.5.1</jedis.version>
+        <spring.data.redis.version>1.6.2.RELEASE</spring.data.redis.version>
 
         <!-- Spring Third Party dependencies -->
         <version.aopalliance>1.0</version.aopalliance>

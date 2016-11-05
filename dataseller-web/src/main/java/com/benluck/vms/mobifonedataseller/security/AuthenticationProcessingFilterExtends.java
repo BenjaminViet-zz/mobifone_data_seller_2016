@@ -11,8 +11,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AuthenticationProcessingFilterExtends extends
-	AbstractAuthenticationProcessingFilter {
+public class AuthenticationProcessingFilterExtends extends AbstractAuthenticationProcessingFilter {
     private transient final Logger logger = Logger.getLogger(getClass());
 	public AuthenticationProcessingFilterExtends(){
 		super("/loginProcess");

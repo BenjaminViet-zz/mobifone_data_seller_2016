@@ -75,7 +75,7 @@ public class UserController extends ApplicationObjectSupport {
             }
         }
 
-        executeSearch(command, request);
+
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;

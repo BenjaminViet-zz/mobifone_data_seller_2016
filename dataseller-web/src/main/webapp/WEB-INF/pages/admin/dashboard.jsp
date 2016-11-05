@@ -1,7 +1,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="prefix" value="/user" />
-<security:authorize ifAnyGranted="ADMIN">
+<security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 
