@@ -46,7 +46,7 @@
                                id="tableList" pagesize="${items.maxPageItems}" export="false"
                                class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                    <display:column headerClass="table_header text-center" sortable="true" titleKey="label.stt" class="text-center" style="width: 5%;" >
+                    <display:column headerClass="table_header text-center" sortable="false" titleKey="label.stt" class="text-center" style="width: 5%;" >
                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                     </display:column>
                     <display:column headerClass="table_header text-center" property="code" sortName="userName" sortable="true" titleKey="usergroup.label.code" style="20%"/>

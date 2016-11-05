@@ -90,7 +90,7 @@
                                id="tableList" pagesize="${items.maxPageItems}" export="false"
                                class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                    <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="true" class="text-center" style="width: 5%;" >
+                    <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                     </display:column>
                     <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>

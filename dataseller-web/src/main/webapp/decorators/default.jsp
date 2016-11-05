@@ -14,6 +14,7 @@
     <meta name="description"content="">
     <meta name="author"content="">
     <title>Mobifone :: | Data Code </title>
+    <link rel="shortcut icon" href="<c:url value="/themes/admin/images/favicon2.ico"/>" type="image/png">
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/font-awesome/css/font-awesome.min.css"/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/bootstrap.min.css"/>"/>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i" rel="stylesheet">

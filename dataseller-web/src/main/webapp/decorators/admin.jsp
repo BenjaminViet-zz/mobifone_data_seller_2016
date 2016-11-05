@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="<c:url value="/themes/admin/images/favicon.png"/>" type="image/png">
+    <link rel="shortcut icon" href="<c:url value="/themes/admin/images/favicon2.ico"/>" type="image/png">
 
     <title><decorator:title/></title>
 
