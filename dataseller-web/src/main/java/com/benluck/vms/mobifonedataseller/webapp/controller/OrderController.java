@@ -3,18 +3,31 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
+import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import com.benluck.vms.mobifonedataseller.redis.service.DataCodeService;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
+import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
+import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
+import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OrderValidator;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.format.Alignment;
+import jxl.format.Border;
+import jxl.format.BorderLineStyle;
+import jxl.format.Colour;
+import jxl.write.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +44,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -39,7 +56,10 @@ import java.util.*;
 
 @Controller
 public class OrderController extends ApplicationObjectSupport{
+
     private Logger logger = Logger.getLogger(OrderController.class);
+
+    private static final Integer TOTAL_COLUMN_EXPORT = 9;
 
     @Autowired
     private OrderManagementLocalBean orderService;
@@ -50,17 +70,21 @@ public class OrderController extends ApplicationObjectSupport{
     @Autowired
     private DataCodeService dataCodeService;
     @Autowired
+    private OrderDataCodeManagementLocalBean orderDataCodeService;
+    @Autowired
     private OrderValidator validator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
+        binder.registerCustomEditor(Double.class, new CustomCurrencyFormatEditor());
+        binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
     @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html"} )
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                              HttpServletRequest request,
-                             BindingResult bindingResult){
+                             HttpServletResponse response){
         ModelAndView mav = new ModelAndView("/admin/order/list");
         String action = command.getCrudaction();
 
@@ -78,14 +102,95 @@ public class OrderController extends ApplicationObjectSupport{
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
                 executeSearch(command, request);
+            }else if(action.equals(Constants.ACTION_EXPORT)){
+                try{
+                    exportOrder2Excel(command, request, response);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    mav.addObject(Constants.ALERT_TYPE, "danger");
+                    mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.export_failed"));
+                    logger.error(e.getMessage());
+                }
             }
         }
 
         preferenceData(mav);
-        HashSet<String> newGeneratedDataCode = DataCodeUtil.generateDataCodeList("216", "10", 1000);
 
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
+    }
+
+    private void exportOrder2Excel(OrderCommand command, HttpServletRequest request, HttpServletResponse response) throws Exception{
+        SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        String exportDate = df.format(currentTimestamp);
+
+        List<OrderDataCodeDTO> dtoList = this.orderDataCodeService.fetchByOrderId(command.getPojo().getOrderId());
+
+        if(dtoList.size() == 0){
+            logger.error("Error happened when fetching Data Code by OrderId: " + command.getPojo().getOrderId());
+            throw new Exception("Error happened when fetching Data Code by OrderId: " + command.getPojo().getOrderId());
+        }
+
+        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/don_hang.xls");
+        String outputFileName = "/files/temp/export/don_hang_" + exportDate + ".xls";
+        String export2FileName = request.getSession().getServletContext().getRealPath(outputFileName);
+        WorkbookSettings ws = new WorkbookSettings();
+        ExcelUtil.setEncoding4Workbook(ws);
+        Workbook templateWorkbook = Workbook.getWorkbook(new File(reportTemplate), ws);
+        WritableWorkbook workbook = Workbook.createWorkbook(new File(export2FileName), templateWorkbook);
+        WritableSheet sheet = workbook.getSheet(0);
+        int startRow = 5;
+
+        WritableFont normalFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD);
+        normalFont.setColour(Colour.BLACK);
+
+        WritableFont boldFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD);
+        normalFont.setColour(Colour.BLACK);
+
+        WritableCellFormat stringCellFormat = new WritableCellFormat(normalFont);
+        stringCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+
+        WritableCellFormat stringNgayBaoCaoCellFormat = new WritableCellFormat(normalFont);
+        stringNgayBaoCaoCellFormat.setBorder(Border.ALL, BorderLineStyle.NONE);
+        stringNgayBaoCaoCellFormat.setAlignment(Alignment.CENTRE);
+
+        WritableCellFormat integerCellFormat = new WritableCellFormat(normalFont);
+        integerCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+        integerCellFormat.setAlignment(Alignment.CENTRE);
+
+        NumberFormat nf = new NumberFormat("#,###");
+        WritableCellFormat doubleCellFormat = new WritableCellFormat(nf);
+        doubleCellFormat.setFont(normalFont);
+        doubleCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+
+
+        if(dtoList.size() > 0){
+            int indexRow = 1;
+            for(OrderDataCodeDTO dto : dtoList){
+                CellValue[] resValue = addCellValues(dto, indexRow);
+                ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
+                indexRow++;
+            }
+            workbook.write();
+            workbook.close();
+            response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
+        }
+    }
+    private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow){
+        SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
+        CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
+        int columnIndex = 0;
+        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getSerial().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getValue());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getVolume());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getDuration());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getName());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getKhdn().getMst());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getExpiredDate()));
+        return resValue;
     }
 
     private void executeSearch(OrderCommand command, HttpServletRequest request){
@@ -133,16 +238,49 @@ public class OrderController extends ApplicationObjectSupport{
                         updatedBy.setUserId(SecurityUtils.getLoginUserId());
                         pojo.setCreatedBy(updatedBy);
 
-                        if (pojo.getOrderId() == null ){
-                            this.orderService.addItem(command.getPojo());
-                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
-                        } else {
-                            this.orderService.updateItem(command.getPojo());
-                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                        Calendar current = Calendar.getInstance();
+                        DataCode dataCode = null;
+                        String yearCode = String.valueOf(current.get(Calendar.YEAR)).replace("0","");
+                        String unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
+
+                        if(unitPriceCode.length() > 2){
+                            mav.addObject(Constants.ALERT_TYPE, "info");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_support_unit_price_2_digit"));
+                        }else{
+                            if (pojo.getOrderId() == null ){
+
+                                if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                                    dataCode = DataCodeUtil.generateDataCodes(yearCode, unitPriceCode, pojo.getQuantity());
+                                    pojo.setDataCodeHasSet2Store(dataCode.getDataCodeHashSet());
+                                }
+
+                                this.orderService.addItem(pojo);
+
+                                if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                                    DataCodeUtil.storeDataCodes(dataCode);
+                                }
+
+                                redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                            } else {
+                                OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
+                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
+                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                                    dataCode = DataCodeUtil.generateDataCodes(yearCode, unitPriceCode, pojo.getQuantity());
+                                    pojo.setDataCodeHasSet2Store(dataCode.getDataCodeHashSet());
+                                }
+
+                                this.orderService.updateItem(pojo);
+
+                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
+                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                                    DataCodeUtil.storeDataCodes(dataCode);
+                                }
+                                redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                            }
+                            return new ModelAndView("redirect:/admin/order/list.html");
                         }
-                        return new ModelAndView("redirect:/admin/order/list.html");
                     }
                 }
             }else if(pojo.getOrderId() != null){

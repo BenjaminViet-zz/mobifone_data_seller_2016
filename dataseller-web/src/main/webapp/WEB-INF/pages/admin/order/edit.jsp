@@ -22,6 +22,22 @@
 </c:if>
 <c:url var="backUrl" value="${prefix}/order/list.html" />
 
+<div class="clearfix"></div>
+<c:if test ="${not empty messageResponse}">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="alert alert-${alertType} no-bottom">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                            ${messageResponse}
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:if>
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">

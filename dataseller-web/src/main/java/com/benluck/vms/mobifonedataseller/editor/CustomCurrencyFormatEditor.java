@@ -20,9 +20,10 @@ public class CustomCurrencyFormatEditor extends PropertyEditorSupport{
      */
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        if(StringUtils.isNotBlank(text))
+        if(StringUtils.isNotBlank(text)) {
             setValue(text.replaceAll("\\,", ""));
-        else
+        }else{
             setValue(null);
+        }
     }
 }

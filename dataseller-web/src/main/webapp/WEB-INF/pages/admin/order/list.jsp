@@ -1,3 +1,4 @@
+<%@ page import="com.benluck.vms.mobifonedataseller.common.Constants" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
@@ -78,7 +79,7 @@
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                         </div>
                     </div>
-                    <input type="hidden" name="crudaction" value="search" />
+                    <input id="crudaction" type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>" />
                 </form:form>
             </div>
         </div>
@@ -96,7 +97,7 @@
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                             <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 4%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" titleKey="admin.donhang.label.DN" style="width: 13%"/>
+                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" titleKey="admin.donhang.label.DN" style="width: 12%"/>
                             <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 8%"/>
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity" style="width: 8%" >
                                 <fmt:formatNumber type="number" value="${tableList.quantity}" />
@@ -111,7 +112,7 @@
                                 <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
                             </display:column>
                             <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 10%" />
-                            <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.status" style="width: 12%">
+                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.status" style="width: 12%">
                                 <c:choose>
                                     <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
                                         <fmt:message key="label.in_progress" />
@@ -126,6 +127,9 @@
                                 <c:if test="${tableList.orderStatus ne Constants.ORDER_STATUS_FINISH}">
                                     | <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                                     | <a class="tip-top" onclick="javascript: deleteOrder(${tableList.orderId});"><fmt:message key="label.delete" /></a>
+                                </c:if>
+                                <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                    | <a class="tip-top" onclick="javascript: exportExcel(${tableList.orderId});"><fmt:message key="label.button.export" /></a>
                                 </c:if>
                             </display:column>
                             <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.order" /></display:setProperty>
@@ -152,11 +156,15 @@
         $('#listForm').submit();
     }
 
-    function deleteOrder(userId){
+    function deleteOrder(orderId){
         bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
             if(r){
-                document.location.href = '${formUrl}?pojo.orderId=' + userId + '&crudaction=delete';
+                document.location.href = '${formUrl}?pojo.orderId=' + orderId + '&crudaction=<%=Constants.ACTION_DELETE%>';
             }
         });
+    }
+
+    function exportExcel(orderId){
+        document.location.href = '${formUrl}?pojo.orderId=' + orderId + '&crudaction=<%=Constants.ACTION_EXPORT%>';
     }
 </script>

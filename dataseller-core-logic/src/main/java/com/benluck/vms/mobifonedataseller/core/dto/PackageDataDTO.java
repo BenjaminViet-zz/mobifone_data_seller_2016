@@ -21,6 +21,18 @@ public class PackageDataDTO implements Serializable {
     private Integer numberOfExtend;
     private String tk;
 
+    public PackageDataDTO() {
+    }
+
+    public PackageDataDTO(Long packageDataId, String name, Double value, String volume, Integer duration, String durationText) {
+        this.packageDataId = packageDataId;
+        this.name = name;
+        this.value = value;
+        this.volume = volume;
+        this.duration = duration;
+        this.durationText = durationText;
+    }
+
     public Long getPackageDataId() {
         return packageDataId;
     }
