@@ -1,7 +1,15 @@
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 <head>
-    <title><fmt:message key="admin.edit_user.heading_page" /></title>
+    <%--<title><fmt:message key="admin.edit_user.heading_page" /></title>--%>
+    <title>
+        <c:choose>
+            <c:when test="${not empty item.pojo.userId}">
+                <fmt:message key="admin.edit_user.label.edit_user" />
+            </c:when>
+            <c:otherwise><fmt:message key="admin.edit_user.label.add_user" /></c:otherwise>
+        </c:choose>
+    </title>
     <meta name="menu" content="<fmt:message key="admin.edit_user.heading_page" />"/>
 </head>
 <c:url var="backUrl" value="/admin/user/list.html"/>

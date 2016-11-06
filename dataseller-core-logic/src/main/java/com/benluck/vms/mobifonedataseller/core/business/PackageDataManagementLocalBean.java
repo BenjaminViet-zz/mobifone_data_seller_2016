@@ -19,4 +19,5 @@ public interface PackageDataManagementLocalBean {
     List<PackageDataDTO> findAll();
 
     Object[] findByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
+
 }

@@ -55,7 +55,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="quantity" type="number" path="pojo.quantity" cssClass="form-control required form-control money" ></form:input>
+                            <form:input id="quantity" type="text" path="pojo.quantity" cssClass="form-control required form-control money" ></form:input>
                             <form:errors for="quantity" path="pojo.quantity" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -63,16 +63,15 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="unitPrice" type="number" path="pojo.unitPrice" cssClass="form-control required form-control money" ></form:input>
+                            <form:input id="unitPrice" type="text" path="pojo.unitPrice" cssClass="form-control required form-control money" ></form:input>
                             <form:errors for="unitPrice" path="pojo.unitPrice" cssClass="error-inline-validate"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="total"><fmt:message key="admin.donhang.label.total" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="admin.donhang.label.total" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="total" type="number" class="form-control form-control" />
-                            <form:errors for="unitPrice" path="pojo.total" cssClass="error-inline-validate"/>
+                            <span class="calcOrderTotal"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -126,7 +125,40 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        jQueryMask();
+        /*-------------------------------*/
+        /* Calculator order total*/
+        /*-------------------------------*/
+        $('.money').mask('000,000,000,000,000,000', {
+            reverse: true
+        });
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        $('#quantity').keyup(function() {
+            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val())  );
+            $('.money').mask('000,000,000,000,000,000', {
+                reverse: true
+            });
+        });
+
+        $('#unitPrice').keyup(function() {
+            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
+            $('.money').mask('000,000,000,000,000,000', {
+                reverse: true
+            });
+        });
+
+        /*-------------------------------*/
+        /* //Calculator order total*/
+        /*-------------------------------*/
+
+
+
+
+
+
 
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){

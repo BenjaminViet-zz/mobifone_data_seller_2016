@@ -58,93 +58,28 @@
                     <ul class="ul-thele-q-student">
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên IN</b>:</p></li>
                     </ul>
-                    <table class="table text-center">
-                        <thead>
-                            <tr>
-                                <th class="text-center">TT</th>
-                                <th class="text-center">Tên gói</th>
-                                <th class="text-center">Giá gói(đ)</th>
-                                <th class="text-center">DL miễn phí (MB)</th>
-                                <th class="text-center">Thời gian sử dụng</th>
-                                <th class="text-center">Số lần gia hạn</th>
-                                <th class="text-center">TK</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>DataQT1B</td>
-                                <td>1.000</td>
-                                <td>100MB</td>
-                                <td>01 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>DataQT3B</td>
-                                <td>3.000</td>
-                                <td>300MB</td>
-                                <td>01 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>DataQT5B</td>
-                                <td>5.000</td>
-                                <td>500MB</td>
-                                <td>01 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>DataQT8B</td>
-                                <td>8.000</td>
-                                <td>600MB</td>
-                                <td>03 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>DataQT10B</td>
-                                <td>10.000</td>
-                                <td>1000MB</td>
-                                <td>10 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>DataQT50B</td>
-                                <td>50.000</td>
-                                <td>1500MB</td>
-                                <td>31 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>DataQT70B</td>
-                                <td>70.000</td>
-                                <td>2000MB</td>
-                                <td>31 ngày</td>
-                                <td>0</td>
-                                <td>DATA5</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>DataQT35B(*)</td>
-                                <td>35.000</td>
-                                <td>1.536MB truy cập IP ngoài Facebook<span class="line_separator"></span>Miễn phí truy cập IP Facebook</td>
-                                <td>31 ngày</td>
-                                <td>11</td>
-                                <td>DATA5</td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                   partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                   id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                   class="table text-center" style="margin: 1em 0 1.5em;">
+
+                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 3%;" >
+                            ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                        </display:column>
+                        <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="15%"/>
+                        <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
+                            ${tableList.value}
+                        </display:column>
+                        <display:column headerClass="table_header text-center breakTwoLines" property="volume" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
+
+                        </display:column>
+                        <display:column headerClass="table_header text-center" property="durationText" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="numberOfExtend" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="tk" class="text-center" titleKey="packagedata.label.tk" style="width: 7%" />
+                    </display:table>
+
+
 
                     <ul class="ul-thele-q-student">
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên PCRF</b>:</p></li>
@@ -243,47 +178,24 @@
                 </article>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_content">
-                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
-                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
-
-                            <display:column headerClass="table_header text-center" sortable="false" titleKey="label.stt" class="text-center" style="width: 3%;" >
-                                ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                            </display:column>
-                            <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" sortable="true" titleKey="packagedata.label.tenGoiCuoc" style="15%"/>
-                            <display:column headerClass="table_header text-center" sortName="value" sortable="true" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
-                                ${tableList.value}
-                            </display:column>
-                            <display:column headerClass="table_header text-center breakTwoLines" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
-
-                            </display:column>
-                            <display:column headerClass="table_header text-center" property="durationText" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
-                            <display:column headerClass="table_header text-center" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
-                            <display:column headerClass="table_header text-center" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 7%" />
-                            <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
-                            <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
-                        </display:table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-<br/>
 </section>
 <script type="text/javascript">
     $(document).ready(function(){
+        function replaceSpecialCharacter() {
+            var str = $('#tableList').text();
+            var textToReplace = '{delimiter_line}';
+            var replaceWith = '<span class="line_separator"></span>';
+            if (str.indexOf(textToReplace) == -1) {
 
-        var getText = $('#tableList td.breakTwoLines').text();
-        var result = getText.replace('|', '<span class="line_separator"></span>');
-        $('#tableList td.breakTwoLines').html(result);
-
+            } else {
+                $("#tableList td:contains(" + textToReplace + ")").addClass('breakTwoLines');
+                var newString = $('td.breakTwoLines').text();
+                var result = newString.replace(textToReplace, replaceWith);
+                $('td.breakTwoLines').html(result);
+            }
+        }
+        replaceSpecialCharacter();
         highlightKppFocusPage('#kppTheLeCt');
     });
 </script>

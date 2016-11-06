@@ -1,31 +1,33 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: thaihoang
+  Date: 11/5/2016
+  Time: 12:37 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+
 <head>
-    <title>
-        <c:choose>
-            <c:when test="${not empty item.pojo.userGroupId}">
-                <fmt:message key="admin.edit_user_group.edit.heading_page"/>
-            </c:when>
-            <c:otherwise><fmt:message key="admin.edit_user_group.label.add_usergroup"/></c:otherwise>
-        </c:choose>
-    </title>
+    <title><fmt:message key="admin.edit_user_group.edit.heading_page" /></title>
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
-<c:url var="backUrl" value="/admin/usergroup/list.html"/>
-<c:url var="formUrl" value="/admin/usergroup/add.html"/>
 
-<c:if test="${pojo.userGroupId != null}">
-    <c:url var="formUrl" value="/admin/usergroup/edit.html"/>
+<c:url var="backUrl" value="/admin/vendor/list.html"/>
+<c:url var="formUrl" value="/admin/vendor/add.html"/>
+
+<c:if test="${pojo.KHDNID != null}">
+    <c:url var="formUrl" value="/admin/vendor/edit.html"/>
 </c:if>
 
 <div class="page-title">
     <div class="title_left">
         <h3>
             <c:choose>
-                <c:when test="${not empty item.pojo.userGroupId}">
-                    <fmt:message key="admin.edit_user_group.edit.heading_page" />
+                <c:when test="${not empty item.pojo.KHDNId}">
+                    <fmt:message key="admin.edit_khdn.label.edit_khdn" />
                 </c:when>
-                <c:otherwise><fmt:message key="admin.edit_user_group.label.add_usergroup" /></c:otherwise>
+                <c:otherwise><fmt:message key="admin.edit_khdn.label.add_khdn" /></c:otherwise>
             </c:choose>
         </h3>
     </div>
@@ -39,7 +41,7 @@
                 <div class="x_content">
                     <div class="alert alert-${alertType} no-bottom">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
-                        ${messageResponse}
+                            ${messageResponse}
                     </div>
                 </div>
             </div>
@@ -100,20 +102,21 @@
                             <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
                             <button id="btnSave" class="btn btn-primary">
                                 <c:choose>
-                                    <c:when test="${not empty item.pojo.userGroupId}"><fmt:message key="label.update" /></c:when>
+                                    <c:when test="${not empty item.pojo.KHDNID}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                                 </c:choose>
                             </button>
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
-                    <form:hidden path="pojo.userGroupId" />
+                    <form:hidden path="pojo.KHDNID" />
                 </form:form>
             </div>
         </div>
     </div>
 </div>
 
+<%--
 <script type="text/javascript">
     $(document).ready(function(){
         $("#btnSave").click(function(){
@@ -126,4 +129,4 @@
             $(this).closest('tr').find("input[type='hidden']")
         });
     });
-</script>
+</script>--%>
