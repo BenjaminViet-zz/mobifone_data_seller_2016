@@ -10,4 +10,7 @@ import com.benluck.vms.mobifonedataseller.domain.KHDNEntity;
  * To change this template use File | Settings | File Templates.
  */
 public interface KHDNLocalBean extends GenericSessionBean<KHDNEntity, Long>{
+
+    Boolean checkExistsBeforeDelete(Long khdnId);
+
 }

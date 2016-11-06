@@ -15,9 +15,13 @@
     <meta name="menu" content="<fmt:message key="admin.khdn.label.heading_page" />"/>
 </head>
 
-<c:url var="addUrl" value="/admin/vendor/add.html"/>
-<c:url var="editUrl" value="/admin/vendor/edit.html"/>
-<c:url var="formUrl" value="/admin/vendor/list.html"/>
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="addUrl" value="${prefix}/vendor/add.html"/>
+<c:url var="editUrl" value="${prefix}/vendor/edit.html"/>
+<c:url var="formUrl" value="${prefix}/vendor/list.html"/>
 
 <div class="page-title">
     <div class="title_left">
@@ -54,15 +58,10 @@
 
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name"><fmt:message key="admin.khdn.name" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.KHDNId" cssClass="form-control">
-                                <option value=""><fmt:message key="label.all" /></option>
-                                <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
-                                </c:forEach>
-                            </form:select>
+                            <form:input id="name" path="pojo.name" cssClass="form-control" />
                         </div>
                     </div>
 
@@ -79,15 +78,6 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:input id="gpkd" path="pojo.gpkd" cssClass="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.issuedContractDate" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="issuedContractDate" path="pojo.issuedContractDate" cssClass="form-control data_picker has-feedback-left" describedby="inputSuccess2Status" />
-                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         </div>
                     </div>
 

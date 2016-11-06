@@ -71,15 +71,21 @@ public class UserController extends ApplicationObjectSupport {
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
-                executeSearch(command, request);
+                executeSearch(mav, command, request);
             }
         }
 
+        preferenceData(mav);
 
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
 	}
+
+    private void preferenceData(ModelAndView mav){
+        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
+        mav.addObject("userGroups", userGroups);
+    }
 
     @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
@@ -119,22 +125,20 @@ public class UserController extends ApplicationObjectSupport {
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
 
-        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
-        mav.addObject("userGroups", userGroups);
-        mav.addObject(Constants.FORM_MODEL_KEY, command);
+        preferenceData(mav);
         return mav;
     }
 
 
     /**
      * Fetch uset list by properties
-     * @param model
+     * @param command
      * @param request
      */
-    private void executeSearch(UserCommand model, HttpServletRequest request){
-        RequestUtil.initSearchBean(request, model);
+    private void executeSearch(ModelAndView mav, UserCommand command, HttpServletRequest request){
+        RequestUtil.initSearchBean(request, command);
         Map<String, Object> properties = new HashMap<String, Object>();
-        UserDTO pojo = model.getPojo();
+        UserDTO pojo = command.getPojo();
         if (StringUtils.isNotBlank(pojo.getUserName())){
             properties.put("userName", pojo.getUserName());
         }
@@ -148,10 +152,10 @@ public class UserController extends ApplicationObjectSupport {
         StringBuilder whereClause = new StringBuilder();
         whereClause.append("A.userId != " + SecurityUtils.getLoginUserId());
 
-        Object [] result = this.userService.searchByProperties(properties, model.getSortExpression(), model.getSortDirection(), model.getFirstItem(), model.getMaxPageItems(), whereClause.toString());
-        model.setTotalItems(Integer.valueOf(result[0].toString()));
-        model.setListResult((List<UserDTO>)result[1]);
-        model.setMaxPageItems(model.getMaxPageItems());
+        Object [] result = this.userService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems(), whereClause.toString());
+        command.setTotalItems(Integer.valueOf(result[0].toString()));
+        command.setListResult((List<UserDTO>)result[1]);
+        command.setMaxPageItems(command.getMaxPageItems());
     }
 }
 
