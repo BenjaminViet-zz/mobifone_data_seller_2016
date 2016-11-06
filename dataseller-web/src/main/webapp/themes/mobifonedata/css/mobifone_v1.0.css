@@ -6,7 +6,8 @@ body {
 h1, h2, h3, h4, h5, nav {
     font-family: Tahoma, Geneva, sans-serif;
 }
-
+a:active,
+a:focus,
 a:hover {
     text-decoration: none;
 }
@@ -495,9 +496,9 @@ table>tbody>tr>td:nth-child(4) {
 }
 
 .q_student_q_teen_2015_home_img {
-    background: url(/themes/mobifonedata/images/bg_4.png) top center no-repeat;
+    background: url(/themes/mobifonedata/images/bg-home.png) top center no-repeat;
     width: 100%;
-    height: 768px;
+    height: 800px;
 }
 
 .q_teen_q_student_left_img {
