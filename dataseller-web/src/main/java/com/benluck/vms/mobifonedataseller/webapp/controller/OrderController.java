@@ -7,7 +7,10 @@ import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
+import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
+import com.benluck.vms.mobifonedataseller.redis.service.DataCodeService;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
@@ -28,10 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by thaihoang on 10/31/2016.
@@ -47,6 +47,8 @@ public class OrderController extends ApplicationObjectSupport{
     private PackageDataManagementLocalBean packageDataService;
     @Autowired
     private KHDNManagementLocalBean KHDNService;
+    @Autowired
+    private DataCodeService dataCodeService;
     @Autowired
     private OrderValidator validator;
 
@@ -80,6 +82,7 @@ public class OrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav);
+        HashSet<String> newGeneratedDataCode = DataCodeUtil.generateDataCodeList("216", "10", 1000);
 
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;

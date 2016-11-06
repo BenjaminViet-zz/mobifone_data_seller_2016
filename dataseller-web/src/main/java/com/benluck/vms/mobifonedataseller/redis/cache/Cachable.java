@@ -1,4 +1,4 @@
-package com.benluck.vms.mobifonedataseller.cache;
+package com.benluck.vms.mobifonedataseller.redis.cache;
 
 import java.io.Serializable;
 
@@ -12,5 +12,5 @@ import java.io.Serializable;
 public interface Cachable extends Serializable{
     public String getKey();
 
-    public String getObjectKey();
+    public String getHashKey();
 }

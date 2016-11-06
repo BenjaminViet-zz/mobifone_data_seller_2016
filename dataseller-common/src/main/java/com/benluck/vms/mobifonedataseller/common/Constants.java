@@ -148,4 +148,11 @@ public class Constants {
     public static final Integer ORDER_HISTORY_OPERATOR_CREATED = 0;
     public static final Integer ORDER_HISTORY_OPERATOR_UPDATED = 1;
     public static final Integer ORDER_HISTORY_OPERATOR_DELETED = 2;
+
+//    Order Data Code prefix
+    public static final String DATAT_CODE_VMS_PREFIX = "2";
+
+//    Used Data Code Key and HashKey
+    public static final String KEY_USED_2016 = DATAT_CODE_VMS_PREFIX + "16";
+    public static final String HAS_KEY_USED_2016UNIT_PRICE_10 = "10_USED";
 }

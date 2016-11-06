@@ -1,8 +1,6 @@
-package com.benluck.vms.mobifonedataseller.service;
+package com.benluck.vms.mobifonedataseller.redis.service;
 
-import com.benluck.vms.mobifonedataseller.cache.Cachable;
-
-import java.util.Map;
+import com.benluck.vms.mobifonedataseller.redis.cache.Cachable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,5 +13,5 @@ public interface Service <V extends Cachable>{
 
     public void put(V obj);
 
-    public V get();
+    public V get(String objectKey, String key);
 }
