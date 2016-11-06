@@ -56,5 +56,23 @@
     $(document).ready(function(){
         highlightFocusPage('#howToExchangePage');
     });
+
+    /*--------------------------------*/
+    /* background-attachment fixed IE */
+    /*--------------------------------*/
+
+    $('body').on("mousewheel", function () {
+        event.preventDefault();
+
+        var wheelDelta = event.wheelDelta;
+
+        var currentScrollPosition = window.pageYOffset;
+        window.scrollTo(0, currentScrollPosition - wheelDelta);
+    });
+
+    /*--------------------------------*/
+    /* //background-attachment fixed IE */
+    /*--------------------------------*/
+
 </script>
 </body>

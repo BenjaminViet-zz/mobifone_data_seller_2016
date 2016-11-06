@@ -6,6 +6,7 @@ body {
 h1, h2, h3, h4, h5, nav {
     font-family: Tahoma, Geneva, sans-serif;
 }
+
 a:active,
 a:focus,
 a:hover {
@@ -17,7 +18,13 @@ a:hover {
 }
 
 #content404 {
+    position: relative;
+    z-index: 2;
+}
+
+#content404 .container {
     background: white;
+    height: 500px;
 }
 
 .nowrap {
@@ -38,6 +45,15 @@ table tr td {
     width: 100%;
     border-top: 1px solid #ddd;
     position: relative;
+}
+
+header.padding-top-large {
+    position: relative;
+    z-index: 2;
+}
+
+#q-student-the-le-chuong-trinh .pagelinks {
+    display: none;
 }
 
 header .banner {
@@ -201,6 +217,7 @@ nav li.active a {
     padding: 0;
     top: 0;
     left: 0;
+    z-index: 1;
 }
 
 .twoxtwo {
@@ -218,7 +235,7 @@ footer {
     background: rgba(255, 255, 255, 1);
     padding: 8px 0 1px;
     color: white;
-    position: relative;
+    position: absolute;
     left: 0;
     right: 0;
     width: 100%;
@@ -278,7 +295,6 @@ footer img {
     right: 10px;
     z-index: 9;
 }
-
 
 .scrollTop {
     width: 50px;
@@ -384,7 +400,8 @@ a.social-icon {
 .content {
     position: relative;
     min-height: 650px;
-    padding: 25px 0;
+    padding: 25px 0 60px 0;
+    z-index: 2;
 }
 
 .img-left {
@@ -414,38 +431,21 @@ table>tbody>tr>td:nth-child(4) {
 
 
 /***   Page total  ***/
-.home-total {
-    background: url(../images/bg-total-home-new.jpg) top center;
-    background-size: cover;
-}
-
-.home-total a {
-    display: inline-block;
-}
-
-.home-total img {
-    max-height: 450px;
-}
-
-.img-canhan {
-    margin: 200px 0 0 200px
-}
 
 .img-phanphoi {
-    margin: 0px 0 0 -75px;
+    margin: 0 0 0 -75px;
 }
 
 .ul-thele-q-student li {
-    /*background: url(https://cdn1.iconfinder.com/data/icons/Momentum_MatteEntireSet/32/bullet-blue.png) 0px -6px no-repeat;*/
     margin-left: 15px;
     list-style: none;
-    padding-top: 0px;
+    padding-top: 0;
     padding-bottom: 2px;
     padding-left: 27px;
 }
 
 .ul-thele-q-student li p {
-    margin: 0px;
+    margin: 0;
 }
 
 .q-student-thankcaption {
@@ -489,11 +489,6 @@ table>tbody>tr>td:nth-child(4) {
     padding-left: 20px;
 }
 
-.q_student_q_teen_2015_home_page {
-    /*background: url(/themes/mobifonedata/images/bg_2.png) top center no-repeat;
-    background-attachment: fixed;
-    background-size: cover;*/
-}
 
 .q_student_q_teen_2015_home_img {
     background: url(/themes/mobifonedata/images/bg-home.png) top center no-repeat;
@@ -516,7 +511,7 @@ table>tbody>tr>td:nth-child(4) {
 }
 
 .no-margin {
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 @media screen and (max-width:1200px) {
@@ -541,15 +536,7 @@ table>tbody>tr>td:nth-child(4) {
         left: -90px;
     }
 
-    .sub-page .content {
-        background: url(../images/bg-png1.png) -9% 0% no-repeat;
-    }
-
     /***   Page total  ***/
-    .home-total img {
-        max-height: 450px;
-    }
-
     .img-canhan {
         margin: 200px 0 0 100px;
     }
@@ -560,11 +547,6 @@ table>tbody>tr>td:nth-child(4) {
 }
 
 @media screen and (max-width:800px) {
-    .home-total {
-        background: url(../images/bg-home-total-tablet-doc-total.jpg) top center;
-        background-size: cover;
-    }
-
     header hr {
         width: 94%;
         margin-left: 14px;
@@ -589,10 +571,6 @@ table>tbody>tr>td:nth-child(4) {
     /***   Page total  ***/
     .home-total img {
         max-height: 390px;
-    }
-
-    .img-canhan {
-        margin: 170px 0 0 200px;
     }
 
     .img-phanphoi {
@@ -637,15 +615,6 @@ table>tbody>tr>td:nth-child(4) {
         min-height: 390px;
     }
 
-    .sub-page, .sub-page-the-le {
-        background: url(../images/bg-sub-mobile.jpg) top center no-repeat;
-        background-attachment: fixed;
-    }
-
-    .sub-page .content {
-        background: none;
-        max-width: none;
-    }
 
     article {
         padding: 1px 8px;
@@ -659,10 +628,6 @@ table>tbody>tr>td:nth-child(4) {
     /***   Page total  ***/
     .home-total img {
         max-height: 250px;
-    }
-
-    .img-canhan {
-        margin: 110px 0 0 56px;
     }
 
     .img-phanphoi {
@@ -679,10 +644,6 @@ table>tbody>tr>td:nth-child(4) {
 
 @media screen and (max-width:500px) {
     /***   Page total  ***/
-    .img-canhan {
-        margin: 95px 0 0 125px;
-    }
-
     .img-phanphoi {
         margin: 0 0 0 90px;
     }
@@ -691,10 +652,6 @@ table>tbody>tr>td:nth-child(4) {
 @media screen and (max-width:360px) {
     nav li {
         margin: 2px 0 !important;
-    }
-
-    .img-canhan {
-        margin: 100px 0 0 35px;
     }
 
     .img-phanphoi {
@@ -781,4 +738,24 @@ p {
     h5, .h5 {
         margin: 10px auto 5px;
     }
+}
+
+.error-not-found {
+    width: 100%;
+    position: relative;
+    margin-top: 50px;
+}
+
+.error-textOops {
+    font-size: 60px;
+    font-weight: 700;
+}
+
+p.error-content {
+    font-size: 16px;
+}
+
+p.error-link a {
+    font-size: 15px;
+    padding: 0;
 }

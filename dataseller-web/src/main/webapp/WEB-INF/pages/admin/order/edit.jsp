@@ -141,6 +141,10 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
+        console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
+        $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
+
+
         /*-------------------------------*/
         /* Calculator order total*/
         /*-------------------------------*/
@@ -165,6 +169,10 @@
                 reverse: true
             });
         });
+
+        $('#packageData').on('change', function(){
+            console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
+        })
 
         /*-------------------------------*/
         /* //Calculator order total*/

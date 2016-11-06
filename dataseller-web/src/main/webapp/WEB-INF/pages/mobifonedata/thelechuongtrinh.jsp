@@ -43,11 +43,11 @@
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Doanh nghiệp khi mua gói cước sẽ được đăng ký vào thuê bao VAS của doanh nghiệp.</p></li>
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Gói cước được trừ 01 lần vào tháng đăng ký và không gia hạn tự động</p></li>
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Doanh nghiệp có thể mua 01 hoặc nhiều gói cước BB_Data trong cùng 01 chu kỳ cước.</p></li>
-                        <li><p><i class="fa fa-check" aria-hidden="true"></i> Gói cước chỉ được thực hiện đăng ký tại cửa hang trên form đấu nối, không đăng ký bằng SMS, USSD, web/wap;</p></li>
+                        <li><p><i class="fa fa-check" aria-hidden="true"></i> Gói cước chỉ được thực hiện đăng ký tại cửa hàng trên form đấu nối, không đăng ký bằng SMS, USSD, web/wap;</p></li>
                     </ul>
 
                     <h5 class="text-red padding-round-small display-inline text-uppercase">Data_code:</h5>
-                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> Được cung cấp cho khách hang dưới dạng file excel có bảo mật, trong đó:</p>
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> Được cung cấp cho khách hà`ng dưới dạng file excel có bảo mật, trong đó:</p>
                     <ul class="ul-thele-q-student">
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Serial data_code: gồm 12 chữ số;</p></li>
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> Mã bảo mật: 12 chữ số được mã hóa bằng thuật toán SHA 256 trước khi cập nhật vào hệ thống quản lý mã thẻ.</p></li>
@@ -182,6 +182,27 @@
 </section>
 <script type="text/javascript">
     $(document).ready(function(){
+
+
+        /*--------------------------------*/
+        /* background-attachment fixed IE */
+        /*--------------------------------*/
+
+        $('body').on("mousewheel", function () {
+            event.preventDefault();
+
+            var wheelDelta = event.wheelDelta;
+
+            var currentScrollPosition = window.pageYOffset;
+            window.scrollTo(0, currentScrollPosition - wheelDelta);
+        });
+
+        /*--------------------------------*/
+        /* //background-attachment fixed IE */
+        /*--------------------------------*/
+
+
+
         function replaceSpecialCharacter() {
             var str = $('#tableList').text();
             var textToReplace = '{delimiter_line}';
