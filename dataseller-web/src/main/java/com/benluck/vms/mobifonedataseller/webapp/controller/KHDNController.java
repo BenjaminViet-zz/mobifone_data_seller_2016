@@ -1,9 +1,10 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.common.exception.DuplicateKeyException;
+import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
+import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.KHDNCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.KHDNValidator;
@@ -13,15 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
 import javax.ejb.RemoveException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by thaihoang on 11/1/2016.
@@ -35,47 +42,47 @@ public class KHDNController extends ApplicationObjectSupport {
     @Autowired
     private KHDNValidator validator;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
+    }
 
-    /*@RequestMapping( value = {"/admin/vendor/list.html"})
-    public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command, HttpServletRequest request) throws RemoveException {
+    @RequestMapping( value = {"/admin/vendor/list.html"})
+    public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
+                             HttpServletRequest request,
+                             BindingResult bindingResult) throws RemoveException {
         ModelAndView mav = new ModelAndView("/admin/khdn/list");
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
             if(action.equals("delete")){
                 if(command.getPojo().getKHDNId() != null){
                     try{
-                        this.khdnService.deleteItemById(command.getPojo().getKHDNId());
-                        mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                        validator.validate(command, bindingResult);
+                        if(StringUtils.isBlank(command.getErrorMessage())){
+                            this.khdnService.deleteItemById(command.getPojo().getKHDNId());
+                            mav.addObject(Constants.ALERT_TYPE, "success");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.khdn.delete_successfully"));
+                        }else{
+                            mav.addObject(Constants.ALERT_TYPE, "danger");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage(command.getErrorMessage()));
+                            executeSearch(mav, command, request);
+                        }
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.khdn.delete_khdn_exception"));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
-                executeSearch(command, request);
+                executeSearch(mav, command, request);
             }
+        }else{
+            executeSearch(mav, command, request);
         }
+
         mav.addObject("page", command.getPage() - 1);
-        mav.addObject(Constants.LIST_MODEL_KEY, command);
-        return mav;*//**//*
-        ModelAndView mav = new ModelAndView("/admin/khdn/list");
-        executeSearch(command, request);
-        mav.addObject(Constants.LIST_MODEL_KEY, command);
-        return mav;
-    }*/
-
-    @RequestMapping( value = {"/admin/vendor/list.html"})
-    /*public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command, HttpServletRequest request) throws RemoveException {*/
-    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command, HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("/admin/khdn/list");
-        executeSearch(command, request);
-
-        preferenceData(mav);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
-
 
     @RequestMapping(value = {"/admin/vendor/add.html", "/admin/vendor/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command,
@@ -88,18 +95,19 @@ public class KHDNController extends ApplicationObjectSupport {
         try{
             if (StringUtils.isNotBlank(crudaction)){
                 if(crudaction.equals("insert-update")){
+                    convertDate2Timestamp(command);
                     validator.validate(command, bindingResult);
                     if (!bindingResult.hasErrors()){
                         if (pojo.getKHDNId() == null ){
-                            /*this.khdnService.addItem(command.getPojo());
+                            this.khdnService.addItem(command.getPojo());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));*/
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                         } else {
-                            /*this.khdnService.updateItem(command.getPojo());
+                            this.khdnService.updateItem(command.getPojo());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));*/
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        return new ModelAndView("redirect:/admin/user/list.html");
+                        return new ModelAndView("redirect:/admin/vendor/list.html");
                     }
                 }
             } else if( pojo.getKHDNId() != null ) {
@@ -109,24 +117,37 @@ public class KHDNController extends ApplicationObjectSupport {
             logger.error("Can not get data of khdnId: " + pojo.getKHDNId());
             mav.addObject(Constants.ALERT_TYPE, "danger");
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.keynotfound"));
-        }/*catch (DuplicateKeyException dle){
+        }catch (DuplicateKeyException dle){
             logger.error("Duplicated khdnId: " + pojo.getKHDNId());
             mav.addObject(Constants.ALERT_TYPE, "danger");
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
-        }*/
+        }
         preferenceData(mav);
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
-
-
-
-
-    private void executeSearch(KHDNCommand command, HttpServletRequest request){
+    private void executeSearch(ModelAndView mav, KHDNCommand command, HttpServletRequest request){
         RequestUtil.initSearchBean(request, command);
-        Object[] resultObject = khdnService.findByProperties(new HashMap<String, Object>(), command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
+        KHDNDTO pojo = command.getPojo();
+
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if(StringUtils.isNotBlank(pojo.getMst())){
+            properties.put("mst", pojo.getMst());
+        }
+        if(StringUtils.isNotBlank(pojo.getGpkd())){
+            properties.put("gpkd", pojo.getGpkd());
+        }
+        if(StringUtils.isNotBlank(pojo.getName())){
+            properties.put("name", pojo.getName());
+        }
+        if(StringUtils.isNotBlank(pojo.getStb_vas())){
+            properties.put("stb_vas", pojo.getStb_vas());
+        }
+
+        Object[] resultObject = khdnService.findByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<KHDNDTO>)resultObject[1]);
         command.setMaxPageItems(command.getMaxPageItems());
@@ -135,5 +156,13 @@ public class KHDNController extends ApplicationObjectSupport {
     private void preferenceData(ModelAndView mav){
         mav.addObject("KHDNList", khdnService.findAll());
     }
-
+    /**
+     * Copy Date value and format to Timestamp.
+     * @param command
+     */
+    private void convertDate2Timestamp(KHDNCommand command){
+        if(command.getIssuedContractDate() != null){
+            command.getPojo().setIssuedContractDate(DateUtil.dateToTimestamp(command.getIssuedContractDate(), Constants.VI_DATE_FORMAT));
+        }
+    }
 }

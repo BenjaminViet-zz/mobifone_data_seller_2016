@@ -68,8 +68,6 @@ public class OrderController extends ApplicationObjectSupport{
     @Autowired
     private KHDNManagementLocalBean KHDNService;
     @Autowired
-    private DataCodeService dataCodeService;
-    @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
     @Autowired
     private OrderValidator validator;

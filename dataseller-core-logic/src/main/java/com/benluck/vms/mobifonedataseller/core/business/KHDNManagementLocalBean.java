@@ -21,10 +21,17 @@ public interface KHDNManagementLocalBean {
 
     List<KHDNDTO> findAll();
 
-    KHDNDTO findById(Long KHDNIId) throws ObjectNotFoundException;
+    KHDNDTO findById(Long khdnId) throws ObjectNotFoundException;
 
     Object[] findByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 
-    KHDNDTO addItem(KHDNDTO pojo) throws DuplicateKeyException;
-    void deleteItemById(Long KHDNIId) throws RemoveException;
+    void addItem(KHDNDTO pojo) throws DuplicateKeyException;
+
+    void deleteItemById(Long khdnId) throws RemoveException;
+
+    void updateItem(KHDNDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
+
+    KHDNDTO findEqualUnique(String key, String value) throws ObjectNotFoundException;
+
+    Boolean checkExistsBeforeDelete(Long khdnId);
 }

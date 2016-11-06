@@ -31,6 +31,11 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public List<UserGroupDTO> findAll() {
+        return UserGroupBeanUtil.entityList2DTOList(this.userGroupService.findAll());
+    }
+
+    @Override
+    public List<UserGroupDTO> findAll4Access() {
         return UserGroupBeanUtil.entityList2DTOList(this.userGroupService.findAll4Access());
     }
 

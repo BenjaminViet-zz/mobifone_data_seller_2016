@@ -21,46 +21,63 @@ import java.util.Map;
 public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
 
     @EJB
-    private KHDNLocalBean KHDNService;
+    private KHDNLocalBean khdnService;
 
     public KHDNManagementSessionBean() {
     }
 
     @Override
     public List<KHDNDTO> findAll() {
-        return KHDNBeanUtil.entityList2DTOList(this.KHDNService.findAll());
+        return KHDNBeanUtil.entityList2DTOList(this.khdnService.findAll());
     }
 
     @Override
-    public KHDNDTO findById(Long userId) throws ObjectNotFoundException {
-        return KHDNBeanUtil.entity2DTO(KHDNService.findById(userId));
+    public KHDNDTO findById(Long khdnId) throws ObjectNotFoundException {
+        return KHDNBeanUtil.entity2DTO(khdnService.findById(khdnId));
     }
 
     @Override
     public Object[] findByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems) {
-        Object[] resultObject = this.KHDNService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems);
+        Object[] resultObject = this.khdnService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems);
         List<KHDNDTO> dtoList = KHDNBeanUtil.entityList2DTOList((List<KHDNEntity>) resultObject[1]);
         resultObject[1] = dtoList;
         return resultObject;
     }
 
     @Override
-    public void deleteItemById(Long KHDNId) throws RemoveException {
-        this.KHDNService.delete(KHDNId);
+    public void deleteItemById(Long khdnId) throws RemoveException {
+        this.khdnService.delete(khdnId);
     }
 
     @Override
-    public KHDNDTO addItem(KHDNDTO pojo) throws DuplicateKeyException {
+    public void addItem(KHDNDTO pojo) throws DuplicateKeyException {
         KHDNEntity entity = new KHDNEntity();
         entity.setName(pojo.getName());
         entity.setMst(pojo.getMst());
         entity.setGpkd(pojo.getGpkd());
         entity.setIssuedContractDate(pojo.getIssuedContractDate());
         entity.setStb_vas(pojo.getStb_vas());
-        //entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        /*entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);*/
-        //entity = this.orderService.save(entity);
-        return KHDNBeanUtil.entity2DTO(this.KHDNService.save(entity));
-        //createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
+        this.khdnService.save(entity);
+    }
+
+    @Override
+    public void updateItem(KHDNDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
+        KHDNEntity dbItem = this.khdnService.findById(pojo.getKHDNId());
+        dbItem.setName(pojo.getName());
+        dbItem.setGpkd(pojo.getGpkd());
+        dbItem.setMst(pojo.getMst());
+        dbItem.setIssuedContractDate(pojo.getIssuedContractDate());
+        dbItem.setStb_vas(pojo.getStb_vas());
+        this.khdnService.update(dbItem);
+    }
+
+    @Override
+    public KHDNDTO findEqualUnique(String key, String value) throws ObjectNotFoundException {
+        return KHDNBeanUtil.entity2DTO(this.khdnService.findEqualUnique(key, value));
+    }
+
+    @Override
+    public Boolean checkExistsBeforeDelete(Long khdnId) {
+        return this.khdnService.checkExistsBeforeDelete(khdnId);
     }
 }

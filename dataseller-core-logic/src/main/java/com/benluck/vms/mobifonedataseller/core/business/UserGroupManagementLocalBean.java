@@ -21,6 +21,8 @@ public interface UserGroupManagementLocalBean {
 
     List<UserGroupDTO> findAll();
 
+    List<UserGroupDTO> findAll4Access();
+
     Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 
     void deleteItem(Long userGroupId) throws RemoveException;
