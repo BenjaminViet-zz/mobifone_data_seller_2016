@@ -18,6 +18,7 @@ public class DataCode implements Cachable {
 
     private String keyByYear;
     private String hasKeyByUnitPrice;
+    private HashSet<String> dataCodeHashSet = new HashSet<String>();
 
     public String getKeyByYear() {
         return keyByYear;
@@ -35,9 +36,12 @@ public class DataCode implements Cachable {
         this.hasKeyByUnitPrice = hasKeyByUnitPrice;
     }
 
-    private HashSet<String> dataCodeHashSet;
-
     public DataCode() {
+    }
+
+    public DataCode(String keyByYear, String hasKeyByUnitPrice) {
+        this.keyByYear = keyByYear;
+        this.hasKeyByUnitPrice = hasKeyByUnitPrice;
     }
 
     @Override

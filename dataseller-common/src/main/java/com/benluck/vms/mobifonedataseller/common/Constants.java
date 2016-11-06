@@ -155,4 +155,6 @@ public class Constants {
 //    Used Data Code Key and HashKey
     public static final String KEY_USED_2016 = DATAT_CODE_VMS_PREFIX + "16";
     public static final String HAS_KEY_USED_2016UNIT_PRICE_10 = "10_USED";
+
+    public static final int ORDER_DATA_CODE_SERIAL_OFFSET = 15000;
 }

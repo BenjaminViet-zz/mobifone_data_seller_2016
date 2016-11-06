@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.core.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +28,17 @@ public class OrderDTO implements Serializable{
     private Timestamp createdDate;
     private Timestamp lastModified;
     private UserDTO createdBy;
+    private List<String> dataCodes2Render;
+    private HashSet<String> dataCodeHasSet2Store;
+
+    public OrderDTO() {
+    }
+
+    public OrderDTO(Long orderId, KHDNDTO khdn, PackageDataDTO packageData) {
+        this.orderId = orderId;
+        this.khdn = khdn;
+        this.packageData = packageData;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -129,5 +142,21 @@ public class OrderDTO implements Serializable{
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public List<String> getDataCodes2Render() {
+        return dataCodes2Render;
+    }
+
+    public void setDataCodes2Render(List<String> dataCodes2Render) {
+        this.dataCodes2Render = dataCodes2Render;
+    }
+
+    public HashSet<String> getDataCodeHasSet2Store() {
+        return dataCodeHasSet2Store;
+    }
+
+    public void setDataCodeHasSet2Store(HashSet<String> dataCodeHasSet2Store) {
+        this.dataCodeHasSet2Store = dataCodeHasSet2Store;
     }
 }

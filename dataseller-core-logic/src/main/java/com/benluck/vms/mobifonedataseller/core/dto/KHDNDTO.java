@@ -20,6 +20,16 @@ public class KHDNDTO implements Serializable{
     private Timestamp issuedContractDate;
     private String stb_vas;
 
+    public KHDNDTO() {
+    }
+
+    public KHDNDTO(Long KHDNId, String name, String mst, String gpkd) {
+        this.KHDNId = KHDNId;
+        this.name = name;
+        this.mst = mst;
+        this.gpkd = gpkd;
+    }
+
     public Long getKHDNId() {
         return KHDNId;
     }

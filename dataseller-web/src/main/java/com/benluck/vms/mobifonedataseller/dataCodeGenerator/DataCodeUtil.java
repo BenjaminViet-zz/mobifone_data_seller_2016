@@ -25,16 +25,17 @@ public class DataCodeUtil {
     private static List<String> duplicatedList = null;
     private static int min = 1;
     private static int max = 9999999;
-    private static int data_code_suffix_length = 7;
-    private static int numberOfDataCodes = 12000;
-    private static String yearCode = "216";
-    private static String priceCode = "10";
+    private static int total_length = 12;
+    private static int prefix_year = 3;
+    private static int prefix_unit_price = 2;
 
     @Autowired
     private static DataCodeService dataCodeService;
 
-    public static HashSet<String> generateDataCodes(){
-        return generateDataCodeList(yearCode, priceCode, numberOfDataCodes);
+    public static DataCode generateDataCodes(String yearCode, String unitPriceCode, Integer numberOfDataCodes){
+        DataCode dataCode = new DataCode(yearCode, unitPriceCode);
+        dataCode.setDataCodeHashSet(generateDataCodeList(yearCode, (unitPriceCode.length() == 1 ? "0" + unitPriceCode : unitPriceCode), numberOfDataCodes));
+        return dataCode;
     }
 
     public static HashSet<String> getUsedDataCodeHashSet(){
@@ -45,16 +46,26 @@ public class DataCodeUtil {
     /**
      *  Function sinh ra danh sách Data Code theo params.
      * @param yearCode          Prefix 3 ký tự đầu của năm trong mỗi Data Code
-     * @param priceCode         Prefix 2 ký tự tiếp theo của mệnh giá gói trong mỗi Data Code
+     * @param unitPriceCode         Prefix 2 ký tự tiếp theo của mệnh giá gói trong mỗi Data Code
      * @param numberOfCode      Số lượng Data Code cần sinh ra
      * @return
      */
-    public static HashSet<String> generateDataCodeList(String yearCode, String priceCode, Integer numberOfCode){
-        if(Config.getInstance().getProperty("redis.turn_on").equals("true")){
-            return getUsedDataCodeHashSet();
+    public static HashSet<String> generateDataCodeList(String yearCode, String unitPriceCode, Integer numberOfCode){
+        if(Config.getInstance().getProperty("redis.turn_on").equals("false")){
+            DataCode dataCode = new DataCode();
+            dataCode.setKeyByYear(yearCode);
+            dataCode.setHasKeyByUnitPrice(unitPriceCode);
+            dataCode.setDataCodeHashSet(getUsedDataCodeHashSet());
+            return dataCode.getDataCodeHashSet();
         }else{
             RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
-            DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+            DataCode dataCodeForUsedFixedValition = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+            DataCode dataCodeForYearAndUnitPriceValidation = (DataCode)redisTemplate.opsForHash().get(yearCode, "10");
+
+            if(dataCodeForYearAndUnitPriceValidation == null){
+                dataCodeForYearAndUnitPriceValidation = new DataCode();
+            }
+
             duplicatedList = new ArrayList<String>();
             HashSet<String> newGeneratedDataCodeHashSet = new HashSet<String>();
             System.out.println("Generating Data Code (tu 1 den " + numberOfCode + ")...");
@@ -64,9 +75,11 @@ public class DataCodeUtil {
                 ++counter;
                 tmpDataCode = new StringBuilder();
                 tmpDataCode.append(yearCode)
-                        .append(priceCode)
+                        .append(unitPriceCode)
                         .append(randomSevenDigits());
-                if(newGeneratedDataCodeHashSet.contains(tmpDataCode.toString()) || dataCode.getDataCodeHashSet().contains(tmpDataCode.toString())){
+                if(newGeneratedDataCodeHashSet.contains(tmpDataCode.toString())
+                        || dataCodeForUsedFixedValition.getDataCodeHashSet().contains(tmpDataCode.toString())
+                        || dataCodeForYearAndUnitPriceValidation.getDataCodeHashSet().contains(tmpDataCode.toString())){
                     duplicatedList.add(tmpDataCode.toString());
                 }else{
                     addedCounter++;
@@ -97,12 +110,21 @@ public class DataCodeUtil {
     }
 
     /**
-     * Sinh ra 1 số 7 chữ số
+     * Store Data Code list to Redis with KEY (region) is Year number and Hash Key (Object Key) is Unit Price value to check later.
+     * @param dataCode      Object that includes DataCode list for a specific Order.
+     */
+    public static void storeDataCodes(DataCode dataCode){
+        RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
+        redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
+    }
+
+    /**
+     * Sinh ra 1 chuỗi số theo độ dài của chuỗi quy định là 12 ký tự.
      * @return
      */
     private static String randomSevenDigits(){
         dataCodeSuffix = new StringBuilder(String.valueOf((int)(Math.random() * ((max - min) + 1)) + min));
-        if(dataCodeSuffix.toString().length() < data_code_suffix_length){
+        if(dataCodeSuffix.toString().length() < total_length - prefix_year - prefix_unit_price){
             if(dataCodeSuffix.toString().length() == 6){
                 dataCodeSuffix = new StringBuilder("0").append(dataCodeSuffix.toString());
             }else if(dataCodeSuffix.toString().length() == 5){
@@ -117,7 +139,6 @@ public class DataCodeUtil {
                 dataCodeSuffix = new StringBuilder("000000").append(dataCodeSuffix.toString());
             }
         }
-        UUID.randomUUID();
         return dataCodeSuffix.toString();
     }
 }

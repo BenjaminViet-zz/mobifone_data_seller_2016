@@ -12,6 +12,7 @@
         <class>com.benluck.vms.mobifonedataseller.domain.KHDNEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.OrderEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.OrderHistoryEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.OrderDataCodeEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
