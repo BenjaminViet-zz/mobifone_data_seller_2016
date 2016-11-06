@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.webapp.listener;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
+import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
@@ -80,16 +81,18 @@ public class StartupListener implements ServletContextListener {
 
 
     private void storeDataCodeHashSet2Redis(){
-        Calendar calendar = Calendar.getInstance();
-        if(calendar.get(Calendar.YEAR) == 2016){
-            RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)AppContext.getApplicationContext().getBean("redisTemplate");
-            DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-            if(dataCode == null){
-                dataCode = new DataCode();
-                dataCode.setKeyByYear(Constants.KEY_USED_2016);
-                dataCode.setHasKeyByUnitPrice(Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-                dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSet());
-                redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
+        if(Config.getInstance().getProperty("redis.turn_on").equals("true")){
+            Calendar calendar = Calendar.getInstance();
+            if(calendar.get(Calendar.YEAR) == 2016){
+                RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)AppContext.getApplicationContext().getBean("redisTemplate");
+                DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+                if(dataCode == null){
+                    dataCode = new DataCode();
+                    dataCode.setKeyByYear(Constants.KEY_USED_2016);
+                    dataCode.setHasKeyByUnitPrice(Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+                    dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSet());
+                    redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
+                }
             }
         }
     }

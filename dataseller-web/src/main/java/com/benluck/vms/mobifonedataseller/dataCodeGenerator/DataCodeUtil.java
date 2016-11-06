@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.dataCodeGenerator;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import com.benluck.vms.mobifonedataseller.redis.service.DataCodeService;
@@ -49,46 +50,50 @@ public class DataCodeUtil {
      * @return
      */
     public static HashSet<String> generateDataCodeList(String yearCode, String priceCode, Integer numberOfCode){
-        RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
-        DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-        duplicatedList = new ArrayList<String>();
-        HashSet<String> newGeneratedDataCodeHashSet = new HashSet<String>();
-        System.out.println("Generating Data Code (tu 1 den " + numberOfCode + ")...");
-        int counter = 0;
-        int addedCounter = 0;
-        while (addedCounter < numberOfCode){
-            ++counter;
-            tmpDataCode = new StringBuilder();
-            tmpDataCode.append(yearCode)
-                    .append(priceCode)
-                    .append(randomSevenDigits());
-            if(newGeneratedDataCodeHashSet.contains(tmpDataCode.toString()) || dataCode.getDataCodeHashSet().contains(tmpDataCode.toString())){
-                duplicatedList.add(tmpDataCode.toString());
-            }else{
-                addedCounter++;
-                newGeneratedDataCodeHashSet.add(tmpDataCode.toString());
-                if(showCounter){
-                    System.out.println(addedCounter + "       :       " +tmpDataCode.toString());
+        if(Config.getInstance().getProperty("redis.turn_on").equals("true")){
+            return getUsedDataCodeHashSet();
+        }else{
+            RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
+            DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+            duplicatedList = new ArrayList<String>();
+            HashSet<String> newGeneratedDataCodeHashSet = new HashSet<String>();
+            System.out.println("Generating Data Code (tu 1 den " + numberOfCode + ")...");
+            int counter = 0;
+            int addedCounter = 0;
+            while (addedCounter < numberOfCode){
+                ++counter;
+                tmpDataCode = new StringBuilder();
+                tmpDataCode.append(yearCode)
+                        .append(priceCode)
+                        .append(randomSevenDigits());
+                if(newGeneratedDataCodeHashSet.contains(tmpDataCode.toString()) || dataCode.getDataCodeHashSet().contains(tmpDataCode.toString())){
+                    duplicatedList.add(tmpDataCode.toString());
                 }else{
-                    System.out.println(tmpDataCode.toString());
+                    addedCounter++;
+                    newGeneratedDataCodeHashSet.add(tmpDataCode.toString());
+                    if(showCounter){
+                        System.out.println(addedCounter + "       :       " +tmpDataCode.toString());
+                    }else{
+                        System.out.println(tmpDataCode.toString());
+                    }
                 }
             }
-        }
-        System.out.println("========================");
-        System.out.println("Finished");
-        System.out.println("Tong so lan chay: " + counter + " lan");
-        System.out.println("Total Data Code duoc sinh ra: " + newGeneratedDataCodeHashSet.size() + " data codes");
-        System.out.println("========================");
-        if(duplicatedList.size() > 0){
-            System.out.println("Tong so ma Data Code bi trung: " + duplicatedList.size() + " Data Code");
-            System.out.println("Danh sach trung ma Data Code (Khong su dung danh sach nay!)");
-            for (String dupDataCode : duplicatedList){
-                System.out.println(dupDataCode);
+            System.out.println("========================");
+            System.out.println("Finished");
+            System.out.println("Tong so lan chay: " + counter + " lan");
+            System.out.println("Total Data Code duoc sinh ra: " + newGeneratedDataCodeHashSet.size() + " data codes");
+            System.out.println("========================");
+            if(duplicatedList.size() > 0){
+                System.out.println("Tong so ma Data Code bi trung: " + duplicatedList.size() + " Data Code");
+                System.out.println("Danh sach trung ma Data Code (Khong su dung danh sach nay!)");
+                for (String dupDataCode : duplicatedList){
+                    System.out.println(dupDataCode);
+                }
+            }else{
+                System.out.println("Khong co Data Code bi trung!");
             }
-        }else{
-            System.out.println("Khong co Data Code bi trung!");
+            return newGeneratedDataCodeHashSet;
         }
-        return newGeneratedDataCodeHashSet;
     }
 
     /**
