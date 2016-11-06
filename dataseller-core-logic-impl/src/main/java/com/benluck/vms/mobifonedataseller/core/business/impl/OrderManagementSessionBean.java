@@ -8,10 +8,8 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.domain.*;
-import com.benluck.vms.mobifonedataseller.service.DataCodeService;
 import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ejb.*;
 import java.sql.Timestamp;
@@ -32,8 +30,6 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     private OrderLocalBean orderService;
     @EJB
     private OrderHistoryLocalBean orderHistoryService;
-//    @Autowired
-//    private DataCodeService dataCodeService;
 
     public OrderManagementSessionBean() {
     }

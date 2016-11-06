@@ -3,14 +3,18 @@ package com.benluck.vms.mobifonedataseller.webapp.listener;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
+import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
+import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +63,8 @@ public class StartupListener implements ServletContextListener {
         context.setAttribute(Constants.CONFIG, config);
 
         initializeApplicationSetting(context);
+
+        storeDataCodeHashSet2Redis();
     }
 
 
@@ -72,6 +78,21 @@ public class StartupListener implements ServletContextListener {
         context.setAttribute("applicationSettingMap", applicationSettingMap);
     }
 
+
+    private void storeDataCodeHashSet2Redis(){
+        Calendar calendar = Calendar.getInstance();
+        if(calendar.get(Calendar.YEAR) == 2016){
+            RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)AppContext.getApplicationContext().getBean("redisTemplate");
+            DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+            if(dataCode == null){
+                dataCode = new DataCode();
+                dataCode.setKeyByYear(Constants.KEY_USED_2016);
+                dataCode.setHasKeyByUnitPrice(Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
+                dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSet());
+                redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
+            }
+        }
+    }
 
     /**
      * Shutdown servlet context (currently a no-op method).

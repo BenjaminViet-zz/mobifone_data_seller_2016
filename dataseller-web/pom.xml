@@ -46,12 +46,6 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.benluck</groupId>
-            <artifactId>dataseller-redis</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
 
         <!-- Import Spring dependencies, these are either from community or versions
             certified in WFK2 -->
@@ -394,6 +388,21 @@
             <groupId>org.springframework.mobile</groupId>
             <artifactId>spring-mobile-device</artifactId>
             <version>1.0.1.RELEASE</version>
+        </dependency>
+
+        <!--redis-->
+        <!-- Redis Java Binding-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!-- Spring Data Redis -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring.data.redis.version}</version>
         </dependency>
     </dependencies>
 
