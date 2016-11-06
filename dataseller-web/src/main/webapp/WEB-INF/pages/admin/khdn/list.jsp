@@ -5,6 +5,7 @@
   Time: 9:37 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page import="com.benluck.vms.mobifonedataseller.common.Constants" %>
 <%@ taglib prefix="ft" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
@@ -16,11 +17,11 @@
 
 <c:url var="addUrl" value="/admin/vendor/add.html"/>
 <c:url var="editUrl" value="/admin/vendor/edit.html"/>
-<c:url var="formUrl" value="${prefix}/vendor/list.html"/>
+<c:url var="formUrl" value="/admin/vendor/list.html"/>
 
 <div class="page-title">
     <div class="title_left">
-        <h3><fmt:message key="admin.orderhistory.label.heading" /></h3>
+        <h3><fmt:message key="admin.khdn.label.heading_page" /></h3>
     </div>
 
     <div class="title_right">
@@ -65,99 +66,47 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.mst" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="mst" path="pojo.mst" cssClass="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.gpkd" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="gpkd" path="pojo.gpkd" cssClass="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.issuedContractDate" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="issuedContractDate" path="pojo.issuedContractDate" cssClass="form-control data_picker has-feedback-left" describedby="inputSuccess2Status" />
+                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.stb_vas" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="stb_vas" path="pojo.stb_vas" cssClass="form-control" />
+                        </div>
+                    </div>
+
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
                         </div>
                     </div>
-                    <input type="hidden" name="crudaction" value="search" />
+                    <input type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>"/>
                 </form:form>
-
-
-                <%--<form id="listForm" name="listForm" class="form-horizontal form-label-left" action="" method="post" autocomplete="off">
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="chonKHDN"><fmt:message key="admin.donhang.label.KHDN" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select id="chonKHDN" class="form-control" required="">
-                                <option value="">Chọn Khách Hàng Doanh Nghiệp</option>
-                                <option value="vienthonga">Viễn Thông A</option>
-                                <option value="tgdd">Thế Giới Di Động</option>
-                                <option value="fpt">FPT Shop</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="chonGoiCuoc"><fmt:message key="admin.donhang.label.tenGoiCuoc" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select id="chonGoiCuoc" class="form-control" required="">
-                                <option value="">Chọn gói</option>
-                                <option value="DataQT1B">DataQT1B</option>
-                                <option value="net">DataQT3B</option>
-                                <option value="mouth">DataQT5B</option>
-                                <option value="mouth">DataQT8B</option>
-                                <option value="mouth">DataQT10B</option>
-                                <option value="mouth">DataQT50B</option>
-                                <option value="mouth">DataQT70B</option>
-                                <option value="mouth">DataQT35B(*)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="quantity" name="pojo.quantity" class="form-control" type="text" value="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="UnitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="UnitPrice" name="pojo.UnitPrice" class="form-control" type="text" value="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shippingDate"><fmt:message key="admin.donhang.label.shippingDate" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="shippingDate" name="pojo.shippingDate" class="form-control" type="text" value="">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status"><fmt:message key="admin.donhang.label.status" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="status" name="pojo.status" class="form-control" type="text" value="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="CreatedDate"><fmt:message key="admin.donhang.label.CreatedDate" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="CreatedDate" name="pojo.CreatedDate" class="form-control" type="text" value="">
-                        </div>
-                    </div>
-                    &lt;%&ndash;<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="LastModified"><fmt:message key="admin.donhang.label.LastModified" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="LastModified" name="pojo.LastModified" class="form-control" type="text" value="">
-                        </div>
-                    </div>&ndash;%&gt;
-                    <div class="form-group last">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
-                            <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
-                        </div>
-                    </div>
-                </form>--%>
             </div>
         </div>
     </div>
@@ -174,7 +123,7 @@
                         <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="label.stt" style="width: 4%">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
                         <display:column headerClass="table_header text-center" property="name" sortable="false" titleKey="admin.khdn.label.name" style="width: 20%" />
                         <display:column headerClass="table_header text-center" property="mst" sortable="false" titleKey="admin.khdn.label.mst" style="width: 20%" />
-                        <display:column headerClass="table_header text-center" property="gpkd" sortable="false" titleKey="admin.khdn.label.gpkd" style="width: 26%" />
+                        <display:column headerClass="table_header text-center" property="gpkd" sortable="false" titleKey="admin.khdn.label.gpkd" style="width: 20%" />
                         <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedContractDate" titleKey="admin.khdn.label.issuedContractDate" style="width: 10%">
                             <fmt:formatDate value="${tableList.issuedContractDate}" pattern="${datePattern}" />
                         </display:column>
@@ -183,8 +132,6 @@
                             <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                             | <a class="tip-top" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><fmt:message key="label.delete" /></a>
                         </display:column>
-
-
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>--%>
                     </display:table>
@@ -196,12 +143,12 @@
 <script language="javascript" type="text/javascript">
     function resetForm(){
          $("input[type='text']").val('');
-         selectFirstItemSelect2('#userGroupMenu');
+         selectFirstItemSelect2('#KHDN');
      }
 
-     function submitForm(){
+    function submitForm(){
         $('#listForm').submit();
-     }
+    }
 
     function deleteKHDN(userId){
         bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
