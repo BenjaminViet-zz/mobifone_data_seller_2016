@@ -91,8 +91,8 @@
                                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                                     </display:column>
                                     <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" sortable="true" titleKey="packagedatacodegen.packagedata.name" style="40%"/>
-                                    <display:column headerClass="table_header text-center" property="packageData.value" sortName="packageData.value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="35%">
-                                        <fmt:formatNumber type="number" value="${tableList.packageData.value}" />
+                                    <display:column headerClass="table_header text-center" sortName="packageData.value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="35%">
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.packageData.value}" />
                                     </display:column>
                                     <display:column headerClass="table_header text-center nowrap" class="text-center" titleKey="label.status" style="20%">
                                         <c:choose>
@@ -144,8 +144,8 @@
                                         ${tableList2_rowNum + (page * Constants.MAXPAGEITEMS)}
                                     </display:column>
                                     <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="packagedatacodegen.packagedata.name" style="width: 35;%"/>
-                                    <display:column headerClass="table_header text-center" property="value" sortName="value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="width: 35;%">
-                                        <fmt:formatNumber type="number" value="${tableList2.value}" />
+                                    <display:column headerClass="table_header text-center" sortName="value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="width: 35;%">
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList2.value}" />
                                     </display:column>
                                     <display:column headerClass="table_header text-center nowrap" class="text-center" titleKey="label.status" style="width: 20%;">
                                         <fmt:message key="packagedatacodegen.not_yet_generate_card_code" />
