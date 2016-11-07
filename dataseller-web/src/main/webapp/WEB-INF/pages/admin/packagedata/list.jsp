@@ -48,7 +48,7 @@
                     </display:column>
                     <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="15%"/>
                     <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
-                        ${tableList.value}
+                        <fmt:formatNumber type="number" value="${tableList.value}" />
                     </display:column>
                     <display:column headerClass="table_header text-center" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" />
                     <display:column headerClass="table_header text-center" property="durationText" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
