@@ -10,8 +10,8 @@
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
 <head>
-    <title><fmt:message key="packagedata.list.heading" /></title>
-    <meta name="menu" content="<fmt:message key="packagedata.list.heading" />"/>
+    <title><fmt:message key="admin.cost.heading_page" /></title>
+    <meta name="menu" content="<fmt:message key="admin.cost.heading_page" />"/>
 </head>
 
 <%--<c:url var="addUrl" value="/admin/vendor/add.html"/>--%>
@@ -146,7 +146,7 @@
         <div class="x_panel">
             <div class="x_content">
                 <display:table class="table table-striped table-bordered text-center">
-                    <display:column headerClass="table_header text-center" sortable="true" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                    <display:column headerClass="table_header text-center" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
                     <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.KHDN" style="width: 15%"/>
                     <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 10%" />
                     <display:column headerClass="table_header text-center" sortable="true" titleKey="admin.donhang.label.quantity" style="width: 10%"/>

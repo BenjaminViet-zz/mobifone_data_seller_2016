@@ -9,7 +9,14 @@
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
 <head>
-    <title><fmt:message key="admin.edit_user_group.edit.heading_page" /></title>
+    <title>
+        <c:choose>
+            <c:when test="${not empty item.pojo.KHDNId}">
+                <fmt:message key="admin.edit_khdn.label.edit_khdn" />
+            </c:when>
+            <c:otherwise><fmt:message key="admin.edit_khdn.label.add_khdn" /></c:otherwise>
+        </c:choose>
+    </title>
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
 
