@@ -7,6 +7,7 @@ import com.benluck.vms.mobifonedataseller.domain.PackageDataEntity;
 import com.benluck.vms.mobifonedataseller.session.PackageDataLocalBean;
 
 import javax.ejb.EJB;
+import javax.ejb.ObjectNotFoundException;
 import javax.ejb.Stateless;
 import java.util.List;
 import java.util.Map;
@@ -38,5 +39,20 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
         List<PackageDataDTO> dtoList = PackageDataBeanUtil.entityList2DTOList((List<PackageDataEntity>) resultObject[1]);
         resultObject[1] = dtoList;
         return resultObject;
+    }
+
+    @Override
+    public Object[] findListNotYetGenerateCardCode(Integer year, String sortExpression, String sortDirection, Integer offset, Integer limitItems) {
+        Object[] resultObject = this.packageDataService.findListNotYetGenerateCardCode(year, sortExpression, sortDirection, offset, limitItems);
+        List<PackageDataEntity> packageDataEntityList = (List<PackageDataEntity>)resultObject[1];
+        if(packageDataEntityList.size() > 0){
+            resultObject[1] = PackageDataBeanUtil.entityList2DTOList(packageDataEntityList);
+        }
+        return resultObject;
+    }
+
+    @Override
+    public PackageDataDTO findById(Long packageDataId) throws ObjectNotFoundException {
+        return PackageDataBeanUtil.entity2DTO(packageDataService.findById(packageDataId));
     }
 }

@@ -49,8 +49,8 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:select cssClass="form-control" id="userGroupMenu" path="pojo.userGroup.userGroupId" >
                                 <option value=""><fmt:message key="label.all" /></option>
-                                <c:forEach items="${userGroups}" var="userGroup">
-                                    <option <c:if test="${item.pojo.userGroup.userGroupId eq userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.description}</option>
+                                <c:forEach items="${userGroups}" var="packageData">
+                                    <option <c:if test="${item.pojo.userGroup.userGroupId eq packageData.userGroupId}">selected="true"</c:if> value="${packageData.userGroupId}">${packageData.description}</option>
                                 </c:forEach>
                             </form:select>
                         </div>

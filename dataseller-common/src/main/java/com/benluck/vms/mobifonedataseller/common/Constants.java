@@ -157,4 +157,12 @@ public class Constants {
     public static final String HAS_KEY_USED_2016UNIT_PRICE_10 = "10_USED";
 
     public static final int ORDER_DATA_CODE_SERIAL_OFFSET = 15000;
+
+//    Package Data Code Gen Status
+    public static final Integer PACKAGE_DATA_CODE_GEN_ALREADY = 1;
+    public static final Integer PACKAGE_DATA_CODE_GEN_NOT_YET = 0;
+
+    public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING = 0;
+    public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_FAILED = 1;
+    public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS = 2;
 }

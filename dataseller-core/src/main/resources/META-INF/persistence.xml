@@ -13,6 +13,7 @@
         <class>com.benluck.vms.mobifonedataseller.domain.OrderEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.OrderHistoryEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.OrderDataCodeEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.PackageDataCodeGenEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

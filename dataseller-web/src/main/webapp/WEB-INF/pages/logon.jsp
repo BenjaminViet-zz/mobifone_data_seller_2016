@@ -4,7 +4,7 @@
 
 <security:authorize access="hasAuthority('ADMIN')">
     <%--<c:redirect url="/admin/dashboard.html"/>--%>
-    <c:redirect url="/admin/user/list.html"/>
+    <c:redirect url="/admin/packagedatacodegen/list.html"/>
 </security:authorize>
 <c:redirect url="/dashboard.html"/>
 

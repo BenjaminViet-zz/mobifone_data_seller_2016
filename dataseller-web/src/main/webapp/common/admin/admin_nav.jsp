@@ -33,6 +33,11 @@
                 <h3><%=SecurityUtils.getPrincipal().getDisplayName()%></h3>
                 <ul class="nav side-menu">
                     <security:authorize access="hasAuthority('ADMIN')">
+                        <li><a><i class="fa fa-credit-card" aria-hidden="true"></i> <fmt:message key="packagedatacodegen.admin_nav.manager" /> <span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                                <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="packagedatacodegen.admin_nav.generation" /></a></li>
+                            </ul>
+                        </li>
                         <li><a><i class="fa fa-user-o" aria-hidden="true"></i> <fmt:message key="user.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li><a href="<c:url value="${prefix}/user/list.html" />"><fmt:message key="user.manager.list" /></a></li>
