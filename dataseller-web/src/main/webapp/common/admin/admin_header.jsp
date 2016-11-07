@@ -25,7 +25,7 @@
                         <security:authorize access="hasAnyAuthority('ADMIN')">
                             <li><a href="<c:url value="${prefix}/dashboard.html"/>"><fmt:message key="user.dashboard_warning_page" /> </a></li>
                         </security:authorize>
-                        <li><a href="/logout.jsp"><i class="fa fa-sign-out pull-right"></i><fmt:message key="logout" /></a></li>
+                        <li><a href="<c:url value="/logout.jsp"/> "><i class="fa fa-sign-out pull-right"></i><fmt:message key="logout" /></a></li>
                     </ul>
                 </li>
 
