@@ -38,9 +38,18 @@
         </div>
     </div>
 </c:if>
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
+            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                <div class="x_title">
+                    <div class="alert alert-danger no-bottom">
+                        <span id="page_message_title"><fmt:message key="packagedatacodegen.there_are_not_any_package_data_generate_card_code" /></span>
+                    </div>
+                </div>
+            </c:if>
+
             <div class="x_content">
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate">
                     <div class="form-group">
@@ -59,7 +68,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="packageData"><fmt:message key="admin.donhang.label.tenGoiCuoc" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control required">
+                            <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control required" onchange="javascript: checkPackageDataCardCodeGeneration();">
                                 <option value=""><fmt:message key="label.all" /></option>
                                 <c:forEach items="${packageDataList}" var="packageData">
                                     <option data-unitPrice="${packageData.value}" <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
@@ -122,7 +131,11 @@
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
-                            <button id="btnSave" class="btn btn-primary">
+                            <c:set var="allowUpdateOrInsert" value="${true}" />
+                            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                                <c:set var="allowUpdateOrInsert" value="${false}" />
+                            </c:if>
+                            <button id="btnSave" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-primary">
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.orderId}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
@@ -139,6 +152,27 @@
 </div>
 
 <script type="text/javascript">
+
+    var packageDataIdsHasGenerateCardCodeList = [];
+    <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
+        <c:forEach items="${packageDataIdListHasGeneratedCardCode}" var="packageDataId">
+            packageDataIdsHasGenerateCardCodeList.push('${packageDataId}');
+        </c:forEach>
+    </c:if>
+
+    function checkPackageDataCardCodeGeneration(){
+        <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
+            var selectedPackageDataId = $('#packageData').val();
+            if(packageDataIdsHasGenerateCardCodeList.length() > 0 && selectedPackageDataId != ''){
+                if(!packageDataIdsHasGenerateCardCodeList.contains(selectedPackageDataId)){
+                    $('#page_message_title').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
+                }
+            }else{
+                $('#page_message_title').parent().hide();
+            }
+        </c:if>
+    }
+
     $(document).ready(function(){
 
         console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );

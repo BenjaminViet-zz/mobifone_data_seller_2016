@@ -37,24 +37,4 @@ public class PackageDataCodeGenSessionBean extends AbstractSessionBean<PackageDa
             return entityList.get(0);
         }
     }
-
-    @Override
-    public Boolean checkBeforeGeneratingCardCode(Integer year, String[] packageDataIds) {
-        List<Long> packageDataIdList = new ArrayList<Long>();
-        for (String packageDataIdStr : packageDataIds){
-            packageDataIdList.add(Long.valueOf(packageDataIdStr));
-        }
-
-        StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" SELECT COUNT(pdcg.packageDataCodeGenId) FROM PackageDataCodeGenEntity pdcg WHERE (pdcg.status = :statusSuccess OR pdcg.status = :statusProcessing) AND pdcg.packageData.packageDataId IN (:packageDataIds) ");
-        Query query = entityManager.createQuery(sqlQuery.toString());
-        query.setParameter("statusSuccess", Constants.PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS);
-        query.setParameter("statusProcessing", Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
-        query.setParameter("packageDataIds", packageDataIdList);
-        Integer count = Integer.valueOf(query.getSingleResult().toString());
-        if(count.intValue() > 0){
-            return false;
-        }
-        return true;
-    }
 }

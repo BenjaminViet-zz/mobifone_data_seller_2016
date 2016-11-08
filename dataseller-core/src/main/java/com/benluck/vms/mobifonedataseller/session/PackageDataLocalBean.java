@@ -15,4 +15,5 @@ public interface PackageDataLocalBean extends GenericSessionBean<PackageDataEnti
 
     Object[] findListNotYetGenerateCardCode(Integer year, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 
+    List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year);
 }

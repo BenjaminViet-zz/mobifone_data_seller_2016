@@ -55,4 +55,9 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
     public PackageDataDTO findById(Long packageDataId) throws ObjectNotFoundException {
         return PackageDataBeanUtil.entity2DTO(packageDataService.findById(packageDataId));
     }
+
+    @Override
+    public List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year) {
+        return this.packageDataService.findPackageDataIdListHasGeneratedCardCode(year);
+    }
 }

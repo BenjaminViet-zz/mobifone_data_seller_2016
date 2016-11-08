@@ -52,7 +52,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="year"><fmt:message key="label.year" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select cssClass="form-control" id="year" path="pojo.year" >
+                            <form:select cssClass="form-control" id="year" path="pojo.year" onchange="javascript: checkLoadPage();" >
                                 <c:forEach items="${yearList}" var="year">
                                     <option <c:if test="${item.pojo.year eq year}">selected="true"</c:if> value="${year}">${year}</option>
                                 </c:forEach>
@@ -176,6 +176,13 @@
         selectFirstItemSelect2('#year');
     }
 
+    function checkLoadPage(){
+        var year = $('#year').val();
+        if(year != ''){
+            document.location.href = '${formUrl}?year=' + year;
+        }
+    }
+
     function generateCardCodeForYear(){
 
         /*------------------------
@@ -239,7 +246,7 @@
                         }
                     });
 
-                    // uncheck all checkboxs
+//                    // uncheck all checkboxs
                     var $allCheck = $('#allCheck');
                     if($allCheck.is(':checked')){
                         $('#allCheck').trigger('click');

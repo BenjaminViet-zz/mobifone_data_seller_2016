@@ -24,4 +24,6 @@ public interface PackageDataManagementLocalBean {
     Object[] findListNotYetGenerateCardCode(Integer year, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 
     PackageDataDTO findById(Long packageDataId) throws ObjectNotFoundException;
+
+    List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year);
 }

@@ -159,11 +159,6 @@ public class PackageDataCodeGenManagementSessionBean implements PackageDataCodeG
     }
 
     @Override
-    public Boolean checkBeforeGeneratingCardCode(Integer year, String[] packageDataIds) {
-        return this.packageDataCodeGenService.checkBeforeGeneratingCardCode(year, packageDataIds);
-    }
-
-    @Override
     public PackageDataCodeGenDTO findByUniqueCompositeKey(Long packageDataId, Integer year) throws ObjectNotFoundException{
         return PackageDataCodeGenBeanUtil.entity2DTO(this.packageDataCodeGenService.findByUniqueCompositeKey(packageDataId, year));
     }

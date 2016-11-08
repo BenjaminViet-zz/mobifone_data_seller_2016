@@ -3,6 +3,7 @@ package com.benluck.vms.mobifonedataseller.session;
 import com.benluck.vms.mobifonedataseller.domain.PackageDataCodeGenEntity;
 
 import javax.ejb.ObjectNotFoundException;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,4 @@ import javax.ejb.ObjectNotFoundException;
 public interface PackageDataCodeGenLocalBean extends GenericSessionBean<PackageDataCodeGenEntity, Long>{
 
     PackageDataCodeGenEntity findByUniqueCompositeKey(Long packageDataId, Integer year) throws ObjectNotFoundException;
-
-    Boolean checkBeforeGeneratingCardCode(Integer year, String[] packageDataIds);
 }

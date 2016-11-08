@@ -41,8 +41,16 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
 
     @RequestMapping(value = {"/admin/packagedatacodegen/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCodeGenCommand command,
+                             @RequestParam(value = "year", required = false) Integer year,
                              HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/packagedatacodegen/list");
+
+        if(year != null){
+            PackageDataCodeGenDTO pojo = new PackageDataCodeGenDTO();
+            pojo.setYear(year);
+            command.setPojo(pojo);
+        }
+
         executeSearch(command, request);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         preferenceData(mav);
@@ -87,22 +95,36 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
 
     @RequestMapping(value = {"/ajax/admin/packagedatacodegen/generateCardCode.html"})
     public @ResponseBody Map generateCardCode(@RequestParam(value = "year", required = true)Integer year,
-                                              @RequestParam(value = "packageDataIds", required = true)String[] packageDataIds){
+                                              @RequestParam(value = "packageDataIds", required = true)String[] packageDataIdsStr){
         Map resultMap = new HashMap();
 
         try{
-            Boolean allow2GenerateCardCode = this.packageDataCodeGenService.checkBeforeGeneratingCardCode(year, packageDataIds);
-            if(allow2GenerateCardCode){
-                this.packageDataCodeGenService.updateProcessing(year, packageDataIds, Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
+            List<Long> packageDataIdList = this.packageDataService.findPackageDataIdListHasGeneratedCardCode(year);
+            boolean allOfPackageGeneratedCardCode = true;
+            boolean hasAtLeastOneGeneratedBefore = false;
+            for (String packageDataIdStr : packageDataIdsStr){
+                if(!packageDataIdList.contains(Long.valueOf(packageDataIdStr))){
+                    allOfPackageGeneratedCardCode = false;
+                }else{
+                    hasAtLeastOneGeneratedBefore = true;
+                }
+            }
 
-                TaskGenerateCardCode generateCardCodeTask = new TaskGenerateCardCode(year, packageDataIds);
+            if(allOfPackageGeneratedCardCode){
+                resultMap.put("r", false);
+                resultMap.put("msg", this.getMessageSourceAccessor().getMessage("packagedatacodegen.all_package_generated_card_code_for_this_year"));
+
+            }else if(hasAtLeastOneGeneratedBefore){
+                resultMap.put("r", false);
+                resultMap.put("msg", this.getMessageSourceAccessor().getMessage("packagedatacodegen.generation.at_least_one_package_data_has_generated_card_code_success"));
+            }else{
+                this.packageDataCodeGenService.updateProcessing(year, packageDataIdsStr, Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
+
+                TaskGenerateCardCode generateCardCodeTask = new TaskGenerateCardCode(year, packageDataIdsStr);
                 Timer timer = new Timer(true);
                 timer.schedule(generateCardCodeTask, 0);
 
                 resultMap.put("r", true);
-            }else{
-                resultMap.put("r", false);
-                resultMap.put("msg", this.getMessageSourceAccessor().getMessage("packagedatacodegen.generation.at_least_one_package_data_has_generated_card_code_success"));
             }
         }catch (Exception e){
             logger.error(e.getMessage());

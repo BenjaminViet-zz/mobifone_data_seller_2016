@@ -10,8 +10,6 @@ import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
-import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
-import com.benluck.vms.mobifonedataseller.redis.service.DataCodeService;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
@@ -39,8 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.ejb.DuplicateKeyException;
-import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -215,6 +211,7 @@ public class OrderController extends ApplicationObjectSupport{
     private void preferenceData(ModelAndView mav){
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
+        mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
     }
 
     @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html",

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -44,5 +45,13 @@ public class PackageDataSessionBean extends AbstractSessionBean<PackageDataEntit
         Query countQuery = entityManager.createQuery(sqlCount.toString()).setParameter("year", year);
         Integer count = Integer.valueOf(countQuery.getSingleResult().toString());
         return new Object[]{count, packageDataEntityList};
+    }
+
+    @Override
+    public List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT pdcg.packageData.packageDataId FROM PackageDataCodeGenEntity pdcg WHERE pdcg.year = :year ");
+        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("year", year);
+        return (List<Long>)query.getResultList();
     }
 }
