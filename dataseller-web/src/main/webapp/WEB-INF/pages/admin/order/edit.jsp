@@ -175,7 +175,6 @@
 
     $(document).ready(function(){
 
-        console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
         $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
 
 
@@ -204,15 +203,9 @@
             });
         });
 
-        $('#packageData').on('change', function(){
-            console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
-        })
-
         /*-------------------------------*/
         /* //Calculator order total*/
         /*-------------------------------*/
-
-
 
 
 
@@ -230,6 +223,7 @@
 
         $('#packageData').on('change', function(){
             $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
+            /*console.log( $('#unitPrice').val() );*/
         });
         
         $('#orderId').data("remainingBalance", '${remainingBalance}');

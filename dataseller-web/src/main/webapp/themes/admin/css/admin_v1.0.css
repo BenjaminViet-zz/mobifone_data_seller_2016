@@ -1,6 +1,7 @@
 body {
     font-family: 'Arial', 'sans-serif';
     background: darkcyan;
+    position: relative;
 }
 
 #admin_navigation_bar li.active {
@@ -424,4 +425,8 @@ table tr td {
     font-size: 14px;
     color: #555;
     padding: 6px 12px;
+}
+
+.site_title {
+    padding-left: 25px !important;
 }

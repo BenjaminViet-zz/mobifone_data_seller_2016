@@ -93,7 +93,7 @@
                             <fmt:message key="admin.khdn.stb_vas" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="stb_vas" path="pojo.stb_vas" cssClass="required nohtml form-control"></form:input>
+                            <form:input id="stb_vas" path="pojo.stb_vas" cssClass="required nohtml form-control money"></form:input>
                             <form:errors for="stb_vas" path="pojo.stb_vas" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -128,6 +128,9 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
+        $('.money').mask('00000000000000000000000', {reverse: true});
+
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
                 $("#formEdit").submit();

@@ -65,6 +65,6 @@
             <jsp:include page="/common/admin/admin_footer.jsp"/>
         </div>
     </div>
-
+    <div id="ajaxLoading"></div>
 </body>
 </html>

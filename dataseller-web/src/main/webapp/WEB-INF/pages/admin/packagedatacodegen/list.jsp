@@ -164,8 +164,23 @@
         </div>
     </c:if>
 </form:form>
-<div id="ajaxLoading"></div>
+
 <script language="javascript" type="text/javascript">
+
+    function overlay(){
+        if ( $('#ajaxLoading').children().length ){
+            $('#ajaxLoading').css({'position': 'absolute',
+                'top': '0', 'left': '0',
+                'z-index': '9999',
+                'width': '100%',
+                'height': '100%',
+                'background-color': 'rgba(0,0,0,0.5)'}
+            )
+        } else {
+            $('#ajaxLoading').attr('style', '');
+        }
+    }
+
     function submitForm(){
         $('#listForm').submit();
     }
@@ -239,31 +254,22 @@
                         dataType: "json",
                         success: function(res){
                             if(res.r != null){
-                                if(!res.r){
+                                if ( res.r ) {
+                                    var spinner = new Spinner(opts).spin(target);
+                                    $('#ajaxLoading').delay(3000).fadeOut(500);
+                                    overlay();
+                                    setTimeout(function(){
+                                        checkLoadPage();
+                                    },3000);
+                                } else {
                                     bootbox.alert('<fmt:message key="label.alert_title" />', (res.msg != null ? res.msg : '<fmt:message key="packagedatacodegen.generation.error_generation" />'), function(){});
                                 }
+                                /*if(!res.r){
+
+                                }*/
                             }
                         }
                     });
-
-//                    // uncheck all checkboxs
-                    var $allCheck = $('#allCheck');
-                    if($allCheck.is(':checked')){
-                        $('#allCheck').trigger('click');
-                    } else{
-                        /*------------------------
-                                Spinner appear
-                         ------------------------*/
-                        var spinner = new Spinner(opts).spin(target);
-                        $('#ajaxLoading').delay(3000).fadeOut(500);
-
-                        /*------------------------
-                                Reload page
-                        ------------------------*/
-                        setTimeout(function(){
-                            location.reload();
-                        },3000);
-                    }
                 }
             });
         }else{
