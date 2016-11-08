@@ -162,4 +162,34 @@ public class PackageDataCodeGenManagementSessionBean implements PackageDataCodeG
     public Boolean checkBeforeGeneratingCardCode(Integer year, String[] packageDataIds) {
         return this.packageDataCodeGenService.checkBeforeGeneratingCardCode(year, packageDataIds);
     }
+
+    @Override
+    public PackageDataCodeGenDTO findByUniqueCompositeKey(Long packageDataId, Integer year) throws ObjectNotFoundException{
+        return PackageDataCodeGenBeanUtil.entity2DTO(this.packageDataCodeGenService.findByUniqueCompositeKey(packageDataId, year));
+    }
+
+    @Override
+    public void updateBatchRemainingCardCodeSize(Long packageDataCodeGenId, int batchIndex, int remainingCardCodeSize) throws ObjectNotFoundException, DuplicateKeyException{
+        PackageDataCodeGenEntity dbItem = this.packageDataCodeGenService.findById(packageDataCodeGenId);
+        if(batchIndex == 1){
+            dbItem.setBatch1_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 2){
+            dbItem.setBatch2_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 3){
+            dbItem.setBatch3_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 4){
+            dbItem.setBatch4_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 5){
+            dbItem.setBatch5_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 6){
+            dbItem.setBatch6_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 7){
+            dbItem.setBatch7_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 8){
+            dbItem.setBatch8_Remaining(remainingCardCodeSize);
+        }else if(batchIndex == 9){
+            dbItem.setBatch9_Remaining(remainingCardCodeSize);
+        }
+        this.packageDataCodeGenService.update(dbItem);
+    }
 }

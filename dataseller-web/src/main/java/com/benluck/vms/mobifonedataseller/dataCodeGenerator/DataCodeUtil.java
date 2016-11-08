@@ -3,11 +3,14 @@ package com.benluck.vms.mobifonedataseller.dataCodeGenerator;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
+import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
-import com.benluck.vms.mobifonedataseller.redis.service.DataCodeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.ejb.DuplicateKeyException;
+import javax.ejb.ObjectNotFoundException;
 import java.util.*;
 
 /**
@@ -18,24 +21,24 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class DataCodeUtil {
-    private static boolean showCounter = true;
-    private static StringBuilder dataCodeSuffix = null;
-    private static StringBuilder prefixDataCode = null;
-    private static StringBuilder tmpDataCode = null;
-    private static List<String> duplicatedList = null;
-    private static int min = 1;
-    private static int max = 9999999;
-    private static int total_length = 12;
-    private static int prefix_year = 3;
-    private static int prefix_unit_price = 2;
 
-    @Autowired
-    private static DataCodeService dataCodeService;
+    private static Logger logger = Logger.getLogger(DataCode.class);
 
-    public static DataCode generateDataCodes(String yearCode, String unitPriceCode, Integer numberOfDataCodes){
-        DataCode dataCode = new DataCode(yearCode, unitPriceCode);
-        dataCode.setDataCodeHashSet(generateDataCodeList(yearCode, (unitPriceCode.length() == 1 ? "0" + unitPriceCode : unitPriceCode), numberOfDataCodes));
-        return dataCode;
+    private static RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
+    private static PackageDataCodeGenManagementLocalBean packageCodeDataGenService = AppContext.getApplicationContext().getBean(PackageDataCodeGenManagementLocalBean.class);
+    private static StringBuilder tmpCardCode;
+
+    /**
+     *
+     * @param packageDataCodeGenDTO
+     * @param year
+     * @param yearCode
+     * @param unitPriceCode
+     * @param numberOfDataCodes Number of Card Code need to be taken for the Order exporting.
+     * @return
+     */
+    public static Object[] generateDataCodes(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfDataCodes){
+        return generateDataCodeList(packageDataCodeGenDTO, year, yearCode, (unitPriceCode.length() == 1 ? "0" + unitPriceCode : unitPriceCode), numberOfDataCodes);
     }
 
     public static HashSet<String> getUsedDataCodeHashSet(){
@@ -45,68 +48,133 @@ public class DataCodeUtil {
 
     /**
      *  Function sinh ra danh sách Data Code theo params.
+     * @param packageDataCodeGenDTO     Used to search nearest available batch index in the PackageDataCodeGen this packageDataId.
      * @param yearCode          Prefix 3 ký tự đầu của năm trong mỗi Data Code
      * @param unitPriceCode         Prefix 2 ký tự tiếp theo của mệnh giá gói trong mỗi Data Code
-     * @param numberOfCode      Số lượng Data Code cần sinh ra
+     * @param numberOfCardCode      Số lượng Data Code cần sinh ra
      * @return
      */
-    public static HashSet<String> generateDataCodeList(String yearCode, String unitPriceCode, Integer numberOfCode){
-        if(Config.getInstance().getProperty("redis.turn_on").equals("false")){
-            DataCode dataCode = new DataCode();
-            dataCode.setKeyByYear(yearCode);
-            dataCode.setHasKeyByUnitPrice(unitPriceCode);
-            dataCode.setDataCodeHashSet(getUsedDataCodeHashSet());
-            return dataCode.getDataCodeHashSet();
-        }else{
-            RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
-            DataCode dataCodeForUsedFixedValition = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-            DataCode dataCodeForYearAndUnitPriceValidation = (DataCode)redisTemplate.opsForHash().get(yearCode, "10");
+    public static Object[] generateDataCodeList(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfCardCode){
 
-            if(dataCodeForYearAndUnitPriceValidation == null){
-                dataCodeForYearAndUnitPriceValidation = new DataCode();
+        Map<String, HashSet<String>> mapCardCodeHSRemainingInBatches = new HashMap<String, HashSet<String>>();
+        HashSet<String> tmpCardCodeHSFromCache = null;
+        int cardCodeSizeCounter = 1;
+
+        if(Config.getInstance().getProperty("redis.turn_on").equals("false")){
+            tmpCardCodeHSFromCache = getUsedDataCodeHashSet();
+            mapCardCodeHSRemainingInBatches.put("NULL", tmpCardCodeHSFromCache);
+            return new Object[]{tmpCardCodeHSFromCache.size(), mapCardCodeHSRemainingInBatches};
+        }else{
+            HashSet<String> usedCardCode21610HashSet = new HashSet<String>();
+            Calendar current = Calendar.getInstance();
+            if(current.get(Calendar.YEAR) == 2016 && unitPriceCode.equals(Constants.USED_UNIT_PRICE_CODE)){
+                usedCardCode21610HashSet = getUsedDataCodeHashSet();
             }
 
-            duplicatedList = new ArrayList<String>();
-            HashSet<String> newGeneratedDataCodeHashSet = new HashSet<String>();
-            System.out.println("Generating Data Code (tu 1 den " + numberOfCode + ")...");
-            int counter = 0;
-            int addedCounter = 0;
-            while (addedCounter < numberOfCode){
-                ++counter;
-                tmpDataCode = new StringBuilder();
-                tmpDataCode.append(yearCode)
-                        .append(unitPriceCode)
-                        .append(randomSevenDigits());
-                if(newGeneratedDataCodeHashSet.contains(tmpDataCode.toString())
-                        || dataCodeForUsedFixedValition.getDataCodeHashSet().contains(tmpDataCode.toString())
-                        || dataCodeForYearAndUnitPriceValidation.getDataCodeHashSet().contains(tmpDataCode.toString())){
-                    duplicatedList.add(tmpDataCode.toString());
-                }else{
-                    addedCounter++;
-                    newGeneratedDataCodeHashSet.add(tmpDataCode.toString());
-                    if(showCounter){
-                        System.out.println(addedCounter + "       :       " +tmpDataCode.toString());
-                    }else{
-                        System.out.println(tmpDataCode.toString());
+            HashSet<String> cardCodeHashSet = new HashSet<String>();
+
+            try{
+                StringBuilder tmpUnitPriceCodeWithBatchIndex = null;
+                int batchSizeRemaining = -1;
+
+                for(int batchIndex = 1; batchIndex <= 9; batchIndex++){
+                    if(batchIndex == 1){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch1_Remaining().intValue();
+                    }else if(batchIndex == 2){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch2_Remaining().intValue();
+                    }else if(batchIndex == 3){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch3_Remaining().intValue();
+                    }else if(batchIndex == 4){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch4_Remaining().intValue();
+                    }else if(batchIndex == 5){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch5_Remaining().intValue();
+                    }else if(batchIndex == 6){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch6_Remaining().intValue();
+                    }else if(batchIndex == 7){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch7_Remaining().intValue();
+                    }else if(batchIndex == 8){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch8_Remaining().intValue();
+                    }else if(batchIndex == 9){
+                        batchSizeRemaining = packageDataCodeGenDTO.getBatch9_Remaining().intValue();
+                    }
+
+                    if(batchSizeRemaining > 0){
+                        tmpUnitPriceCodeWithBatchIndex = new StringBuilder(unitPriceCode).append("_").append(batchIndex);
+                        tmpCardCodeHSFromCache = (HashSet<String>) redisTemplate.opsForHash().get(yearCode, tmpUnitPriceCodeWithBatchIndex.toString());
+                        if(tmpCardCodeHSFromCache.size() != batchSizeRemaining){
+                            throw new Exception("The remaining Card Code size in batch " + batchIndex + " of packageData name : " + packageDataCodeGenDTO.getPackageData().getName() + ", year: " + year + " not same. THIS IS A FATAL ERROR. PLEASE CHECK REDIS CONSISTENCY!");
+                        }
+                        if(tmpCardCodeHSFromCache.size() + cardCodeSizeCounter <= numberOfCardCode.intValue()){
+
+                            if(usedCardCode21610HashSet.size() > 0){
+                                Iterator<String> ito = tmpCardCodeHSFromCache.iterator();
+                                while (ito.hasNext()){
+                                    tmpCardCode = new StringBuilder(ito.next());
+                                    if(!usedCardCode21610HashSet.contains(tmpCardCode.toString())){
+                                        cardCodeHashSet.add(tmpCardCode.toString());
+                                        cardCodeSizeCounter++;
+                                    }
+                                }
+                            }else{
+                                cardCodeHashSet.addAll(tmpCardCodeHSFromCache);
+                                cardCodeSizeCounter += tmpCardCodeHSFromCache.size();
+                            }
+
+                            mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), new HashSet<String>());
+//                            updateRemainingCardCodeSizeOnDB(packageDataCodeGenDTO.getPackageDataCodeGenId(), batchIndex, 0);
+//                            updateRemainingCardCodeSizeOnCache(yearCode, tmpUnitPriceCodeWithBatchIndex.toString(), new HashSet<String>());
+
+                            if(cardCodeSizeCounter == numberOfCardCode.intValue()){
+                                break;
+                            }
+                        }else{
+                            int remainingSizeOnDemand = numberOfCardCode.intValue() - tmpCardCodeHSFromCache.size() - cardCodeHashSet.size();
+                            HashSet<String> remainingCardCodeInCacheHS = new HashSet<>();
+                            Iterator<String> ito = tmpCardCodeHSFromCache.iterator();
+                            while(ito.hasNext()){
+                                if(cardCodeSizeCounter == numberOfCardCode.intValue()){
+                                    remainingCardCodeInCacheHS.add(ito.next());
+                                }else{
+                                    cardCodeHashSet.add(ito.next());
+                                    cardCodeSizeCounter++;
+                                }
+                            }
+
+                            mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
+//                            updateRemainingCardCodeSizeOnDB(packageDataCodeGenDTO.getPackageDataCodeGenId(), batchIndex, batchSizeRemaining - remainingSizeOnDemand);
+//                            updateRemainingCardCodeSizeOnCache(yearCode, tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
+                            break;
+                        }
                     }
                 }
+            }catch (Exception e){
+                logger.error(e.getMessage());
             }
-            System.out.println("========================");
-            System.out.println("Finished");
-            System.out.println("Tong so lan chay: " + counter + " lan");
-            System.out.println("Total Data Code duoc sinh ra: " + newGeneratedDataCodeHashSet.size() + " data codes");
-            System.out.println("========================");
-            if(duplicatedList.size() > 0){
-                System.out.println("Tong so ma Data Code bi trung: " + duplicatedList.size() + " Data Code");
-                System.out.println("Danh sach trung ma Data Code (Khong su dung danh sach nay!)");
-                for (String dupDataCode : duplicatedList){
-                    System.out.println(dupDataCode);
-                }
-            }else{
-                System.out.println("Khong co Data Code bi trung!");
-            }
-            return newGeneratedDataCodeHashSet;
+
+            return new Object[]{cardCodeSizeCounter, mapCardCodeHSRemainingInBatches};
         }
+    }
+
+    public static void updateRemainingCardCodeSize(Long packageDataCodeGenId, String redisKey, Map<String, HashSet<String>> mapCardCodeRemainingHS) throws ObjectNotFoundException, DuplicateKeyException{
+        StringBuilder tmpUnitPriceCodeWithBatchIndex = null;
+        Iterator<String> ito = mapCardCodeRemainingHS.keySet().iterator();
+        HashSet<String> tmpCardCodeSizeRemaining = null;
+        while(ito.hasNext()){
+            tmpUnitPriceCodeWithBatchIndex = new StringBuilder(ito.next());
+            if(!tmpUnitPriceCodeWithBatchIndex.toString().equals("NULL")){
+                tmpCardCodeSizeRemaining = mapCardCodeRemainingHS.get(tmpUnitPriceCodeWithBatchIndex.toString());
+                updateRemainingCardCodeSizeOnCache(redisKey, tmpUnitPriceCodeWithBatchIndex.toString(), tmpCardCodeSizeRemaining);
+                updateRemainingCardCodeSizeOnDB(packageDataCodeGenId, Integer.valueOf(tmpUnitPriceCodeWithBatchIndex.toString().substring(tmpUnitPriceCodeWithBatchIndex.toString().length() - 2, tmpUnitPriceCodeWithBatchIndex.toString().toString().length())), tmpCardCodeSizeRemaining.size());
+            }
+        }
+    }
+
+    private static void updateRemainingCardCodeSizeOnDB(Long packageDataCodeGenId, int batchIndex, int remainingCardCodeSize) throws ObjectNotFoundException, DuplicateKeyException{
+        packageCodeDataGenService.updateBatchRemainingCardCodeSize(packageDataCodeGenId, batchIndex, remainingCardCodeSize);
+    }
+
+    private static void updateRemainingCardCodeSizeOnCache(String redisKey, String redisHashKey, HashSet<String> cardCodeSizeRemaining){
+        redisTemplate.opsForHash().put(redisKey, redisHashKey, cardCodeSizeRemaining);
     }
 
     /**
@@ -116,29 +184,5 @@ public class DataCodeUtil {
     public static void storeDataCodes(DataCode dataCode){
         RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
         redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
-    }
-
-    /**
-     * Sinh ra 1 chuỗi số theo độ dài của chuỗi quy định là 12 ký tự.
-     * @return
-     */
-    private static String randomSevenDigits(){
-        dataCodeSuffix = new StringBuilder(String.valueOf((int)(Math.random() * ((max - min) + 1)) + min));
-        if(dataCodeSuffix.toString().length() < total_length - prefix_year - prefix_unit_price){
-            if(dataCodeSuffix.toString().length() == 6){
-                dataCodeSuffix = new StringBuilder("0").append(dataCodeSuffix.toString());
-            }else if(dataCodeSuffix.toString().length() == 5){
-                dataCodeSuffix = new StringBuilder("00").append(dataCodeSuffix.toString());
-            }else if(dataCodeSuffix.toString().length() == 4){
-                dataCodeSuffix = new StringBuilder("000").append(dataCodeSuffix.toString());
-            }else if(dataCodeSuffix.toString().length() == 3){
-                dataCodeSuffix = new StringBuilder("0000").append(dataCodeSuffix.toString());
-            }else if(dataCodeSuffix.toString().length() == 2){
-                dataCodeSuffix = new StringBuilder("00000").append(dataCodeSuffix.toString());
-            }else if(dataCodeSuffix.toString().length() == 1){
-                dataCodeSuffix = new StringBuilder("000000").append(dataCodeSuffix.toString());
-            }
-        }
-        return dataCodeSuffix.toString();
     }
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,6 +31,7 @@ public class OrderDTO implements Serializable{
     private UserDTO createdBy;
     private List<String> dataCodes2Render;
     private HashSet<String> dataCodeHasSet2Store;
+    private Map<String, HashSet<String>> mapBatchIndexAndCardCodeHSRemaining;
 
     public OrderDTO() {
     }
@@ -158,5 +160,13 @@ public class OrderDTO implements Serializable{
 
     public void setDataCodeHasSet2Store(HashSet<String> dataCodeHasSet2Store) {
         this.dataCodeHasSet2Store = dataCodeHasSet2Store;
+    }
+
+    public Map<String, HashSet<String>> getMapBatchIndexAndCardCodeHSRemaining() {
+        return mapBatchIndexAndCardCodeHSRemaining;
+    }
+
+    public void setMapBatchIndexAndCardCodeHSRemaining(Map<String, HashSet<String>> mapBatchIndexAndCardCodeHSRemaining) {
+        this.mapBatchIndexAndCardCodeHSRemaining = mapBatchIndexAndCardCodeHSRemaining;
     }
 }

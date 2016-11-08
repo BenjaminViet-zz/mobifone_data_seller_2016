@@ -1,5 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
+
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
 import javax.ejb.ObjectNotFoundException;
@@ -22,4 +24,8 @@ public interface PackageDataCodeGenManagementLocalBean {
     void updateProcessing(Integer year, String[] packageDataIds, Integer statusCode) throws ObjectNotFoundException, DuplicateKeyException;
 
     Boolean checkBeforeGeneratingCardCode(Integer year, String[] packageDataIds);
+
+    PackageDataCodeGenDTO findByUniqueCompositeKey(Long packageDataId, Integer year) throws ObjectNotFoundException;
+
+    void updateBatchRemainingCardCodeSize(Long packageDataCodeGenId, int batchIndex, int remainingCardCodeSize) throws ObjectNotFoundException, DuplicateKeyException;
 }

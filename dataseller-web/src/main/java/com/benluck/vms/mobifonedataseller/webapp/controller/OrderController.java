@@ -2,12 +2,10 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
-import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.*;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
@@ -69,6 +67,8 @@ public class OrderController extends ApplicationObjectSupport{
     private KHDNManagementLocalBean KHDNService;
     @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
+    @Autowired
+    private PackageDataCodeGenManagementLocalBean packageDataCodeGenService;
     @Autowired
     private OrderValidator validator;
 
@@ -237,7 +237,6 @@ public class OrderController extends ApplicationObjectSupport{
                         pojo.setCreatedBy(updatedBy);
 
                         Calendar current = Calendar.getInstance();
-                        DataCode dataCode = null;
                         String yearCode = String.valueOf(current.get(Calendar.YEAR)).replace("0","");
                         String unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
 
@@ -245,34 +244,53 @@ public class OrderController extends ApplicationObjectSupport{
                             mav.addObject(Constants.ALERT_TYPE, "info");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_support_unit_price_2_digit"));
                         }else{
+
+                            PackageDataCodeGenDTO packageDataCodeGenDTO = this.packageDataCodeGenService.findByUniqueCompositeKey(pojo.getPackageData().getPackageDataId(), Calendar.getInstance().get(Calendar.YEAR));
+                            Object[] cardCodeHSGenerationObject = null;
+
                             if (pojo.getOrderId() == null ){
 
+                                // Take Card Code from Cache
                                 if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    dataCode = DataCodeUtil.generateDataCodes(yearCode, unitPriceCode, pojo.getQuantity());
-                                    pojo.setDataCodeHasSet2Store(dataCode.getDataCodeHashSet());
+                                    cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
                                 }
+
+                                if(Integer.valueOf(cardCodeHSGenerationObject[0].toString()) != pojo.getQuantity()){
+                                    throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
+                                }
+
+                                pojo.setMapBatchIndexAndCardCodeHSRemaining((Map<String, HashSet<String>>)cardCodeHSGenerationObject[1]);
 
                                 this.orderService.addItem(pojo);
 
+                                // Update Card Code size in DB nd Cachce
                                 if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.storeDataCodes(dataCode);
+                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, pojo.getMapBatchIndexAndCardCodeHSRemaining());
                                 }
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                             } else {
                                 OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
+
+                                // Take Card Code from Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    dataCode = DataCodeUtil.generateDataCodes(yearCode, unitPriceCode, pojo.getQuantity());
-                                    pojo.setDataCodeHasSet2Store(dataCode.getDataCodeHashSet());
+                                    cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
                                 }
+
+                                if(Integer.valueOf(cardCodeHSGenerationObject[0].toString()) != pojo.getQuantity()){
+                                    throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
+                                }
+
+                                pojo.setMapBatchIndexAndCardCodeHSRemaining((Map<String, HashSet<String>>)cardCodeHSGenerationObject[1]);
 
                                 this.orderService.updateItem(pojo);
 
+                                // Update Card Code size in DB nd Cachce
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.storeDataCodes(dataCode);
+                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, pojo.getMapBatchIndexAndCardCodeHSRemaining());
                                 }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
@@ -284,12 +302,8 @@ public class OrderController extends ApplicationObjectSupport{
             }else if(pojo.getOrderId() != null){
                 command.setPojo(this.orderService.findById(command.getPojo().getOrderId()));
             }
-        }catch (ObjectNotFoundException one){
-            logger.error("Can not get data of OrderId: " + pojo.getOrderId());
-            mav.addObject(Constants.ALERT_TYPE, "danger");
-            mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.keynotfound"));
-        }catch (DuplicateKeyException dle){
-            logger.error("Duplicated OrderId: " + pojo.getOrderId());
+        }catch (Exception e){
+            logger.error("Error when add or update OrderId: " + e.getMessage());
             mav.addObject(Constants.ALERT_TYPE, "danger");
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }

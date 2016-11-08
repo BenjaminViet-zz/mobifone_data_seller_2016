@@ -165,4 +165,6 @@ public class Constants {
     public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING = 0;
     public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_FAILED = 1;
     public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS = 2;
+
+    public static final String USED_UNIT_PRICE_CODE = "10";
 }
