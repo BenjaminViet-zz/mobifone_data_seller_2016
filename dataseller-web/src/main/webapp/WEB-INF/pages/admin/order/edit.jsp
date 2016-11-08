@@ -42,13 +42,22 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
-                <div class="x_title">
-                    <div class="alert alert-danger no-bottom">
-                        <span id="page_message_title"><fmt:message key="packagedatacodegen.there_are_not_any_package_data_generate_card_code" /></span>
+            <c:choose>
+                <c:when test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                    <div class="x_title">
+                        <div class="alert alert-danger no-bottom">
+                            <fmt:message key="packagedatacodegen.there_are_not_any_package_data_generate_card_code" />
+                        </div>
                     </div>
-                </div>
-            </c:if>
+                </c:when>
+                <c:otherwise>
+                    <div class="x_title hide" id="page_message_title">
+                        <div class="alert alert-danger no-bottom">
+                            <span></span>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 
             <div class="x_content">
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate">
@@ -71,7 +80,7 @@
                             <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control required" onchange="javascript: checkPackageDataCardCodeGeneration();">
                                 <option value=""><fmt:message key="label.all" /></option>
                                 <c:forEach items="${packageDataList}" var="packageData">
-                                    <option data-unitPrice="${packageData.value}" <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
+                                    <option data-unitPrice="<fmt:formatNumber type="number" maxFractionDigits="0" value="${packageData.value}" />" <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
                                 </c:forEach>
                             </form:select>
                         </div>
@@ -80,7 +89,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="quantity" type="text" path="pojo.quantity" cssClass="form-control required form-control money" ></form:input>
+                            <input id="quantity" type="text" name="pojo.quantity" class="form-control required form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.quantity}" /> " />
                             <form:errors for="quantity" path="pojo.quantity" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -88,7 +97,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="unitPrice" type="text" path="pojo.unitPrice" cssClass="form-control required form-control money" ></form:input>
+                            <input id="unitPrice" type="text" name="pojo.unitPrice" class="form-control required form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.unitPrice}" /> " />
                             <form:errors for="unitPrice" path="pojo.unitPrice" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -145,6 +154,7 @@
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
                     <form:hidden id="orderId" path="pojo.orderId" />
+                    <form:hidden path="pojo.cardCodeProcessStatus" />
                 </form:form>
             </div>
         </div>
@@ -163,19 +173,27 @@
     function checkPackageDataCardCodeGeneration(){
         <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
             var selectedPackageDataId = $('#packageData').val();
-            if(packageDataIdsHasGenerateCardCodeList.length() > 0 && selectedPackageDataId != ''){
-                if(!packageDataIdsHasGenerateCardCodeList.contains(selectedPackageDataId)){
-                    $('#page_message_title').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
+            if(packageDataIdsHasGenerateCardCodeList.length > 0 && selectedPackageDataId != ''){
+                if(packageDataIdsHasGenerateCardCodeList.indexOf(selectedPackageDataId) == -1){
+                    $('#page_message_title').removeClass('hide').find('span:first').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
+                    $('#btnSave').attr('disabled', 'disabled');
+                }else{
+                    $('#page_message_title').addClass('hide').find('span:first').html('');
+                    $('#btnSave').removeAttr('disabled');
                 }
             }else{
-                $('#page_message_title').parent().hide();
+                $('#page_message_title').addClass('hide');
             }
         </c:if>
     }
 
     $(document).ready(function(){
 
-        $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
+        var $totalEl = $('.calcOrderTotal');
+        $totalEl.text(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
+        $totalEl.mask('000,000,000,000,000,000', {
+            reverse: true
+        })
 
 
         /*-------------------------------*/
@@ -203,9 +221,15 @@
             });
         });
 
+        $('#packageData').on('change', function(){
+//            console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
+        })
+
         /*-------------------------------*/
         /* //Calculator order total*/
         /*-------------------------------*/
+
+
 
 
 
@@ -223,7 +247,6 @@
 
         $('#packageData').on('change', function(){
             $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
-            /*console.log( $('#unitPrice').val() );*/
         });
         
         $('#orderId').data("remainingBalance", '${remainingBalance}');

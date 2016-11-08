@@ -114,12 +114,19 @@
                             <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 10%" />
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.status" style="width: 12%">
                                 <c:choose>
-                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
-                                        <fmt:message key="label.in_progress" />
-                                    </c:when>
-                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
-                                        <fmt:message key="label.finish" />
-                                    </c:when>
+                                   <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus eq Constants.ORDER_CARD_CODE_PROCESSING_STATUS}">
+                                       <fmt:message key="order.card_code_taking_in_progress" />
+                                   </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
+                                                <fmt:message key="label.in_progress" />
+                                            </c:when>
+                                            <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                                <fmt:message key="label.finish" />
+                                            </c:when>
+                                        </c:choose>
+                                    </c:otherwise>
                                 </c:choose>
                             </display:column>
                             <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">

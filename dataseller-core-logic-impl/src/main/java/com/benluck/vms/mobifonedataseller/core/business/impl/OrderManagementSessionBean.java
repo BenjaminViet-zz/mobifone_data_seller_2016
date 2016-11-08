@@ -51,7 +51,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public void addItem(OrderDTO pojo) throws DuplicateKeyException {
+    public OrderDTO addItem(OrderDTO pojo) throws DuplicateKeyException {
 
         OrderEntity entity = new OrderEntity();
 
@@ -74,24 +74,20 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         entity.setOrderStatus(pojo.getOrderStatus());
         entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+            entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
+        }else{
+            entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_NOT_START_STATUS);
+        }
         entity = this.orderService.save(entity);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
-
-        if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-            saveDataCodes4Order(entity, pojo.getMapBatchIndexAndCardCodeHSRemaining());
-        }
+        return OrderBeanUtil.entity2DTO(entity);
     }
 
     @Override
     public void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
         OrderEntity dbItem = this.orderService.findById(pojo.getOrderId());
-        boolean storeDataCodes = false;
-
-        if(dbItem.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
-                && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-            storeDataCodes = true;
-        }
 
         if(!dbItem.getKhdn().getKHDNId().equals(pojo.getKhdn().getKHDNId())){
             KHDNEntity khdnEntity = new KHDNEntity();
@@ -111,15 +107,16 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         dbItem.setShippingDate(pojo.getShippingDate());
         dbItem.setOrderStatus(pojo.getOrderStatus());
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
+        dbItem.setCardCodeProcessStatus(pojo.getCardCodeProcessStatus());
         this.orderService.update(dbItem);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
-        if(storeDataCodes){
-            saveDataCodes4Order(dbItem, pojo.getMapBatchIndexAndCardCodeHSRemaining());
+        if(pojo.getCardCodeHashSet2Store() != null && pojo.getCardCodeHashSet2Store().size() > 0 && pojo.getCardCodeProcessStatus().equals(Constants.ORDER_CARD_CODE_COMPLETED_STATUS)){
+            saveDataCodes4Order(dbItem, pojo.getCardCodeHashSet2Store());
         }
     }
 
-    private void saveDataCodes4Order(OrderEntity orderEntity, Map<String, HashSet<String>> mapCardCodeSizeWithUnitPriceCodeAndBatchIndex) throws DuplicateKeyException{
+    private void saveDataCodes4Order(OrderEntity orderEntity, HashSet<String> cardCodeHashSetList2Store) throws DuplicateKeyException{
         Integer totalDataCode = this.orderDataCodeService.countTotal();
         if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
             totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + 1;
@@ -134,40 +131,31 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         expiredDate.add(Calendar.DAY_OF_YEAR, expiredDays);
         Timestamp expiredDate4CardCode = new Timestamp(expiredDate.getTimeInMillis());
 
-        Iterator<String> ito = mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.keySet().iterator();
-        HashSet<String> tmpCardCodeHS = null;
         StringBuilder tmpCardCode = null;
         StringBuilder serial = null;
-
-        for(int i = 0; i < mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.size(); i++){
-
-        }
+        Iterator<String> ito = cardCodeHashSetList2Store.iterator();
 
         while (ito.hasNext()){
-            tmpCardCodeHS = (HashSet<String>)mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.get(ito.next());
-            Iterator<String> cardCodeHSIterator = tmpCardCodeHS.iterator();
-            while (cardCodeHSIterator.hasNext()){
-                tmpCardCode = new StringBuilder(cardCodeHSIterator.next());
+            tmpCardCode = new StringBuilder(ito.next());
 
-                // Take same 5 characters in Card Code.
-                serial = new StringBuilder(tmpCardCode.substring(0, 5));
+            // Take same 5 characters in Card Code.
+            serial = new StringBuilder(tmpCardCode.substring(0, 5));
 
-                // Generate full Serial.
-                if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
-                    serial.append("00");
-                }else if(totalDataCode > 99999 && totalDataCode < 999999){
-                    serial.append("0");
-                }
-                serial.append(totalDataCode.toString());
-
-                OrderDataCodeEntity entity = new OrderDataCodeEntity();
-                entity.setOrder(orderEntity);
-                entity.setSerial(Long.valueOf(serial.toString()));
-                entity.setDataCode(Long.valueOf(tmpCardCode.toString()));
-                entity.setExpiredDate(expiredDate4CardCode);
-                this.orderDataCodeService.save(entity);
-                totalDataCode++;
+            // Generate full Serial.
+            if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
+                serial.append("00");
+            }else if(totalDataCode > 99999 && totalDataCode < 999999){
+                serial.append("0");
             }
+            serial.append(totalDataCode.toString());
+
+            OrderDataCodeEntity entity = new OrderDataCodeEntity();
+            entity.setOrder(orderEntity);
+            entity.setSerial(Long.valueOf(serial.toString()));
+            entity.setDataCode(Long.valueOf(tmpCardCode.toString()));
+            entity.setExpiredDate(expiredDate4CardCode);
+            this.orderDataCodeService.save(entity);
+            totalDataCode++;
         }
     }
 

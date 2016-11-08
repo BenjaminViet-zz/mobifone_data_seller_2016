@@ -27,6 +27,7 @@ public class OrderEntity {
     private Integer activeStatus;
     private Timestamp createdDate;
     private Timestamp lastModified;
+    private Integer cardCodeProcessStatus;
     private UserEntity CreatedBy;
 
     @Column(name = "ORDERID")
@@ -151,6 +152,16 @@ public class OrderEntity {
         this.activeStatus = activeStatus;
     }
 
+    @Column(name = "CARDCODEPROCESSSTATUS")
+    @Basic
+    public Integer getCardCodeProcessStatus() {
+        return cardCodeProcessStatus;
+    }
+
+    public void setCardCodeProcessStatus(Integer cardCodeProcessStatus) {
+        this.cardCodeProcessStatus = cardCodeProcessStatus;
+    }
+
     @Override
     public int hashCode() {
         int result = orderId != null ? orderId.hashCode() : 0;
@@ -162,6 +173,7 @@ public class OrderEntity {
         result = 31 * result + (activeStatus != null ? activeStatus.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
         result = 31 * result + (lastModified != null ? lastModified.hashCode() : 0);
+        result = 31 * result + (cardCodeProcessStatus != null ? cardCodeProcessStatus.hashCode() : 0);
         return result;
     }
 
@@ -181,6 +193,7 @@ public class OrderEntity {
         if (activeStatus != null ? !activeStatus.equals(that.activeStatus) : that.activeStatus!= null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
         if (lastModified != null ? !lastModified.equals(that.lastModified) : that.lastModified != null) return false;
+        if (cardCodeProcessStatus != null ? !cardCodeProcessStatus.equals(that.cardCodeProcessStatus) : that.cardCodeProcessStatus != null) return false;
 
         return true;
     }
