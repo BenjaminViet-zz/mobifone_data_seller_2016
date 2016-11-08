@@ -51,7 +51,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public void addItem(OrderDTO pojo) throws DuplicateKeyException {
+    public OrderDTO addItem(OrderDTO pojo) throws DuplicateKeyException {
 
         OrderEntity entity = new OrderEntity();
 
@@ -74,24 +74,20 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         entity.setOrderStatus(pojo.getOrderStatus());
         entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+            entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
+        }else{
+            entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_NOT_START_STATUS);
+        }
         entity = this.orderService.save(entity);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
-
-        if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-            saveDataCodes4Order(entity, pojo.getCardCodeHashSet2Store());
-        }
+        return OrderBeanUtil.entity2DTO(entity);
     }
 
     @Override
     public void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
         OrderEntity dbItem = this.orderService.findById(pojo.getOrderId());
-        boolean storeDataCodes = false;
-
-        if(dbItem.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
-                && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-            storeDataCodes = true;
-        }
 
         if(!dbItem.getKhdn().getKHDNId().equals(pojo.getKhdn().getKHDNId())){
             KHDNEntity khdnEntity = new KHDNEntity();
@@ -111,10 +107,11 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         dbItem.setShippingDate(pojo.getShippingDate());
         dbItem.setOrderStatus(pojo.getOrderStatus());
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
+        dbItem.setCardCodeProcessStatus(pojo.getCardCodeProcessStatus());
         this.orderService.update(dbItem);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
-        if(storeDataCodes){
+        if(pojo.getCardCodeHashSet2Store() != null && pojo.getCardCodeHashSet2Store().size() > 0 && pojo.getCardCodeProcessStatus().equals(Constants.ORDER_CARD_CODE_COMPLETED_STATUS)){
             saveDataCodes4Order(dbItem, pojo.getCardCodeHashSet2Store());
         }
     }

@@ -31,6 +31,7 @@ public class OrderDTO implements Serializable{
     private UserDTO createdBy;
     private List<String> dataCodes2Render;
     private HashSet<String> cardCodeHashSet2Store;
+    private Integer cardCodeProcessStatus;
 
     public OrderDTO() {
     }
@@ -159,5 +160,13 @@ public class OrderDTO implements Serializable{
 
     public void setCardCodeHashSet2Store(HashSet<String> cardCodeHashSet2Store) {
         this.cardCodeHashSet2Store = cardCodeHashSet2Store;
+    }
+
+    public Integer getCardCodeProcessStatus() {
+        return cardCodeProcessStatus;
+    }
+
+    public void setCardCodeProcessStatus(Integer cardCodeProcessStatus) {
+        this.cardCodeProcessStatus = cardCodeProcessStatus;
     }
 }

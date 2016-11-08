@@ -16,6 +16,7 @@ import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
+import com.benluck.vms.mobifonedataseller.webapp.task.TaskTakeCardCode;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OrderValidator;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -233,8 +234,6 @@ public class OrderController extends ApplicationObjectSupport{
                         updatedBy.setUserId(SecurityUtils.getLoginUserId());
                         pojo.setCreatedBy(updatedBy);
 
-                        Calendar current = Calendar.getInstance();
-                        String yearCode = String.valueOf(current.get(Calendar.YEAR)).replace("0","");
                         String unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
 
                         if(unitPriceCode.length() > 2){
@@ -242,52 +241,27 @@ public class OrderController extends ApplicationObjectSupport{
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_support_unit_price_2_digit"));
                         }else{
 
-                            PackageDataCodeGenDTO packageDataCodeGenDTO = this.packageDataCodeGenService.findByUniqueCompositeKey(pojo.getPackageData().getPackageDataId(), Calendar.getInstance().get(Calendar.YEAR));
-                            Object[] cardCodeHSGenerationObject = null;
-
                             if (pojo.getOrderId() == null ){
+                                pojo = this.orderService.addItem(pojo);
 
-                                // Take Card Code from Cache
-                                if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
-
-                                    if(!Integer.valueOf(cardCodeHSGenerationObject[0].toString()).equals(pojo.getQuantity())){
-                                        throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
-                                    }
-
-                                    pojo.setCardCodeHashSet2Store((HashSet<String>)cardCodeHSGenerationObject[1]);
-                                }
-
-                                this.orderService.addItem(pojo);
-
-                                // Update Card Code size in DB nd Cachce
-                                if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
-                                }
+                                startTaskTakingCardCode(pojo.getOrderId(), unitPriceCode);
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                             } else {
                                 OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
 
-                                // Take Card Code from Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
+                                    pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
                                 }
-
-                                if(!Integer.valueOf(cardCodeHSGenerationObject[0].toString()).equals(pojo.getQuantity())){
-                                    throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
-                                }
-
-                                pojo.setCardCodeHashSet2Store((HashSet<String>)cardCodeHSGenerationObject[1]);
 
                                 this.orderService.updateItem(pojo);
 
                                 // Update Card Code size in DB nd Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
+                                    startTaskTakingCardCode(pojo.getOrderId(), unitPriceCode);
                                 }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
@@ -308,6 +282,12 @@ public class OrderController extends ApplicationObjectSupport{
         preferenceData(mav);
         mav.addObject("remainingBalance", calculateRemainingBalance());
         return mav;
+    }
+
+    private void startTaskTakingCardCode(Long orderId, String unitPriceCode){
+        TaskTakeCardCode taskTakeCardCode = new TaskTakeCardCode(orderId, unitPriceCode);
+        Timer timer = new Timer(true);
+        timer.schedule(taskTakeCardCode, 0);
     }
 
     private Double calculateRemainingBalance(){

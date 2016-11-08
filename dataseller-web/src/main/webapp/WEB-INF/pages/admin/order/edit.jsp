@@ -154,6 +154,7 @@
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
                     <form:hidden id="orderId" path="pojo.orderId" />
+                    <form:hidden path="pojo.cardCodeProcessStatus" />
                 </form:form>
             </div>
         </div>

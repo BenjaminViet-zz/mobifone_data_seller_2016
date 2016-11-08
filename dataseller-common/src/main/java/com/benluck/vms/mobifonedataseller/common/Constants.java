@@ -141,6 +141,11 @@ public class Constants {
     public static final Integer ORDER_STATUS_PROCESSING = 0;
     public static final Integer ORDER_STATUS_FINISH = 1;
 
+    public static final Integer ORDER_CARD_CODE_NOT_START_STATUS = 0;
+    public static final Integer ORDER_CARD_CODE_PROCESSING_STATUS = 1;
+    public static final Integer ORDER_CARD_CODE_COMPLETED_STATUS = 2;
+    public static final Integer ORDER_CARD_CODE_FAILED_STATUS = 3;
+
     public static final Integer ORDER_ACTIVE_STATUS_ALIVE = 0;
     public static final Integer ORDER_ACTIVE_STATUS_DIE = 1;
 

@@ -164,16 +164,20 @@ public class DataCodeUtil {
             if(!tmpUnitPriceCodeWithBatchIndex.toString().equals("NULL")){
                 tmpCardCodeSizeRemaining = mapCardCodeRemainingHS.get(tmpUnitPriceCodeWithBatchIndex.toString());
                 updateRemainingCardCodeSizeOnDB(packageDataCodeGenId, Integer.valueOf(tmpUnitPriceCodeWithBatchIndex.toString().substring(tmpUnitPriceCodeWithBatchIndex.toString().length() - 1, tmpUnitPriceCodeWithBatchIndex.toString().toString().length())), tmpCardCodeSizeRemaining.size());
-                updateRemainingCardCodeSizeOnCache(redisKey, tmpUnitPriceCodeWithBatchIndex.toString(), tmpCardCodeSizeRemaining);
+                if(Config.getInstance().getProperty("redis.turn_on").equals("true")){
+                    updateRemainingCardCodeSizeOnCache(redisKey, tmpUnitPriceCodeWithBatchIndex.toString(), tmpCardCodeSizeRemaining);
+                }
             }
         }
     }
 
     private static void updateRemainingCardCodeSizeOnDB(Long packageDataCodeGenId, int batchIndex, int remainingCardCodeSize) throws ObjectNotFoundException, DuplicateKeyException{
+        logger.info("Updating Card Code Size on DB");
         packageCodeDataGenService.updateBatchRemainingCardCodeSize(packageDataCodeGenId, batchIndex, remainingCardCodeSize);
     }
 
     private static void updateRemainingCardCodeSizeOnCache(String redisKey, String redisHashKey, HashSet<String> cardCodeSizeRemaining){
+        logger.info("Updating Card Code Size on Redis DB");
         redisTemplate.opsForHash().put(redisKey, redisHashKey, cardCodeSizeRemaining);
     }
 
