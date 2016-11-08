@@ -30,8 +30,7 @@ public class OrderDTO implements Serializable{
     private Timestamp lastModified;
     private UserDTO createdBy;
     private List<String> dataCodes2Render;
-    private HashSet<String> dataCodeHasSet2Store;
-    private Map<String, HashSet<String>> mapBatchIndexAndCardCodeHSRemaining;
+    private HashSet<String> cardCodeHashSet2Store;
 
     public OrderDTO() {
     }
@@ -154,19 +153,11 @@ public class OrderDTO implements Serializable{
         this.dataCodes2Render = dataCodes2Render;
     }
 
-    public HashSet<String> getDataCodeHasSet2Store() {
-        return dataCodeHasSet2Store;
+    public HashSet<String> getCardCodeHashSet2Store() {
+        return cardCodeHashSet2Store;
     }
 
-    public void setDataCodeHasSet2Store(HashSet<String> dataCodeHasSet2Store) {
-        this.dataCodeHasSet2Store = dataCodeHasSet2Store;
-    }
-
-    public Map<String, HashSet<String>> getMapBatchIndexAndCardCodeHSRemaining() {
-        return mapBatchIndexAndCardCodeHSRemaining;
-    }
-
-    public void setMapBatchIndexAndCardCodeHSRemaining(Map<String, HashSet<String>> mapBatchIndexAndCardCodeHSRemaining) {
-        this.mapBatchIndexAndCardCodeHSRemaining = mapBatchIndexAndCardCodeHSRemaining;
+    public void setCardCodeHashSet2Store(HashSet<String> cardCodeHashSet2Store) {
+        this.cardCodeHashSet2Store = cardCodeHashSet2Store;
     }
 }

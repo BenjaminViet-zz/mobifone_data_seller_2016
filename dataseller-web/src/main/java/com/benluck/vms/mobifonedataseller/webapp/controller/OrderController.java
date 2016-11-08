@@ -250,19 +250,19 @@ public class OrderController extends ApplicationObjectSupport{
                                 // Take Card Code from Cache
                                 if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
                                     cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
-                                }
 
-                                if(Integer.valueOf(cardCodeHSGenerationObject[0].toString()) != pojo.getQuantity()){
-                                    throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
-                                }
+                                    if(!Integer.valueOf(cardCodeHSGenerationObject[0].toString()).equals(pojo.getQuantity())){
+                                        throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
+                                    }
 
-                                pojo.setMapBatchIndexAndCardCodeHSRemaining((Map<String, HashSet<String>>)cardCodeHSGenerationObject[1]);
+                                    pojo.setCardCodeHashSet2Store((HashSet<String>)cardCodeHSGenerationObject[1]);
+                                }
 
                                 this.orderService.addItem(pojo);
 
                                 // Update Card Code size in DB nd Cachce
                                 if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, pojo.getMapBatchIndexAndCardCodeHSRemaining());
+                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
                                 }
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
@@ -276,18 +276,18 @@ public class OrderController extends ApplicationObjectSupport{
                                     cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, pojo.getQuantity());
                                 }
 
-                                if(Integer.valueOf(cardCodeHSGenerationObject[0].toString()) != pojo.getQuantity()){
+                                if(!Integer.valueOf(cardCodeHSGenerationObject[0].toString()).equals(pojo.getQuantity())){
                                     throw new Exception("Error when taking Card Code List from Cache. Details: Not matching request size and generated size. ");
                                 }
 
-                                pojo.setMapBatchIndexAndCardCodeHSRemaining((Map<String, HashSet<String>>)cardCodeHSGenerationObject[1]);
+                                pojo.setCardCodeHashSet2Store((HashSet<String>)cardCodeHSGenerationObject[1]);
 
                                 this.orderService.updateItem(pojo);
 
-                                // Update Card Code size in DB nd Cachce
+                                // Update Card Code size in DB nd Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, pojo.getMapBatchIndexAndCardCodeHSRemaining());
+                                    DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
                                 }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
@@ -300,7 +300,7 @@ public class OrderController extends ApplicationObjectSupport{
                 command.setPojo(this.orderService.findById(command.getPojo().getOrderId()));
             }
         }catch (Exception e){
-            logger.error("Error when add or update OrderId: " + e.getMessage());
+            logger.error("Error when add or update Order. \nDetails: " + e.getMessage());
             mav.addObject(Constants.ALERT_TYPE, "danger");
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }

@@ -58,12 +58,12 @@ public class DataCodeUtil {
 
         Map<String, HashSet<String>> mapCardCodeHSRemainingInBatches = new HashMap<String, HashSet<String>>();
         HashSet<String> tmpCardCodeHSFromCache = null;
-        int cardCodeSizeCounter = 1;
+        int cardCodeSizeCounter = 0;
 
         if(Config.getInstance().getProperty("redis.turn_on").equals("false")){
             tmpCardCodeHSFromCache = getUsedDataCodeHashSet();
             mapCardCodeHSRemainingInBatches.put("NULL", tmpCardCodeHSFromCache);
-            return new Object[]{tmpCardCodeHSFromCache.size(), mapCardCodeHSRemainingInBatches};
+            return new Object[]{tmpCardCodeHSFromCache.size(), tmpCardCodeHSFromCache, mapCardCodeHSRemainingInBatches};
         }else{
             HashSet<String> usedCardCode21610HashSet = new HashSet<String>();
             Calendar current = Calendar.getInstance();
@@ -151,7 +151,7 @@ public class DataCodeUtil {
                 logger.error(e.getMessage());
             }
 
-            return new Object[]{cardCodeSizeCounter, mapCardCodeHSRemainingInBatches};
+            return new Object[]{cardCodeSizeCounter, cardCodeHashSet, mapCardCodeHSRemainingInBatches};
         }
     }
 
@@ -163,8 +163,8 @@ public class DataCodeUtil {
             tmpUnitPriceCodeWithBatchIndex = new StringBuilder(ito.next());
             if(!tmpUnitPriceCodeWithBatchIndex.toString().equals("NULL")){
                 tmpCardCodeSizeRemaining = mapCardCodeRemainingHS.get(tmpUnitPriceCodeWithBatchIndex.toString());
+                updateRemainingCardCodeSizeOnDB(packageDataCodeGenId, Integer.valueOf(tmpUnitPriceCodeWithBatchIndex.toString().substring(tmpUnitPriceCodeWithBatchIndex.toString().length() - 1, tmpUnitPriceCodeWithBatchIndex.toString().toString().length())), tmpCardCodeSizeRemaining.size());
                 updateRemainingCardCodeSizeOnCache(redisKey, tmpUnitPriceCodeWithBatchIndex.toString(), tmpCardCodeSizeRemaining);
-                updateRemainingCardCodeSizeOnDB(packageDataCodeGenId, Integer.valueOf(tmpUnitPriceCodeWithBatchIndex.toString().substring(tmpUnitPriceCodeWithBatchIndex.toString().length() - 2, tmpUnitPriceCodeWithBatchIndex.toString().toString().length())), tmpCardCodeSizeRemaining.size());
             }
         }
     }

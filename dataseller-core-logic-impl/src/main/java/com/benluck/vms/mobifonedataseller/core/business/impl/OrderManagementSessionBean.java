@@ -79,7 +79,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
 
         if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-            saveDataCodes4Order(entity, pojo.getMapBatchIndexAndCardCodeHSRemaining());
+            saveDataCodes4Order(entity, pojo.getCardCodeHashSet2Store());
         }
     }
 
@@ -115,11 +115,11 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
         if(storeDataCodes){
-            saveDataCodes4Order(dbItem, pojo.getMapBatchIndexAndCardCodeHSRemaining());
+            saveDataCodes4Order(dbItem, pojo.getCardCodeHashSet2Store());
         }
     }
 
-    private void saveDataCodes4Order(OrderEntity orderEntity, Map<String, HashSet<String>> mapCardCodeSizeWithUnitPriceCodeAndBatchIndex) throws DuplicateKeyException{
+    private void saveDataCodes4Order(OrderEntity orderEntity, HashSet<String> cardCodeHashSetList2Store) throws DuplicateKeyException{
         Integer totalDataCode = this.orderDataCodeService.countTotal();
         if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
             totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + 1;
@@ -134,40 +134,31 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         expiredDate.add(Calendar.DAY_OF_YEAR, expiredDays);
         Timestamp expiredDate4CardCode = new Timestamp(expiredDate.getTimeInMillis());
 
-        Iterator<String> ito = mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.keySet().iterator();
-        HashSet<String> tmpCardCodeHS = null;
         StringBuilder tmpCardCode = null;
         StringBuilder serial = null;
-
-        for(int i = 0; i < mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.size(); i++){
-
-        }
+        Iterator<String> ito = cardCodeHashSetList2Store.iterator();
 
         while (ito.hasNext()){
-            tmpCardCodeHS = (HashSet<String>)mapCardCodeSizeWithUnitPriceCodeAndBatchIndex.get(ito.next());
-            Iterator<String> cardCodeHSIterator = tmpCardCodeHS.iterator();
-            while (cardCodeHSIterator.hasNext()){
-                tmpCardCode = new StringBuilder(cardCodeHSIterator.next());
+            tmpCardCode = new StringBuilder(ito.next());
 
-                // Take same 5 characters in Card Code.
-                serial = new StringBuilder(tmpCardCode.substring(0, 5));
+            // Take same 5 characters in Card Code.
+            serial = new StringBuilder(tmpCardCode.substring(0, 5));
 
-                // Generate full Serial.
-                if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
-                    serial.append("00");
-                }else if(totalDataCode > 99999 && totalDataCode < 999999){
-                    serial.append("0");
-                }
-                serial.append(totalDataCode.toString());
-
-                OrderDataCodeEntity entity = new OrderDataCodeEntity();
-                entity.setOrder(orderEntity);
-                entity.setSerial(Long.valueOf(serial.toString()));
-                entity.setDataCode(Long.valueOf(tmpCardCode.toString()));
-                entity.setExpiredDate(expiredDate4CardCode);
-                this.orderDataCodeService.save(entity);
-                totalDataCode++;
+            // Generate full Serial.
+            if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
+                serial.append("00");
+            }else if(totalDataCode > 99999 && totalDataCode < 999999){
+                serial.append("0");
             }
+            serial.append(totalDataCode.toString());
+
+            OrderDataCodeEntity entity = new OrderDataCodeEntity();
+            entity.setOrder(orderEntity);
+            entity.setSerial(Long.valueOf(serial.toString()));
+            entity.setDataCode(Long.valueOf(tmpCardCode.toString()));
+            entity.setExpiredDate(expiredDate4CardCode);
+            this.orderDataCodeService.save(entity);
+            totalDataCode++;
         }
     }
 

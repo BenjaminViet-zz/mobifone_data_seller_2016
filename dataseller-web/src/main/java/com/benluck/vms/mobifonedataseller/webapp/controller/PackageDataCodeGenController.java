@@ -44,12 +44,13 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
                              @RequestParam(value = "year", required = false) Integer year,
                              HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/packagedatacodegen/list");
+        PackageDataCodeGenDTO pojo = new PackageDataCodeGenDTO();
 
-        if(year != null){
-            PackageDataCodeGenDTO pojo = new PackageDataCodeGenDTO();
-            pojo.setYear(year);
-            command.setPojo(pojo);
+        if(year == null){
+            year = Calendar.getInstance().get(Calendar.YEAR);
         }
+        pojo.setYear(year);
+        command.setPojo(pojo);
 
         executeSearch(command, request);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
