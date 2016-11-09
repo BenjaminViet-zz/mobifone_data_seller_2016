@@ -61,6 +61,7 @@ CREATE TABLE MOBI_DATA_KHDN
    GPKD                   VARCHAR(100)                  NOT NULL,
    IssuedContractDate     DATE                          NOT NULL,
    STB_VAS                VARCHAR(50)                   NOT NULL,
+   CUST_ID                NUMBER(24,0)                  NOT NULL,
    CONSTRAINT "MOBI_DATA_KHDN_MST_UQ" UNIQUE(MST),
    CONSTRAINT "MOBI_DATA_KHDN_GPKD_UQ" UNIQUE(GPKD)
 )  TABLESPACE "USERS";
@@ -135,6 +136,51 @@ CREATE TABLE MOBI_DATA_PACKAGEDATA_CODE_GEN
    CONSTRAINT "PACKAGE_DATA_FK" FOREIGN KEY(PackageDataID) REFERENCES MOBI_DATA_PACKAGE_DATA(PACKAGEDATAID)
 )  TABLESPACE "USERS";
 
+CREATE TABLE MOBI_DATA_CODE_HISTORY
+(
+   Trans_ID               NUMBER(24,0)                  NOT NULL PRIMARY KEY,
+   Sub_ID                 NUMBER(24,0)                  NOT NULL,
+   Isdn                   VARCHAR(20)                   NOT NULL,
+   Reg_DateTime           TIMESTAMP                     NOT NULL,
+   Cust_ID                NUMBER(24,0)                  NOT NULL,
+   Name                   VARCHAR(200)                  NOT NULL,
+   STA_DateTIme           TIMESTAMP                     NOT NULL,
+   TIN                    VARCHAR(200)                  NOT NULL,
+   Insert_DateTime        TIMESTAMP                     DEFAULT SYSDATE NOT NULL
+)  TABLESPACE "USERS";
+
+CREATE TABLE MOBI_DATA_COST
+(
+   CostID                 NUMBER(24,0)                  NOT NULL PRIMARY KEY,
+   Shop_Code              VARCHAR(20)                   NOT NULL,
+   Shop_Name              VARCHAR(100)                  NOT NULL,
+   Emp_Code               VARCHAR(50)                   NOT NULL,
+   Cust_ID                NUMBER(24,0)                  NOT NULL,
+   Sub_ID                 NUMBER(24,0)                  NOT NULL,
+   Isdn                   VARCHAR(20)                   NOT NULL,
+   Name                   VARCHAR(200)                  NOT NULL,
+   BUS_Type               VARCHAR(20)                   NOT NULL,
+   Cust_Type              VARCHAR(20)                   NOT NULL,
+   STA_DateTime           TIMESTAMP                     NOT NULL,
+   ACT_Status             VARCHAR(2)                    NOT NULL,
+   Status                 VARCHAR(2)                    NOT NULL,
+   Issue_Month            TIMESTAMP                     NOT NULL,
+   Payment                FLOAT                         NOT NULL,
+   Development_Phase1     VARCHAR(1)                    NOT NULL,
+   Development_Amount1    FLOAT                         NOT NULL,
+   Development_Phase2     VARCHAR(1)                    NOT NULL,
+   Development_Amount2    FLOAT                         NOT NULL,
+   Development_Phase3     VARCHAR(1)                    NOT NULL,
+   Development_Amount3    FLOAT                         NOT NULL,
+   Maintain_Phase1        VARCHAR(2)                    NOT NULL,
+   Maintain_Amount1       FLOAT                         NOT NULL,
+   Maintain_Phase2        VARCHAR(2)                    NOT NULL,
+   Maintain_Amount2       FLOAT                         NOT NULL,
+   Maintain_Phase3        VARCHAR(2)                    NOT NULL,
+   Maintain_Amount3       FLOAT                         NOT NULL,
+   Insert_DateTime        TIMESTAMP                     NOT NULL
+)  TABLESPACE "USERS";
+
 CREATE SEQUENCE  MOBI_DATA_USERGROUP_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 4 CACHE 20 NOORDER  NOCYCLE ;
 CREATE SEQUENCE  MOBI_DATA_PERMISSION_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 5 CACHE 20 NOORDER  NOCYCLE ;
 CREATE SEQUENCE  MOBI_DATA_USER_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 2 CACHE 20 NOORDER  NOCYCLE ;
@@ -145,6 +191,8 @@ CREATE SEQUENCE  MOBI_DATA_ORDER_SEQ  MINVALUE 1 MAXVALUE 9999999999999999999999
 CREATE SEQUENCE  MOBI_DATA_ORDER_DATA_CODE_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
 CREATE SEQUENCE  MOBI_DATA_ORDER_HISTORY_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
 CREATE SEQUENCE  MOBI_DATA_PDCGEN_PKD_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+CREATE SEQUENCE  MOBI_DATA_CODE_HISTORY_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
+CREATE SEQUENCE  MOBI_DATA_COST_SEQ  MINVALUE 1 MAXVALUE 999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE ;
 
 commit;
 

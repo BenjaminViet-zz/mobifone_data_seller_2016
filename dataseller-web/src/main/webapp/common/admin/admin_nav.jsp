@@ -72,20 +72,18 @@
                     </security:authorize>
                     <li><a><i class="fa fa-pie-chart" aria-hidden="true"></i> <fmt:message key="report.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="<c:url value="${prefix}/report/tong_hop_chi_phi_phat_trien_duy_tri.html"/> "><fmt:message key="report.baocaotonghopchiphiphattrien_duytri" /></a></li>
-                            <li><a href="<c:url value="${prefix}/report/chi_tiet_chi_phi_phat_trien_duy_tri.html"/> "><fmt:message key="report.baocaochitietchiphiphattrien_duytri" /></a></li>
-                            <li><a href="<c:url value="${prefix}/report/theo_doi_khach_hang.html"/> "><fmt:message key="report.theodoihopdongkhachang" /></a></li>
+                            <li><a href="<c:url value="${prefix}/reportGeneralExpense/list.html"/> "><fmt:message key="report.baocaotonghopchiphiphattrien_duytri" /></a></li>
+                            <li><a href="<c:url value="${prefix}/reportGeneralExpense/list.html"/> "><fmt:message key="report.baocaochitietchiphiphattrien_duytri" /></a></li>
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-pie-chart" aria-hidden="true"></i> <fmt:message key="cost_history.manager" /> <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="<c:url value="${prefix}/reportCostPaymentHistory.html"/> "><fmt:message key="cost_history.list" /></a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
         <!-- /sidebar menu -->
-
-        <!-- /menu footer buttons -->
-        <div class="sidebar-footer hidden-small">
-
-        </div>
-        <!-- /menu footer buttons -->
     </div>
 </div>

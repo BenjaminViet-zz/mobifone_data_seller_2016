@@ -57,6 +57,7 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
         entity.setGpkd(pojo.getGpkd());
         entity.setIssuedContractDate(pojo.getIssuedContractDate());
         entity.setStb_vas(pojo.getStb_vas());
+        entity.setCustId(pojo.getCustId());
         this.khdnService.save(entity);
     }
 
@@ -68,6 +69,7 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
         dbItem.setMst(pojo.getMst());
         dbItem.setIssuedContractDate(pojo.getIssuedContractDate());
         dbItem.setStb_vas(pojo.getStb_vas());
+        dbItem.setCustId(pojo.getCustId());
         this.khdnService.update(dbItem);
     }
 

@@ -51,7 +51,7 @@ public class KHDNValidator extends ApplicationObjectSupport implements Validator
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.name", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("label.tenDoanhNghiep")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.mst", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("admin.khdn.label.mst")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.gpkd", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("admin.khdn.label.gpkd")}, "non-empty value required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.issuedContractDate", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("admin.khdn.label.issuedContractDate")}, "non-empty value required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "issuedContractDate", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("admin.khdn.label.issuedContractDate")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.stb_vas", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("admin.khdn.label.stb_vas")}, "non-empty value required.");
     }
 

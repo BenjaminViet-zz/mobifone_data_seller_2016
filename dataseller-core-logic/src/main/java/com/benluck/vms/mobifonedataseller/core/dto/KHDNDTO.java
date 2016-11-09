@@ -19,6 +19,7 @@ public class KHDNDTO implements Serializable{
     private String gpkd;
     private Timestamp issuedContractDate;
     private String stb_vas;
+    private Long custId;
 
     public KHDNDTO() {
     }
@@ -76,5 +77,13 @@ public class KHDNDTO implements Serializable{
 
     public void setStb_vas(String stb_vas) {
         this.stb_vas = stb_vas;
+    }
+
+    public Long getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Long custId) {
+        this.custId = custId;
     }
 }

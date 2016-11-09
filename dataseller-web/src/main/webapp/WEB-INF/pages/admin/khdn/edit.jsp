@@ -107,6 +107,15 @@
                                 <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="custId">
+                            <fmt:message key="admin.khdn.custId" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="custId" path="pojo.custId" cssClass="required nohtml form-control"></form:input>
+                            <form:errors for="gpkd" path="pojo.custId" cssClass="error-inline-validate"/>
+                        </div>
+                    </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;

@@ -22,6 +22,7 @@ public class KHDNEntity {
     private String gpkd;
     private Timestamp issuedContractDate;
     private String stb_vas;
+    private Long custId;
 
     @Column(name = "KHDNID")
     @Id
@@ -85,6 +86,16 @@ public class KHDNEntity {
         this.stb_vas = stb_vas;
     }
 
+    @Column(name = "CUST_ID")
+    @Basic
+    public Long getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Long custId) {
+        this.custId = custId;
+    }
+
     @Override
     public int hashCode() {
         int result = KHDNId != null ? KHDNId.hashCode() : 0;
@@ -93,6 +104,7 @@ public class KHDNEntity {
         result = 31 * result + (gpkd != null ? gpkd.hashCode() : 0);
         result = 31 * result + (issuedContractDate != null ? issuedContractDate.hashCode() : 0);
         result = 31 * result + (stb_vas != null ? stb_vas.hashCode() : 0);
+        result = 31 * result + (custId != null ? custId.hashCode() : 0);
         return result;
     }
 
@@ -109,6 +121,7 @@ public class KHDNEntity {
         if (gpkd != null ? !gpkd.equals(that.gpkd) : that.gpkd != null) return false;
         if (issuedContractDate != null ? !issuedContractDate.equals(that.issuedContractDate) : that.issuedContractDate != null) return false;
         if (stb_vas != null ? !stb_vas.equals(that.stb_vas) : that.stb_vas != null) return false;
+        if (custId != null ? !custId.equals(that.custId) : that.custId != null) return false;
 
         return true;
     }
