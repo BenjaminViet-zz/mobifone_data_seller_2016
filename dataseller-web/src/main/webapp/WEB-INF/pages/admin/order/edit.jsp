@@ -193,15 +193,13 @@
         $totalEl.text(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
         $totalEl.mask('000,000,000,000,000,000', {
             reverse: true
-        })
+        });
 
 
         /*-------------------------------*/
         /* Calculator order total*/
         /*-------------------------------*/
-        $('.money').mask('000,000,000,000,000,000', {
-            reverse: true
-        });
+        jQueryMask();
 
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -209,22 +207,13 @@
 
         $('#quantity').keyup(function() {
             $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val())  );
-            $('.money').mask('000,000,000,000,000,000', {
-                reverse: true
-            });
+            jQueryMask();
         });
 
         $('#unitPrice').keyup(function() {
             $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
-            $('.money').mask('000,000,000,000,000,000', {
-                reverse: true
-            });
+            jQueryMask();
         });
-
-        $('#packageData').on('change', function(){
-//            console.log( $('#quantity').unmask().val() * $('#unitPrice').unmask().val() );
-        })
-
         /*-------------------------------*/
         /* //Calculator order total*/
         /*-------------------------------*/
@@ -247,6 +236,9 @@
 
         $('#packageData').on('change', function(){
             $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
+
+            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
+            jQueryMask();
         });
         
         $('#orderId').data("remainingBalance", '${remainingBalance}');

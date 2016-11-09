@@ -131,8 +131,10 @@
 </div>
 
 <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        jQueryMaskNonThousandFormat();
+    });
 
-    $('.money').mask('00000000000000000000000', {reverse: true});
 
     function resetForm(){
          $("input[type='text']").val('');

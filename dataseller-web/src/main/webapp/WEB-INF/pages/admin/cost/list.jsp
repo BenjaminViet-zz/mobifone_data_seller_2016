@@ -165,4 +165,9 @@
     $(document).ready(function(){
        jQueryMask();
     });
+
+    function resetForm(){
+        $("input[type='text']").val('');
+        selectFirstItemSelect2('#KHDN');
+    }
 </script>

@@ -128,8 +128,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-
-        $('.money').mask('00000000000000000000000', {reverse: true});
+        jQueryMaskNonThousandFormat();
 
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
