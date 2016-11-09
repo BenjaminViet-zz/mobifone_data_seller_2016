@@ -5,9 +5,7 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.*;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
-import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
@@ -37,6 +35,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.mobifone.sercurity.MobiFoneSercurity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,8 +63,6 @@ public class OrderController extends ApplicationObjectSupport{
     private KHDNManagementLocalBean KHDNService;
     @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
-    @Autowired
-    private PackageDataCodeGenManagementLocalBean packageDataCodeGenService;
     @Autowired
     private OrderValidator validator;
 
@@ -178,7 +175,8 @@ public class OrderController extends ApplicationObjectSupport{
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getSerial().toString());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString().getBytes());
+//        resValue[columnIndex++] = new CellValue(CellDataType.STRING, MobiFoneSercurity.encode(dto.getDataCode().toString()));
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getValue());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getVolume());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getDuration());
