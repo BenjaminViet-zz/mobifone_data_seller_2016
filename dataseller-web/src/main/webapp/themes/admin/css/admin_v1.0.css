@@ -430,3 +430,7 @@ table tr td {
 .site_title {
     padding-left: 25px !important;
 }
+
+table>thead>tr>th.middle-vertical{
+    vertical-align: middle;
+}

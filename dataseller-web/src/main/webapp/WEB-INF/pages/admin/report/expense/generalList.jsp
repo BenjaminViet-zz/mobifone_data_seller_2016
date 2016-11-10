@@ -135,4 +135,31 @@
         $('#crudaction').val('${Constants.ACTION_EXPORT}');
         $('#listForm').submit();
     }
+
+    function restructureTableHeader(){
+        var $tableEl = $('#tableList');
+        var newTheadDOM = $("<thead>" +
+                                "<tr>"  +
+                                    "<th class='table_header text-center middle-vertical' rowspan='2'>" + '<fmt:message key="label.stt" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical' rowspan='2'>" + '<fmt:message key="general_expense_report.shop_code" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical' rowspan='2'>" + '<fmt:message key="general_expense_report.shop_name" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical' colspan='3'>" + '<fmt:message key="general_expense_report.development_fee" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical' colspan='3'>" + '<fmt:message key="general_expense_report.maintain_fee" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical' rowspan='2'>" + '<fmt:message key="general_expense_report.total" />' + "</th>" +
+                                "</tr>" +
+                                "<tr>"  +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.development_phase1" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.development_phase2" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.development_phase3" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.maintain_phase1" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.maintain_phase2" />' + "</th>" +
+                                    "<th class='table_header text-center middle-vertical'>" + '<fmt:message key="general_expense_report.maintain_phase3" />' + "</th>" +
+                                "</tr>" +
+                            "</thead>");
+        $tableEl.find("thead").replaceWith(newTheadDOM);
+    }
+
+    $(document).ready(function(){
+        restructureTableHeader();
+    });
 </script>
