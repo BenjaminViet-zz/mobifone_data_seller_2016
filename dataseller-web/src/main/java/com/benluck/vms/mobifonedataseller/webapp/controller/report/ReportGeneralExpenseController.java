@@ -83,7 +83,7 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("custID", command.getPojo().getCustId());
 
-        Object[] resultObject = this.costService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(),command.getReportMaxPageItems());
+        Object[] resultObject = this.costService.searchGeneralReportDataByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<MBDReportGeneralExpenseDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());
@@ -97,7 +97,7 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("custID", command.getPojo().getCustId());
 
-        Object[] resultObject = this.costService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(),command.getReportMaxPageItems());
+        Object[] resultObject = this.costService.searchGeneralReportDataByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         List<MBDReportGeneralExpenseDTO> dtoList = (List<MBDReportGeneralExpenseDTO>)resultObject[1];
 
         if(dtoList.size() == 0){

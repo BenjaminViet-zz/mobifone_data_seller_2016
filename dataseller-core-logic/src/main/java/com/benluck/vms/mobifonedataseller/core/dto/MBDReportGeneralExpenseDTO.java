@@ -22,7 +22,6 @@ public class MBDReportGeneralExpenseDTO implements Serializable{
     private Double maintainAmount1;
     private Double maintainAmount2;
     private Double maintainAmount3;
-    private Double total;
 
     public Long getCostId() {
         return costId;
@@ -102,13 +101,5 @@ public class MBDReportGeneralExpenseDTO implements Serializable{
 
     public void setMaintainAmount3(Double maintainAmount3) {
         this.maintainAmount3 = maintainAmount3;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
     }
 }

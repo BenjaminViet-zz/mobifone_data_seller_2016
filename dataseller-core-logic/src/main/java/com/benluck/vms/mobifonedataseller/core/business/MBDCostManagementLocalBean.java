@@ -13,6 +13,26 @@ import java.util.Map;
 @Local
 public interface MBDCostManagementLocalBean {
 
-    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+    /**
+     * Search genral report data
+     * @param properties
+     * @param sortExpression
+     * @param sortDirection
+     * @param firstItem
+     * @param reportMaxPageItems
+     * @return
+     */
+    Object[] searchGeneralReportDataByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+
+    /**
+     * Search detail report data
+     * @param properties
+     * @param sortExpression
+     * @param sortDirection
+     * @param firstItem
+     * @param reportMaxPageItems
+     * @return
+     */
+    Object[] searchDetailReportDataByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 
 }
