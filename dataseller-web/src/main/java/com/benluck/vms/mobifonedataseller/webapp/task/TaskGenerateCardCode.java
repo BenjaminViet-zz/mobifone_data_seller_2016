@@ -6,6 +6,7 @@ import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -147,7 +148,7 @@ public class TaskGenerateCardCode extends TimerTask{
             }else{
                 tmpCardCode.append(i);
             }
-            cardCodeHashSet.add(tmpCardCode.toString());
+            cardCodeHashSet.add(MobiFoneSecurityBase64Util.encode(tmpCardCode.toString()));
         }
         return cardCodeHashSet;
     }

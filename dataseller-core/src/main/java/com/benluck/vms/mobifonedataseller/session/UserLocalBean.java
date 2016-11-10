@@ -1,7 +1,6 @@
 package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.UserEntity;
-import sun.misc.VMSupport;
 
 import javax.ejb.ObjectNotFoundException;
 import java.util.List;

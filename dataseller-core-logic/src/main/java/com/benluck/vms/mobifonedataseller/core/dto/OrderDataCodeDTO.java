@@ -15,7 +15,7 @@ public class OrderDataCodeDTO implements Serializable{
     private Long orderDataCodeId;
     private OrderDTO order;
     private Long serial;
-    private Long dataCode;
+    private String dataCode;
     private Timestamp expiredDate;
 
     public Long getOrderDataCodeId() {
@@ -42,11 +42,11 @@ public class OrderDataCodeDTO implements Serializable{
         this.serial = serial;
     }
 
-    public Long getDataCode() {
+    public String getDataCode() {
         return dataCode;
     }
 
-    public void setDataCode(Long dataCode) {
+    public void setDataCode(String dataCode) {
         this.dataCode = dataCode;
     }
 

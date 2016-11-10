@@ -91,7 +91,7 @@ CREATE TABLE MOBI_DATA_ORDER_DATA_CODE
    OrderDataCodeID      NUMBER(24,0)                    NOT NULL PRIMARY KEY,
    OrderID              NUMBER(24,0)                    NOT NULL,
    Serial               NUMBER(24,0)                    NOT NULL,
-   DataCode             NUMBER(24,0)                          NOT NULL,
+   DataCode             VARCHAR(100)                   NOT NULL,
    ExpiredDate          TIMESTAMP                       NOT NULL,
    CONSTRAINT "ORDER_DATA_CODE_ORDER_FK" FOREIGN KEY(OrderID) REFERENCES MOBI_DATA_ORDER(OrderID),
    CONSTRAINT "ORDER_DATA_CODE_UQ" UNIQUE(DataCode)

@@ -77,6 +77,9 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.search" /></a>
+                            <security:authorize access="hasAnyAuthority('ADMIN')">
+                                <input id="adminExport4KHDN" type="checkbox" class="flat" value="${Constants.ADMIN_EXPORT_4_KHDN}" ><fmt:message key="order.admin_export_4_khdn" /></input>
+                            </security:authorize>
                         </div>
                     </div>
                     <input id="crudaction" type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>" />
@@ -172,6 +175,13 @@
     }
 
     function exportExcel(orderId){
-        document.location.href = '${formUrl}?pojo.orderId=' + orderId + '&crudaction=<%=Constants.ACTION_EXPORT%>';
+        var url = '${formUrl}?pojo.orderId=' + orderId + '&crudaction=<%=Constants.ACTION_EXPORT%>';
+
+        var $adminExport4KHDN = $('#adminExport4KHDN');
+        if($adminExport4KHDN.length > 0 && $adminExport4KHDN.is(':checked')){
+            url += '&pojo.adminExport4KHDN=true';
+        }
+
+        document.location.href = url;
     }
 </script>

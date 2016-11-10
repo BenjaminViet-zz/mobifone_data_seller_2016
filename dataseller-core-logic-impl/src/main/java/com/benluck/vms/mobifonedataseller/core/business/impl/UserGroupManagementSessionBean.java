@@ -42,7 +42,7 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
     @Override
     public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems) {
         StringBuilder whereClause = new StringBuilder();
-        whereClause.append("A.code != '" + Constants.ADMIN_ROLE + "'");
+        whereClause.append("A.code NOT IN ('" + Constants.ADMIN_ROLE + "','" + Constants.USERGROUP_KHDN + "')");
 
         Object[] resultObject = this.userGroupService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems, whereClause.toString());
         List<UserGroupDTO> dtoList = UserGroupBeanUtil.entityList2DTOList((List<UserGroupEntity>) resultObject[1]);

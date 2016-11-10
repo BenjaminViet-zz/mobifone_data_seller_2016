@@ -32,6 +32,7 @@ public class OrderDTO implements Serializable{
     private List<String> dataCodes2Render;
     private HashSet<String> cardCodeHashSet2Store;
     private Integer cardCodeProcessStatus;
+    private boolean adminExport4KHDN = false;
 
     public OrderDTO() {
     }
@@ -168,5 +169,13 @@ public class OrderDTO implements Serializable{
 
     public void setCardCodeProcessStatus(Integer cardCodeProcessStatus) {
         this.cardCodeProcessStatus = cardCodeProcessStatus;
+    }
+
+    public boolean isAdminExport4KHDN() {
+        return adminExport4KHDN;
+    }
+
+    public void setAdminExport4KHDN(boolean adminExport4KHDN) {
+        this.adminExport4KHDN = adminExport4KHDN;
     }
 }

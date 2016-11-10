@@ -121,8 +121,6 @@ public class DataCodeUtil {
                             }
 
                             mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), new HashSet<String>());
-//                            updateRemainingCardCodeSizeOnDB(packageDataCodeGenDTO.getPackageDataCodeGenId(), batchIndex, 0);
-//                            updateRemainingCardCodeSizeOnCache(yearCode, tmpUnitPriceCodeWithBatchIndex.toString(), new HashSet<String>());
 
                             if(cardCodeSizeCounter == numberOfCardCode.intValue()){
                                 break;
@@ -141,8 +139,6 @@ public class DataCodeUtil {
                             }
 
                             mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
-//                            updateRemainingCardCodeSizeOnDB(packageDataCodeGenDTO.getPackageDataCodeGenId(), batchIndex, batchSizeRemaining - remainingSizeOnDemand);
-//                            updateRemainingCardCodeSizeOnCache(yearCode, tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
                             break;
                         }
                     }

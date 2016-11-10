@@ -12,6 +12,7 @@ import com.benluck.vms.mobifonedataseller.domain.*;
 import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 
 import javax.ejb.*;
 import java.sql.Timestamp;
@@ -131,15 +132,17 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         expiredDate.add(Calendar.DAY_OF_YEAR, expiredDays);
         Timestamp expiredDate4CardCode = new Timestamp(expiredDate.getTimeInMillis());
 
-        StringBuilder tmpCardCode = null;
+        StringBuilder tmpEncodedCardCode = null;
         StringBuilder serial = null;
+        StringBuilder tmpCodecodeCardCode = null;
         Iterator<String> ito = cardCodeHashSetList2Store.iterator();
 
         while (ito.hasNext()){
-            tmpCardCode = new StringBuilder(ito.next());
+            tmpEncodedCardCode = new StringBuilder(ito.next());
+            tmpCodecodeCardCode = new StringBuilder(MobiFoneSecurityBase64Util.decode(tmpEncodedCardCode.toString()));
 
             // Take same 5 characters in Card Code.
-            serial = new StringBuilder(tmpCardCode.substring(0, 5));
+            serial = new StringBuilder(tmpCodecodeCardCode.toString().substring(0, 5));
 
             // Generate full Serial.
             if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
@@ -152,7 +155,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
             OrderDataCodeEntity entity = new OrderDataCodeEntity();
             entity.setOrder(orderEntity);
             entity.setSerial(Long.valueOf(serial.toString()));
-            entity.setDataCode(Long.valueOf(tmpCardCode.toString()));
+            entity.setDataCode(tmpEncodedCardCode.toString());
             entity.setExpiredDate(expiredDate4CardCode);
             this.orderDataCodeService.save(entity);
             totalDataCode++;

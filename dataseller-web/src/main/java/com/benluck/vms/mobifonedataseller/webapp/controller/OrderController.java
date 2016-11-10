@@ -8,9 +8,11 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SHA256Util;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
@@ -35,7 +37,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.mobifone.sercurity.MobiFoneSercurity;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -156,11 +157,16 @@ public class OrderController extends ApplicationObjectSupport{
         doubleCellFormat.setFont(normalFont);
         doubleCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
 
+        boolean adminExport4KHDN = false;
+
+        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && command.getPojo().isAdminExport4KHDN()){
+            adminExport4KHDN = true;
+        }
 
         if(dtoList.size() > 0){
             int indexRow = 1;
             for(OrderDataCodeDTO dto : dtoList){
-                CellValue[] resValue = addCellValues(dto, indexRow);
+                CellValue[] resValue = addCellValues(dto, indexRow, adminExport4KHDN);
                 ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
                 indexRow++;
             }
@@ -169,14 +175,18 @@ public class OrderController extends ApplicationObjectSupport{
             response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
         }
     }
-    private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow){
+    private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow, boolean adminExport4KHDN){
         SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getSerial().toString());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString().getBytes());
-//        resValue[columnIndex++] = new CellValue(CellDataType.STRING, MobiFoneSercurity.encode(dto.getDataCode().toString()));
+
+        if(!adminExport4KHDN && SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+            resValue[columnIndex++] = new CellValue(CellDataType.STRING, SHA256Util.hash(MobiFoneSecurityBase64Util.decode(dto.getDataCode().toString())));
+        }else if(adminExport4KHDN || SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN)){
+            resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString());
+        }
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getValue());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getVolume());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getDuration());

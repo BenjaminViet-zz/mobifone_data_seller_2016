@@ -149,6 +149,8 @@ public class Constants {
     public static final Integer ORDER_ACTIVE_STATUS_ALIVE = 0;
     public static final Integer ORDER_ACTIVE_STATUS_DIE = 1;
 
+    public static final Boolean ADMIN_EXPORT_4_KHDN = true;
+
 //    Order History Constants
     public static final Integer ORDER_HISTORY_OPERATOR_CREATED = 0;
     public static final Integer ORDER_HISTORY_OPERATOR_UPDATED = 1;

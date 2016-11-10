@@ -19,7 +19,7 @@ public class OrderDataCodeEntity {
     private Long orderDataCodeId;
     private OrderEntity order;
     private Long serial;
-    private Long dataCode;
+    private String dataCode;
     private Timestamp expiredDate;
 
     @Column(name = "ORDERDATACODEID")
@@ -56,11 +56,11 @@ public class OrderDataCodeEntity {
 
     @Column(name = "DATACODE")
     @Basic
-    public Long getDataCode() {
+    public String getDataCode() {
         return dataCode;
     }
 
-    public void setDataCode(Long dataCode) {
+    public void setDataCode(String dataCode) {
         this.dataCode = dataCode;
     }
 
