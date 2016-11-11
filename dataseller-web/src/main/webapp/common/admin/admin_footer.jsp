@@ -50,6 +50,9 @@
 <!-- Switchery -->
 <script src="<c:url value="/themes/newteample/vendors/switchery/dist/switchery.min.js" />"></script>
 
+<!-- Select2 -->
+<script src="<c:url value="/themes/newteample/vendors/select2/dist/js/select2.full.min.js" />"></script>
+
 <!-- Custom Theme Scripts -->
 <script src="<c:url value="/themes/newteample/content/js/custom.js" />"></script>
 
@@ -60,6 +63,15 @@
             singleDatePicker: true,
             locale: {
                 format: 'DD/MM/YYYY'
+            }
+        });
+
+        $("select").select2({
+            placeholder: "Chọn",
+            allowClear: true
+        }).on("select2:close", function(){
+            if($(this).val() == null){
+                selectFirstItemSelect2(this);
             }
         });
     });

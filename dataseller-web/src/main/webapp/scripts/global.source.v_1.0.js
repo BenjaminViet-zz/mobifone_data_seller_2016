@@ -311,12 +311,7 @@ function jQueryMaskNonThousandFormat(){
 }
 
 function selectFirstItemSelect2(selectEl){
-//    if ($.browser.msie) {
-//        $(selectEl).select2().select2('val','-1');
-//    }else{
-//
-//    }
-    $(selectEl).select2().select2('val', $(selectEl).find('option:eq(0)').val());
+    $(selectEl).val($(selectEl).find('option:eq(0)').val()).trigger('change');
 }
 
 function setSelectedValueForSelectMenu(select2Id, valueOfOption){

@@ -4,19 +4,19 @@
 
 
 <head>
-    <title><fmt:message key="detail_expense_report.heading" /></title>
-    <meta name="menu" content="<fmt:message key="detail_expense_report.heading" />"/>
+    <title><fmt:message key="code_history.heading" /></title>
+    <meta name="menu" content="<fmt:message key="code_history.heading" />"/>
 </head>
 
 <c:set var="prefix" value="/user" />
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
-<c:url var="historyUrl" value="${prefix}/reportDetailExpense/list.html"/>
+<c:url var="historyUrl" value="${prefix}/codeHistory/list.html"/>
 
 <div class="page-title">
     <div class="title_left">
-        <h3><fmt:message key="detail_expense_report.page_title" /></h3>
+        <h3><fmt:message key="code_history.page_title" /></h3>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -29,7 +29,7 @@
                     <div class="x_content">
                         <div class="alert alert-${alertType} no-bottom">
                             <a class="close" data-dismiss="alert" href="#">&times;</a>
-                            ${messageResponse}
+                                ${messageResponse}
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -46,7 +46,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:select id="KHDN" path="pojo.custId" cssClass="form-control">
-                                <option value=""><fmt:message key="label.choose" /></option>
+                                <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
                                     <option <c:if test="${item.pojo.custId eq KHDN.custId}">selected="true"</c:if> value="${KHDN.custId}">${KHDN.name}</option>
                                 </c:forEach>
@@ -77,37 +77,18 @@
                                            partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                            id="tableList" pagesize="${items.maxPageItems}" export="false"
                                            class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
-                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 3%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                                <display:column headerClass="table_header text-center" property="empCode" titleKey="detail_expense_report.emp_code" style="width: 10%"/>
-                                <display:column headerClass="table_header text-center" property="isdn" titleKey="detail_expense_report.isdn" style="width:15%"/>
-                                <display:column headerClass="table_header text-center" property="empName" class="text-center" titleKey="detail_expense_report.emp_name" style="width: 10%" />
-                                <display:column headerClass="table_header text-center" property="maNVPhatTrien" class="text-center" titleKey="detail_expense_report.ma_nvpt" style="width: 10%" />
-                                <display:column headerClass="table_header text-center" property="loaiHM" class="text-center" titleKey="detail_expense_report.loai_hm" style="width: 10%" />
-                                <display:column headerClass="table_header text-center" property="loaiTB" class="text-center" titleKey="detail_expense_report.loai_tb" style="width: 10%" />
-                                <display:column headerClass="table_header text-center" property="loaiKH" class="text-center" titleKey="detail_expense_report.loai_kh" style="width: 10%" />
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.ngay_dau_noi" style="width: 10%" >
-                                    <fmt:formatDate value="${tableList.ngayDauNoi}" pattern="${datePattern}" />
+                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                                <display:column headerClass="table_header text-center" property="name" titleKey="code_history.cust_name" style="width: 10%"/>
+                                <display:column headerClass="table_header text-center" property="tin" titleKey="code_history.tin" style="width:15%"/>
+                                <display:column headerClass="table_header text-center" property="isdn" class="text-center" titleKey="code_history.isdn" style="width: 10%" />
+                                <display:column headerClass="table_header text-center" class="text-center" titleKey="code_history.reg_date" style="width: 10%" >
+                                    <fmt:formatDate value="${tableList.regDateTime}" />
                                 </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.ngay_nop_ho_so" style="width: 10%" >
-                                    <fmt:formatDate value="${tableList.ngayNopHoSo}" pattern="${datePattern}" />
+                                <display:column headerClass="table_header text-center" class="text-center" titleKey="code_history.sta_date" style="width: 10%" >
+                                    <fmt:formatDate value="${tableList.staDateTime}" />
                                 </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.act_status" style="width: 10%" >
-                                    ${tableList.trangThaiChanCat}
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.status" style="width: 10%" >
-                                    ${tableList.status}
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.cuoc_thuc_thu" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.cuocThucThu}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.chu_ky" style="width: 10%" >
-                                    ${tableList.chuKy}
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.tip" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.hoaHong}" />
-                                </display:column>
-                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
-                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
+                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.history" /></display:setProperty>
+                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.history" /></display:setProperty>
                             </display:table>
                         </c:when>
                         <c:otherwise>
@@ -129,10 +110,10 @@
 
     function submitForm(){
         var selectedCustId = $('#KHDN').val();
-        if(selectedCustId != ''){
+        if(selectedCustId != '-1'){
             $('#listForm').submit();
         }else{
-            bootbox.alert('<fmt:message key="label.alert_title" />', '<fmt:message key="general_expense_report.search_popup" />', function(){});
+            bootbox.alert('<fmt:message key="label.alert_title" />', '<fmt:message key="code_history.search_popup" />', function(){});
         }
     }
 

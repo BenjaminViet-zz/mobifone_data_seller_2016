@@ -69,7 +69,9 @@ public class ReportDetailExpenseController extends ApplicationObjectSupport{
                 mav.addObject(Constants.LIST_MODEL_KEY, command);
             }
         }
+
         mav.addObject("KHDNList", this.khdnService.findAll());
+        mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
