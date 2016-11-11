@@ -100,8 +100,8 @@
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                             <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 4%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" titleKey="admin.donhang.label.DN" style="width: 12%"/>
-                            <display:column headerClass="table_header text-center" property="packageData.name" class="text-center" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 8%"/>
+                            <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" sortable="true" titleKey="admin.donhang.label.DN" style="width: 12%"/>
+                            <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 8%"/>
                             <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity" style="width: 8%" >
                                 <fmt:formatNumber type="number" value="${tableList.quantity}" />
                             </display:column>
@@ -115,7 +115,7 @@
                                 <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
                             </display:column>
                             <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 10%" />
-                            <display:column headerClass="table_header text-center" sortable="true" class="text-center" titleKey="admin.donhang.label.status" style="width: 12%">
+                            <display:column headerClass="table_header text-center" sortable="true" sortName="orderStatus" class="text-center" titleKey="admin.donhang.label.status" style="width: 12%">
                                 <c:choose>
                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus eq Constants.ORDER_CARD_CODE_PROCESSING_STATUS}">
                                        <fmt:message key="order.card_code_taking_in_progress" />

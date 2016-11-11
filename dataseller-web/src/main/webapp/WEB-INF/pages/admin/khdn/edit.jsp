@@ -102,7 +102,7 @@
                             <fmt:message key="admin.khdn.issued_contract_date" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
-                            <input type="text" class="form-control has-feedback-left data_picker" name="issuedContractDate" id="issuedContractDate" aria-describedby="inputSuccess2Status4">
+                            <input type="text" class="form-control has-feedback-left data_picker" value="<fmt:formatDate pattern="dd/MM/yyyy" dateStyle="short" value="${item.pojo.issuedContractDate}" />" name="issuedContractDate" id="issuedContractDate" aria-describedby="inputSuccess2Status4">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>

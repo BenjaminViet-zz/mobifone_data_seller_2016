@@ -390,8 +390,10 @@ $.extend( $.validator, {
 		minlength: $.validator.format( "Tối thiểu không quá {0} ký tự." ),
 		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
 		range: $.validator.format( "Please enter a value between {0} and {1}." ),
-		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
-		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
+		max: $.validator.format( "Giá trị tối đa cho phép là {0}." ),
+		minSoLuong: $.validator.format( "Số lượng tối thiểu là {0}." ),
+		minDonGia: $.validator.format( "Đơn giá tối thiểu là {0}." ),
+		min: $.validator.format( "Chỉ nhập giá trị lớn hơn hoặc bằng {0}." ),
 		step: $.validator.format( "Please enter a multiple of {0}." )
 	},
 
@@ -1420,12 +1422,12 @@ $.extend( $.validator, {
 
 		// http://jqueryvalidation.org/min-method/
 		min: function( value, element, param ) {
-			return this.optional( element ) || value >= param;
+			return this.optional( element ) || value.replace(/\,/g, '')*1 >= param;
 		},
 
 		// http://jqueryvalidation.org/max-method/
 		max: function( value, element, param ) {
-			return this.optional( element ) || value <= param;
+			return this.optional( element ) || value.replace(/\,/g, '')*1 <= param;
 		},
 
 		// http://jqueryvalidation.org/range-method/

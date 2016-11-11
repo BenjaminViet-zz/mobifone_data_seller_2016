@@ -147,7 +147,7 @@
                                     <display:column headerClass="table_header text-center" sortName="value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="width: 35;%">
                                         <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList2.value}" />
                                     </display:column>
-                                    <display:column headerClass="table_header text-center nowrap" class="text-center" titleKey="label.status" style="width: 20%;">
+                                    <display:column headerClass="table_header text-center nowrap" class="text-center" sortName="status" sortable="true" titleKey="label.status" style="width: 20%;">
                                         <fmt:message key="packagedatacodegen.not_yet_generate_card_code" />
                                     </display:column>
                                     <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>

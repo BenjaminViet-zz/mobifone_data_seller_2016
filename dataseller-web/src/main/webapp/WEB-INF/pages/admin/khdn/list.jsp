@@ -111,13 +111,13 @@
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
                                    class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                         <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="label.stt" style="width: 4%">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                        <display:column headerClass="table_header text-center" property="name" sortable="false" titleKey="admin.khdn.label.name" style="width: 20%" />
-                        <display:column headerClass="table_header text-center" property="mst" sortable="false" titleKey="admin.khdn.label.mst" style="width: 20%" />
-                        <display:column headerClass="table_header text-center" property="gpkd" sortable="false" titleKey="admin.khdn.label.gpkd" style="width: 20%" />
+                        <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="admin.khdn.label.name" style="width: 20%" />
+                        <display:column headerClass="table_header text-center" property="mst" sortName="mst" sortable="true" titleKey="admin.khdn.label.mst" style="width: 20%" />
+                        <display:column headerClass="table_header text-center" property="gpkd" sortName="gpkd" sortable="true" titleKey="admin.khdn.label.gpkd" style="width: 20%" />
                         <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedContractDate" titleKey="admin.khdn.label.issuedContractDate" style="width: 10%">
                             <fmt:formatDate value="${tableList.issuedContractDate}" pattern="${datePattern}" />
                         </display:column>
-                        <display:column headerClass="table_header text-center" property="stb_vas" sortable="false" class="text-center" titleKey="admin.khdn.label.stb_vas" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="stb_vas" sortName="stb_vas" sortable="true" class="text-center" titleKey="admin.khdn.label.stb_vas" style="width: 15%" />
                         <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:15%;">
                             <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                             | <a class="tip-top" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><fmt:message key="label.delete" /></a>

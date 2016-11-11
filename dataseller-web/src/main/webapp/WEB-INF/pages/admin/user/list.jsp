@@ -95,7 +95,7 @@
                     </display:column>
                     <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
                     <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="25%"/>
-                    <display:column headerClass="table_header text-center" property="userGroup.description"  sortable="true" class="" titleKey="user.label.usergroup" style="width: 20%" />
+                    <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup" sortable="true" class="" titleKey="user.label.usergroup" style="width: 20%" />
                     <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="15%">
                         <c:choose>
                             <c:when test = "${tableList.status eq 1}">
@@ -106,7 +106,7 @@
                             </c:otherwise>
                         </c:choose>
                     </display:column>
-                    <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">
+                    <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:15%;">
                         <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                         | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
                     </display:column>

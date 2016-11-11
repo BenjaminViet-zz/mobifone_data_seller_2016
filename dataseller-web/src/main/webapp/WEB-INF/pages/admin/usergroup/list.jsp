@@ -49,7 +49,7 @@
                     <display:column headerClass="table_header text-center" sortable="false" titleKey="label.stt" class="text-center" style="width: 5%;" >
                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                     </display:column>
-                    <display:column headerClass="table_header text-center" property="code" sortName="userName" sortable="true" titleKey="usergroup.label.code" style="20%"/>
+                    <display:column headerClass="table_header text-center" property="code" sortName="code" sortable="true" titleKey="usergroup.label.code" style="20%"/>
                     <display:column headerClass="table_header text-center" property="description" sortName="displayName" sortable="false" titleKey="usergroup.label.description" style="60%"/>
                     <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">
                         <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>

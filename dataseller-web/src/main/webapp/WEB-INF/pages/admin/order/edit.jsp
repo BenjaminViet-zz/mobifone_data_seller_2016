@@ -89,7 +89,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="quantity" type="text" name="pojo.quantity" class="form-control required form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.quantity}" /> " />
+                            <input id="quantity" type="text" name="pojo.quantity" min="1" class="form-control required money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.quantity}" /> " />
                             <form:errors for="quantity" path="pojo.quantity" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="unitPrice" type="text" name="pojo.unitPrice" class="form-control required form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.unitPrice}" /> " />
+                            <input id="unitPrice" type="text" name="pojo.unitPrice" min="1" class="form-control required money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.unitPrice}" /> " />
                             <form:errors for="unitPrice" path="pojo.unitPrice" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -105,14 +105,15 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="admin.donhang.label.total" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <span class="calcOrderTotal"></span>
+                            <input id="calcOrderTotal" type="text" readonly="readonly" max="100000000" class="form-control calcOrderTotal"/>
+                            <form:errors for="calcOrderTotal" cssClass="error-inline-validate"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDate"><fmt:message key="admin.donhang.label.issueDate" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
-                            <input type="text" class="form-control has-feedback-left data_picker" name="issuedDate" id="issuedDate" aria-describedby="inputSuccess2Status4">
+                            <input type="text" class="form-control has-feedback-left data_picker" name="issuedDate" value="<fmt:formatDate pattern="dd/MM/yyyy" dateStyle="short" value="${item.pojo.issuedDate}" />" id="issuedDate" aria-describedby="inputSuccess2Status4">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
@@ -121,7 +122,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shippingDate"><fmt:message key="admin.donhang.label.shippingDate" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
-                            <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" id="shippingDate" aria-describedby="inputSuccess2Status4">
+                            <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" value="<fmt:formatDate pattern="dd/MM/yyyy" dateStyle="short" value="${item.pojo.shippingDate}" />" id="shippingDate" aria-describedby="inputSuccess2Status4">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                 <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
@@ -144,12 +145,12 @@
                             <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
                                 <c:set var="allowUpdateOrInsert" value="${false}" />
                             </c:if>
-                            <button id="btnSave" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-primary">
+                            <a id="btnSave" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-primary">
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.orderId}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                                 </c:choose>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
@@ -187,10 +188,20 @@
         </c:if>
     }
 
-    $(document).ready(function(){
+    $("#btnSave").click(function(e){
+        e.preventDefault();
+        bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+            if(r && $('#formEdit').valid() ){
+                $("#formEdit").submit();
+            }
+        })
+    });
 
+
+
+    $(document).ready(function(){
         var $totalEl = $('.calcOrderTotal');
-        $totalEl.text(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
+        $totalEl.val(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
         $totalEl.mask('000,000,000,000,000,000', {
             reverse: true
         });
@@ -201,19 +212,25 @@
         /*-------------------------------*/
         jQueryMask();
 
+        /* Replace with comma thousand */
         function numberWithCommas(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
         $('#quantity').keyup(function() {
-            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val())  );
-            jQueryMask();
+            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
         });
 
         $('#unitPrice').keyup(function() {
-            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
-            jQueryMask();
+            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
         });
+
+        $('#packageData').on('change', function(){
+            $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
+            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+            /*jQueryMask();*/
+        });
+
         /*-------------------------------*/
         /* //Calculator order total*/
         /*-------------------------------*/
@@ -224,21 +241,10 @@
 
 
 
-        $("#btnSave").click(function(){
-            if($('#formEdit').valid()){
-                $("#formEdit").submit();
-            }
-        });
+
 
         $('option:not(:first-child)', '#packageData').each(function(idx, el){
             $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
-        });
-
-        $('#packageData').on('change', function(){
-            $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
-
-            $('.calcOrderTotal').text( numberWithCommas($('#quantity').unmask().val() * $('#unitPrice').unmask().val()) );
-            jQueryMask();
         });
         
         $('#orderId').data("remainingBalance", '${remainingBalance}');
