@@ -39,4 +39,9 @@
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('#username').focus();
+    })
+</script>
 </html>

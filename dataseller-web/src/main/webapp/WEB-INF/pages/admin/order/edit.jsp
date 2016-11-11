@@ -140,12 +140,12 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
+                            <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;
                             <c:set var="allowUpdateOrInsert" value="${true}" />
                             <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
                                 <c:set var="allowUpdateOrInsert" value="${false}" />
                             </c:if>
-                            <a id="btnSave" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-primary">
+                            <a id="btnSave" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.orderId}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>

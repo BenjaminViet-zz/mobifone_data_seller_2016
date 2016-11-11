@@ -97,8 +97,8 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a href="${backUrl}" class="btn btn-success"><fmt:message key="label.huy" /></a>&nbsp;
-                            <button id="btnSave" class="btn btn-primary">
+                            <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;
+                            <button id="btnSave" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.userGroupId}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
