@@ -66,7 +66,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required">
-                                <option value=""><fmt:message key="label.all" /></option>
+                                <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
                                     <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
                                 </c:forEach>
@@ -78,7 +78,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control required" onchange="javascript: checkPackageDataCardCodeGeneration();">
-                                <option value=""><fmt:message key="label.all" /></option>
+                                <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${packageDataList}" var="packageData">
                                     <option data-unitPrice="<fmt:formatNumber type="number" maxFractionDigits="0" value="${packageData.value}" />" <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
                                 </c:forEach>

@@ -1352,7 +1352,7 @@ $.extend( $.validator, {
 
 				// Could be an array for select-multiple or a string, both are fine this way
 				var val = $( element ).val();
-				return val && val.length > 0;
+				return val && val != '-1' && val.length > 0;
 			}
 			if ( this.checkable( element ) ) {
 				return this.getLength( value, element ) > 0;
