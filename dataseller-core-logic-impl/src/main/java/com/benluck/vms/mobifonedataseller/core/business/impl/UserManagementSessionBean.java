@@ -58,13 +58,20 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
 
     @Override
     public UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException {
-        UserEntity userEntity = this.userService.findById(pojo.getUserId());
-        userEntity.setUserName(pojo.getUserName());
-        userEntity.setDisplayName(pojo.getDisplayName());
-        userEntity.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
-        userEntity.setLastModified(new Timestamp(System.currentTimeMillis()));
-        userEntity.setStatus(pojo.getStatus());
-        return UserBeanUtil.entity2DTO(this.userService.update(userEntity));
+        UserEntity dbItem = this.userService.findById(pojo.getUserId());
+        dbItem.setUserName(pojo.getUserName());
+        dbItem.setDisplayName(pojo.getDisplayName());
+        dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
+        dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
+
+        if(!dbItem.getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN)
+                && !dbItem.getUserName().equalsIgnoreCase("admin")){
+            dbItem.setStatus(pojo.getStatus());
+            UserGroupEntity userGroupEntity = new UserGroupEntity();
+            userGroupEntity.setUserGroupId(pojo.getUserGroup().getUserGroupId());
+            dbItem.setUserGroup(userGroupEntity);
+        }
+        return UserBeanUtil.entity2DTO(this.userService.update(dbItem));
     }
 
     @Override

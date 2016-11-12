@@ -108,6 +108,6 @@
 
     function resetForm(){
         $("input[type='text']").val('');
-        selectFirstItemSelect2('#userGroupMenu');
+        selectFirstItemSelect2('#status');
     }
 </script>

@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.webapp.validator;
 
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserCommand;
@@ -37,9 +38,27 @@ public class UserValidator extends ApplicationObjectSupport implements Validator
     @Override
     public void validate(Object o, Errors errors) {
         UserCommand command = (UserCommand)o;
-        trimmingField(command);
-        checkRequiredFields(command, errors);
-        checkUniqueCode(command, errors);
+        String action = command.getCrudaction();
+
+        if(action.equals(Constants.ACTION_DELETE)){
+            validateDeleteSystemUser(command);
+        }else{
+            trimmingField(command);
+            checkRequiredFields(command, errors);
+            checkUniqueCode(command, errors);
+        }
+    }
+
+    private void validateDeleteSystemUser(UserCommand command){
+        UserDTO pojo = null;
+        try{
+            pojo = this.userService.findById(command.getPojo().getUserId());
+            if(pojo.getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN) && pojo.getUserName().equalsIgnoreCase("admin")){
+                command.setErrorMessage(this.getMessageSourceAccessor().getMessage("user.not_allow_delete_system_user"));
+            }
+        }catch (ObjectNotFoundException one){
+            command.setErrorMessage(this.getMessageSourceAccessor().getMessage("user.not_allow_this_user_to_delete"));
+        }
     }
 
     /**
