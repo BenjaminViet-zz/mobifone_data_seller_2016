@@ -67,7 +67,7 @@
                         </li>
                         <li><a><i class="fa fa-bar-chart-o"></i> <fmt:message key="cost.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li><a href="<c:url value="${prefix}/cost/list.html"/> "><fmt:message key="cost.manager.list" /> </a></li>
+                                <li><a href="<c:url value="${prefix}/cost/management.html"/> "><fmt:message key="cost.manager.list" /> </a></li>
                                 <li><a href="<c:url value="${prefix}/codeHistory/list.html"/> "><fmt:message key="cost_history.list" /></a></li>
                             </ul>
                         </li>

@@ -189,4 +189,8 @@ public class Constants {
     public static final Integer NOTIFICATION_READ_ALREADY = 1;
 
     public static final Integer MAX_NOTIFICATION_MESSAGE_POPUP = 5;
+
+    // Code History
+    public static final String COD_HISTORY_NOT_PAID = "0";
+    public static final String COD_HISTORY_PAID = "1";
 }

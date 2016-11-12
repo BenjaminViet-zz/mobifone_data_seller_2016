@@ -44,6 +44,8 @@ public class MBDCostEntity {
     private String maintainPhase3;
     private Double maintainAmount3;
     private Timestamp insertDateTime;
+    private String paymentStatus;
+    private Timestamp paymentDate;
 
     @Column(name = "COSTID")
     @Id
@@ -327,6 +329,26 @@ public class MBDCostEntity {
         this.insertDateTime = insertDateTime;
     }
 
+    @Column(name = "PAYMENT_STATUS")
+    @Basic
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    @Column(name = "PAYMENT_DATE")
+    @Basic
+    public Timestamp getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Timestamp paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
     @Override
     public int hashCode() {
         int result = costId != null ? costId.hashCode() : 0;
@@ -357,6 +379,8 @@ public class MBDCostEntity {
         result = 31 * result + (maintainPhase3 != null ? maintainPhase3.hashCode() : 0);
         result = 31 * result + (maintainAmount3 != null ? maintainAmount3.hashCode() : 0);
         result = 31 * result + (insertDateTime != null ? insertDateTime.hashCode() : 0);
+        result = 31 * result + (paymentStatus != null ? paymentStatus.hashCode() : 0);
+        result = 31 * result + (paymentDate != null ? paymentDate.hashCode() : 0);
         return result;
     }
 
@@ -395,6 +419,8 @@ public class MBDCostEntity {
         if (maintainPhase3 != null ? !maintainPhase3.equals(that.maintainPhase3) : that.maintainPhase3 != null) return false;
         if (maintainAmount3 != null ? !maintainAmount3.equals(that.maintainAmount3) : that.maintainAmount3 != null) return false;
         if (insertDateTime != null ? !insertDateTime.equals(that.insertDateTime) : that.insertDateTime != null) return false;
+        if (paymentStatus != null ? !paymentStatus.equals(that.paymentStatus) : that.paymentStatus != null) return false;
+        if (paymentDate != null ? !paymentDate.equals(that.paymentDate) : that.insertDateTime != null) return false;
 
         return true;
     }

@@ -81,8 +81,7 @@ public class MBDCodeHistoryController extends ApplicationObjectSupport{
     private void executeSearch(MBDCodeHistoryCommand command, HttpServletRequest request){
         RequestUtil.initSearchBean(request, command);
 
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("custID", command.getPojo().getCustId());
+        Map<String, Object> properties = buildProperties(command);
 
         Object[] resultObject = this.codeHistoryService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
@@ -90,13 +89,29 @@ public class MBDCodeHistoryController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
+    private Map<String, Object> buildProperties(MBDCodeHistoryCommand command){
+        MBDCodeHistoryDTO pojo = command.getPojo();
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if(StringUtils.isNotBlank(pojo.getName())){
+            properties.put("", pojo.getName());
+        }
+        if(StringUtils.isNotBlank(pojo.getIsdn())){
+            properties.put("isdn", pojo.getIsdn());
+        }
+        if(StringUtils.isNotBlank(pojo.getTin())){
+            properties.put("tin", pojo.getTin());
+        }
+        // ngay dang ky
+        return properties;
+    }
+
     private void export2Excel(MBDCodeHistoryCommand command, HttpServletRequest request, HttpServletResponse response) throws Exception{
         SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         String exportDate = df.format(currentTimestamp);
 
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("custID", command.getPojo().getCustId());
+        Map<String, Object> properties = buildProperties(command);
 
         Object[] resultObject = this.codeHistoryService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         List<MBDCodeHistoryDTO> dtoList = (List<MBDCodeHistoryDTO>)resultObject[1];

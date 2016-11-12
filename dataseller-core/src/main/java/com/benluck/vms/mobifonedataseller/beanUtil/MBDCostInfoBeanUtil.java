@@ -45,6 +45,8 @@ public class MBDCostInfoBeanUtil {
         dto.setMaintainPhase3(entity.getMaintainPhase3());
         dto.setMaintainAmount3(entity.getMaintainAmount3());
         dto.setInsertDateTime(entity.getInsertDateTime());
+        dto.setPaymentStatus(entity.getPaymentStatus());
+        dto.setPaymentDate(entity.getPaymentDate());
         return dto;
     }
 

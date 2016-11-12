@@ -111,7 +111,7 @@
                             </display:table>
                         </c:when>
                         <c:otherwise>
-                            <fmt:message key="no_data_found" />
+                            <fmt:message key="please_choose_filter" />
                         </c:otherwise>
                     </c:choose>
                 </div>

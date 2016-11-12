@@ -41,6 +41,8 @@ public class MBDCostInfoDTO implements Serializable{
     private String maintainPhase3;
     private Double maintainAmount3;
     private Timestamp insertDateTime;
+    private String paymentStatus;
+    private Timestamp paymentDate;
 
     public Long getCostId() {
         return costId;
@@ -264,5 +266,21 @@ public class MBDCostInfoDTO implements Serializable{
 
     public void setInsertDateTime(Timestamp insertDateTime) {
         this.insertDateTime = insertDateTime;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Timestamp getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Timestamp paymentDate) {
+        this.paymentDate = paymentDate;
     }
 }

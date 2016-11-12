@@ -76,7 +76,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.gpkd" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="gpkd"><fmt:message key="admin.khdn.label.gpkd" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:input id="gpkd" path="pojo.gpkd" cssClass="form-control" />
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.stb_vas" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="stb_vas"><fmt:message key="admin.khdn.label.stb_vas" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <form:input id="stb_vas" path="pojo.stb_vas" cssClass="form-control" />

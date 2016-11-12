@@ -178,7 +178,9 @@ CREATE TABLE MOBI_DATA_COST
    Maintain_Amount2       FLOAT                         NOT NULL,
    Maintain_Phase3        VARCHAR(2)                    NOT NULL,
    Maintain_Amount3       FLOAT                         NOT NULL,
-   Insert_DateTime        TIMESTAMP                     NOT NULL
+   Insert_DateTime        TIMESTAMP                     NOT NULL,
+   Payment_Status         Varchar(1)                    DEFAULT '0' NOT NUL,
+   Payment_Date           TIMESTAMP                     NULL
 )  TABLESPACE "USERS";
 
 CREATE TABLE MOBI_DATA_NOTIFICATION
