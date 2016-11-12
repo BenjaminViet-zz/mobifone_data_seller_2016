@@ -39,7 +39,7 @@
     <%--<link href="<c:url value="/themes/newteample/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" />" rel="stylesheet" />--%>
 
     <!-- Custom Theme Style -->
-    <link href="<c:url value="/themes/newteample/content/css/custom.min.css" />" rel="stylesheet" />
+    <link href="<c:url value="/themes/newteample/content/css/custom.css" />" rel="stylesheet" />
 
     <link href="<c:url value="/themes/admin/css/admin_v1.0.css" />" rel="stylesheet" />
 

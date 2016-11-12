@@ -273,9 +273,10 @@
     margin-bottom: 35px;
 }
 
-.menu_section h3 {
-    padding-left: 23px;
+.profile_info h3 {
+    /*padding-left: 23px;*/
     color: #fff;
+    display: inline-block;
     text-transform: uppercase;
     letter-spacing: .5px;
     font-weight: bold;
@@ -306,9 +307,9 @@
 }
 
 .profile_info {
-    padding: 25px 0px 0px;
-    width: 65%;
-    float: left;
+    padding: 25px 0 0 25px;
+    width: 100%;
+    /*float: left;*/
 }
 
 .profile_info span {

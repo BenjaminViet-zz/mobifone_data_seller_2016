@@ -17,11 +17,11 @@
 
         <!-- menu profile quick info -->
         <div class="profile">
-            <div class="profile_pic">
+            <%--<div class="profile_pic">
                 <img src="<c:url value="/themes/newteample/content/images/img.jpg"/>" alt="..." class="img-circle profile_img">
-            </div>
+            </div>--%>
             <div class="profile_info">
-                <span><fmt:message key="label.welcome" /></span>
+                <span><fmt:message key="label.welcome" /></span> <h3><%=SecurityUtils.getPrincipal().getDisplayName()%></h3>
             </div>
         </div>
         <!-- /menu profile quick info -->
@@ -31,7 +31,7 @@
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
-                <h3><%=SecurityUtils.getPrincipal().getDisplayName()%></h3>
+
                 <ul class="nav side-menu">
                     <security:authorize access="hasAuthority('ADMIN')">
                         <li><a><i class="fa fa-credit-card" aria-hidden="true"></i> <fmt:message key="packagedatacodegen.admin_nav.manager" /> <span class="fa fa-chevron-down"></span></a>
