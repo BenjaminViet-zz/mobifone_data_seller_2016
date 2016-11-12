@@ -2,12 +2,10 @@ package com.benluck.vms.mobifonedataseller.security;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
+import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.LDAPUserDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.*;
 import com.benluck.vms.mobifonedataseller.security.util.MyUserDetail;
 import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import org.apache.log4j.Logger;
@@ -24,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.ejb.ObjectNotFoundException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +38,7 @@ public class MyUserDetailService implements UserDetailsService {
     protected UserCache userCache = null;
     private LdapUserLookup ldapUserLookup;
     private UserGroupManagementLocalBean userGroupService;
-
-    @Autowired
+    private NotificationManagementLocalBean notificationService;
     private UserManagementLocalBean userService;
 
     public void setUserService(UserManagementLocalBean userService) {
@@ -53,6 +51,10 @@ public class MyUserDetailService implements UserDetailsService {
 
     public void setUserGroupService(UserGroupManagementLocalBean userGroupService) {
         this.userGroupService = userGroupService;
+    }
+
+    public void setNotificationService(NotificationManagementLocalBean notificationService) {
+        this.notificationService = notificationService;
     }
 
     /**
@@ -198,8 +200,14 @@ public class MyUserDetailService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(Constants.LOGON_ROLE));
 
         MyUserDetail loginUser = new MyUserDetail(username, username + Constants.SECURITY_CREDENTIAL_DELIMITER + account.getPassword(), true, true, true, true, authorities);
+        populateUserInfo(account.getUserId(), loginUser);
         BeanUtils.copyProperties(account, loginUser);
         return loginUser;
     }
 
+
+    private void populateUserInfo(Long userId, MyUserDetail loginUser){
+        List<NotificationDTO> notificationList = this.notificationService.fetchNotificationNewestList(userId);
+        loginUser.setNotificationList(notificationList);
+    }
 }

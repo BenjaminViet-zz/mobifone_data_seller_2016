@@ -63,7 +63,7 @@
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><fmt:message key="label.huy" /></a>
-                            <a class="btn btn-success" onclick="javacsript: resetForm();" ><fmt:message key="label.save" /></a>
+                            <a class="btn btn-success" onclick="javascript: resetForm();" ><fmt:message key="label.save" /></a>
                         </div>
                     </div>
                 </form>

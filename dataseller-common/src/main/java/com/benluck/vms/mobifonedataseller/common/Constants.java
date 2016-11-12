@@ -183,4 +183,10 @@ public class Constants {
     public static final Integer PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS = 2;
 
     public static final String USED_UNIT_PRICE_CODE = "10";
+
+    // Notification Constants
+    public static final Integer NOTIFICATION_NOT_YET_READ = 0;
+    public static final Integer NOTIFICATION_READ_ALREADY = 1;
+
+    public static final Integer MAX_NOTIFICATION_MESSAGE_POPUP = 5;
 }

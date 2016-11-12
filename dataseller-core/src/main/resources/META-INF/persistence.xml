@@ -16,6 +16,7 @@
         <class>com.benluck.vms.mobifonedataseller.domain.PackageDataCodeGenEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.MBDCodeHistoryEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.MBDCostEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.NotificationEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
