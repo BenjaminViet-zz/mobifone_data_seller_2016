@@ -4,13 +4,21 @@
     <title><fmt:message key="login.title"/></title>
 </head>
 <body>
-    <form name="loginForm" action="<c:url value="/perform_login"/>" method="post">
-        <h4 class="nomargin"><fmt:message key="login"/></h4>
-        <p class="mt5 mb20"><fmt:message key="page.login.info"/></p>
+    <form name="loginForm" class="loginForm" action="<c:url value="/perform_login"/>" method="post">
+        <h4 class="nomargin text-center"><fmt:message key="login"/></h4>
+        <%--<p class="mt5 mb20"><fmt:message key="page.login.info"/></p>--%>
+        <div class="form-group">
+            <label for="username"><fmt:message key="page.login.username"/></label>
+            <input type="text" name="j_username" id="username" class="form-control uname" />
+        </div>
 
-        <input type="text" name="j_username" id="username" class="form-control uname" placeholder="<fmt:message key="page.login.username"/>" />
-        <input type="password" name="j_password" id="password" class="form-control pword" placeholder="<fmt:message key="page.login.password"/>" />
-        <button class="btn btn-success btn-block" id="submitForm"><fmt:message key="login"/></button>
+        <div class="form-group">
+            <label for="password"><fmt:message key="page.login.password"/></label>
+            <input type="password" name="j_password" id="password" class="form-control pword" />
+        </div>
+
+
+        <button class="btn btn-primary btn-block" id="submitForm"><fmt:message key="login"/></button>
         <c:if test="${not empty param.error}">
             <small style="color: orangered">
                 <c:choose>
