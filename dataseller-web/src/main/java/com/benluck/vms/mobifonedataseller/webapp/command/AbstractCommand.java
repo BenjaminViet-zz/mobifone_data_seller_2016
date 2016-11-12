@@ -29,6 +29,7 @@ public class AbstractCommand<E> implements Serializable {
 	private String sessionId;
 	private String tableId = "tableList";
     private String errorMessage;
+    private Boolean hasError = false;
 
 	private int page = 1;
 	protected E pojo;
@@ -184,5 +185,13 @@ public class AbstractCommand<E> implements Serializable {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public Boolean getHasError() {
+        return hasError;
+    }
+
+    public void setHasError(Boolean hasError) {
+        this.hasError = hasError;
     }
 }

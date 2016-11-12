@@ -12,6 +12,7 @@
 <head>
     <title><fmt:message key="admin.khdn.import_page.heading" /></title>
     <meta name="menu" content="<fmt:message key="admin.khdn.import_page.heading" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -107,8 +108,8 @@
                             </div>
 
                         </div>
-                        <div id="step-2">
-                            <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                        <div id="step-2" style="width: 100%; min-height: 500px;">
+                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1450px;">
                                 <thead>
                                     <tr>
                                         <th class="table_header text-center"><fmt:message key="label.stt" /></th>
@@ -123,15 +124,24 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach items="${item.importKHDNDTOList}" var="importKHDNDTO" varStatus="status">
-                                        <tr>
-                                            <td class="text-center">${status.count}</td>
-                                            <td class="text-center">${importKHDNDTO.shopCode}</td>
-                                            <td>${importKHDNDTO.name}</td>
-                                            <td class="text-center">${importKHDNDTO.mst}</td>
-                                            <td class="text-center">${importKHDNDTO.gpkd}</td>
-                                            <td class="text-center"><fmt:formatDate value="${importKHDNDTO.issuedContractDate}" pattern="${datePattern}" /></td>
-                                            <td class="text-center">${importKHDNDTO.stb_vas}</td>
-                                            <td class="text-error">${importKHDNDTO.errorMessage}</td>
+                                        <tr class="<c:if test="${not empty importKHDNDTO.errorMessage}">line-error</c:if> ">
+                                            <td style="width: 50px;" class="text-center">${status.count}</td>
+                                            <td style="width: 200px;" class="text-center">${importKHDNDTO.shopCode}</td>
+                                            <td style="width: 200px;">${importKHDNDTO.name}</td>
+                                            <td style="width: 200px;" class="text-center">${importKHDNDTO.mst}</td>
+                                            <td style="width: 200px;" class="text-center">${importKHDNDTO.gpkd}</td>
+                                            <td style="width: 150px;" class="text-center"><fmt:formatDate value="${importKHDNDTO.issuedContractDate}" pattern="${datePattern}" /></td>
+                                            <td style="width: 100px;" class="text-center">${importKHDNDTO.stb_vas}</td>
+                                            <td style="width: 350px;" class="text-error text-center">
+                                                <c:choose>
+                                                    <c:when test="${not empty importKHDNDTO.errorMessage}">
+                                                        <span class="error">${importKHDNDTO.errorMessage}</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="valid">OK</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -144,12 +154,7 @@
                     </div>
                     <!-- End SmartWizard Content -->
 
-                    <c:set var="cruaction" value="${Constants.ACTION_UPLOAD}" />
-                    <c:if test="${item.stepImportIndex eq Constants.IMPORT_ORDER_STEP_2_UPLOAD}">
-                        <c:set var="cruaction" value="${Constants.ACTION_IMPORT}" />
-                    </c:if>
-
-                    <input type="hidden" name="crudaction" value="${cruaction}"/>
+                    <input id="crudaction" type="hidden" name="crudaction" value="${Constants.ACTION_IMPORT}"/>
                 </form:form>
             </div>
         </div>
@@ -158,18 +163,28 @@
 
 <!-- jQuery Smart Wizard -->
 <script src="<c:url value="/themes/newteample/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js" />"></script>
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
+    var curStepIndex = ${item.stepImportIndex};
+    var $buttonNext = null;
+    var $buttonPrev = null;
+    var $buttonFinish = null;
+
     $(document).ready(function() {
         handleButtons();
         handleFile();
+        initScrollablePane();
     });
+
+    function initScrollablePane(){
+        $('#step-2').mCustomScrollbar({axis:"x"});
+    }
 
     function handleFile(){
         var $buttonNext = $('.buttonNext');
 
         $('#file').on('change', function(){
-            $buttonNext.removeClass('buttonDisabled');
-            $buttonNext.data('prevent-goforward', true);
+            enableOrDisableNextButton(false);
         });
     }
 
@@ -178,28 +193,19 @@
         // add class 'hide' on step content 1
 
         var $wizardForm = $('#wizard');
-
-        // update selected step by index
         $wizardForm.smartWizard({
             transitionEffect: 'slide'
         });
 
-        var $buttonNext = $('.buttonNext');
-        var $buttonPrev = $('.buttonPrevious');
-        var $buttonFinish = $('.buttonFinish');
+        $buttonNext = $('.buttonNext');
+        $buttonPrev = $('.buttonPrevious');
+        $buttonFinish = $('.buttonFinish');
 
         $buttonFinish.data('manual-handle', true);
 
-        if(${item.stepImportIndex eq Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
-            $buttonNext.on('click', function(e){
-                e.stopPropagation();
-                e.preventDefault();
-                $('#listForm').submit();
-            });
-
-            // need to choose a file to upload to enable this button.
-            $buttonNext.addClass('buttonDisabled');
-        }else if(${item.stepImportIndex eq Constants.IMPORT_ORDER_STEP_2_UPLOAD}){
+        if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
+            enableOrDisableNextButton(true);
+        }else if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_2_UPLOAD}){
 
             // trigger click on button Next to go to Step 2
             $buttonNext.trigger('click');
@@ -209,12 +215,7 @@
 
             if(${not empty item.errorMessage}){
                 // disable button next in case of errors in Import file.
-                $buttonNext.addClass('buttonDisabled');
-
-                $buttonNext.on('click', function(e){
-                    e.stopPropagation();
-                    e.preventDefault();
-                });
+                enableOrDisableNextButton(true);
             }
 
             // process for button Finish
@@ -238,15 +239,43 @@
                     });
                 }
             });
+        }
 
-            // handle button previous
-            $buttonPrev.on('click', function(){
-                if(!$buttonFinish.hasClass('buttonDisabled')){
-                    $buttonFinish.addClass('buttonDisabled');
-                }
-            });
+        $buttonNext.on('click', function(e){
+            if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
+                e.stopPropagation();
+                e.preventDefault();
 
-            // handle disable step label
+                $('#crudaction').val('${Constants.ACTION_UPLOAD}');
+                $('#listForm').submit();
+            }else{
+                curStepIndex++;
+            }
+        })
+
+        // handle button previous
+        $buttonPrev.on('click', function(){
+            if(!$buttonFinish.hasClass('buttonDisabled')){
+                $buttonFinish.addClass('buttonDisabled');
+            }
+            curStepIndex--;
+            if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
+                enableOrDisableNextButton(true);
+            }
+        });
+    }
+
+    /**
+    *   Disable or enable button next.
+    * @param flag True: disable, else enables
+    */
+    function enableOrDisableNextButton(flag){
+        if(flag){
+            $buttonNext.addClass('buttonDisabled');
+            $buttonNext.data('prevent-goforward', true);
+        }else{
+            $buttonNext.removeClass('buttonDisabled');
+            $buttonNext.removeData('prevent-goforward');
         }
     }
 </script>

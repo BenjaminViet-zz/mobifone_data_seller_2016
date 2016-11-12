@@ -88,6 +88,7 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
     public void importData(List<ImportKHDNDTO> importDTOList) throws DuplicateKeyException {
         for (ImportKHDNDTO dto : importDTOList){
             KHDNEntity entity = new KHDNEntity();
+            entity.setShopCode(dto.getShopCode());
             entity.setName(dto.getName());
             entity.setMst(dto.getMst());
             entity.setGpkd(dto.getGpkd());

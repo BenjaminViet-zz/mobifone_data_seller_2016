@@ -57,10 +57,7 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage(errorCodes.get(0)));
         }else{
             try{
-                List<ImportKHDNDTO> importKHDNDTOList = extractFileImport(fileUpload, command);
-                if(StringUtils.isBlank(command.getErrorMessage())){
-                    command.setImportKHDNDTOList(importKHDNDTOList);
-                }
+                command.setImportKHDNDTOList(extractFileImport(fileUpload, command));
             }catch (Exception e){
                 logger.error(e.getMessage());
             }
@@ -69,6 +66,8 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
 
     private List<ImportKHDNDTO> extractFileImport(MultipartFile fileUpload, ImportKHDNCommand command)throws Exception{
         HashSet<String> shopCodeHS = new HashSet<String>();
+        HashSet<String> mstHS = new HashSet<String>();
+        HashSet<String> gpkdHS = new HashSet<String>();
         List<ImportKHDNDTO> importKHDNDTOLIst = new ArrayList<ImportKHDNDTO>();
         try{
             WorkbookSettings ws = new WorkbookSettings();
@@ -112,7 +111,7 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
 
                     dto = new ImportKHDNDTO(shopCode.toString(), shopName.toString(), mst.toString(), gpkd.toString(), issuedContractDate.toString(), stb_vas.toString());
 
-                    boolean  hasError = validateRequiredFields(dto, shopCodeHS, rowIndex);
+                    boolean  hasError = validateRequiredFields(dto, shopCodeHS, mstHS, gpkdHS, rowIndex);
                     importKHDNDTOLIst.add(dto);
 
                     if(hasError){
@@ -121,21 +120,25 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
                 }
             }else{
                 command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.exceed_min_row_to_read"));
+                command.setHasError(true);
             }
         }catch (Exception e){
             logger.error(e.getMessage(), e);
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.error_unknown"));
+            command.setHasError(true);
         }
         return importKHDNDTOLIst;
     }
 
-    private boolean validateRequiredFields(ImportKHDNDTO dto, HashSet<String> shopCodeHS, int rowIndex) throws ObjectNotFoundException{
+    private boolean validateRequiredFields(ImportKHDNDTO dto, HashSet<String> shopCodeHS, HashSet<String> mstHS, HashSet<String> gpkdHS, int rowIndex) throws ObjectNotFoundException{
+        KHDNDTO khdnDTO = null;
+
         if(StringUtils.isBlank(dto.getShopCode())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_shop_code"));
             return true;
-        }else if(StringUtils.isNotBlank(dto.getShopCode())){
-            KHDNDTO khdnDTO = null;
+        }else{
             try{
+                khdnDTO = null;
                 khdnDTO = khdnService.findEqualUnique("shopCode", dto.getShopCode().trim());
             }catch (ObjectNotFoundException oe){}
 
@@ -144,21 +147,47 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
                 return true;
             }
         }
+
         if(StringUtils.isBlank(dto.getName())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_shop_name"));
             return true;
         }
+
         if(StringUtils.isBlank(dto.getMst())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_mst"));
             return true;
+        }else{
+            try{
+                khdnDTO = null;
+                khdnDTO = khdnService.findEqualUnique("mst", dto.getMst().trim());
+            }catch (ObjectNotFoundException oe){}
+
+            if(khdnDTO != null || mstHS.contains(dto.getMst().trim())){
+                dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.duplicated_mst"));
+                return true;
+            }
         }
+
         if(StringUtils.isBlank(dto.getGpkd())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_gpkd"));
             return true;
-        }if(StringUtils.isBlank(dto.getIssuedContractDateStr())){
+        }else{
+            try{
+                khdnDTO = null;
+                khdnDTO = khdnService.findEqualUnique("gpkd", dto.getGpkd().trim());
+            }catch (ObjectNotFoundException oe){}
+
+            if(khdnDTO != null || gpkdHS.contains(dto.getGpkd().trim())){
+                dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.duplicated_gpkd"));
+                return true;
+            }
+        }
+
+        if(StringUtils.isBlank(dto.getIssuedContractDateStr())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_issuedContractDate"));
             return true;
         }
+
         if(StringUtils.isBlank(dto.getStb_vas())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_stb"));
             return true;

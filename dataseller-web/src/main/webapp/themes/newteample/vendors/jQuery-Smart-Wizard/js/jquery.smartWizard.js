@@ -287,7 +287,13 @@ function SmartWizard(target, options) {
                     $($this.buttons.next).hide();
                 }
             }else{
-                $($this.buttons.next).removeClass("buttonDisabled");
+                // override custom from page
+                var flagPreventNext = $($this.buttons.next).data('prevent-goforward');
+                if(typeof flagPreventNext != 'undefined' && flagPreventNext){
+                    $($this.buttons.next).addClass("buttonDisabled");
+                }else{
+                    $($this.buttons.next).removeClass("buttonDisabled");
+                }
                 if ($this.options.hideButtonsOnDisabled) {
                     $($this.buttons.next).show();
                 }

@@ -87,6 +87,21 @@ public class KHDNValidator extends ApplicationObjectSupport implements Validator
                 }
             }
         }catch (ObjectNotFoundException one){}
+
+        try{
+            if(StringUtils.isNotBlank(pojo.getGpkd())){
+                KHDNDTO dto = khdnService.findEqualUnique("shopCode", pojo.getGpkd());
+                if(pojo.getKHDNId() != null){
+                    if(!dto.getKHDNId().equals(pojo.getKHDNId())){
+                        errors.rejectValue("pojo.gpkd", "label.khdn.shopCode.errors_duplicated");
+                    }
+                }else{
+                    if(dto != null){
+                        errors.rejectValue("pojo.gpkd", "label.khdn.shopCode.errors_duplicated");
+                    }
+                }
+            }
+        }catch (ObjectNotFoundException one){}
     }
 
     private void checkExistBeforeDelete(KHDNCommand command, Errors errors){

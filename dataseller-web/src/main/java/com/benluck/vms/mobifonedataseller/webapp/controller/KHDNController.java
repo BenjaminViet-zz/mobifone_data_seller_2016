@@ -147,6 +147,11 @@ public class KHDNController extends ApplicationObjectSupport {
             properties.put("stb_vas", pojo.getStb_vas());
         }
 
+        if(properties.size() == 0 && StringUtils.isBlank(command.getSortExpression())){
+            command.setSortExpression("name");
+            command.setSortDirection(Constants.SORT_DESC);
+        }
+
         Object[] resultObject = khdnService.findByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<KHDNDTO>)resultObject[1]);
