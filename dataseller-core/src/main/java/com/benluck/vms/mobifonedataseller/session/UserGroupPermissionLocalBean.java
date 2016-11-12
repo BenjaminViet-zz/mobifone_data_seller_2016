@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: benluck
@@ -13,7 +15,7 @@ public interface UserGroupPermissionLocalBean extends GenericSessionBean<UserGro
 
     void deleteByUserGroupId(Long userGroupId);
 
-    Long[] findPermissionIsListById(Long userGroupId);
+    List<Long> findPermissionIsListById(Long userGroupId);
 
-    void deletePermissionNotInList(Long userGroupId, Long[] permissionIds);
+    void deleteOutUpdatePermissionIds(Long userGroupId, List<Long> permissionIds);
 }

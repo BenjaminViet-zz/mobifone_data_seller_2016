@@ -60,10 +60,10 @@
 
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name"><fmt:message key="admin.khdn.name" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shopCode"><fmt:message key="admin.khdn.shopCode" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="name" path="pojo.name" cssClass="form-control" />
+                            <form:input id="shopCode" path="pojo.shopCode" cssClass="form-control" />
                         </div>
                     </div>
 
@@ -87,7 +87,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="mst"><fmt:message key="admin.khdn.label.stb_vas" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="stb_vas" path="pojo.stb_vas" cssClass="form-control money" />
+                            <form:input id="stb_vas" path="pojo.stb_vas" cssClass="form-control" />
                         </div>
                     </div>
 

@@ -140,8 +140,8 @@ public class KHDNController extends ApplicationObjectSupport {
         if(StringUtils.isNotBlank(pojo.getGpkd())){
             properties.put("gpkd", pojo.getGpkd());
         }
-        if(StringUtils.isNotBlank(pojo.getName())){
-            properties.put("name", pojo.getName());
+        if(StringUtils.isNotBlank(pojo.getShopCode())){
+            properties.put("shopCode", pojo.getShopCode());
         }
         if(StringUtils.isNotBlank(pojo.getStb_vas())){
             properties.put("stb_vas", pojo.getStb_vas());
