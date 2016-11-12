@@ -63,8 +63,8 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-success" onclick="javacsript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
-                            <a class="btn btn-primary" onclick="javascript: generateCardCodeForYear();"><i class="fa fa-cc" aria-hidden="true"></i>
-                                 <fmt:message key="label.generate_data_code" /></a>
+                            <a class="btn btn-primary"><i class="fa fa-cc" aria-hidden="true"></i>
+                                <fmt:message key="label.regenerate_data_code" /></a>
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>"/>
@@ -131,6 +131,8 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
+                        <a class="btn btn-primary" class="btnGenerateCardCode" id="btnGenerateCardCode" onclick="javascript: generateCardCodeForYear();"><i class="fa fa-cc" aria-hidden="true"></i>
+                            <fmt:message key="label.generate_data_code" /></a>
                         <c:choose>
                             <c:when test="${items.packageDataNotGenerateCardCodeListResult.size() > 0}">
                                 <display:table name="items.packageDataNotGenerateCardCodeListResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
@@ -167,6 +169,31 @@
 </form:form>
 
 <script language="javascript" type="text/javascript">
+    var genCardCode = $('#btnGenerateCardCode');
+
+    $(document).ready(function(){
+        hideSinhCardCode();
+    });
+
+    $( $('#tableList2 input[type="checkbox"]') ).change(function(){
+        if ( $(this).prop( "checked" ) ) {
+            genCardCode.removeClass("disabled")
+                    .css('pointer-events', 'auto');
+        } else {
+            genCardCode.addClass("disabled")
+                    .css('pointer-events', 'visible');
+        }
+    });
+
+    function hideSinhCardCode(){
+        if ( $('#tableList2 input[type="checkbox"]').is(":checked") ) {
+            genCardCode.removeClass("disabled")
+                .css('pointer-events', 'auto');
+        } else {
+            genCardCode.addClass("disabled")
+                    .css('pointer-events', 'visible');
+        }
+    }
 
     function overlay(){
         if ( $('#ajaxLoading').children().length ){
@@ -234,6 +261,7 @@
 
 
         var $packageDataCodeEls = $("input[name='packageDataGenerationCardCodeListId']:checked");
+
         if($packageDataCodeEls.length > 0){
 
             var packageDataIdArr = [];
@@ -273,8 +301,6 @@
                     });
                 }
             });
-        }else{
-            bootbox.alert('<fmt:message key="label.alert_title" />', '<fmt:message key="packagedatacodegen.generation.no_package_data_chosen" />', function(){});
         }
     }
 </script>
