@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.beanUtil.KHDNBeanUtil;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.ImportKHDNDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 import com.benluck.vms.mobifonedataseller.domain.KHDNEntity;
 import com.benluck.vms.mobifonedataseller.session.KHDNLocalBean;
@@ -57,7 +58,7 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
         entity.setGpkd(pojo.getGpkd());
         entity.setIssuedContractDate(pojo.getIssuedContractDate());
         entity.setStb_vas(pojo.getStb_vas());
-        entity.setCustId(pojo.getCustId());
+        entity.setShopCode(pojo.getShopCode());
         this.khdnService.save(entity);
     }
 
@@ -69,7 +70,7 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
         dbItem.setMst(pojo.getMst());
         dbItem.setIssuedContractDate(pojo.getIssuedContractDate());
         dbItem.setStb_vas(pojo.getStb_vas());
-        dbItem.setCustId(pojo.getCustId());
+        dbItem.setShopCode(pojo.getShopCode());
         this.khdnService.update(dbItem);
     }
 
@@ -81,5 +82,18 @@ public class KHDNManagementSessionBean implements KHDNManagementLocalBean{
     @Override
     public Boolean checkExistsBeforeDelete(Long khdnId) {
         return this.khdnService.checkExistsBeforeDelete(khdnId);
+    }
+
+    @Override
+    public void importData(List<ImportKHDNDTO> importDTOList) throws DuplicateKeyException {
+        for (ImportKHDNDTO dto : importDTOList){
+            KHDNEntity entity = new KHDNEntity();
+            entity.setName(dto.getName());
+            entity.setMst(dto.getMst());
+            entity.setGpkd(dto.getGpkd());
+            entity.setIssuedContractDate(dto.getIssuedContractDate());
+            entity.setStb_vas(dto.getStb_vas());
+            this.khdnService.save(entity);
+        }
     }
 }

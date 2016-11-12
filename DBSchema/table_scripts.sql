@@ -61,9 +61,9 @@ CREATE TABLE MOBI_DATA_KHDN
    GPKD                   VARCHAR(100)                  NOT NULL,
    IssuedContractDate     DATE                          NOT NULL,
    STB_VAS                VARCHAR(50)                   NOT NULL,
-   CUST_ID                NUMBER(24,0)                  NOT NULL,
+   SHOP_CODE              VARCHAR(20)                   NOT NULL,
    CONSTRAINT "MOBI_DATA_KHDN_MST_UQ" UNIQUE(MST),
-   CONSTRAINT "MOBI_DATA_KHDN_GPKD_UQ" UNIQUE(GPKD)
+   CONSTRAINT "MOBI_DATA_KHDN_GPKD_UQ" UNIQUE(GPKD),
 )  TABLESPACE "USERS";
 
 CREATE TABLE MOBI_DATA_ORDER

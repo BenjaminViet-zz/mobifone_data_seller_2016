@@ -20,11 +20,11 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
 
-<c:url var="backUrl" value="/admin/vendor/list.html"/>
-<c:url var="formUrl" value="/admin/vendor/add.html"/>
+<c:url var="backUrl" value="/admin/khdn/list.html"/>
+<c:url var="formUrl" value="/admin/khdn/add.html"/>
 
 <c:if test="${pojo.KHDNID != null}">
-    <c:url var="formUrl" value="/admin/vendor/edit.html"/>
+    <c:url var="formUrl" value="/admin/khdn/edit.html"/>
 </c:if>
 
 <div class="page-title">
@@ -108,12 +108,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="custId">
-                            <fmt:message key="admin.khdn.custId" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shopCode">
+                            <fmt:message key="admin.khdn.shopCode" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="custId" path="pojo.custId" cssClass="required nohtml form-control"></form:input>
-                            <form:errors for="gpkd" path="pojo.custId" cssClass="error-inline-validate"/>
+                            <form:input id="shopCode" path="pojo.shopCode" cssClass="required nohtml form-control"></form:input>
+                            <form:errors for="shopCode" path="pojo.shopCode" cssClass="error-inline-validate"/>
                         </div>
                     </div>
                     <div class="form-group last">

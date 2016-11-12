@@ -22,7 +22,7 @@ public class KHDNBeanUtil {
         dto.setGpkd(entity.getGpkd());
         dto.setIssuedContractDate(entity.getIssuedContractDate());
         dto.setStb_vas(entity.getStb_vas());
-        dto.setCustId(entity.getCustId());
+        dto.setShopCode(entity.getShopCode());
         return dto;
     }
 

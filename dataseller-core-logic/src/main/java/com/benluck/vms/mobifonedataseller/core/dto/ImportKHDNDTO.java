@@ -6,37 +6,31 @@ import java.sql.Timestamp;
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
- * Date: 10/30/16
- * Time: 22:44
+ * Date: 11/12/16
+ * Time: 00:15
  * To change this template use File | Settings | File Templates.
  */
-public class KHDNDTO implements Serializable{
-    private static final long serialVersionUID = -1784528134368776822L;
+public class ImportKHDNDTO implements Serializable{
+    private static final long serialVersionUID = -2086639060452005784L;
 
-    private Long KHDNId;
     private String name;
     private String mst;
     private String gpkd;
     private Timestamp issuedContractDate;
+    private String issuedContractDateStr;
     private String stb_vas;
     private String shopCode;
+    private String errorMessage;
 
-    public KHDNDTO() {
-    }
+    public ImportKHDNDTO() {}
 
-    public KHDNDTO(Long KHDNId, String name, String mst, String gpkd) {
-        this.KHDNId = KHDNId;
+    public ImportKHDNDTO(String shopCode, String name, String mst, String gpkd, String issuedContractDateStr, String stb_vas) {
+        this.shopCode = shopCode;
         this.name = name;
         this.mst = mst;
         this.gpkd = gpkd;
-    }
-
-    public Long getKHDNId() {
-        return KHDNId;
-    }
-
-    public void setKHDNId(Long KHDNId) {
-        this.KHDNId = KHDNId;
+        this.issuedContractDateStr = issuedContractDateStr;
+        this.stb_vas = stb_vas;
     }
 
     public String getName() {
@@ -85,5 +79,21 @@ public class KHDNDTO implements Serializable{
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getIssuedContractDateStr() {
+        return issuedContractDateStr;
+    }
+
+    public void setIssuedContractDateStr(String issuedContractDateStr) {
+        this.issuedContractDateStr = issuedContractDateStr;
     }
 }

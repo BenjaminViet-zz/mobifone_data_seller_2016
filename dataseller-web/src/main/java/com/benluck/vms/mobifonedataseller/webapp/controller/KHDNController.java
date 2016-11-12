@@ -47,7 +47,7 @@ public class KHDNController extends ApplicationObjectSupport {
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping( value = {"/admin/vendor/list.html"})
+    @RequestMapping( value = {"/admin/khdn/list.html"})
     public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult) throws RemoveException {
@@ -84,7 +84,7 @@ public class KHDNController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/admin/vendor/add.html", "/admin/vendor/edit.html"})
+    @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
@@ -107,7 +107,7 @@ public class KHDNController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        return new ModelAndView("redirect:/admin/vendor/list.html");
+                        return new ModelAndView("redirect:/admin/khdn/list.html");
                     }
                 }
             } else if( pojo.getKHDNId() != null ) {

@@ -103,8 +103,8 @@ public class ReportDetailExpenseController extends ApplicationObjectSupport{
             throw new Exception("Error happened when fetching report detail expense for CustID: " + command.getPojo().getCustId());
         }
 
-        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/baoc_cao_chi_tiet_chi_phi.xls");
-        String outputFileName = "/files/temp/export/bao_cao_tong_hop_chi_phi_" + exportDate + ".xls";
+        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/bao_cao_chi_tiet_chi_phi.xls.xls");
+        String outputFileName = "/files/temp/export/bao_cao_chi_tiet_chi_phi.xls_" + exportDate + ".xls";
         String export2FileName = request.getSession().getServletContext().getRealPath(outputFileName);
         WorkbookSettings ws = new WorkbookSettings();
         ExcelUtil.setEncoding4Workbook(ws);

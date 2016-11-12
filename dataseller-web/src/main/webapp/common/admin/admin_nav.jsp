@@ -56,12 +56,14 @@
                         </li>
                         <li><a><i class="fa fa-users" aria-hidden="true"></i> <fmt:message key="khdn.manager"/> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li><a href="<c:url value="${prefix}/vendor/list.html"/> "><fmt:message key="khdn.manager.list"/></a></li>
+                                <li><a href="<c:url value="${prefix}/khdn/list.html"/> "><fmt:message key="khdn.manager.list"/></a></li>
+                                <li><a href="<c:url value="${prefix}/khdn/import.html"/> "><fmt:message key="khdn.import.manager"/></a></li>
                             </ul>
                         </li>
                         <li><a><i class="fa fa-bar-chart-o"></i> <fmt:message key="cost.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li><a href="<c:url value="${prefix}/cost/list.html"/> "><fmt:message key="cost.manager.list" /> </a></li>
+                                <li><a href="<c:url value="${prefix}/codeHistory/list.html"/> "><fmt:message key="cost_history.list" /></a></li>
                             </ul>
                         </li>
                         <li><a><i class="fa fa-clone"></i> <fmt:message key="order.manager" /> <span class="fa fa-chevron-down"></span></a>
@@ -74,11 +76,6 @@
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/reportGeneralExpense/list.html"/> "><fmt:message key="report.baocaotonghopchiphiphattrien_duytri" /></a></li>
                             <li><a href="<c:url value="${prefix}/reportDetailExpense/list.html"/> "><fmt:message key="report.baocaochitietchiphiphattrien_duytri" /></a></li>
-                        </ul>
-                    </li>
-                    <li><a><i class="fa fa-pie-chart" aria-hidden="true"></i> <fmt:message key="cost_history.manager" /> <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="<c:url value="${prefix}/codeHistory/list.html"/> "><fmt:message key="cost_history.list" /></a></li>
                         </ul>
                     </li>
                 </ul>

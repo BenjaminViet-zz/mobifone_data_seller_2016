@@ -21,9 +21,9 @@ function SmartWizard(target, options) {
     this.elmStepContainer = $('<div></div>').addClass("stepContainer");
     this.loader = $('<div>Loading</div>').addClass("loader");
     this.buttons = {
-        next : $('<a>'+options.labelNext+'</a>').attr("href","#").addClass("buttonNext"),
-        previous : $('<a>'+options.labelPrevious+'</a>').attr("href","#").addClass("buttonPrevious"),
-        finish  : $('<a>'+options.labelFinish+'</a>').attr("href","#").addClass("buttonFinish")
+        next : $('<a>'+options.labelNext+'</a>').attr("href","#").addClass("buttonNext btn btn-success"),
+        previous : $('<a>'+options.labelPrevious+'</a>').attr("href","#").addClass("buttonPrevious btn btn-primary"),
+        finish  : $('<a>'+options.labelFinish+'</a>').attr("href","#").addClass("buttonFinish btn btn-default")
     };
 
     /*
@@ -52,13 +52,18 @@ function SmartWizard(target, options) {
         $this.elmStepContainer.append(allDivs);
         elmActionBar.append($this.loader);
         $this.target.append($this.elmStepContainer);
-        elmActionBar.append($this.buttons.finish)
+        elmActionBar.append($this.buttons.previous)
                     .append($this.buttons.next)
-                    .append($this.buttons.previous);
+                    .append($this.buttons.finish);
         $this.target.append(elmActionBar);
         this.contentWidth = $this.elmStepContainer.width();
 
         $($this.buttons.next).click(function() {
+            var preventForward = $(this).data('prevent-goforward');
+
+            if(typeof preventForward != 'undefined' && preventForward){
+                return false;
+            }
             $this.goForward();
             return false;
         });
@@ -74,9 +79,14 @@ function SmartWizard(target, options) {
                         return false;
                     }
                 }else{
-                    var frm = $this.target.parents('form');
-                    if(frm && frm.length){
-                        frm.submit();
+                    var manualHandleFlag = $(this).data('manual-handle');
+                    if(manualHandleFlag){
+                        return false;
+                    }else{
+                        var frm = $this.target.parents('form');
+                        if(frm && frm.length){
+                            frm.submit();
+                        }
                     }
                 }
             }

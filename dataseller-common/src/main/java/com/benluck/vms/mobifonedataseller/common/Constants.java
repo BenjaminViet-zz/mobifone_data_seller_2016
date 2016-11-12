@@ -130,6 +130,8 @@ public class Constants {
     public static final String ACTION_UPDATE = "update";
     public static final String ACTION_SEARCH = "search";
     public static final String ACTION_EXPORT = "export";
+    public static final String ACTION_UPLOAD = "upload";
+    public static final String ACTION_IMPORT = "import";
 
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
@@ -150,6 +152,13 @@ public class Constants {
     public static final Integer ORDER_ACTIVE_STATUS_DIE = 1;
 
     public static final Boolean ADMIN_EXPORT_4_KHDN = true;
+
+    // Import Constants
+    public static final String ORDER_IMPORT_FILE_CACHE_KEY = "ORDER_IMPORT_FILE_CACHE_KEY";
+
+    public static final Integer IMPORT_ORDER_STEP_1_CHOOSE_FILE = 0;
+    public static final Integer IMPORT_ORDER_STEP_2_UPLOAD = 1;
+    public static final Integer IMPORT_ORDER_STEP_3_IMPORT = 2;
 
 //    Order History Constants
     public static final Integer ORDER_HISTORY_OPERATOR_CREATED = 0;

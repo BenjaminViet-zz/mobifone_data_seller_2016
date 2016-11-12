@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.core.business;
 
+import com.benluck.vms.mobifonedataseller.core.dto.ImportKHDNDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 
 import javax.ejb.DuplicateKeyException;
@@ -34,4 +35,6 @@ public interface KHDNManagementLocalBean {
     KHDNDTO findEqualUnique(String key, String value) throws ObjectNotFoundException;
 
     Boolean checkExistsBeforeDelete(Long khdnId);
+
+    void importData(List<ImportKHDNDTO> importDTOList) throws DuplicateKeyException;
 }

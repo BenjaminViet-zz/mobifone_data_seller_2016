@@ -19,9 +19,10 @@
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
-<c:url var="addUrl" value="${prefix}/vendor/add.html"/>
-<c:url var="editUrl" value="${prefix}/vendor/edit.html"/>
-<c:url var="formUrl" value="${prefix}/vendor/list.html"/>
+<c:url var="addUrl" value="${prefix}/khdn/add.html"/>
+<c:url var="editUrl" value="${prefix}/khdn/edit.html"/>
+<c:url var="formUrl" value="${prefix}/khdn/list.html"/>
+<c:url var="importUrl" value="${prefix}/khdn/import.html"/>
 
 <div class="page-title">
     <div class="title_left">
@@ -31,6 +32,7 @@
     <div class="title_right">
         <div class="action-bar">
             <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+            <a class="btn btn-primary" href="${importUrl}"> <fmt:message key="label.button.import"/></a>
         </div>
     </div>
 
@@ -111,9 +113,10 @@
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
                                    class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                         <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="label.stt" style="width: 4%">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                        <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="admin.khdn.label.name" style="width: 20%" />
-                        <display:column headerClass="table_header text-center" property="mst" sortName="mst" sortable="true" titleKey="admin.khdn.label.mst" style="width: 20%" />
-                        <display:column headerClass="table_header text-center" property="gpkd" sortName="gpkd" sortable="true" titleKey="admin.khdn.label.gpkd" style="width: 20%" />
+                        <display:column headerClass="table_header text-center" property="shopCode" sortName="shopCode" sortable="true" titleKey="admin.khdn.shopCode" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="admin.khdn.label.name" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="mst" sortName="mst" sortable="true" titleKey="admin.khdn.label.mst" style="width: 15%" />
+                        <display:column headerClass="table_header text-center" property="gpkd" sortName="gpkd" sortable="true" titleKey="admin.khdn.label.gpkd" style="width: 15%" />
                         <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedContractDate" titleKey="admin.khdn.label.issuedContractDate" style="width: 10%">
                             <fmt:formatDate value="${tableList.issuedContractDate}" pattern="${datePattern}" />
                         </display:column>
