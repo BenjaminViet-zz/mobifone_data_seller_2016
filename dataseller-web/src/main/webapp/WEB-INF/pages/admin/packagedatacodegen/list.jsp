@@ -169,35 +169,36 @@
 </form:form>
 
 <script language="javascript" type="text/javascript">
-    var genCardCode = $('#btnGenerateCardCode');
-
+    var $genCardCode = $('#btnGenerateCardCode');
+    var $ajaxLoading = $('#ajaxLoading');
+    var tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
     $(document).ready(function(){
         hideSinhCardCode();
     });
 
-    $( $('#tableList2 input[type="checkbox"]') ).change(function(){
+    $( tableList2Checkbox ).change(function(){
         if ( $(this).prop( "checked" ) ) {
-            genCardCode.removeClass("disabled")
+            $genCardCode.removeClass("disabled")
                     .css('pointer-events', 'auto');
         } else {
-            genCardCode.addClass("disabled")
+            $genCardCode.addClass("disabled")
                     .css('pointer-events', 'visible');
         }
     });
 
     function hideSinhCardCode(){
-        if ( $('#tableList2 input[type="checkbox"]').is(":checked") ) {
-            genCardCode.removeClass("disabled")
+        if ( tableList2Checkbox.is(":checked") ) {
+            $genCardCode.removeClass("disabled")
                 .css('pointer-events', 'auto');
         } else {
-            genCardCode.addClass("disabled")
+            $genCardCode.addClass("disabled")
                     .css('pointer-events', 'visible');
         }
     }
 
     function overlay(){
-        if ( $('#ajaxLoading').children().length ){
-            $('#ajaxLoading').css({'position': 'absolute',
+        if ( $ajaxLoading.children().length ){
+            $ajaxLoading.css({'position': 'absolute',
                 'top': '0', 'left': '0',
                 'z-index': '9999',
                 'width': '100%',
@@ -205,7 +206,7 @@
                 'background-color': 'rgba(0,0,0,0.5)'}
             )
         } else {
-            $('#ajaxLoading').attr('style', '');
+            $ajaxLoading.attr('style', '');
         }
     }
 
@@ -285,7 +286,7 @@
                             if(res.r != null){
                                 if ( res.r ) {
                                     var spinner = new Spinner(opts).spin(target);
-                                    $('#ajaxLoading').delay(3000).fadeOut(500);
+                                    $ajaxLoading.delay(3000).fadeOut(500);
                                     overlay();
                                     setTimeout(function(){
                                         checkLoadPage();
@@ -293,9 +294,6 @@
                                 } else {
                                     bootbox.alert('<fmt:message key="label.alert_title" />', (res.msg != null ? res.msg : '<fmt:message key="packagedatacodegen.generation.error_generation" />'), function(){});
                                 }
-                                /*if(!res.r){
-
-                                }*/
                             }
                         }
                     });

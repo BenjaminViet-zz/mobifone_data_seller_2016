@@ -90,7 +90,7 @@
                                                 <fmt:message key="import.import_page.step1.instruction1"></fmt:message>
                                             </p>
                                             <div style="padding: 5px 0px 12px 60px;">
-                                                <a id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><fmt:message key="import.import_page.step1.instruction2"/></a>
+                                                <a id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
                                             </div>
                                             <p><fmt:message key="import.import_page.step1.instruction3"/></p>
 
