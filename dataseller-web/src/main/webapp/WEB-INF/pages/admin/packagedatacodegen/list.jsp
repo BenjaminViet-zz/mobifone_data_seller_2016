@@ -171,12 +171,12 @@
 <script language="javascript" type="text/javascript">
     var $genCardCode = $('#btnGenerateCardCode');
     var $ajaxLoading = $('#ajaxLoading');
-    var tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
+    var $tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
     $(document).ready(function(){
         hideSinhCardCode();
     });
 
-    $( tableList2Checkbox ).change(function(){
+    $( $tableList2Checkbox ).change(function(){
         if ( $(this).prop( "checked" ) ) {
             $genCardCode.removeClass("disabled")
                     .css('pointer-events', 'auto');
@@ -187,7 +187,7 @@
     });
 
     function hideSinhCardCode(){
-        if ( tableList2Checkbox.is(":checked") ) {
+        if ( $tableList2Checkbox.is(":checked") ) {
             $genCardCode.removeClass("disabled")
                 .css('pointer-events', 'auto');
         } else {
