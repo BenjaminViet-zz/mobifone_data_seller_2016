@@ -33,7 +33,7 @@
             <div class="menu_section">
 
                 <ul class="nav side-menu">
-                    <li><a><i class="fa fa-credit-card" aria-hidden="true"></i> <fmt:message key="packagedatacodegen.notification.manager" /> <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <fmt:message key="packagedatacodegen.notification.manager" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/notification.html" />"><fmt:message key="packagedatacodegen.notification.list" /></a></li>
                         </ul>

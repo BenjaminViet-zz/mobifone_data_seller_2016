@@ -32,7 +32,8 @@
     text-align: center
 }
 
-.wizard_horizontal ul.wizard_steps li a,.wizard_horizontal ul.wizard_steps li:hover {
+.wizard_horizontal ul.wizard_steps li a,
+.wizard_horizontal ul.wizard_steps li:hover {
     display: block;
     position: relative;
     -moz-opacity: 1;
@@ -69,12 +70,19 @@
     z-index: 5
 }
 
-.wizard_horizontal ul.wizard_steps li a.selected:before,.step_no {
+.wizard_horizontal ul.wizard_steps .step_descr {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.wizard_horizontal ul.wizard_steps li a.selected:before,
+.step_no {
     background: #34495E;
     color: #fff
 }
 
-.wizard_horizontal ul.wizard_steps li a.done:before,.wizard_horizontal ul.wizard_steps li a.done .step_no {
+.wizard_horizontal ul.wizard_steps li a.done:before,
+.wizard_horizontal ul.wizard_steps li a.done .step_no {
     background: #1ABB9C;
     color: #fff
 }
@@ -1058,7 +1066,7 @@ a:focus {
 
 .nav.child_menu > li > a {
     color: rgba(255, 255, 255, 0.75);
-    font-size: 12px;
+    font-size: 13px;
     padding: 9px;
 }
 
@@ -4076,7 +4084,7 @@ a.hiddenanchor {
 .login_wrapper {
     right: 0;
     margin: 5% auto 0 auto;
-    max-width: 420px;
+    max-width: 440px;
     position: relative;
 }
 

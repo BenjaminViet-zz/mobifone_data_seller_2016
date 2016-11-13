@@ -56,7 +56,7 @@
                             <li>
                                 <a href="#step-1">
                                     <span class="step_no">1</span>
-                                    <span class="step_descr">
+                                    <span class="step_descr text-primary">
                                         <fmt:message key="label.step_1" /><br />
                                         <small><fmt:message key="admin.khdn.import_page.step_1_title" /></small>
                                     </span>
@@ -85,13 +85,13 @@
                             <div class="row-fluid pane_info">
                                 <div class="widget-box">
                                     <div class="widget-content nopadding">
-                                        <div style="margin: 10px;">
+                                        <div>
                                             <p>
                                                 <fmt:message key="import.import_page.step1.instruction1"></fmt:message>
                                             </p>
-                                            <div style="padding: 5px 0px 12px 60px;">
-                                                <a id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
-                                            </div>
+                                            <p>
+                                                <a class="text-primary" id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
+                                            </p>
                                             <p><fmt:message key="import.import_page.step1.instruction3"/></p>
 
                                         </div>
@@ -119,7 +119,7 @@
                                         <th class="table_header text-center"><fmt:message key="import.review_list.gpkd" /></th>
                                         <th class="table_header text-center"><fmt:message key="import.review_list.ngay_ky_hop_dong" /></th>
                                         <th class="table_header text-center"><fmt:message key="import.review_list.stb_vas" /></th>
-                                        <th class="table_header text-center"><fmt:message key="import.review_list.error_message" /></th>
+                                        <th class="table_header text-center"><fmt:message key="import.review_list.status" /></th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -197,8 +197,8 @@
     }
 
     function overlay(){
-        if ( $ajaxLoading.children().length ){
-            $ajaxLoading.css({'position': 'absolute',
+        if ( $('#ajaxLoading').children().length ){
+            $('#ajaxLoading').css({'position': 'absolute',
                 'top': '0', 'left': '0',
                 'z-index': '9999',
                 'width': '100%',
@@ -206,7 +206,7 @@
                 'background-color': 'rgba(0,0,0,0.5)'}
             )
         } else {
-            $ajaxLoading.attr('style', '');
+            $('#ajaxLoading').attr('style', '');
         }
     }
 
