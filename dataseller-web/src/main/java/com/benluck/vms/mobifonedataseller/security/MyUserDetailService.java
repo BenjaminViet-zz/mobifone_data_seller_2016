@@ -122,7 +122,7 @@ public class MyUserDetailService implements UserDetailsService {
                         account.setStatus(Constants.USER_ACTIVE);
                         account.setLDAP(Constants.USER_LDAP);
                         account.setDisplayName(userDTO.getDisplayName());
-                        account = userService.updateItem(account);
+                        account = userService.updateItem(account, false);
                     }else{
                         account = new UserDTO();
                         account.setUserName(username);

@@ -57,15 +57,14 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     }
 
     @Override
-    public UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException {
+    public UserDTO updateItem(UserDTO pojo, Boolean flagUpdateUserGroup) throws DuplicateKeyException, ObjectNotFoundException {
         UserEntity dbItem = this.userService.findById(pojo.getUserId());
         dbItem.setUserName(pojo.getUserName());
         dbItem.setDisplayName(pojo.getDisplayName());
         dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
 
-        if(!dbItem.getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN)
-                && !dbItem.getUserName().equalsIgnoreCase("admin")){
+        if(flagUpdateUserGroup != null && flagUpdateUserGroup.booleanValue()){
             dbItem.setStatus(pojo.getStatus());
             UserGroupEntity userGroupEntity = new UserGroupEntity();
             userGroupEntity.setUserGroupId(pojo.getUserGroup().getUserGroupId());

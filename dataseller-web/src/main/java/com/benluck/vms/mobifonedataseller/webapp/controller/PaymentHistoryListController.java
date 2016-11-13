@@ -4,11 +4,13 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.MBDCostCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -57,11 +59,17 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping(value = {"/admin/payment/list.html", "/USER/payment/list.html"})
+    @RequestMapping(value = {"/admin/payment/history.html", "/user/payment/history.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCostCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
-        ModelAndView mav = new ModelAndView("/admin/payment/list");
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/history.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
+        ModelAndView mav = new ModelAndView("/admin/payment/history");
         String action = command.getCrudaction();
 
         if(StringUtils.isNotBlank(action)){

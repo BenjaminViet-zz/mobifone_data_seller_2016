@@ -8,6 +8,9 @@
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
+<security:authorize access="hasAnyAuthority('KHDN')">
+    <c:set var="prefix" value="/khdn" />
+</security:authorize>
 <c:url var="backUrl" value="${prefix}/dashboard.html"/>
 <c:url var="formUrl" value="${prefix}/profile.html"/>
 
@@ -58,20 +61,22 @@
                             <form:errors for="password" path="pojo.password" cssClass="error-inline-validate"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="userGroup">
-                            <fmt:message key="user.label.usergroup" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required form-control" cssStyle="width: 250px;">
-                                <form:option value=""><fmt:message key="label.select" /></form:option>
-                                <c:forEach items="${userGroups}" var="KHDN">
-                                    <option <c:if test="${KHDN.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${KHDN.userGroupId}">${KHDN.description}</option>
-                                </c:forEach>
-                            </form:select>
-                            <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
+                    <security:authorize access="hasAnyAuthority('ADMIN', 'USER_GROUP_MANAGER')">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="userGroup">
+                                <fmt:message key="user.label.usergroup" />
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required form-control" cssStyle="width: 250px;">
+                                    <form:option value=""><fmt:message key="label.select" /></form:option>
+                                    <c:forEach items="${userGroups}" var="KHDN">
+                                        <option <c:if test="${KHDN.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${KHDN.userGroupId}">${KHDN.description}</option>
+                                    </c:forEach>
+                                </form:select>
+                                <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
+                            </div>
                         </div>
-                    </div>
+                    </security:authorize>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">
                             <fmt:message key="label.status" />

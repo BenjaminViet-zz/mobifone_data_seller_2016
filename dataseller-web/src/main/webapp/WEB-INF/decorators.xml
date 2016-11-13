@@ -13,6 +13,7 @@
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>
         <pattern>/user/*</pattern>
+        <pattern>/khdn/*</pattern>
     </decorator>
     <decorator name="login" page="login.jsp">
         <pattern>/login*</pattern>

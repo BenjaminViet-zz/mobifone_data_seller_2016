@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 public class MBDReportGeneralExpenseDTO implements Serializable{
     private static final long serialVersionUID = 6152971691370936337L;
     private Long costId;
-    private Long custId;
     private String shopCode;
+    private String empCode;
     private String shopName;
     private Double developmentAmount1;
     private Double developmentAmount2;
@@ -22,6 +22,10 @@ public class MBDReportGeneralExpenseDTO implements Serializable{
     private Double maintainAmount1;
     private Double maintainAmount2;
     private Double maintainAmount3;
+    private Timestamp issuedDateTime;
+    private Timestamp issuedDateTimeFrom;
+    private Timestamp issuedDateTimeTo;
+    private String isdn;
 
     public Long getCostId() {
         return costId;
@@ -31,12 +35,12 @@ public class MBDReportGeneralExpenseDTO implements Serializable{
         this.costId = costId;
     }
 
-    public Long getCustId() {
-        return custId;
+    public String getEmpCode() {
+        return empCode;
     }
 
-    public void setCustId(Long custId) {
-        this.custId = custId;
+    public void setEmpCode(String empCode) {
+        this.empCode = empCode;
     }
 
     public String getShopCode() {
@@ -101,5 +105,37 @@ public class MBDReportGeneralExpenseDTO implements Serializable{
 
     public void setMaintainAmount3(Double maintainAmount3) {
         this.maintainAmount3 = maintainAmount3;
+    }
+
+    public Timestamp getIssuedDateTime() {
+        return issuedDateTime;
+    }
+
+    public void setIssuedDateTime(Timestamp issuedDateTime) {
+        this.issuedDateTime = issuedDateTime;
+    }
+
+    public String getIsdn() {
+        return isdn;
+    }
+
+    public void setIsdn(String isdn) {
+        this.isdn = isdn;
+    }
+
+    public Timestamp getIssuedDateTimeFrom() {
+        return issuedDateTimeFrom;
+    }
+
+    public void setIssuedDateTimeFrom(Timestamp issuedDateTimeFrom) {
+        this.issuedDateTimeFrom = issuedDateTimeFrom;
+    }
+
+    public Timestamp getIssuedDateTimeTo() {
+        return issuedDateTimeTo;
+    }
+
+    public void setIssuedDateTimeTo(Timestamp issuedDateTimeTo) {
+        this.issuedDateTimeTo = issuedDateTimeTo;
     }
 }

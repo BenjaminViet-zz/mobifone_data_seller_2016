@@ -6,6 +6,9 @@
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
+<security:authorize access="hasAnyAuthority('KHDN')">
+    <c:set var="prefix" value="/khdn" />
+</security:authorize>
 <c:redirect url="${prefix}/notification.html"/>
 
 

@@ -42,15 +42,44 @@
             <div class="x_panel">
                 <div class="x_content">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shop_Code"><fmt:message key="general_expense_report.shop_code" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.custId" cssClass="form-control">
-                                <option value=""><fmt:message key="label.choose" /></option>
-                                <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.custId eq KHDN.custId}">selected="true"</c:if> value="${KHDN.custId}">${KHDN.name}</option>
-                                </c:forEach>
-                            </form:select>
+                            <form:input id="shop_Code" path="pojo.shopCode" cssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="empCode"><fmt:message key="general_expense_report.emp_code" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="empCode" path="pojo.empCode" cssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="isdn"><fmt:message key="general_expense_report.isdn" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="isdn" path="pojo.isdn" cssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDateFrom"><fmt:message key="general_expense_report.issuedDateFrom" /></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-append date" >
+                                <input name="issuedDateFrom" id="issuedDateFrom" class="prevent_type text-center form-control" type="text"
+                                       value="<fmt:formatDate pattern="${datePattern}" value="${item.issuedDateFrom}" />" placeholder="${symbolDateEmpty}"/>
+                                <span class="add-on" id="staDateFromIcon"><i class="icon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDateTo"><fmt:message key="general_expense_report.issuedDateTo" /></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="input-append date" >
+                                <input name="issuedDateTo" id="issuedDateTo" class="prevent_type text-center form-control" type="text"
+                                       value="<fmt:formatDate pattern="${datePattern}" value="${item.issuedDateTo}" />" placeholder="${symbolDateEmpty}"/>
+                                <span class="add-on" id="issuedDateToIcon"><i class="icon-calendar"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group last">
@@ -81,13 +110,13 @@
                                 <display:column headerClass="table_header text-center" property="shopCode" titleKey="general_expense_report.shop_code" style="width: 10%"/>
                                 <display:column headerClass="table_header text-center" property="shopName" titleKey="general_expense_report.shop_name" style="width:15%"/>
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase1" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentPhase1}" />
+                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1}" />
                                 </display:column>
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase2" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentPhase2}" />
+                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount2}" />
                                 </display:column>
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase3" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentPhase3}" />
+                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount3}" />
                                 </display:column>
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase1" style="width: 10%" >
                                     <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount1}" />
@@ -99,7 +128,7 @@
                                     <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount3}" />
                                 </display:column>
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.total" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentPhase1 + tableList.developmentPhase2 + tableList.developmentPhase3 + tableList.maintainAmount1 + tableList.maintainAmount2 + tableList.maintainAmount3}" />
+                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1 + tableList.developmentAmount2 + tableList.developmentAmount3 + tableList.maintainAmount1 + tableList.maintainAmount2 + tableList.maintainAmount3}" />
                                 </display:column>
                                 <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
                                 <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
@@ -117,18 +146,46 @@
 </form:form>
 
 <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        initDatePicker();
+    });
+
     function resetForm(){
         $("input[type='text']").val('');
         selectFirstItemSelect2('#userGroupMenu');
     }
 
     function submitForm(){
-        var selectedCustId = $('#KHDN').val();
-        if(selectedCustId != ''){
-            $('#listForm').submit();
-        }else{
-            bootbox.alert('<fmt:message key="label.alert_title" />', '<fmt:message key="general_expense_report.search_popup" />', function(){});
-        }
+        $('#crudaction').val('${Constants.ACTION_SEARCH}');
+        $('#listForm').submit();
+    }
+
+    function initDatePicker(){
+        var issuedDateFromEl = $("#staDateFrom");
+        issuedDateFromEl.datepicker({
+            dateFormat: 'dd/mm/yy',
+            onRender: function (date) {
+            }}).on('changeDate',function (ev) {
+                    issuedDateFromEl.hide();
+                }).data('datepicker');
+
+        $('#staDateFromIcon').click(function () {
+            issuedDateFromEl.focus();
+            return true;
+        });
+
+        var issuedDateToEl = $("#staDateTo");
+        issuedDateToEl.datepicker({
+            dateFormat: 'dd/mm/yy',
+            onRender: function (date) {
+            }}).on('changeDate',function (ev) {
+                    issuedDateToEl.hide();
+                }).data('datepicker');
+
+        $('#staDateToIcon').click(function () {
+            issuedDateToEl.focus();
+            return true;
+        });
     }
 
     function exportExcel(){

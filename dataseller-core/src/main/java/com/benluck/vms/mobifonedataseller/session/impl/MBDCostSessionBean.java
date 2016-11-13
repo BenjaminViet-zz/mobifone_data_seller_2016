@@ -24,19 +24,69 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
 
     @Override
     public Object[] search4GeneralExpenseReport(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer maxPageItems) {
-        StringBuilder sqlSelectQuery = new StringBuilder();
-        sqlSelectQuery.append(" SELECT shop_Code, shop_Name, development_Amount1 ,development_Amount2 ,development_Amount3, maintain_Phase1, maintain_Phase2, maintain_Phase3 ")
-                    .append(" FROM MOBI_DATA_COST WHERE Cust_ID = :custID ORDER BY shop_Code, shop_Name ASC ");
+        StringBuilder sqlMainQuery = new StringBuilder();
+        sqlMainQuery.append(" FROM MOBI_DATA_COST WHERE 1 = 1");
 
-        Query query = entityManager.createNativeQuery(sqlSelectQuery.toString());
-        query.setParameter("custID", Long.valueOf(properties.get("custID").toString()));
+        if(properties.get("shopCode") != null){
+            sqlMainQuery.append(" AND shop_Code LIKE :shopCode ");
+        }
+        if(properties.get("empCode") != null){
+            sqlMainQuery.append(" AND emp_Code LIKE :empCode ");
+        }
+        if(properties.get("isdn") != null){
+            sqlMainQuery.append(" AND isdn LIKE :isdn ");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            sqlMainQuery.append(" AND c.issue_Month >= to_date(substr(:issuedDateTimeFrom,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            sqlMainQuery.append(" AND c.issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+        }
+
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT shop_Code, shop_Name, development_Amount1 ,development_Amount2 ,development_Amount3, maintain_Amount1, maintain_Amount2, maintain_Amount3 ")
+                .append(sqlMainQuery.toString())
+                .append(" ORDER BY shop_Code, shop_Name, issue_Month ASC ");
+
+        Query query = entityManager.createNativeQuery(sqlQuery.toString());
+        if(properties.get("shopCode") != null){
+            query.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+        }
+        if(properties.get("empCode") != null){
+            query.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+        }
+        if(properties.get("isdn") != null){
+            query.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            query.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            query.setParameter("issuedDateTimeTo", properties.get("issuedDateTimeTo").toString());
+        }
+
         query.setFirstResult(firstItem);
         query.setMaxResults(maxPageItems);
         List resultSet = query.getResultList();
 
         StringBuilder sqlCountQuery = new StringBuilder();
-        sqlCountQuery.append(" SELECT COUNT(CostID) FROM MOBI_DATA_COST WHERE Cust_ID = :custID ");
-        Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString()).setParameter("custID", Long.valueOf(properties.get("custID").toString()));
+        sqlCountQuery.append(" SELECT COUNT(CostID) ").append(sqlMainQuery.toString());
+        Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString());
+        if(properties.get("shopCode") != null){
+            countQuery.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+        }
+        if(properties.get("empCode") != null){
+            countQuery.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+        }
+        if(properties.get("isdn") != null){
+            countQuery.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            countQuery.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            countQuery.setParameter("issuedDateTimeTo", properties.get("issuedDateTimeTo").toString());
+        }
         Integer count = Integer.valueOf(countQuery.getSingleResult().toString());
 
         return new Object[]{count, resultSet};
@@ -44,21 +94,75 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
 
     @Override
     public Object[] search4DetailExpenseReport(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer maxPageItems) {
-        StringBuilder sqlSelectQuery = new StringBuilder();
-        sqlSelectQuery.append(" SELECT emp_Code, isdn, name, name as tenKhachHang, 'LOAI HM' as loaiHM, bus_Type, cust_Type ")
-                    .append("           , sta_DateTime as ngayDauNoi, insert_DateTime as ngayNopHoSo, act_Status as trangThaiChanCat ")
-                    .append("           , status as trangThaiThueBao, '0' as cuocThucThu, '0' as chuKy , 0 as hoaHong ")
-                    .append(" FROM MOBI_DATA_COST WHERE Cust_ID = :custID ORDER BY name ASC ");
+        StringBuilder sqlMainQuery = new StringBuilder();
+        sqlMainQuery.append(" FROM MOBI_DATA_COST WHERE 1 = 1 ");
+        if(properties.get("shopCode") != null){
+            sqlMainQuery.append(" AND shop_Code LIKE :shopCode ");
+        }
+        if(properties.get("empCode") != null){
+            sqlMainQuery.append(" AND emp_Code LIKE :empCode ");
+        }
+        if(properties.get("isdn") != null){
+            sqlMainQuery.append(" AND isdn LIKE :isdn ");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            sqlMainQuery.append(" AND issue_Month >= to_date(substr(:issuedDateTimeFrom,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            sqlMainQuery.append(" AND issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+        }
 
-        Query query = entityManager.createNativeQuery(sqlSelectQuery.toString());
-        query.setParameter("custID", Long.valueOf(properties.get("custID").toString()));
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT shop_Code, isdn, name as tenKhachHang, emp_Code as maNVPhatTrien, bus_Type as loaiHM, '' as laiTB, cust_Type as loaiKH ")
+                .append("           , sta_DateTime as ngayDauNoi, act_Status as trangThaiChanCat ")
+                .append("           , status as trangThaiThueBao")
+                .append("           , development_amount1 as chPhiPTDot1, development_amount2 as chPhiPTDot2, development_amount3 as chPhiPTDot3 ")
+                .append("           , maintain_amount1 as hoaHongGD1, maintain_amount2 as hoaHongGD2, maintain_amount3 as hoaHongGD3 ")
+                .append(sqlMainQuery.toString())
+                .append(" ORDER BY name ASC ");
+
+
+        Query query = entityManager.createNativeQuery(sqlQuery.toString());
+        if(properties.get("shopCode") != null){
+            query.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+        }
+        if(properties.get("empCode") != null){
+            query.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+        }
+        if(properties.get("isdn") != null){
+            query.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            query.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            query.setParameter("issuedDateTimeTo", properties.get("issuedDateTimeTo").toString());
+        }
+
         query.setFirstResult(firstItem);
         query.setMaxResults(maxPageItems);
+
         List resultSet = query.getResultList();
 
         StringBuilder sqlCountQuery = new StringBuilder();
-        sqlCountQuery.append(" SELECT COUNT(CostID) FROM MOBI_DATA_COST WHERE Cust_ID = :custID ");
-        Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString()).setParameter("custID", Long.valueOf(properties.get("custID").toString()));
+        sqlCountQuery.append(" SELECT COUNT(CostID) ").append(sqlMainQuery.toString());
+        Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString());
+        if(properties.get("shopCode") != null){
+            countQuery.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+        }
+        if(properties.get("empCode") != null){
+            countQuery.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+        }
+        if(properties.get("isdn") != null){
+            countQuery.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+        }
+        if(properties.get("issuedDateTimeFrom") != null){
+            countQuery.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
+        }
+        if(properties.get("issuedDateTimeTo") != null){
+            countQuery.setParameter("issuedDateTimeTo", properties.get("issuedDateTimeTo").toString());
+        }
+
         Integer count = Integer.valueOf(countQuery.getSingleResult().toString());
 
         return new Object[]{count, resultSet};

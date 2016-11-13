@@ -33,7 +33,7 @@ public interface UserManagementLocalBean {
 
     List<PermissionDTO> loadPermissionsByUserId(Long userId);
 
-    UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException;
+    UserDTO updateItem(UserDTO pojo, Boolean flagUpdateUserGroup) throws DuplicateKeyException, ObjectNotFoundException;
 
     void deleteItemById(Long userId) throws RemoveException;
 

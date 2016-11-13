@@ -51,9 +51,9 @@
                         ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                     </display:column>
                     <display:column headerClass="table_header text-center" property="code" sortName="code" sortable="true" titleKey="usergroup.label.code" style="20%"/>
-                    <display:column headerClass="table_header text-center" property="description" sortName="displayName" sortable="false" titleKey="usergroup.label.description" style="60%"/>
-                    <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">
-                        <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                    <display:column headerClass="table_header text-center" property="description" sortName="displayName" sortable="false" titleKey="usergroup.label.description" style="45%"/>
+                    <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:30%;">
+                        <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit_and_access" /></a>
                         <c:if test="${tableList.code != Constants.USERGROUP_ADMIN && tableList.code != Constants.USERGROUP_KHDN && tableList.code != Constants.USERGROUP_VMS_USER}">
                             | <a class="tip-top" onclick="javascript: deleteUserGroup(${tableList.userGroupId});"><fmt:message key="label.delete" /></a>
                         </c:if>

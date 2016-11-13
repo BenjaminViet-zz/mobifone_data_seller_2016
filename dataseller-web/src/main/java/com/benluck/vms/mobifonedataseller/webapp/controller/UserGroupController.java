@@ -7,8 +7,10 @@ import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocal
 import com.benluck.vms.mobifonedataseller.core.dto.PermissionDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserGroupValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -50,6 +52,12 @@ public class UserGroupController extends ApplicationObjectSupport {
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_GROUP_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/usergroup/add.html or /usergroup/edit.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/usergroup/edit");
         String crudaction = command.getCrudaction();
         UserGroupDTO pojo = command.getPojo();
@@ -96,11 +104,17 @@ public class UserGroupController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/admin/usergroup/list.html"})
+    @RequestMapping(value = {"/admin/usergroup/list.html", "/user/usergroup/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult){
         ModelAndView mav = new ModelAndView("/admin/usergroup/list");
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_GROUP_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/usergroup/list.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
             if(action.equals("delete")){

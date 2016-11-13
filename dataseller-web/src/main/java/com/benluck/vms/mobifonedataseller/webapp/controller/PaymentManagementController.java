@@ -5,8 +5,10 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.MBDCostCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.PaymentManagementValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -51,6 +53,12 @@ public class PaymentManagementController extends ApplicationObjectSupport{
     public ModelAndView management(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCostCommand command,
                                    HttpServletRequest request,
                                    BindingResult bindingResult){
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/management.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/payment/management");
         String action = command.getCrudaction();
 

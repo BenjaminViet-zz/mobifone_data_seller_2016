@@ -193,4 +193,14 @@ public class Constants {
     // Code History
     public static final String COST_PAYMENT_NOT_PAID = "0";
     public static final String COST_PAYMENT_PAID = "1";
+
+    // Permission Code
+    public static final String USER_MANAGER = "USER_MANAGER";
+    public static final String USER_GROUP_MANAGER = "USER_GROUP_MANAGER";
+    public static final String KHDN_MANAGER = "KHDN_MANAGER";
+    public static final String PACKAGE_DATA_MANAGER = "PACKAGE_DATA_MANAGER";
+    public static final String GENERATE_CARD_CODE_MANAGER = "GENERATE_CARD_CODE_MANAGER";
+    public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
+    public static final String ORDER_MANAGER = "ORDER_MANAGER";
+    public static final String REPORT_MANAGER = "REPORT_MANAGER";
 }

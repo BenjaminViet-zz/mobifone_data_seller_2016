@@ -23,7 +23,8 @@
         <custom-filter ref="ajaxTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
 
         <intercept-url pattern="/admin/**" access="hasAuthority('ADMIN')" />
-        <intercept-url pattern="/user/**" access="hasAuthority('LOGON')" />
+        <intercept-url pattern="/user/**" access="hasAuthority('VMS_USER')" />
+        <intercept-url pattern="/khdn/**" access="hasAuthority('KHDN')" />
         <intercept-url pattern="/login*" access="hasAnyAuthority('LOGON', 'ADMIN')" />
 
         <intercept-url pattern="/logon/**" access="hasAuthority('LOGON')" />

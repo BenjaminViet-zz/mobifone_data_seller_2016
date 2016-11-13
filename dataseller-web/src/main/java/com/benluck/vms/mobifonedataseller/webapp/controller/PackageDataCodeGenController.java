@@ -6,8 +6,10 @@ import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManage
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.PackageDataCodeGenCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskGenerateCardCode;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,11 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCodeGenCommand command,
                              @RequestParam(value = "year", required = false) Integer year,
                              HttpServletRequest request){
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.GENERATE_CARD_CODE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/packagedatacodegen/list.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/packagedatacodegen/list");
         PackageDataCodeGenDTO pojo = new PackageDataCodeGenDTO();
 

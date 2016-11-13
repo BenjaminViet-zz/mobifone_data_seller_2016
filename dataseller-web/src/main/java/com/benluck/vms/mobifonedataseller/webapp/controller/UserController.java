@@ -11,6 +11,7 @@ import com.benluck.vms.mobifonedataseller.editor.PojoEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -54,10 +55,16 @@ public class UserController extends ApplicationObjectSupport {
 
     }
 
-    @RequestMapping("/admin/user/list.html")
+    @RequestMapping(value = {"/admin/user/list.html", "/user/user/list.html"})
 	public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY)UserCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult) throws RemoveException {
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/user/list.html user page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/user/list");
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
@@ -95,11 +102,17 @@ public class UserController extends ApplicationObjectSupport {
         mav.addObject("userGroups", userGroups);
     }
 
-    @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html"})
+    @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html", "/user/user/add.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView("/admin/user/edit");
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "add/edit user page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         String crudaction = command.getCrudaction();
         UserDTO pojo = command.getPojo();
         boolean notSystemUser = true;
@@ -114,7 +127,12 @@ public class UserController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                         } else {
-                            this.userService.updateItem(command.getPojo());
+                            boolean flagUpdateUserGroup = false;
+                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)
+                                    || SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                flagUpdateUserGroup = true;
+                            }
+                            this.userService.updateItem(command.getPojo(), flagUpdateUserGroup);
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }

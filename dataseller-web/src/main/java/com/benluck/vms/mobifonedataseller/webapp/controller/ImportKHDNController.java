@@ -2,8 +2,10 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.dto.ImportKHDNDTO;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportKHDNCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportKHDN;
 import com.benluck.vms.mobifonedataseller.webapp.validator.ImportKHDNValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -39,10 +41,16 @@ public class ImportKHDNController extends ApplicationObjectSupport{
     @Autowired
     private ImportKHDNValidator validator;
 
-    @RequestMapping(value = {"/admin/khdn/import.html"})
+    @RequestMapping(value = {"/admin/khdn/import.html", "/user/khdn/import.html"})
     public ModelAndView importFile(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportKHDNCommand command,
                                    HttpServletRequest request,
                                    BindingResult bindingResult){
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/import.html user page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/khdn/import");
         String action = command.getCrudaction();
 

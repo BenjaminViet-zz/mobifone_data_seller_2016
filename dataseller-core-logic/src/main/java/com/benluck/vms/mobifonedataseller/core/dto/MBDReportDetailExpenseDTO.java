@@ -13,21 +13,26 @@ import java.sql.Timestamp;
 public class MBDReportDetailExpenseDTO implements Serializable{
     private static final long serialVersionUID = 6152971691370936337L;
     private Long costId;
-    private Long custId;
-    private String empCode;
+    private String shopCode;
     private String isdn;
-    private String empName;
-    private String maNVPhatTrien;
-    private String loaiHM;
+    private String name;
+    private String empCode;
+    private String busType;
     private String loaiTB;
-    private String loaiKH;
-    private Timestamp ngayDauNoi;
-    private Timestamp ngayNopHoSo;
-    private String trangThaiChanCat;
-    private String trangThaiThueBao;
+    private String custType;
+    private Timestamp staDateTime;
+    private String actStatus;
+    private String status;
     private Double cuocThucThu;
-    private String chuKy;
-    private Double hoaHong;
+    private Double developmentAmount1;
+    private Double developmentAmount2;
+    private Double developmentAmount3;
+    private Double maintainAmount1;
+    private Double maintainAmount2;
+    private Double maintainAmount3;
+    private Timestamp issuedDateTime;
+    private Timestamp issuedDateTimeFrom;
+    private Timestamp issuedDateTimeTo;
 
     public Long getCostId() {
         return costId;
@@ -37,12 +42,36 @@ public class MBDReportDetailExpenseDTO implements Serializable{
         this.costId = costId;
     }
 
-    public Long getCustId() {
-        return custId;
+    public String getShopCode() {
+        return shopCode;
     }
 
-    public void setCustId(Long custId) {
-        this.custId = custId;
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public Timestamp getIssuedDateTime() {
+        return issuedDateTime;
+    }
+
+    public void setIssuedDateTime(Timestamp issuedDateTime) {
+        this.issuedDateTime = issuedDateTime;
+    }
+
+    public Timestamp getIssuedDateTimeFrom() {
+        return issuedDateTimeFrom;
+    }
+
+    public void setIssuedDateTimeFrom(Timestamp issuedDateTimeFrom) {
+        this.issuedDateTimeFrom = issuedDateTimeFrom;
+    }
+
+    public Timestamp getIssuedDateTimeTo() {
+        return issuedDateTimeTo;
+    }
+
+    public void setIssuedDateTimeTo(Timestamp issuedDateTimeTo) {
+        this.issuedDateTimeTo = issuedDateTimeTo;
     }
 
     public String getEmpCode() {
@@ -61,28 +90,20 @@ public class MBDReportDetailExpenseDTO implements Serializable{
         this.isdn = isdn;
     }
 
-    public String getEmpName() {
-        return empName;
+    public String getName() {
+        return name;
     }
 
-    public void setEmpName(String empName) {
-        this.empName = empName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getMaNVPhatTrien() {
-        return maNVPhatTrien;
+    public String getBusType() {
+        return busType;
     }
 
-    public void setMaNVPhatTrien(String maNVPhatTrien) {
-        this.maNVPhatTrien = maNVPhatTrien;
-    }
-
-    public String getLoaiHM() {
-        return loaiHM;
-    }
-
-    public void setLoaiHM(String loaiHM) {
-        this.loaiHM = loaiHM;
+    public void setBusType(String busType) {
+        this.busType = busType;
     }
 
     public String getLoaiTB() {
@@ -93,44 +114,36 @@ public class MBDReportDetailExpenseDTO implements Serializable{
         this.loaiTB = loaiTB;
     }
 
-    public String getLoaiKH() {
-        return loaiKH;
+    public String getCustType() {
+        return custType;
     }
 
-    public void setLoaiKH(String loaiKH) {
-        this.loaiKH = loaiKH;
+    public void setCustType(String custType) {
+        this.custType = custType;
     }
 
-    public Timestamp getNgayDauNoi() {
-        return ngayDauNoi;
+    public Timestamp getStaDateTime() {
+        return staDateTime;
     }
 
-    public void setNgayDauNoi(Timestamp ngayDauNoi) {
-        this.ngayDauNoi = ngayDauNoi;
+    public void setStaDateTime(Timestamp staDateTime) {
+        this.staDateTime = staDateTime;
     }
 
-    public Timestamp getNgayNopHoSo() {
-        return ngayNopHoSo;
+    public String getActStatus() {
+        return actStatus;
     }
 
-    public void setNgayNopHoSo(Timestamp ngayNopHoSo) {
-        this.ngayNopHoSo = ngayNopHoSo;
+    public void setActStatus(String actStatus) {
+        this.actStatus = actStatus;
     }
 
-    public String getTrangThaiChanCat() {
-        return trangThaiChanCat;
+    public String getStatus() {
+        return status;
     }
 
-    public void setTrangThaiChanCat(String trangThaiChanCat) {
-        this.trangThaiChanCat = trangThaiChanCat;
-    }
-
-    public String getTrangThaiThueBao() {
-        return trangThaiThueBao;
-    }
-
-    public void setTrangThaiThueBao(String trangThaiThueBao) {
-        this.trangThaiThueBao = trangThaiThueBao;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Double getCuocThucThu() {
@@ -141,19 +154,51 @@ public class MBDReportDetailExpenseDTO implements Serializable{
         this.cuocThucThu = cuocThucThu;
     }
 
-    public String getChuKy() {
-        return chuKy;
+    public Double getDevelopmentAmount1() {
+        return developmentAmount1;
     }
 
-    public void setChuKy(String chuKy) {
-        this.chuKy = chuKy;
+    public void setDevelopmentAmount1(Double developmentAmount1) {
+        this.developmentAmount1 = developmentAmount1;
     }
 
-    public Double getHoaHong() {
-        return hoaHong;
+    public Double getDevelopmentAmount2() {
+        return developmentAmount2;
     }
 
-    public void setHoaHong(Double hoaHong) {
-        this.hoaHong = hoaHong;
+    public void setDevelopmentAmount2(Double developmentAmount2) {
+        this.developmentAmount2 = developmentAmount2;
+    }
+
+    public Double getDevelopmentAmount3() {
+        return developmentAmount3;
+    }
+
+    public void setDevelopmentAmount3(Double developmentAmount3) {
+        this.developmentAmount3 = developmentAmount3;
+    }
+
+    public Double getMaintainAmount1() {
+        return maintainAmount1;
+    }
+
+    public void setMaintainAmount1(Double maintainAmount1) {
+        this.maintainAmount1 = maintainAmount1;
+    }
+
+    public Double getMaintainAmount2() {
+        return maintainAmount2;
+    }
+
+    public void setMaintainAmount2(Double maintainAmount2) {
+        this.maintainAmount2 = maintainAmount2;
+    }
+
+    public Double getMaintainAmount3() {
+        return maintainAmount3;
+    }
+
+    public void setMaintainAmount3(Double maintainAmount3) {
+        this.maintainAmount3 = maintainAmount3;
     }
 }

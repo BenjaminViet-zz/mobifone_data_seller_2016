@@ -42,7 +42,7 @@ public class ProfileController extends ApplicationObjectSupport{
     private ProfileValidator validator;
 
 
-    @RequestMapping(value ={"/admin/profile.html","/user/profile.html"})
+    @RequestMapping(value ={"/admin/profile.html","/user/profile.html","/khdn/profile.html"})
     public ModelAndView editProfile(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) throws ObjectNotFoundException {
 
         ModelAndView mav = new ModelAndView("/admin/user/profile");
@@ -55,7 +55,11 @@ public class ProfileController extends ApplicationObjectSupport{
                     mav.addObject(Constants.ALERT_TYPE, "danger");
                     mav.addObject("messageResponse", command.getErrorMessage());
                 }else if (!bindingResult.hasErrors()){
-                    this.userService.updateItem(command.getPojo());
+                    boolean flagUpdateUserGroup = false;
+                    if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                        flagUpdateUserGroup = true;
+                    }
+                    this.userService.updateItem(command.getPojo(), flagUpdateUserGroup);
                     SecurityUtils.getPrincipal().setDisplayName(command.getPojo().getDisplayName());
                     mav.addObject(Constants.ALERT_TYPE, "success");
                     mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));

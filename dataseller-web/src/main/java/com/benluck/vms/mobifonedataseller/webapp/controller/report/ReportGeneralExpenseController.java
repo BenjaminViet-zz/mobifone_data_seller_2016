@@ -1,14 +1,18 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller.report;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDReportGeneralExpenseDTO;
+import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ReportGeneralExpenseCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -21,6 +25,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +58,21 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
     @Autowired
     private KHDNManagementLocalBean khdnService;
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
+    }
+
     @RequestMapping(value = {"/admin/reportGeneralExpense/list.html", "/user/reportGeneralExpense/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)ReportGeneralExpenseCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.REPORT_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + " report page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/report/expense/generalList");
         String action = command.getCrudaction();
 
@@ -79,11 +97,19 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         return mav;
     }
 
+    private void convertDate2Timestamp(ReportGeneralExpenseCommand command){
+        if(command.getIssuedDateFrom() != null){
+            command.getPojo().setIssuedDateTimeFrom(DateUtil.dateToTimestamp(command.getIssuedDateFrom(), Constants.VI_DATE_FORMAT));
+        }
+        if(command.getIssuedDateTo() != null){
+            command.getPojo().setIssuedDateTimeTo(DateUtil.dateToTimestamp(command.getIssuedDateTo(), Constants.VI_DATE_FORMAT));
+        }
+    }
+
     private void executeSearch(ReportGeneralExpenseCommand command, HttpServletRequest request){
         RequestUtil.initSearchBean(request, command);
-
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("custID", command.getPojo().getCustId());
+        convertDate2Timestamp(command);
+        Map<String, Object> properties = buildProperties(command);
 
         Object[] resultObject = this.costService.searchGeneralReportDataByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
@@ -91,20 +117,43 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
+    private Map<String, Object> buildProperties(ReportGeneralExpenseCommand command){
+        MBDReportGeneralExpenseDTO pojo = command.getPojo();
+        Map<String, Object> properties = new HashMap<String, Object>();
+
+        if(StringUtils.isNotBlank(pojo.getShopCode())){
+            properties.put("shopCode", pojo.getShopCode());
+        }
+        if(StringUtils.isNotBlank(pojo.getEmpCode())){
+            properties.put("empCode", pojo.getEmpCode());
+        }
+        if(StringUtils.isNotBlank(pojo.getIsdn())){
+            properties.put("isdn", pojo.getIsdn());
+        }
+        if(pojo.getIssuedDateTimeFrom() != null){
+            properties.put("issuedDateTimeFrom", pojo.getIssuedDateTimeFrom());
+        }
+        if(pojo.getIssuedDateTimeTo() != null){
+            properties.put("issuedDateTimeTo", pojo.getIssuedDateTimeTo());
+        }
+        return properties;
+
+    }
+
     private void export2Excel(ReportGeneralExpenseCommand command, HttpServletRequest request, HttpServletResponse response) throws Exception{
-        SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         String exportDate = df.format(currentTimestamp);
 
-        Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("custID", command.getPojo().getCustId());
+        convertDate2Timestamp(command);
+        Map<String, Object> properties = buildProperties(command);
 
         Object[] resultObject = this.costService.searchGeneralReportDataByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         List<MBDReportGeneralExpenseDTO> dtoList = (List<MBDReportGeneralExpenseDTO>)resultObject[1];
 
         if(dtoList.size() == 0){
-            logger.error("Error happened when fetching report general expense for CustID: " + command.getPojo().getCustId());
-            throw new Exception("Error happened when fetching report general expense for CustID: " + command.getPojo().getCustId());
+            logger.error("Error happened when fetching report general expense");
+            throw new Exception("Error happened when fetching report general expense");
         }
 
         String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/bao_cao_tong_hop_chi_phi.xls");
@@ -115,7 +164,7 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         Workbook templateWorkbook = Workbook.getWorkbook(new File(reportTemplate), ws);
         WritableWorkbook workbook = Workbook.createWorkbook(new File(export2FileName), templateWorkbook);
         WritableSheet sheet = workbook.getSheet(0);
-        int startRow = 5;
+        int startRow = 6;
 
         WritableFont normalFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD);
         normalFont.setColour(Colour.BLACK);

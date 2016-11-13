@@ -5,8 +5,10 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.KHDNCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.KHDNValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -47,10 +49,15 @@ public class KHDNController extends ApplicationObjectSupport {
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping( value = {"/admin/khdn/list.html"})
+    @RequestMapping( value = {"/admin/khdn/list.html", "/user/khdn/list.html"})
     public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult) throws RemoveException {
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/list.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/khdn/list");
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
@@ -84,10 +91,16 @@ public class KHDNController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html"})
+    @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html", "/user/khdn/add.html", "/user/khdn/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/add.html or /khdn/edit.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/khdn/edit");
         String crudaction = command.getCrudaction();
         KHDNDTO pojo = command.getPojo();

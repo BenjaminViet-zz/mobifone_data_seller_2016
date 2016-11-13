@@ -66,19 +66,22 @@ public class MBDCostManagementSessionBean implements MBDCostManagementLocalBean{
         for (Object tmpObject : listObject){
             tmpObjectArr = (Object[]) tmpObject;
             MBDReportDetailExpenseDTO dto = new MBDReportDetailExpenseDTO();
-            dto.setEmpCode(tmpObjectArr[0] != null ? tmpObjectArr[0].toString() : "");
+            dto.setShopCode(tmpObjectArr[0] != null ? tmpObjectArr[0].toString() : "");
             dto.setIsdn(tmpObjectArr[1] != null ? tmpObjectArr[1].toString() : "");
-            dto.setEmpName(tmpObjectArr[2] != null ? tmpObjectArr[2].toString() : "");
-            dto.setMaNVPhatTrien(tmpObjectArr[3] != null ? tmpObjectArr[3].toString() : "");
-            dto.setLoaiHM(tmpObjectArr[4] != null ? tmpObjectArr[4].toString() : "");
+            dto.setName(tmpObjectArr[2] != null ? tmpObjectArr[2].toString() : "");
+            dto.setEmpCode(tmpObjectArr[3] != null ? tmpObjectArr[3].toString() : "");
+            dto.setBusType(tmpObjectArr[4] != null ? tmpObjectArr[4].toString() : "");
             dto.setLoaiTB(tmpObjectArr[5] != null ? tmpObjectArr[5].toString() : "");
-            dto.setLoaiKH(tmpObjectArr[6] != null ? tmpObjectArr[6].toString() : "");
-            dto.setNgayDauNoi(tmpObjectArr[7] != null ? Timestamp.valueOf(tmpObjectArr[7].toString()) : null);
-            dto.setNgayNopHoSo(tmpObjectArr[8] != null ? Timestamp.valueOf(tmpObjectArr[8].toString()) : null);
-            dto.setTrangThaiChanCat(tmpObjectArr[9] != null ? tmpObjectArr[9].toString() : "");
-            dto.setTrangThaiThueBao(tmpObjectArr[10] != null ? tmpObjectArr[10].toString() : "");
-            dto.setChuKy(tmpObjectArr[11] != null ? tmpObjectArr[11].toString() : "");
-            dto.setHoaHong(tmpObjectArr[12] != null ? Double.valueOf(tmpObjectArr[12].toString()) : null);
+            dto.setCustType(tmpObjectArr[6] != null ? tmpObjectArr[6].toString() : "");
+            dto.setStaDateTime(tmpObjectArr[7] != null ? Timestamp.valueOf(tmpObjectArr[7].toString()) : null);
+            dto.setActStatus(tmpObjectArr[8] != null ? tmpObjectArr[8].toString() : "");
+            dto.setStatus(tmpObjectArr[9] != null ? tmpObjectArr[9].toString() : "");
+            dto.setDevelopmentAmount1(tmpObjectArr[10] != null ? Double.valueOf(tmpObjectArr[10].toString()) : null);
+            dto.setDevelopmentAmount2(tmpObjectArr[11] != null ? Double.valueOf(tmpObjectArr[11].toString()) : null);
+            dto.setDevelopmentAmount3(tmpObjectArr[12] != null ? Double.valueOf(tmpObjectArr[12].toString()) : null);
+            dto.setMaintainAmount1(tmpObjectArr[13] != null ? Double.valueOf(tmpObjectArr[13].toString()) : null);
+            dto.setMaintainAmount2(tmpObjectArr[14] != null ? Double.valueOf(tmpObjectArr[14].toString()) : null);
+            dto.setMaintainAmount3(tmpObjectArr[15] != null ? Double.valueOf(tmpObjectArr[15].toString()) : null);
             dtoList.add(dto);
         }
         resultObject[1] = dtoList;
