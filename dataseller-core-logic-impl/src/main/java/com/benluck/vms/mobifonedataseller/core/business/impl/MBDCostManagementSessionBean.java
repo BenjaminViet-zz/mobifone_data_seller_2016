@@ -134,9 +134,11 @@ public class MBDCostManagementSessionBean implements MBDCostManagementLocalBean{
             dto.setMaintainPhase1(tmpArrObject[19] != null ? tmpArrObject[19].toString() : "");
             dto.setMaintainPhase2(tmpArrObject[20] != null ? tmpArrObject[20].toString() : "");
             dto.setMaintainPhase3(tmpArrObject[21] != null ? tmpArrObject[21].toString() : "");
-            dto.setDevelopmentAmount1(tmpArrObject[22] != null ? Double.valueOf(tmpArrObject[22].toString()) : null);
-            dto.setDevelopmentAmount2(tmpArrObject[23] != null ? Double.valueOf(tmpArrObject[23].toString()) : null);
-            dto.setDevelopmentAmount3(tmpArrObject[24] != null ? Double.valueOf(tmpArrObject[24].toString()) : null);
+            dto.setMaintainAmount1(tmpArrObject[22] != null ? Double.valueOf(tmpArrObject[22].toString()) : null);
+            dto.setMaintainAmount2(tmpArrObject[23] != null ? Double.valueOf(tmpArrObject[23].toString()) : null);
+            dto.setMaintainAmount3(tmpArrObject[24] != null ? Double.valueOf(tmpArrObject[24].toString()) : null);
+            dto.setPaymentStatus(tmpArrObject[25].toString());
+            dto.setPaymentDate(tmpArrObject[26] != null ? Timestamp.valueOf(tmpArrObject[26].toString()) : null);
             dtoList.add(dto);
         }
         resultObject[1] = dtoList;

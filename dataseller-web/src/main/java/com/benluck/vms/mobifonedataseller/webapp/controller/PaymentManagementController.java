@@ -62,6 +62,8 @@ public class PaymentManagementController extends ApplicationObjectSupport{
                     validator.validate(command, bindingResult);
                     if(StringUtils.isBlank(command.getErrorMessage())){
                         this.costService.updatePayment(command.getCheckList(), command.getPojo().getPaymentDate());
+                        mav.addObject(Constants.ALERT_TYPE, "success");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("code_history.management.successfully_update_payment"));
                     }else{
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
@@ -71,10 +73,11 @@ public class PaymentManagementController extends ApplicationObjectSupport{
                     mav.addObject(Constants.ALERT_TYPE, "danger");
                     mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("code_history.management.error_not_found_code_history_to_update"));
                 }
+            }else if (action.equals(Constants.ACTION_SEARCH)){
+                executeSearch(command, request);
             }
         }
 
-        executeSearch(command, request);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }

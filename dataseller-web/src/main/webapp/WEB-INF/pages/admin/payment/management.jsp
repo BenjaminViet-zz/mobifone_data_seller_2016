@@ -105,7 +105,7 @@
         </div>
     </div>
 
-    <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID && not empty items.listResult && items.listResult.size() > 0}">
+    <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID && not empty items.listResult && items.listResult.size() > 0}">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -121,7 +121,10 @@
                             </div>
                         </div>
                         <div class="form-group last">
-                            <a class="btn btn-primary" onclick="javascript: bindPayment();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.payment" /></a>
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
+                                <a class="btn btn-primary" onclick="javascript: bindPayment();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.payment" /></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,12 +149,12 @@
                                                class="table table-striped table-bordered" style="width: ${tableWidth}px; margin: 1em 0 1.5em;">
                                     <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
                                     <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID}">
-                                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px" >
-                                            <input type="checkbox" id="${tableList.costId}" class="" style="width: 15px;" name="notPaidPaymentListIds" value="${tableList.costId}" onclick="checkAllIfOne('listForm', 'notPaidPaymentListIds', this, 'allCheck')" />
+                                        <display:column headerClass="table_header text-center" class="text-center" style="width: 50px" >
+                                            <input type="checkbox" id="${tableList.costId}" class="" style="width: 15px;" name="checkList" value="${tableList.costId}" onclick="checkAllIfOne('listForm', 'checkList', this, 'allCheck')" />
                                         </display:column>
                                     </c:if>
 
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment_status" style="width: 200px;">
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="payment.manager.table.payment_status" style="width: 200px;">
                                         <c:choose>
                                             <c:when test="${tableList.paymentStatus eq Constants.COST_PAYMENT_PAID}">
                                                 <fmt:message key="payment.manager.table.payment_status_paid" />
@@ -163,14 +166,14 @@
                                     </display:column>
 
                                     <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID}">
-                                        <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment_dateTime" style="width: 200px;">
+                                        <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment_dateTime" class="text-center" style="width: 200px;">
                                             <fmt:formatDate value="${tableList.paymentDate}" pattern="${datePattern}" />
                                         </display:column>
                                     </c:if>
 
                                     <display:column headerClass="table_header text-center" property="shopCode" titleKey="payment.manager.table.shop_Code" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="shopName" titleKey="payment.manager.table.shop_Name" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="isdn" titleKey="payment.manager.table.isdn" style="width: 200px"/>
+                                    <display:column headerClass="table_header text-center" property="isdn" titleKey="payment.manager.table.isdn" class="text-center" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="name" titleKey="payment.manager.table.name" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="empCode" titleKey="payment.manager.table.emp_code" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="busType" titleKey="payment.manager.table.bus_type" style="width: 200px"/>
@@ -178,11 +181,11 @@
                                     <display:column headerClass="table_header text-center" titleKey="payment.manager.table.sta_dateTime" style="width: 200px">
                                         <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" property="actStatus" titleKey="payment.manager.table.act_status" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.issue_month" style="width: 200px">
+                                    <display:column headerClass="table_header text-center" property="actStatus" class="text-center" titleKey="payment.manager.table.act_status" style="width: 200px"/>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.issue_month" class="text-center" style="width: 200px">
                                         <fmt:formatDate value="${tableList.issueMonth}" pattern="${datePattern}" />
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment" style="width: 200px">
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment" class="text-center" style="width: 200px">
                                         <%--<fmt:formatDate value="${tableList.payment}" type="number" />--%>
                                         ___
                                     </display:column>
@@ -291,7 +294,7 @@
             return true;
         });
 
-        <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID && not empty items.listResult && items.listResult.size() > 0}">
+        <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID && not empty items.listResult && items.listResult.size() > 0}">
             var $paymentDateEl = $("#paymentDate");
             $paymentDateEl.datepicker({
                 dateFormat: 'dd/mm/yy',
@@ -311,16 +314,16 @@
         var $tableList = $('#tableList');
         var thPaymentDate = "";
         var thCheckAll = "";
-        if(${item.pojo.paymentStatus eq Constants.Constants.COST_PAYMENT_PAID}){
+        if(${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID}){
+            thCheckAll = "<th class='table_header text-center middle-vertical' rowspan='2'><input style=\"width: 15px;\" type=\"checkbox\" class=\"\" name=\"allCheck\" id=\"allCheck\" onclick=\"checkAll('listForm', 'checkList', this)\"></th>";
+        }else if(${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID}){
             thPaymentDate = "<th class='table_header text-center middle-vertical' rowspan='2'><fmt:message key="payment.manager.table.payment_dateTime" /></th>";
-            thCheckAll = "<th class='table_header text-center middle-vertical' rowspan='2'><fmt:message key="payment.manager.table.payment_status" /></th>";
         }
 
         var $tableHeadContent = $("<thead>" +
                                         "<tr>" +
                                             "<th class='table_header text-center middle-vertical' rowspan='2'><fmt:message key="label.stt" /></th>" +
                                             thCheckAll +
-                                            "<th class='table_header text-center middle-vertical' rowspan='2'><input style=\"width: 15px;\" type=\"checkbox\" class=\"\" name=\"allCheck\" id=\"allCheck\" onclick=\"checkAll('listForm', 'notPaidPaymentListIds', this)\"></th>" +
                                             "<th class='table_header text-center middle-vertical' rowspan='2'><fmt:message key="payment.manager.table.payment_status" /></th>" +
                                             thPaymentDate +
                                             "<th class='table_header text-center middle-vertical' rowspan='2'><fmt:message key="payment.manager.table.shop_Code" /></th>" +
@@ -350,8 +353,8 @@
     }
 
     function bindPayment(){
-        <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID && not empty items.listResult && items.listResult.size() > 0}">
-            var $notPaidPaymentListEl = $("input[name='notPaidPaymentListIds']:checked");
+        <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID && not empty items.listResult && items.listResult.size() > 0}">
+            var $notPaidPaymentListEl = $("input[name='checkList']:checked");
 
             if($notPaidPaymentListEl.length == 0){
                 return;

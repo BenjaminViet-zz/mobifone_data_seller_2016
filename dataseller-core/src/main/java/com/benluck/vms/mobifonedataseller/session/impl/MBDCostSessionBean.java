@@ -68,7 +68,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
     public Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
         StringBuilder sqlMainQuery = new StringBuilder();
         sqlMainQuery.append(" FROM MOBI_DATA_COST c ")
-                    .append(" WHERE  1= 1 ");
+                    .append(" WHERE  c.payment_Status = :paymentStatus ");
         if(properties.get("isdn") != null){
             sqlMainQuery.append(" AND c.isdn LIKE :isdn ");
         }
@@ -91,6 +91,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
                 .append("           , c.development_phase1 as trangThaiPTDot1, c.development_phase2 as trangThaiPTDot2, c.development_phase3 as trangThaiPTDot3 ")
                 .append("           , c.development_amount1 as chPhiPTDot1, c.development_amount2 as chPhiPTDot2, c.development_amount3 as chPhiPTDot3 ")
                 .append("           , c.maintain_phase1 as trangThaiChiPhiDuyTriGD1, c.maintain_phase2 as trangThaiChiPhiDuyTriGD2, c.maintain_phase3 as trangThaiChiPhiDuyTriGD3 ")
+                .append("           , c.maintain_amount1 as hoaHongGD1, c.maintain_amount2 as hoaHongGD2, c.maintain_amount3 as hoaHongGD3, c.payment_Status, c.payment_Date ")
                 .append(sqlMainQuery.toString())
                 .append(" ORDER BY c. ").append(sortExpression);
 
@@ -101,6 +102,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         }
 
         Query query = entityManager.createNativeQuery(sqlQuery.toString());
+        query.setParameter("paymentStatus", properties.get("paymentStatus".toString()));
         if(properties.get("isdn") != null){
             query.setParameter("isdn", "%'" + properties.get("isdn").toString() + "%'");
         }
@@ -125,6 +127,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         StringBuilder sqlCount = new StringBuilder();
         sqlCount.append(" SELECT COUNT(c.costId) ").append(sqlMainQuery.toString());
         Query countQuery = entityManager.createNativeQuery(sqlCount.toString());
+        countQuery.setParameter("paymentStatus", properties.get("paymentStatus".toString()));
         if(properties.get("isdn") != null){
             countQuery.setParameter("isdn", "%'" + properties.get("isdn").toString() + "%'");
         }
