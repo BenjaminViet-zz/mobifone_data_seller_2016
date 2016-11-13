@@ -71,7 +71,7 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-success" onclick="javacsript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
+                            <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
                         </div>
                     </div>
@@ -85,34 +85,41 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
-                <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                               partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                               id="tableList" pagesize="${items.maxPageItems}" export="false"
-                               class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                <c:choose>
+                    <c:when test="${item.crudaction == Constants.ACTION_SEARCH}">
+                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                    <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
-                        ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                    </display:column>
-                    <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
-                    <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="25%"/>
-                    <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="" titleKey="user.label.usergroup" style="width: 20%" />
-                    <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="15%">
-                        <c:choose>
-                            <c:when test = "${tableList.status eq 1}">
-                                <fmt:message key="label.active" />
-                            </c:when>
-                            <c:otherwise>
-                                <fmt:message key="label.inactive" />
-                            </c:otherwise>
-                        </c:choose>
-                    </display:column>
-                    <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:15%;">
-                        <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                        | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
-                    </display:column>
-                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                </display:table>
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
+                                ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                            </display:column>
+                            <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
+                            <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="25%"/>
+                            <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="" titleKey="user.label.usergroup" style="width: 20%" />
+                            <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="15%">
+                                <c:choose>
+                                    <c:when test = "${tableList.status eq 1}">
+                                        <fmt:message key="label.active" />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <fmt:message key="label.inactive" />
+                                    </c:otherwise>
+                                </c:choose>
+                            </display:column>
+                            <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:15%;">
+                                <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                                | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
+                            </display:column>
+                            <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                            <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                        </display:table>
+                    </c:when>
+                    <c:otherwise>
+                        <fmt:message key="user.label.please_choose_filter" />
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

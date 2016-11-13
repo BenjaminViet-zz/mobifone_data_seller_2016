@@ -26,6 +26,10 @@ public class UserDTO implements Serializable {
 
     public UserDTO(){}
 
+    public UserDTO(Long userId) {
+        this.userId = userId;
+    }
+
     public UserDTO(Long userId, String userName, String displayName){
         this.userId = userId;
         this.userName = userName;

@@ -41,10 +41,7 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems) {
-        StringBuilder whereClause = new StringBuilder();
-        whereClause.append("A.code NOT IN ('" + Constants.ADMIN_ROLE + "','" + Constants.USERGROUP_KHDN + "')");
-
-        Object[] resultObject = this.userGroupService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems, whereClause.toString());
+        Object[] resultObject = this.userGroupService.searchByProperties(properties, sortExpression, sortDirection, offset, limitItems);
         List<UserGroupDTO> dtoList = UserGroupBeanUtil.entityList2DTOList((List<UserGroupEntity>) resultObject[1]);
         resultObject[1] = dtoList;
         return resultObject;
@@ -63,55 +60,62 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
     @Override
     public void updateItem(UserGroupDTO pojo, String[] permissionIdArr) throws ObjectNotFoundException, DuplicateKeyException {
         UserGroupEntity dbItem = this.userGroupService.findById(pojo.getUserGroupId());
-        dbItem.setCode(pojo.getCode());
+        dbItem.setCode(pojo.getCode().toUpperCase());
         dbItem.setDescription(pojo.getDescription());
         dbItem = this.userGroupService.update(dbItem);
 
-        if(permissionIdArr != null && permissionIdArr.length > 0){
-            Long[] updatingPermissionIds = new Long[permissionIdArr.length];
-            for (int i = 0; i < permissionIdArr.length; i++){
-                updatingPermissionIds[i] = Long.valueOf(permissionIdArr[i]);
-            }
+        if(!pojo.getCode().equals(Constants.USERGROUP_ADMIN)
+                && !pojo.getCode().equals(Constants.USERGROUP_KHDN)
+                && !pojo.getCode().equals(Constants.USERGROUP_VMS_USER)){
+            if(permissionIdArr != null && permissionIdArr.length > 0){
+                List<Long> updatingPermissionIds = new ArrayList<Long>();
+                List<Long> dbPermissionIds = userGroupPermissionService.findPermissionIsListById(pojo.getUserGroupId());
+                List<Long> deletePermissionIds = new ArrayList<Long>();
+                List<Long> newPermissionIds = new ArrayList<Long>();
 
-            Long[] dbPermissionIds = this.userGroupPermissionService.findPermissionIsListById(pojo.getUserGroupId());
-            List<Long> addingPermissionIds = new ArrayList<Long>();
+                for (String permissionIdStr : permissionIdArr){
+                    updatingPermissionIds.add(Long.valueOf(permissionIdStr));
+                }
 
-            for(Long updatingPermissionId : updatingPermissionIds){
-                boolean isExisting = false;
-                for(Long dbPermissionId : dbPermissionIds){
-                    if(dbPermissionId.equals(updatingPermissionId)){
-                        isExisting = true;
-                        break;
+                for(Long updatingPermissionId : updatingPermissionIds){
+                    if(!dbPermissionIds.contains(updatingPermissionId)){
+                        newPermissionIds.add(updatingPermissionId);
                     }
                 }
 
-                if(!isExisting){
-                    addingPermissionIds.add(updatingPermissionId);
+                for (Long dbPermissionId : dbPermissionIds){
+                    if(!updatingPermissionIds.contains(dbPermissionId)){
+                        deletePermissionIds.add(dbPermissionId);
+                    }
                 }
 
                 // add new permissions to this UserGroup
-                for(Long newPermissionId : addingPermissionIds){
-                    UserGroupPermissionEntity userGroupPermissionEntity = new UserGroupPermissionEntity();
-                    userGroupPermissionEntity.setUserGroup(dbItem);
+                if(newPermissionIds.size() > 0){
+                    for(Long newPermissionId : newPermissionIds){
+                        UserGroupPermissionEntity userGroupPermissionEntity = new UserGroupPermissionEntity();
+                        userGroupPermissionEntity.setUserGroup(dbItem);
 
-                    PermissionEntity permissionEntity = new PermissionEntity();
-                    permissionEntity.setPermissionId(newPermissionId);
-                    userGroupPermissionEntity.setPermission(permissionEntity);
-                    this.userGroupPermissionService.save(userGroupPermissionEntity);
+                        PermissionEntity permissionEntity = new PermissionEntity();
+                        permissionEntity.setPermissionId(newPermissionId);
+                        userGroupPermissionEntity.setPermission(permissionEntity);
+                        this.userGroupPermissionService.save(userGroupPermissionEntity);
+                    }
                 }
 
                 // delete permissions which is no longer in use
-                this.userGroupPermissionService.deletePermissionNotInList(pojo.getUserGroupId(), updatingPermissionIds);
+                if(deletePermissionIds.size() > 0){
+                    this.userGroupPermissionService.deleteOutUpdatePermissionIds(pojo.getUserGroupId(), deletePermissionIds);
+                }
+            }else{
+                this.userGroupPermissionService.deleteByUserGroupId(pojo.getUserGroupId());
             }
-        }else{
-            this.userGroupPermissionService.deleteByUserGroupId(pojo.getUserGroupId());
         }
     }
 
     @Override
     public void addItem(UserGroupDTO pojo, String[] permissionIdArr) throws DuplicateKeyException {
         UserGroupEntity userGroupEntity = new UserGroupEntity();
-        userGroupEntity.setCode(pojo.getCode());
+        userGroupEntity.setCode(pojo.getCode().toUpperCase());
         userGroupEntity.setDescription(pojo.getDescription());
         userGroupEntity = this.userGroupService.save(userGroupEntity);
 
@@ -143,8 +147,13 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
 
     @Override
     public UserGroupDTO findByCode(String code) throws ObjectNotFoundException {
-        UserGroupEntity entity = this.userGroupService.findEqualUnique("code", code);
+        UserGroupEntity entity = this.userGroupService.findEqualUnique("code", code.toUpperCase());
         if (entity == null) throw new ObjectNotFoundException("Not found User Group has Code "+code);
         return DozerSingletonMapper.getInstance().map(entity, UserGroupDTO.class);
+    }
+
+    @Override
+    public UserGroupDTO findById(Long userGroupId) throws ObjectNotFoundException {
+        return UserGroupBeanUtil.entity2DTO(this.userGroupService.findById(userGroupId));
     }
 }

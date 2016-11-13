@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.webapp.validator;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
@@ -28,9 +29,29 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
     @Override
     public void validate(Object o, Errors errors) {
         UserGroupCommand command = (UserGroupCommand)o;
-        trimmingField(command);
-        checkRequiredFields(command, errors);
-        checkUniqueCode(command, errors);
+        String action = command.getCrudaction();
+        if(action.equals(Constants.ACTION_DELETE)){
+            validateDeleteSystemUserGroup(command);
+        }else{
+            trimmingField(command);
+            checkRequiredFields(command, errors);
+            checkUniqueCode(command, errors);
+            checkWhiteSpaceCode(command, errors);
+        }
+    }
+
+    private void validateDeleteSystemUserGroup(UserGroupCommand command){
+        UserGroupDTO pojo = null;
+        try{
+            pojo = this.userGroupService.findById(command.getPojo().getUserGroupId());
+            if(pojo.getCode().equals(Constants.USERGROUP_ADMIN)
+                    || pojo.getCode().equals(Constants.USERGROUP_KHDN)
+                    || pojo.getCode().equals(Constants.USERGROUP_VMS_USER)){
+                command.setErrorMessage(this.getMessageSourceAccessor().getMessage("usergroup.not_allow_delete_system_usergroup"));
+            }
+        }catch (ObjectNotFoundException one){
+            command.setErrorMessage(this.getMessageSourceAccessor().getMessage("usergroup.not_allow_this_usergroup_to_delete"));
+        }
     }
 
     /**
@@ -74,6 +95,17 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
                     errors.rejectValue("pojo.code", "errors.duplicated");
                 }
             }
-        }catch (ObjectNotFoundException one){}
+        }catch (ObjectNotFoundException one){
+
+        }
+    }
+
+    private void checkWhiteSpaceCode(UserGroupCommand command, Errors errors){
+        String code = command.getPojo().getCode();
+        if(StringUtils.isNotBlank(code)){
+            if(code.indexOf(" ") > -1){
+                errors.rejectValue("pojo.code", "usergroup.not_allow_whitespace_in_code");
+            }
+        }
     }
 }

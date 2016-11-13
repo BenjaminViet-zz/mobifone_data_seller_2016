@@ -13,6 +13,8 @@ public class KHDNCommand extends AbstractCommand<KHDNDTO> {
     }
 
     private Date issuedContractDate;
+    private Date issuedContractDateFrom;
+    private Date issuedContractDateTo;
 
     public Date getIssuedContractDate() {
         return issuedContractDate;
@@ -20,5 +22,21 @@ public class KHDNCommand extends AbstractCommand<KHDNDTO> {
 
     public void setIssuedContractDate(Date issuedContractDate) {
         this.issuedContractDate = issuedContractDate;
+    }
+
+    public Date getIssuedContractDateFrom() {
+        return issuedContractDateFrom;
+    }
+
+    public void setIssuedContractDateFrom(Date issuedContractDateFrom) {
+        this.issuedContractDateFrom = issuedContractDateFrom;
+    }
+
+    public Date getIssuedContractDateTo() {
+        return issuedContractDateTo;
+    }
+
+    public void setIssuedContractDateTo(Date issuedContractDateTo) {
+        this.issuedContractDateTo = issuedContractDateTo;
     }
 }

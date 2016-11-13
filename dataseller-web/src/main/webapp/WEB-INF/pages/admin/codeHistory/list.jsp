@@ -42,20 +42,29 @@
             <div class="x_panel">
                 <div class="x_content">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name"><fmt:message key="code_history.name" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.custId" cssClass="form-control">
-                                <option value="-1"><fmt:message key="label.choose" /></option>
-                                <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.custId eq KHDN.custId}">selected="true"</c:if> value="${KHDN.custId}">${KHDN.name}</option>
-                                </c:forEach>
-                            </form:select>
+                            <form:input id="name" path="pojo.name" cssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tin"><fmt:message key="code_history.tin" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="tin" path="pojo.tin" cssClass="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="isdn"><fmt:message key="code_history.isdn" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <form:input id="isdn" path="pojo.isdn" cssClass="form-control" />
                         </div>
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-success" onclick="javacsript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
+                            <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
                             <c:if test="${item.crudaction == 'search' && item.listResult.size() > 0}">
                                 <a class="btn btn-primary" onclick="javascript: exportExcel();"><fmt:message key="label.button.export" /></a>
@@ -78,7 +87,7 @@
                                            id="tableList" pagesize="${items.maxPageItems}" export="false"
                                            class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
                                 <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                                <display:column headerClass="table_header text-center" property="name" titleKey="code_history.cust_name" style="width: 10%"/>
+                                <display:column headerClass="table_header text-center" property="name" titleKey="code_history.name" style="width: 10%"/>
                                 <display:column headerClass="table_header text-center" property="tin" titleKey="code_history.tin" style="width:15%"/>
                                 <display:column headerClass="table_header text-center" property="isdn" class="text-center" titleKey="code_history.isdn" style="width: 10%" />
                                 <display:column headerClass="table_header text-center" class="text-center" titleKey="code_history.reg_date" style="width: 10%" >
@@ -92,7 +101,7 @@
                             </display:table>
                         </c:when>
                         <c:otherwise>
-                            <fmt:message key="no_data_found" />
+                            <fmt:message key="please_choose_filter" />
                         </c:otherwise>
                     </c:choose>
                 </div>

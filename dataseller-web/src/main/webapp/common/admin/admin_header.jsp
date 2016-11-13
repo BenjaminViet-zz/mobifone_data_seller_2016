@@ -5,6 +5,7 @@
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
+<c:url var="notificationURL" value="${prefix}/notification.html" />
 
 <div class="top_nav">
     <div class="nav_menu">
@@ -30,17 +31,53 @@
                 </li>
 
                 <li role="presentation" class="dropdown">
+                    <c:set var="notificationList" value="<%=SecurityUtils.getPrincipal().getNotificationList()%>" />
+
                     <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown"
                        aria-expanded="false">
-                        <i class="fa fa-envelope-o"></i>
-                        <span class="badge bg-green">0</span>
+                        <i class="fa fa-bell-o"></i>
+                        <span class="badge bg-green">${notificationList.size()}</span>
                     </a>
+
                     <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                        <li>
-                            <span class="message">
-                              <fmt:message key="dashboard.no_warning" />
-                            </span>
-                        </li>
+                        <c:choose>
+                            <c:when test="${notificationList.size() > 0}">
+                                <c:forEach items="${notificationList}" var="notification" varStatus="status">
+                                    <c:if test="${status.count <= Constants.MAX_NOTIFICATION_MESSAGE_POPUP - 1}">
+                                        <li>
+                                            <a>
+                                                <span>
+                                                    <span>${notification.message_type}</span>
+                                                      <span class="time">
+                                                          <fmt:formatDate value="${notification.createdDate}" pattern="${dateTimePattern}" />
+                                                      </span>
+                                                </span>
+                                                <span class="message">
+                                                  ${notification.message}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </c:if>
+                                </c:forEach>
+                                <c:if test="${notificationList.size() >= Constants.MAX_NOTIFICATION_MESSAGE_POPUP}">
+                                    <li>
+                                        <div class="text-center">
+                                            <a href="${notificationURL}">
+                                                <strong><fmt:message key="dashboard.notification.see_all_notifications" /></strong>
+                                                <i class="fa fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </c:if>
+                            </c:when>
+                            <c:otherwise>
+                                <li>
+                                    <span class="message">
+                                      <fmt:message key="dashboard.no_warning" />
+                                    </span>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
                     </ul>
                 </li>
             </ul>

@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.beanUtil.MBDCodeHistoryBeanUtil;
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.domain.MBDCodeHistoryEntity;
 import com.benluck.vms.mobifonedataseller.session.CodeHistoryLocalBean;
@@ -28,6 +29,7 @@ public class CodeHistoryManagementSessionBean implements CodeHistoryManagementLo
 
     @Override
     public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
+        properties.put("paymentStatus", Constants.COD_HISTORY_PAID);
         Object[] objectResult = this.codeHistoryService.searchByProperties(properties, sortExpression, sortDirection, firstItem, reportMaxPageItems);
         List<MBDCodeHistoryEntity> entityList = (List<MBDCodeHistoryEntity>)objectResult[1];
         if(entityList.size() > 0){

@@ -41,6 +41,7 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
+
                 <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
                                partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                id="tableList" pagesize="${items.maxPageItems}" export="false"
@@ -53,7 +54,9 @@
                     <display:column headerClass="table_header text-center" property="description" sortName="displayName" sortable="false" titleKey="usergroup.label.description" style="60%"/>
                     <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width:15%;">
                         <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                        | <a class="tip-top" onclick="javascript: deleteUserGroup(${tableList.userGroupId});"><fmt:message key="label.delete" /></a>
+                        <c:if test="${tableList.code != Constants.USERGROUP_ADMIN && tableList.code != Constants.USERGROUP_KHDN && tableList.code != Constants.USERGROUP_VMS_USER}">
+                            | <a class="tip-top" onclick="javascript: deleteUserGroup(${tableList.userGroupId});"><fmt:message key="label.delete" /></a>
+                        </c:if>
                     </display:column>
                     <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nhom_quyen" /></display:setProperty>
                     <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nhom_quyen" /></display:setProperty>

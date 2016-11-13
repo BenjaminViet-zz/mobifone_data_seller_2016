@@ -34,4 +34,6 @@ public interface UserGroupManagementLocalBean {
     UserGroupDTO findAndFetchPermissionListById(Long userGroupId) throws ObjectNotFoundException;
 
     UserGroupDTO findByCode(String code) throws ObjectNotFoundException;
+
+    UserGroupDTO findById(Long userGroupId) throws ObjectNotFoundException;
 }

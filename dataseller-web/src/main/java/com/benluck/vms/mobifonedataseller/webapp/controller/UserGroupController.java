@@ -97,19 +97,27 @@ public class UserGroupController extends ApplicationObjectSupport {
     }
 
     @RequestMapping(value = {"/admin/usergroup/list.html"})
-    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command, HttpServletRequest request){
+    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
+                             HttpServletRequest request,
+                             BindingResult bindingResult){
         ModelAndView mav = new ModelAndView("/admin/usergroup/list");
         String action = command.getCrudaction();
         if (StringUtils.isNotBlank(action)){
             if(action.equals("delete")){
                 if(command.getPojo().getUserGroupId() != null){
-                    try{
-                        this.userGroupService.deleteItem(command.getPojo().getUserGroupId());
-                        mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
-                    }catch (Exception e){
-                        mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.can_not_delete_user_group"));
+                    validator.validate(command, bindingResult);
+                    if(StringUtils.isBlank(command.getErrorMessage())){
+                        try{
+                            this.userGroupService.deleteItem(command.getPojo().getUserGroupId());
+                            mav.addObject(Constants.ALERT_TYPE, "success");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
+                        }catch (Exception e){
+                            mav.addObject(Constants.ALERT_TYPE, "info");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.can_not_delete_user_group"));
+                        }
+                    }else{
+                        mav.addObject(Constants.ALERT_TYPE, "danger");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
                 }
             }

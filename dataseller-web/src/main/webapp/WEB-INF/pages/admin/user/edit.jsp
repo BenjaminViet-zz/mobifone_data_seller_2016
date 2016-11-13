@@ -76,36 +76,38 @@
                             <fmt:message key="user.label.password" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:password id="password" path="pojo.password" cssClass="required nohtml form-control has-attach-add-on"></form:password>
+                            <input id="password" type="password" name="pojo.password" class="required nohtml form-control has-attach-add-on" value="${item.pojo.password}" />
                             <span class="add-on-attach" id="btnShowHidePassword">Xem</span>
                             <form:errors for="password" path="pojo.password" cssClass="error-inline-validate"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="userGroup">
-                            <fmt:message key="user.label.usergroup" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required form-control" cssStyle="width: 250px;">
-                                <form:option value=""><fmt:message key="label.select" /></form:option>
-                                <c:forEach items="${userGroups}" var="KHDN">
-                                    <option <c:if test="${KHDN.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${KHDN.userGroupId}">${KHDN.description}</option>
-                                </c:forEach>
-                            </form:select>
-                            <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
+                    <c:if test="${notSystemUser}">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="userGroup">
+                                <fmt:message key="user.label.usergroup" />
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required form-control" cssStyle="width: 250px;">
+                                    <form:option value=""><fmt:message key="label.select" /></form:option>
+                                    <c:forEach items="${userGroups}" var="KHDN">
+                                        <option <c:if test="${KHDN.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${KHDN.userGroupId}">${KHDN.description}</option>
+                                    </c:forEach>
+                                </form:select>
+                                <form:errors path="pojo.userGroup.userGroupId" for="userGroup" cssClass="error-inline-validate" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">
-                            <fmt:message key="label.status" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select cssClass="form-control" id="status" path="pojo.status" cssStyle="width: 150px;">
-                                <option <c:if test="${1 eq item.pojo.status}">selected="true"</c:if> value="1"><fmt:message key="label.active" /></option>
-                                <option <c:if test="${0 eq item.pojo.status}">selected="true"</c:if> value="0"><fmt:message key="label.inactive" /></option>
-                            </form:select>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">
+                                <fmt:message key="label.status" />
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <form:select cssClass="form-control" id="status" path="pojo.status" cssStyle="width: 150px;">
+                                    <option <c:if test="${1 eq item.pojo.status}">selected="true"</c:if> value="1"><fmt:message key="label.active" /></option>
+                                    <option <c:if test="${0 eq item.pojo.status}">selected="true"</c:if> value="0"><fmt:message key="label.inactive" /></option>
+                                </form:select>
+                            </div>
                         </div>
-                    </div>
+                    </c:if>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i>

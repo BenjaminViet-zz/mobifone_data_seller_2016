@@ -2,10 +2,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ include file="/common/taglibs.jsp"%>
 
-<security:authorize access="hasAuthority('ADMIN')">
-    <%--<c:redirect url="/admin/dashboard.html"/>--%>
-    <c:redirect url="/admin/packagedatacodegen/list.html"/>
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
 </security:authorize>
-<c:redirect url="/dashboard.html"/>
+<c:redirect url="${prefix}/notification.html"/>
 
 
