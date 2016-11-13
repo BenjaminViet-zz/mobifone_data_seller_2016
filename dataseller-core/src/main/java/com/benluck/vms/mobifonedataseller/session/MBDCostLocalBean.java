@@ -17,5 +17,5 @@ public interface MBDCostLocalBean extends GenericSessionBean<MBDCostEntity, Long
 
     Object[] search4DetailExpenseReport(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer maxPageItems);
 
-    Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+    Object[] searchPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

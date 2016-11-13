@@ -178,7 +178,7 @@
                                     <display:column headerClass="table_header text-center" property="empCode" titleKey="payment.manager.table.emp_code" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="busType" titleKey="payment.manager.table.bus_type" style="width: 200px"/>
                                     <display:column headerClass="table_header text-center" property="custType" titleKey="payment.manager.table.cust_type" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.sta_dateTime" style="width: 200px">
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.sta_dateTime" class="text-center" style="width: 200px">
                                         <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
                                     </display:column>
                                     <display:column headerClass="table_header text-center" property="actStatus" class="text-center" titleKey="payment.manager.table.act_status" style="width: 200px"/>

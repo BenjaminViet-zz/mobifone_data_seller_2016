@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,7 +123,7 @@ public class PaymentManagementController extends ApplicationObjectSupport{
         command.setSortExpression("issue_month");
         command.setSortDirection(Constants.SORT_DESC);
 
-        Object[] resultObject = this.costService.findPaymentListByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
+        Object[] resultObject = this.costService.searchPaymentListByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<MBDCostInfoDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());

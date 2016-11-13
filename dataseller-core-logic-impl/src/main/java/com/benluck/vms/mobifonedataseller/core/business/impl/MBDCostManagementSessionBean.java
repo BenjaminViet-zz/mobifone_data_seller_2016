@@ -2,7 +2,6 @@ package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.beanUtil.MBDCostInfoBeanUtil;
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.common.exception.DuplicateItemException;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDReportDetailExpenseDTO;
@@ -102,8 +101,8 @@ public class MBDCostManagementSessionBean implements MBDCostManagementLocalBean{
     }
 
     @Override
-    public Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
-        Object[] resultObject = this.costService.findPaymentListByProperties(properties, sortExpression, sortDirection, firstItem, reportMaxPageItems);
+    public Object[] searchPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
+        Object[] resultObject = this.costService.searchPaymentListByProperties(properties, sortExpression, sortDirection, firstItem, reportMaxPageItems);
         List<MBDCostInfoDTO> dtoList = new ArrayList<MBDCostInfoDTO>();
         MBDCostInfoDTO dto = null;
 

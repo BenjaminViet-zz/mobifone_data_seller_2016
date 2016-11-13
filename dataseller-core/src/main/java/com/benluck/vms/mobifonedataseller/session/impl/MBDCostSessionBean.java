@@ -65,7 +65,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
     }
 
     @Override
-    public Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
+    public Object[] searchPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
         StringBuilder sqlMainQuery = new StringBuilder();
         sqlMainQuery.append(" FROM MOBI_DATA_COST c ")
                     .append(" WHERE  c.payment_Status = :paymentStatus ");

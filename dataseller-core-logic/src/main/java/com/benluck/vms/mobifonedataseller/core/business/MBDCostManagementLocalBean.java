@@ -44,5 +44,5 @@ public interface MBDCostManagementLocalBean {
 
     MBDCostInfoDTO findById(Long paymentId) throws ObjectNotFoundException;
 
-    Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+    Object[] searchPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

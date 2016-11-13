@@ -148,7 +148,7 @@ public class ReportDetailExpenseController extends ApplicationObjectSupport{
         }
     }
     private CellValue[] addCellValues(MBDReportDetailExpenseDTO dto, int indexRow){
-        SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
