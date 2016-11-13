@@ -1,4 +1,4 @@
-package com.benluck.vms.mobifonedataseller.webapp.controller.report;
+package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean;
@@ -42,8 +42,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-public class MBDCodeHistoryController extends ApplicationObjectSupport{
-    private Logger logger = Logger.getLogger(MBDCodeHistoryController.class);
+public class MBDCodeHistoryListController extends ApplicationObjectSupport{
+    private Logger logger = Logger.getLogger(MBDCodeHistoryListController.class);
     private final Integer TOTAL_COLUMN_EXPORT = 6;
 
     @Autowired
@@ -51,11 +51,11 @@ public class MBDCodeHistoryController extends ApplicationObjectSupport{
     @Autowired
     private KHDNManagementLocalBean khdnService;
 
-    @RequestMapping(value = {"/admin/codeHistory/list.html", "/vms/codeHistory/list.html"})
+    @RequestMapping(value = {"/admin/payment/list.html", "/USER/payment/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCodeHistoryCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
-        ModelAndView mav = new ModelAndView("/admin/codeHistory/list");
+        ModelAndView mav = new ModelAndView("/admin/payment/list");
         String action = command.getCrudaction();
 
         if(StringUtils.isNotBlank(action)){
@@ -117,8 +117,8 @@ public class MBDCodeHistoryController extends ApplicationObjectSupport{
         List<MBDCodeHistoryDTO> dtoList = (List<MBDCodeHistoryDTO>)resultObject[1];
 
         if(dtoList.size() == 0){
-            logger.error("Error happened when fetching report general expense for CustID: " + command.getPojo().getCustId());
-            throw new Exception("Error happened when fetching report general expense for CustID: " + command.getPojo().getCustId());
+            logger.error("Error happened when fetching report general expense.");
+            throw new Exception("Error happened when fetching report general expense");
         }
 
         String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/lich_su_chi_tra.xls");

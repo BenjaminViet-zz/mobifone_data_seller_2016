@@ -1,13 +1,18 @@
 package com.benluck.vms.mobifonedataseller.core.business.impl;
 
-import com.benluck.vms.mobifonedataseller.beanUtil.MBDReportGeneralExpenseDTOBeanUtil;
+import com.benluck.vms.mobifonedataseller.beanUtil.MBDCostInfoBeanUtil;
+import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.common.exception.DuplicateItemException;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDReportDetailExpenseDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDReportGeneralExpenseDTO;
 import com.benluck.vms.mobifonedataseller.domain.MBDCostEntity;
 import com.benluck.vms.mobifonedataseller.session.MBDCostLocalBean;
 
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.EJB;
+import javax.ejb.ObjectNotFoundException;
 import javax.ejb.Stateless;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -75,6 +80,63 @@ public class MBDCostManagementSessionBean implements MBDCostManagementLocalBean{
             dto.setTrangThaiThueBao(tmpObjectArr[10] != null ? tmpObjectArr[10].toString() : "");
             dto.setChuKy(tmpObjectArr[11] != null ? tmpObjectArr[11].toString() : "");
             dto.setHoaHong(tmpObjectArr[12] != null ? Double.valueOf(tmpObjectArr[12].toString()) : null);
+            dtoList.add(dto);
+        }
+        resultObject[1] = dtoList;
+        return resultObject;
+    }
+
+    @Override
+    public void updatePayment(String[] checkList, Timestamp paymentDate) throws ObjectNotFoundException, DuplicateKeyException{
+        for(String costId : checkList){
+            MBDCostEntity dbItem = this.costService.findById(Long.valueOf(costId));
+            dbItem.setPaymentStatus(Constants.COST_PAYMENT_PAID);
+            dbItem.setPaymentDate(paymentDate);
+            this.costService.update(dbItem);
+        }
+    }
+
+    @Override
+    public MBDCostInfoDTO findById(Long paymentId) throws ObjectNotFoundException {
+        return MBDCostInfoBeanUtil.entity2DTO(this.costService.findById(paymentId));
+    }
+
+    @Override
+    public Object[] findPaymentListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
+        Object[] resultObject = this.costService.findPaymentListByProperties(properties, sortExpression, sortDirection, firstItem, reportMaxPageItems);
+        List<MBDCostInfoDTO> dtoList = new ArrayList<MBDCostInfoDTO>();
+        MBDCostInfoDTO dto = null;
+
+        List resultSet = (List)resultObject[1];
+        Object[] tmpArrObject = null;
+        for (Object tmpObject : resultSet){
+            tmpArrObject = (Object[])tmpObject;
+            dto = new MBDCostInfoDTO();
+            dto.setCostId(Long.valueOf(tmpArrObject[0].toString()));
+            dto.setShopCode(tmpArrObject[1].toString());
+            dto.setShopName(tmpArrObject[2].toString());
+            dto.setIsdn(tmpArrObject[3].toString());
+            dto.setName(tmpArrObject[4].toString());
+            dto.setBusType(tmpArrObject[5].toString());
+            dto.setCustType(tmpArrObject[6].toString());
+            dto.setStaDateTime(tmpArrObject[7] != null ? Timestamp.valueOf(tmpArrObject[7].toString()) : null);
+            dto.setStatus(tmpArrObject[8].toString());
+            dto.setEmpCode(tmpArrObject[9].toString());
+            dto.setActStatus(tmpArrObject[10] != null ? tmpArrObject[10].toString() : "");
+            dto.setIssueMonth(Timestamp.valueOf(tmpArrObject[11].toString()));
+            dto.setPayment(tmpArrObject[12] != null ? Double.valueOf(tmpArrObject[12].toString()) : null);
+            dto.setDevelopmentPhase1(tmpArrObject[13] != null ? tmpArrObject[13].toString() : "");
+            dto.setDevelopmentPhase2(tmpArrObject[14] != null ? tmpArrObject[14].toString() : "");
+            dto.setDevelopmentPhase3(tmpArrObject[15] != null ? tmpArrObject[15].toString() : "");
+            dto.setDevelopmentAmount1(tmpArrObject[16] != null ? Double.valueOf(tmpArrObject[16].toString()) : null);
+            dto.setDevelopmentAmount2(tmpArrObject[17] != null ? Double.valueOf(tmpArrObject[17].toString()) : null);
+            dto.setDevelopmentAmount3(tmpArrObject[18] != null ? Double.valueOf(tmpArrObject[18].toString()) : null);
+            dto.setMaintainPhase1(tmpArrObject[19] != null ? tmpArrObject[19].toString() : "");
+            dto.setMaintainPhase2(tmpArrObject[20] != null ? tmpArrObject[20].toString() : "");
+            dto.setMaintainPhase3(tmpArrObject[21] != null ? tmpArrObject[21].toString() : "");
+            dto.setDevelopmentAmount1(tmpArrObject[22] != null ? Double.valueOf(tmpArrObject[22].toString()) : null);
+            dto.setDevelopmentAmount2(tmpArrObject[23] != null ? Double.valueOf(tmpArrObject[23].toString()) : null);
+            dto.setDevelopmentAmount3(tmpArrObject[24] != null ? Double.valueOf(tmpArrObject[24].toString()) : null);
             dtoList.add(dto);
         }
         resultObject[1] = dtoList;

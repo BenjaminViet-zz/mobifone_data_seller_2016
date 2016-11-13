@@ -31,6 +31,8 @@
     <!-- Switchery -->
     <link href="<c:url value="/themes/newteample/vendors/switchery/dist/switchery.min.css" />" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/admin/css/jquery-ui-1.10.3.css"/>"/>
+
     <!-- Datatables -->
     <%--<link href="<c:url value="/themes/newteample/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" />" rel="stylesheet" />--%>
     <%--<link href="<c:url value="/themes/newteample/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" />" rel="stylesheet" />--%>
@@ -45,6 +47,7 @@
 
     <!-- jQuery -->
     <script src="<c:url value="/themes/admin/js/jquery-1.11.1.min.js" />"></script>
+    <script src="<c:url value="/themes/admin/js/jquery-ui-1.10.3.min.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/bootbox.min.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/jquery.validate.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/jquery.mask.min.js"/>"></script>
