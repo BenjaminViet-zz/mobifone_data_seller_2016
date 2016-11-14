@@ -164,16 +164,16 @@ public class OrderController extends ApplicationObjectSupport{
         doubleCellFormat.setFont(normalFont);
         doubleCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
 
-        boolean adminExport4KHDN = false;
+        boolean adminExport4MOBIFONE = false;
 
-        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && command.getPojo().isAdminExport4KHDN()){
-            adminExport4KHDN = true;
+        if((SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) || SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)) && command.getExportOptionType().equals(Constants.ADMIN_EXPORT_4_MOBIFONE)){
+            adminExport4MOBIFONE = true;
         }
 
         if(dtoList.size() > 0){
             int indexRow = 1;
             for(OrderDataCodeDTO dto : dtoList){
-                CellValue[] resValue = addCellValues(dto, indexRow, adminExport4KHDN);
+                CellValue[] resValue = addCellValues(dto, indexRow, adminExport4MOBIFONE);
                 ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
                 indexRow++;
             }
@@ -182,19 +182,19 @@ public class OrderController extends ApplicationObjectSupport{
             response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
         }
     }
-    private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow, boolean adminExport4KHDN){
+    private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow, boolean adminExport4MOBIFONE){
         SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getSerial().toString());
 
-        if(!adminExport4KHDN && SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+        if(adminExport4MOBIFONE){
             resValue[columnIndex++] = new CellValue(CellDataType.STRING, SHA256Util.hash(MobiFoneSecurityBase64Util.decode(dto.getDataCode().toString())));
-        }else if(adminExport4KHDN || SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN)){
+        }else{
             resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getDataCode().toString());
         }
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getValue());
+        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, Double.valueOf(dto.getOrder().getPackageData().getValue()));
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getVolume());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getDuration());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getOrder().getPackageData().getName());

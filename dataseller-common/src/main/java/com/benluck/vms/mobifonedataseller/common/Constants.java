@@ -151,7 +151,8 @@ public class Constants {
     public static final Integer ORDER_ACTIVE_STATUS_ALIVE = 0;
     public static final Integer ORDER_ACTIVE_STATUS_DIE = 1;
 
-    public static final Boolean ADMIN_EXPORT_4_KHDN = true;
+    public static final Integer ADMIN_EXPORT_4_KHDN = 0;
+    public static final Integer ADMIN_EXPORT_4_MOBIFONE = 1;
 
     // Import Constants
     public static final String ORDER_IMPORT_FILE_CACHE_KEY = "ORDER_IMPORT_FILE_CACHE_KEY";

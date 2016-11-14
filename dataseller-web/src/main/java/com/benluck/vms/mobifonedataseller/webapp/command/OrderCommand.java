@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.webapp.command;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 
 import java.util.Date;
@@ -18,6 +19,7 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
 
     public Date issuedDate;
     private Date shippingDate;
+    private Integer exportOptionType = Constants.ADMIN_EXPORT_4_KHDN;
 
     public Date getIssuedDate() {
         return issuedDate;
@@ -33,5 +35,13 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
 
     public void setShippingDate(Date shippingDate) {
         this.shippingDate = shippingDate;
+    }
+
+    public Integer getExportOptionType() {
+        return exportOptionType;
+    }
+
+    public void setExportOptionType(Integer exportOptionType) {
+        this.exportOptionType = exportOptionType;
     }
 }

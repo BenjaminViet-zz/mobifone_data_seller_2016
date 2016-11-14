@@ -189,12 +189,16 @@
     }
 
     $("#btnSave").click(function(e){
-        e.preventDefault();
-        bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
-            if(r && $('#formEdit').valid() ){
-                $("#formEdit").submit();
-            }
-        })
+        var statusVal = $('#status').val();
+        if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
+            bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                if(r && $('#formEdit').valid() ){
+                    $("#formEdit").submit();
+                }
+            });
+        }else{
+            $("#formEdit").submit();
+        }
     });
 
 

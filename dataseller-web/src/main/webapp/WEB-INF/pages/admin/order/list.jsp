@@ -73,13 +73,25 @@
                             </form:select>
                         </div>
                     </div>
+                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
+                        <c:if test="${item.crudaction == 'search' && items.totalItems > 0}">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="exportOptionType"><fmt:message key="admin.donhang.label.export_option" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <form:select id="exportOptionType" path="exportOptionType" cssClass="form-control">
+                                        <option value=""><fmt:message key="label.all" /></option>
+                                        <option <c:if test="${item.exportOptionType eq Constants.ADMIN_EXPORT_4_KHDN}">selected="true"</c:if> value="${Constants.ADMIN_EXPORT_4_KHDN}"><fmt:message key="admin.donhang.label.export_4_khdn" /></option>
+                                        <option <c:if test="${item.exportOptionType eq Constants.ADMIN_EXPORT_4_MOBIFONE}">selected="true"</c:if> value="${Constants.ADMIN_EXPORT_4_MOBIFONE}"><fmt:message key="admin.donhang.label.export_4_he_thong_quan_ly_the" /></option>
+                                    </form:select>
+                                </div>
+                            </div>
+                        </c:if>
+                    </security:authorize>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
-                            <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
-                                <input id="adminExport4KHDN" type="checkbox" class="flat" value="${Constants.ADMIN_EXPORT_4_KHDN}" ><fmt:message key="order.admin_export_4_khdn" /></input>
-                            </security:authorize>
                         </div>
                     </div>
                     <input id="crudaction" type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>" />
@@ -177,9 +189,11 @@
     function exportExcel(orderId){
         var url = '${formUrl}?pojo.orderId=' + orderId + '&crudaction=<%=Constants.ACTION_EXPORT%>';
 
-        var $adminExport4KHDN = $('#adminExport4KHDN');
-        if($adminExport4KHDN.length > 0 && $adminExport4KHDN.is(':checked')){
-            url += '&pojo.adminExport4KHDN=true';
+        var $exportOptionType = $('#exportOptionType');
+        if($exportOptionType.length){
+            if($exportOptionType.val() == '${Constants.ADMIN_EXPORT_4_MOBIFONE}'){
+                url += '&exportOptionType=${Constants.ADMIN_EXPORT_4_MOBIFONE}';
+            }
         }
 
         document.location.href = url;
