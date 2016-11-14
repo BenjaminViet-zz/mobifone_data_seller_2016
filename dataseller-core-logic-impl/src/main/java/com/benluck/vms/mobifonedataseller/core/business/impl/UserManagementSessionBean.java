@@ -64,7 +64,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
 
-        if(flagUpdateUserGroup != null && flagUpdateUserGroup.booleanValue()){
+        if(flagUpdateUserGroup != null && flagUpdateUserGroup.booleanValue() && pojo.getUserGroup() != null){
             dbItem.setStatus(pojo.getStatus());
             UserGroupEntity userGroupEntity = new UserGroupEntity();
             userGroupEntity.setUserGroupId(pojo.getUserGroup().getUserGroupId());

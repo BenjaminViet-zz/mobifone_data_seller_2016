@@ -11,11 +11,16 @@
     </title>
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
-<c:url var="backUrl" value="/admin/usergroup/list.html"/>
-<c:url var="formUrl" value="/admin/usergroup/add.html"/>
+
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="backUrl" value="${prefix}/usergroup/list.html"/>
+<c:url var="formUrl" value="${prefix}/usergroup/add.html"/>
 
 <c:if test="${pojo.userGroupId != null}">
-    <c:url var="formUrl" value="/admin/usergroup/edit.html"/>
+    <c:url var="formUrl" value="${prefix}/usergroup/edit.html"/>
 </c:if>
 
 <div class="page-title">

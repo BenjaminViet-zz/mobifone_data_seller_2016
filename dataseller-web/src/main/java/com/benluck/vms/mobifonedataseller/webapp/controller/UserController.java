@@ -102,7 +102,7 @@ public class UserController extends ApplicationObjectSupport {
         mav.addObject("userGroups", userGroups);
     }
 
-    @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html", "/user/user/add.html"})
+    @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html", "/user/user/add.html", "/user/user/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY)UserCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {

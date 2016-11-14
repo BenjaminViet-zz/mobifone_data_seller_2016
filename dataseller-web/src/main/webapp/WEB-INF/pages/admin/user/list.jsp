@@ -7,9 +7,13 @@
     <meta name="menu" content="<fmt:message key="admin.user_list.heading_page" />"/>
 </head>
 
-<c:url var="formUrl" value="/admin/user/list.html"/>
-<c:url var="editUrl" value="/admin/user/edit.html"/>
-<c:url var="addUrl" value="/admin/user/add.html"/>
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="formUrl" value="${prefix}/user/list.html"/>
+<c:url var="editUrl" value="${prefix}/user/edit.html"/>
+<c:url var="addUrl" value="${prefix}/user/add.html"/>
 
 <div class="page-title">
     <div class="title_left">

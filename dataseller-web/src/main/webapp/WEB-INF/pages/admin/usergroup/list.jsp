@@ -6,9 +6,13 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.list.heading_page" />"/>
 </head>
 
-<c:url var="formUrl" value="/admin/usergroup/list.html"/>
-<c:url var="editUrl" value="/admin/usergroup/edit.html"/>
-<c:url var="addUrl" value="/admin/usergroup/add.html"/>
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="formUrl" value="${prefix}/usergroup/list.html"/>
+<c:url var="editUrl" value="${prefix}/usergroup/edit.html"/>
+<c:url var="addUrl" value="${prefix}/usergroup/add.html"/>
 
 <div class="page-title">
     <div class="title_left">

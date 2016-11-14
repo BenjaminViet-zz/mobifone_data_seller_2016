@@ -20,11 +20,15 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
 
-<c:url var="backUrl" value="/admin/khdn/list.html"/>
-<c:url var="formUrl" value="/admin/khdn/add.html"/>
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+<c:url var="backUrl" value="${prefix}/khdn/list.html"/>
+<c:url var="formUrl" value="${prefix}/khdn/add.html"/>
 
 <c:if test="${pojo.KHDNID != null}">
-    <c:url var="formUrl" value="/admin/khdn/edit.html"/>
+    <c:url var="formUrl" value="${prefix}/khdn/edit.html"/>
 </c:if>
 
 <div class="page-title">

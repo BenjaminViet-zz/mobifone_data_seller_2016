@@ -41,7 +41,7 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
     @Autowired
     private PackageDataManagementLocalBean packageDataService;
 
-    @RequestMapping(value = {"/admin/packagedatacodegen/list.html"})
+    @RequestMapping(value = {"/admin/packagedatacodegen/list.html", "/user/packagedatacodegen/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCodeGenCommand command,
                              @RequestParam(value = "year", required = false) Integer year,
                              HttpServletRequest request){

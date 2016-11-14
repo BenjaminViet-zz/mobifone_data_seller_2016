@@ -12,11 +12,17 @@
     </title>
     <meta name="menu" content="<fmt:message key="admin.edit_user.heading_page" />"/>
 </head>
-<c:url var="backUrl" value="/admin/user/list.html"/>
-<c:url var="formUrl" value="/admin/user/add.html"/>
+
+<c:set var="prefix" value="/user" />
+<security:authorize access="hasAnyAuthority('ADMIN')">
+    <c:set var="prefix" value="/admin" />
+</security:authorize>
+
+<c:url var="backUrl" value="${prefix}/user/list.html"/>
+<c:url var="formUrl" value="${prefix}/user/add.html"/>
 
 <c:if test="${pojo.userId != null}">
-    <c:url var="formUrl" value="/admin/user/edit.html"/>
+    <c:url var="formUrl" value="${prefix}/user/edit.html"/>
 </c:if>
 
 <div class="page-title">
