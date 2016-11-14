@@ -138,6 +138,16 @@
                                                 <fmt:message key="label.in_progress" />
                                             </c:when>
                                             <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                                <c:choose>
+                                                    <c:when test="${tableList.cardCodeProcessStatus eq  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
+                                                        <fmt:message key="label.failed_generate_card_code" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <fmt:message key="label.finish" />
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:when>
+                                            <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
                                                 <fmt:message key="label.finish" />
                                             </c:when>
                                         </c:choose>
@@ -150,7 +160,7 @@
                                     | <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
                                     | <a class="tip-top" onclick="javascript: deleteOrder(${tableList.orderId});"><fmt:message key="label.delete" /></a>
                                 </c:if>
-                                <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus ne  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
                                     | <a class="tip-top" onclick="javascript: exportExcel(${tableList.orderId});"><fmt:message key="label.button.export" /></a>
                                 </c:if>
                             </display:column>
