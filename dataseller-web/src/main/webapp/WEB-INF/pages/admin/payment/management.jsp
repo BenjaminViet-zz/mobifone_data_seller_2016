@@ -41,7 +41,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-                <div class="x_content">
+                <div class="x_content danhSachChiPhi">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="isdn"><fmt:message key="code_history.management.filter.isdn" />
                         </label>
@@ -109,7 +109,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                    <div class="x_content">
+                    <div class="x_content chiTra">
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentDate"><fmt:message key="label.ngay_chi_tra" /></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
@@ -122,8 +122,8 @@
                         </div>
                         <div class="form-group last">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
-                                <a class="btn btn-primary" onclick="javascript: bindPayment();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.payment" /></a>
+                                <a class="btn btn-success" id="resetFormChiTra" onclick="javascript: resetFormChiTra();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
+                                <a class="btn btn-danger" id="btnChiTra"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.payment" /></a>
                             </div>
                         </div>
                     </div>
@@ -248,10 +248,46 @@
         initScrollablePane();
         initDatePicker();
         restructureTableHead();
+        disableBtnChiTra();
+    });
+
+    var $btnChiTra = $('#btnChiTra');
+
+    function enableBtnChiTra(){
+        $btnChiTra.removeClass("disabled")
+                .css('pointer-events', 'auto');
+    }
+
+    function disableBtnChiTra(){
+        $btnChiTra.addClass("disabled")
+                .css('pointer-events', 'visible');
+    }
+
+    $('#paymentDate').datepicker().on("input change", function (e) {
+        $('#tableList input[type="checkbox"]').each(function(index, element) {
+            if ($(element).is(":checked") && $("#paymentDate").val() != '') {
+                enableBtnChiTra();
+            } else {
+                disableBtnChiTra();
+            }
+        });
+    });
+
+    $('#tableList input[type="checkbox"]').on('change', function(){
+        if( $(this).is(":checked") && $("#paymentDate").val() != '' ) {
+            enableBtnChiTra();
+        } else {
+            disableBtnChiTra();
+        }
     });
 
     function resetForm(){
-        $("input[type='text']").val('');
+        $(".danhSachChiPhi input[type='text']").val('');
+    }
+
+    function resetFormChiTra(){
+        $(".chiTra input[type='text']").val('');
+        disableBtnChiTra();
     }
 
     function submitForm(){
@@ -352,16 +388,25 @@
         $tableList.find('thead').replaceWith($tableHeadContent);
     }
 
-    function bindPayment(){
-        <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID && not empty items.listResult && items.listResult.size() > 0}">
-            var $notPaidPaymentListEl = $("input[name='checkList']:checked");
+    $('#btnChiTra').on('click', function(e){
+        e.preventDefault();
+        if( $(this).hasClass('disabled') ){
+            return;
+        } else {
+            bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                if(r){
+                    <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID && not empty items.listResult && items.listResult.size() > 0}">
+                    var $notPaidPaymentListEl = $("input[name='checkList']:checked");
 
-            if($notPaidPaymentListEl.length == 0){
-                return;
-            }
+                    if($notPaidPaymentListEl.length == 0){
+                        return;
+                    }
 
-            $('#crudaction').val('${Constants.ACTION_UPDATE}');
-            $('#listForm').submit();
-        </c:if>
-    }
+                    $('#crudaction').val('${Constants.ACTION_UPDATE}');
+                    $('#listForm').submit();
+                    </c:if>
+                }
+            });
+        }
+    })
 </script>
