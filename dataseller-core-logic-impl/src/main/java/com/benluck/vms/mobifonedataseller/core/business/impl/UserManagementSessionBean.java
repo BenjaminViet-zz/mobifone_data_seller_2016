@@ -85,11 +85,16 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         entity.setPassword(DesEncrypterUtils.getInstance().encrypt(dto.getPassword()));
         entity.setDisplayName(dto.getDisplayName());
         entity.setStatus(Constants.USER_ACTIVE);
-        entity.setLDAP(Constants.USER_NOT_LDAP);
+        if(dto.getLDAP() != null){
+            entity.setLDAP(dto.getLDAP());
+        }else{
+            entity.setLDAP(Constants.USER_NOT_LDAP);
+        }
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
         UserGroupEntity userGroupEntity = new UserGroupEntity();
         userGroupEntity.setUserGroupId(dto.getUserGroup().getUserGroupId());
+        userGroupEntity.setCode(dto.getUserGroup().getCode());
 
         entity.setUserGroup(userGroupEntity);
         return UserBeanUtil.entity2DTO(this.userService.save(entity));

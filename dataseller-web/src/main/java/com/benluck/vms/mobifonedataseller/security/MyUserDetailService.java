@@ -193,7 +193,8 @@ public class MyUserDetailService implements UserDetailsService {
         for(PermissionDTO roleDTO : permissionDTOList) {
             authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
         }
-        if(account.getUserGroup() != null) {
+
+        if(account != null && account.getUserGroup() != null) {
             authorities.add(new SimpleGrantedAuthority(account.getUserGroup().getCode()));
         }
 

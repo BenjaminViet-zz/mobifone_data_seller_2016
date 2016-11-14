@@ -7,23 +7,33 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd">
 
-  	<bean id="contextSource"
-		class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url" value="${ldap.URL}" />
-		<property name="base" value="${ldap.baseDN}" />
-		<property name="userDn" value="${ldap.userDN}" />
+    <bean id="contextSource"
+          class="org.springframework.ldap.core.support.LdapContextSource">
+        <!--<property name="url" value="ldap://10.151.70.248:389" />-->
+        <!--<property name="base" value="ou=c2,dc=vms,dc=com,dc=vn" />-->
+        <!--<property name="userDn" value="CN=webtt_qlcp webtt_qlcp,OU=MailSuDungChoCacChuongTrinh,OU=P.CNTT,OU=C2,DC=vms,DC=com,DC=vn" />-->
+        <!--<property name="password" value="webtt_qlcp_uhm#h1$7ji"/>-->
+        <property name="url" value="${ldap.URL}" />
+        <property name="base" value="${ldap.baseDN}" />
+        <property name="userDn" value="${ldap.userDN}" />
         <property name="password" value="${ldap.password}"/>
         <property name="pooled" value="false" />
-	</bean>
-	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
-		<constructor-arg ref="contextSource" />
-	</bean>
-	<bean id="ldapUserLookup"
-		class="com.benluck.vms.mobifonedataseller.security.LdapUserLookupImpl">
-		<property name="ldapTemplate" ref="ldapTemplate" />
+    </bean>
+
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+        <constructor-arg ref="contextSource" />
+    </bean>
+    <bean id="ldapUserLookup"
+          class="com.benluck.vms.mobifonedataseller.security.LdapUserLookupImpl">
+        <!--<property name="ldapTemplate" ref="ldapTemplate" />-->
+        <!--<property name="userDNPrefix" value="sAMAccountName"/>-->
+        <!--<property name="lastNameAttribute" value="sn"/>-->
+        <!--<property name="userObjectClasses" value="person"/>-->
+
+        <property name="ldapTemplate" ref="ldapTemplate" />
         <property name="userDNPrefix" value="${ldap.userDNPrefix}"/>
         <property name="lastNameAttribute" value="${ldap.lastNameAttribute}"/>
         <property name="userObjectClasses" value="person"/>
-	</bean>
+    </bean>
 
 </beans>
