@@ -483,7 +483,7 @@
 
 .nav-md .container.body .col-md-3.left_col {
     min-height: 100%;
-    width: 230px;
+    width: 245px;
     padding: 0;
     position: absolute;
     display: -ms-flexbox;
@@ -502,11 +502,11 @@ body .container.body .right_col {
 
 .nav-md .container.body .right_col {
     padding: 10px 20px 0;
-    margin-left: 230px;
+    margin-left: 245px;
 }
 
 .nav_title {
-    width: 230px;
+    width: 245px;
     float: left;
     background: #2A3F54;
     border-radius: 0;
@@ -674,7 +674,7 @@ body {
 
 .main_container .top_nav {
     display: block;
-    margin-left: 230px;
+    margin-left: 245px;
 }
 
 .no-padding {
@@ -2023,7 +2023,7 @@ span.right {
     display: block;
     padding: 5px 0 0 0;
     position: fixed;
-    width: 230px;
+    width: 245px;
     background: #2A3F54;
 }
 
@@ -2058,7 +2058,7 @@ span.right {
 
 @media (min-width: 992px) {
     footer {
-        margin-left: 230px;
+        margin-left: 245px;
     }
 }
 
