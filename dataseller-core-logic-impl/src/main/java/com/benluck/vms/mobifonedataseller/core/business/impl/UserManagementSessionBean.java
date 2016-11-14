@@ -70,6 +70,9 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
             userGroupEntity.setUserGroupId(pojo.getUserGroup().getUserGroupId());
             dbItem.setUserGroup(userGroupEntity);
         }
+        if(pojo.getStatus() != null){
+            dbItem.setStatus(pojo.getStatus());
+        }
         return UserBeanUtil.entity2DTO(this.userService.update(dbItem));
     }
 
