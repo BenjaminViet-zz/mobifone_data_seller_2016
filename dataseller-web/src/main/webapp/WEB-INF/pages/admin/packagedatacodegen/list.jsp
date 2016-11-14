@@ -67,8 +67,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
-                            <a class="btn btn-primary"><i class="fa fa-cc" aria-hidden="true"></i>
-                                <fmt:message key="label.regenerate_data_code" /></a>
+                            <%--<a class="btn btn-primary"><i class="fa fa-cc" aria-hidden="true"></i><fmt:message key="label.regenerate_data_code" /></a>--%>
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>"/>
