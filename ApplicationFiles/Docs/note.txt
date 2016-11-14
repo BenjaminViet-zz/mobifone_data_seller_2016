@@ -24,3 +24,16 @@ ldap.lastNameAttribute=sn
 #LDAP user
 [11/14/16, 14:19:17] De Pham: user: portalcenter2
 [11/14/16, 14:19:25] De Pham: pass: portalcenter21016
+
+#Linux Redis command
+cd to src folder
+chmod +x redis-server
+chmod +x redis-cli
+./redis-server
+./redis-cli
+
+#MacOS Redis command
+redis-server
+
+#Jboss stop
+./jboss-cli.sh -c --command=:shutdown
