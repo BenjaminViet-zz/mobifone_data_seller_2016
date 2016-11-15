@@ -244,14 +244,35 @@
 
 <script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
+    var $btnChiTra = $('#btnChiTra');
+
     $(document).ready(function(){
         initScrollablePane();
         initDatePicker();
         restructureTableHead();
         disableBtnChiTra();
+        bindEvent();
     });
 
-    var $btnChiTra = $('#btnChiTra');
+    function bindEvent(){
+        $('#paymentDate').datepicker().on("input change", function (e) {
+            $('#tableList input[type="checkbox"]').each(function(index, element) {
+                if ($(element).is(":checked") && $("#paymentDate").val() != '') {
+                    enableBtnChiTra();
+                } else {
+                    disableBtnChiTra();
+                }
+            });
+        });
+
+        $('input[type="checkbox"]').on('change', function(){
+            if( $(this).is(":checked") && $("#paymentDate").val() != '' ) {
+                enableBtnChiTra();
+            } else {
+                disableBtnChiTra();
+            }
+        });
+    }
 
     function enableBtnChiTra(){
         $btnChiTra.removeClass("disabled")
@@ -262,24 +283,6 @@
         $btnChiTra.addClass("disabled")
                 .css('pointer-events', 'visible');
     }
-
-    $('#paymentDate').datepicker().on("input change", function (e) {
-        $('#tableList input[type="checkbox"]').each(function(index, element) {
-            if ($(element).is(":checked") && $("#paymentDate").val() != '') {
-                enableBtnChiTra();
-            } else {
-                disableBtnChiTra();
-            }
-        });
-    });
-
-    $('#tableList input[type="checkbox"]').on('change', function(){
-        if( $(this).is(":checked") && $("#paymentDate").val() != '' ) {
-            enableBtnChiTra();
-        } else {
-            disableBtnChiTra();
-        }
-    });
 
     function resetForm(){
         $(".danhSachChiPhi input[type='text']").val('');
