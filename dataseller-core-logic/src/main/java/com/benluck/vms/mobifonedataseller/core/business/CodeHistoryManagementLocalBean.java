@@ -13,6 +13,6 @@ import java.util.Map;
 @Local
 public interface CodeHistoryManagementLocalBean {
 
-    Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+    Double calculateTotalPaidPackageValue(String isdn);
 
 }

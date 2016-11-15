@@ -10,4 +10,7 @@ import com.benluck.vms.mobifonedataseller.domain.MBDCodeHistoryEntity;
  * To change this template use File | Settings | File Templates.
  */
 public interface CodeHistoryLocalBean extends GenericSessionBean<MBDCodeHistoryEntity, Long>{
+
+    Double calculateTotalPaidPackageValue(String isdn);
+
 }

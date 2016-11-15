@@ -204,4 +204,7 @@ public class Constants {
     public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
     public static final String ORDER_MANAGER = "ORDER_MANAGER";
     public static final String REPORT_MANAGER = "REPORT_MANAGER";
+
+    // Code History
+    public static final Double PACKAGE_KHDN_DATA_VALUE = 100000000D;
 }

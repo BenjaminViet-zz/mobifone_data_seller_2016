@@ -23,21 +23,23 @@
 <c:url var="backUrl" value="${prefix}/order/list.html" />
 
 <div class="clearfix"></div>
-<c:if test ="${not empty messageResponse}">
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_content">
-                    <div class="alert alert-${alertType} no-bottom">
-                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                            ${messageResponse}
+<div id="message_section">
+    <c:if test ="${not empty messageResponse}">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div class="alert alert-${alertType} no-bottom">
+                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                ${messageResponse}
+                        </div>
+                        <div class="clear"></div>
                     </div>
-                    <div class="clear"></div>
                 </div>
             </div>
         </div>
-    </div>
-</c:if>
+    </c:if>
+</div>
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -65,10 +67,10 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required">
+                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required" onchange="javascript: updateTotalPaidPackageRemainingValue();">
                                 <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
+                                    <option data-isdn="${KHDN.stb_vas}" <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
                                 </c:forEach>
                             </form:select>
                         </div>
@@ -105,7 +107,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="admin.donhang.label.total" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="calcOrderTotal" type="text" readonly="readonly" max="100000000" class="form-control calcOrderTotal"/>
+                            <input id="calcOrderTotal" type="text" readonly="readonly" class="form-control calcOrderTotal"/>
                             <form:errors for="calcOrderTotal" cssClass="error-inline-validate"/>
                         </div>
                     </div>
@@ -163,6 +165,8 @@
 </div>
 
 <script type="text/javascript">
+    var totalRemainingPaidPackageValue = ${totalRemainingPaidPackageValue};
+    var $message_sectionEl = $('#message_section');
 
     var packageDataIdsHasGenerateCardCodeList = [];
     <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
@@ -201,9 +205,56 @@
         }
     });
 
+    function updateTotalPaidPackageRemainingValue(){
+        var $khdnSelectMenu =  $('#KHDN');
+        var selectedKHDNId = $khdnSelectMenu.val();
+        if(selectedKHDNId == -1){
+            return;
+        }
 
+        var isdn = $khdnSelectMenu.find('option:selected').data('isdn');
+        $.ajax({
+            url: '<c:url value="/ajax/calculateTotalPaidPackageValue.html" />',
+            type: 'get',
+            data: {isdn: isdn},
+            success: function(r){
+                totalRemainingPaidPackageValue = r.value;
+                checkOrderCost();
+            }
+        });
+    }
+
+    function storeKHDN_ISDN(){
+        $('#KHDN').find("option:not(:first-child)").each(function(index, el){
+            var $optEl = $(el);
+            $optEl.data("isdn", $optEl.attr('data-isdn')).removeAttr('data-isdn');
+        });
+    }
+
+    function checkOrderCost(){
+        var orderCost = eval($('#calcOrderTotal').val().replace(/\,/g, ''));
+        if(orderCost > totalRemainingPaidPackageValue){
+            $message_sectionEl.html("<div class=\"row\">" +
+                                        "<div class=\"col-md-12 col-sm-12 col-xs-12\">" +
+                                            "<div class=\"x_panel\">" +
+                                                "<div class=\"x_content\">" +
+                                                    "<div class=\"alert alert-warning alert-dismissible fade in\">" +
+                                                        "<a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>" +
+                                                            "<fmt:message key='donhang.popup.exceed_remaining_paid_package' />" +
+                                                    "</div>" +
+                                                    "<div class=\"clear\"></div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</div>" +
+                                    "</div>");
+        }else{
+            $message_sectionEl.html('');
+        }
+    }
 
     $(document).ready(function(){
+        storeKHDN_ISDN();
+
         var $totalEl = $('.calcOrderTotal');
         $totalEl.val(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
         $totalEl.mask('000,000,000,000,000,000', {
@@ -223,10 +274,12 @@
 
         $('#quantity').keyup(function() {
             $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+            checkOrderCost();
         });
 
         $('#unitPrice').keyup(function() {
             $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+            checkOrderCost();
         });
 
         $('#packageData').on('change', function(){

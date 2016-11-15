@@ -66,6 +66,8 @@ public class OrderController extends ApplicationObjectSupport{
     @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
     @Autowired
+    private CodeHistoryManagementLocalBean codeHistoryService;
+    @Autowired
     private OrderValidator validator;
 
     @InitBinder
@@ -302,6 +304,7 @@ public class OrderController extends ApplicationObjectSupport{
 
         preferenceData(mav);
         mav.addObject("remainingBalance", calculateRemainingBalance());
+        mav.addObject("totalRemainingPaidPackageValue", 0D);
         return mav;
     }
 
