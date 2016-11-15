@@ -46,7 +46,8 @@ public class DashboardPageController extends ApplicationObjectSupport{
         RequestUtil.initSearchBean(request, command);
 
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("isRead", command.getPojo().getRead());
+        properties.put("read", command.getPojo().getRead());
+        properties.put("user.userId", SecurityUtils.getLoginUserId());
 
         command.setSortExpression("createdDate");
         command.setSortDirection(Constants.SORT_DESC);

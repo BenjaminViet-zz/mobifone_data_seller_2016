@@ -191,6 +191,11 @@ public class Constants {
 
     public static final Integer MAX_NOTIFICATION_MESSAGE_POPUP = 5;
 
+    public static final String GENERATE_CARD_CODE_FINISH_SUCCESS = "GEN_CARD_SUCCESS";
+    public static final String GENERATE_CARD_CODE_FINISH_FAILED = "GEN_CARD_FAILED";
+    public static final String TAKE_CARD_CODE_4_ORDER_SUCCESS = "ORDER_CARD_SUCCESS";
+    public static final String TAKE_CARD_CODE_4_ORDER_FAILED = "ORDER_CARD_FAILED";
+
     // Code History
     public static final String COST_PAYMENT_NOT_PAID = "0";
     public static final String COST_PAYMENT_PAID = "1";

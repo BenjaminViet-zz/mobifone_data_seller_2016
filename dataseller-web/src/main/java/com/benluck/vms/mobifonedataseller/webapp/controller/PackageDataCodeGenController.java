@@ -128,7 +128,7 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
             }else{
                 this.packageDataCodeGenService.updateProcessing(year, packageDataIdsStr, Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
 
-                TaskGenerateCardCode generateCardCodeTask = new TaskGenerateCardCode(year, packageDataIdsStr);
+                TaskGenerateCardCode generateCardCodeTask = new TaskGenerateCardCode(SecurityUtils.getLoginUserId(), year, packageDataIdsStr);
                 Timer timer = new Timer(true);
                 timer.schedule(generateCardCodeTask, 0);
 

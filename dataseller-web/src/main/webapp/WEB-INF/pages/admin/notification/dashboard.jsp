@@ -78,7 +78,7 @@
                             <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 5%;" >
                                 ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                             </display:column>
-                            <display:column headerClass="table_header text-center" titleKey="dashboard.notification.status" style="width: 10%">
+                            <display:column headerClass="table_header text-center" titleKey="dashboard.notification.status" class="text-center" style="width: 10%">
                                 <c:choose>
                                     <c:when test="${tableList.read eq Constants.NOTIFICATION_NOT_YET_READ}">
                                         <fmt:message key="dashboard.notification.message_not_yet_read" />

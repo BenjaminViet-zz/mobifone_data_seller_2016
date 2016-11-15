@@ -2,7 +2,9 @@ package com.benluck.vms.mobifonedataseller.core.business;
 
 import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
 
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
+import javax.ejb.ObjectNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,4 +21,8 @@ public interface NotificationManagementLocalBean {
     Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer maxPageItems);
 
     List<NotificationDTO> fetchNotificationNewestList(Long userId);
+
+    void addItem(NotificationDTO pojo) throws DuplicateKeyException;
+
+    void updateIsRead(Long notificationId) throws ObjectNotFoundException, DuplicateKeyException;
 }

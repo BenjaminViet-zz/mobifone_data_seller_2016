@@ -48,7 +48,16 @@
                                         <li>
                                             <a>
                                                 <span>
-                                                    <span>${notification.message_type}</span>
+                                                    <span>
+                                                        <c:choose>
+                                                            <c:when test="${notification.messageType eq Constants.GENERATE_CARD_CODE_FINISH_SUCCESS || notification.messageType eq Constants.GENERATE_CARD_CODE_FINISH_FAILED}">
+                                                                <fmt:message key="notification.popup.generate_card_code_message_type" />
+                                                            </c:when>
+                                                            <c:when test="${notification.messageType eq Constants.TAKE_CARD_CODE_4_ORDER_SUCCESS || notification.messageType eq Constants.TAKE_CARD_CODE_4_ORDER_FAILED}">
+                                                                <fmt:message key="notification.popup.take_card_code_message_type" />
+                                                            </c:when>
+                                                        </c:choose>
+                                                    </span>
                                                       <span class="time">
                                                           <fmt:formatDate value="${notification.createdDate}" pattern="${dateTimePattern}" />
                                                       </span>

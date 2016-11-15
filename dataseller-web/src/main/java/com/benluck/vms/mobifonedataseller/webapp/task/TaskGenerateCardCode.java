@@ -3,9 +3,12 @@ package com.benluck.vms.mobifonedataseller.webapp.task;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
+import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +32,7 @@ public class TaskGenerateCardCode extends TimerTask{
     private final String VMS_CODE_PREFIX = "2";
     private final int NUMBER_CARD_CODE_IN_EACH_BATCH = 1000000;
 
+    private Long userId;
     private Integer year;
     private String yearCode;
     private String[] packageDataIds;
@@ -44,13 +48,15 @@ public class TaskGenerateCardCode extends TimerTask{
     private ApplicationContext ctx = AppContext.getApplicationContext();
     private PackageDataCodeGenManagementLocalBean packageCodeDataGenService = ctx.getBean(PackageDataCodeGenManagementLocalBean.class);
     private PackageDataManagementLocalBean packageDataService = ctx.getBean(PackageDataManagementLocalBean.class);
+    private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
     private RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
 
-    public TaskGenerateCardCode(Integer year, String[] packageDataIds) {
+    public TaskGenerateCardCode(Long userId, Integer year, String[] packageDataIds) {
         this.year = year;
         this.yearCode = year.toString().substring(2, 4);
         this.packageDataIds = packageDataIds;
         this.prefixYearCode = new StringBuilder(VMS_CODE_PREFIX).append(yearCode);
+        this.userId = userId;
     }
 
     @Override
@@ -96,21 +102,25 @@ public class TaskGenerateCardCode extends TimerTask{
                                 logger.info("Saving batch "  + batchIndex + " to Redis Database");
                                 redisTemplate.opsForHash().put(this.prefixYearCode.toString(), tmpUnitPriceCodeBatchIndex.toString(), tmpCardCodeHS);
                             }
-
+                            createNotificationMessage(true, packageDataDTO.getName());
                             logger.info("Finish generating 10 batches of Card Code " + tmpCardCodeHS.size() + " Card Code for KEY: '" + VMS_CODE_PREFIX + yearCode + "', HASHKEY: '" + tmpUnitPriceCode.toString() + "'");
                         }catch (DuplicateKeyException dke){
+                            createNotificationMessage(false, "packageId: " + packageDataIdStr);
                             logger.error("Duplicated PackageDataCodeGen for PackageDataId: " + packageDataIdStr + " in year " + year.toString());
                             logger.error("Details: " + dke.getMessage());
                         }catch (ObjectNotFoundException one){
+                            createNotificationMessage(false, "packageId: " + packageDataIdStr);
                             logger.error("Can not find PackageDataEntity with packageId: " + packageDataIdStr);
                             logger.error("Details: " + one.getMessage());
                         }catch (Exception e){
+                            createNotificationMessage(false, "packageId: " + packageDataIdStr);
                             logger.error(" Error happened while update PackageDateCodeGenEntity. See details as below.");
                             logger.error(e.getMessage());
                         }
                     }
                 }
             }else{
+                createNotificationMessage(false, null);
                 logger.error("Connection to Redis Server is not reachable. Please check Redis Server and start it up!");
                 logger.error("Generation Card Code is cancelled!");
             }
@@ -118,8 +128,33 @@ public class TaskGenerateCardCode extends TimerTask{
         }else{
             try{
                 this.packageCodeDataGenService.updateProcessing(year, packageDataIds, Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED);
-            }catch (Exception e){}
+                createNotificationMessage(false, null);
+            }catch (Exception e){
+                createNotificationMessage(false, null);
+            }
             logger.info("================GENERATION CARD CODE TASK: Cancelled. Your setting for Redis Server is turned off. Please check again================");
+        }
+    }
+
+    private void createNotificationMessage(Boolean isSuccess, String packageDataId){
+        try{
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(this.userId);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setUser(userDTO);
+
+            if(isSuccess){
+                notificationDTO.setMessageType(Constants.GENERATE_CARD_CODE_FINISH_SUCCESS);
+                notificationDTO.setMessage("Sinh Card Code hoàn tất" + (packageDataId != null ? " cho Gói " + packageDataId : "." ));
+            }else{
+                notificationDTO.setMessageType(Constants.GENERATE_CARD_CODE_FINISH_FAILED);
+                notificationDTO.setMessage("Sinh Card Code thất bại" + (packageDataId != null ? " cho Gói " + packageDataId : "." ));
+            }
+
+            notificationService.addItem(notificationDTO);
+        }catch (Exception e){
+            logger.error("Could not create notification message for Task Generate Card Code with status: " + (isSuccess ? "SUCCESS" : "FAILED"));
         }
     }
 

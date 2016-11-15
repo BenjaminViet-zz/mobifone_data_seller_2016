@@ -2,10 +2,13 @@ package com.benluck.vms.mobifonedataseller.webapp.task;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
+import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -28,11 +31,14 @@ public class TaskTakeCardCode extends TimerTask{
     private ApplicationContext ctx = AppContext.getApplicationContext();
     private OrderManagementLocalBean orderService = ctx.getBean(OrderManagementLocalBean.class);
     private PackageDataCodeGenManagementLocalBean packageDataCodeGenService = ctx.getBean(PackageDataCodeGenManagementLocalBean.class);
+    private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
 
     private Long orderId;
     private String unitPriceCode;
+    private Long userId;
 
-    public TaskTakeCardCode(Long orderId, String unitPriceCode) {
+    public TaskTakeCardCode(Long userId, Long orderId, String unitPriceCode) {
+        this.userId = userId;
         this.orderId = orderId;
         this.unitPriceCode = unitPriceCode;
     }
@@ -63,12 +69,15 @@ public class TaskTakeCardCode extends TimerTask{
                 this.orderService.updateItem(orderDTO);
 
                 DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
+                createNotificationMessage(true);
             }else{
                 hasError = true;
+                createNotificationMessage(false);
                 logger.error("TAKING CARD CODE TASK is cancelled. The Order is only with status FINISH will be processing for Card Code list.");
             }
         }catch (Exception e){
             hasError = true;
+            createNotificationMessage(false);
             logger.error("Error happen in TAKING CARD CODE for OrderId: " + orderId);
             logger.error("Details: " + e.getMessage());
         }
@@ -83,5 +92,27 @@ public class TaskTakeCardCode extends TimerTask{
         }
 
         logger.info("=================TAKING CARD CODE TASK - FINISHED");
+    }
+
+    private void createNotificationMessage(Boolean isSuccess){
+        try{
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(this.userId);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setUser(userDTO);
+
+            if(isSuccess){
+                notificationDTO.setMessageType(Constants.TAKE_CARD_CODE_4_ORDER_SUCCESS);
+                notificationDTO.setMessage("Đơn hàng orderId " + orderId +" đã hoàn tất sinh Card Code");
+            }else{
+                notificationDTO.setMessageType(Constants.TAKE_CARD_CODE_4_ORDER_FAILED);
+                notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code");
+            }
+
+            notificationService.addItem(notificationDTO);
+        }catch (Exception e){
+            logger.error("Could not create notification message for Task Take Card Code with status: " + (isSuccess ? "SUCCESS" : "FAILED"));
+        }
     }
 }

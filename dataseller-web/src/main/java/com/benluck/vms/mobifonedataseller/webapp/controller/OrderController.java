@@ -66,8 +66,6 @@ public class OrderController extends ApplicationObjectSupport{
     @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
     @Autowired
-    private CodeHistoryManagementLocalBean codeHistoryService;
-    @Autowired
     private OrderValidator validator;
 
     @InitBinder
@@ -309,7 +307,7 @@ public class OrderController extends ApplicationObjectSupport{
     }
 
     private void startTaskTakingCardCode(Long orderId, String unitPriceCode){
-        TaskTakeCardCode taskTakeCardCode = new TaskTakeCardCode(orderId, unitPriceCode);
+        TaskTakeCardCode taskTakeCardCode = new TaskTakeCardCode(SecurityUtils.getLoginUserId(), orderId, unitPriceCode);
         Timer timer = new Timer(true);
         timer.schedule(taskTakeCardCode, 0);
     }
