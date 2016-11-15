@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/bootstrap.min.css"/>"/>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<c:url value="/themes/admin/css/jquery-ui-1.10.3.css"/>"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/mobifone_v1.0.css"/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/themes/mobifonedata/css/mobifone_v1.1.css"/>">
 
     <script src="<c:url value="/themes/mobifonedata/js/jquery.min.js"/>" type="text/javascript"></script>
     <script src='<c:url value="/themes/admin/js/jquery-ui-1.10.3.min.js"/>' type='text/javascript'></script>
