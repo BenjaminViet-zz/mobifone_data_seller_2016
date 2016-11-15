@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
@@ -104,9 +105,23 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
+    private void convertDate2Timestamp(MBDCostCommand command){
+        if(command.getPaymentDate() != null){
+            command.getPojo().setPaymentDate(DateUtil.dateToTimestamp(command.getPaymentDate(), Constants.VI_DATE_FORMAT));
+        }
+        if(command.getStaDateFrom() != null){
+            command.getPojo().setStaDateFrom(DateUtil.dateToTimestamp(command.getStaDateFrom(), Constants.VI_DATE_FORMAT));
+        }
+        if(command.getStaDateTo() != null){
+            command.getPojo().setStaDateTo(DateUtil.dateToTimestamp(command.getStaDateTo(), Constants.VI_DATE_FORMAT));
+        }
+    }
+
     private Map<String, Object> buildProperties(MBDCostCommand command){
         MBDCostInfoDTO pojo = command.getPojo();
         Map<String, Object> properties = new HashMap<String, Object>();
+
+        convertDate2Timestamp(command);
 
         if(pojo.getStaDateFrom() != null){
             properties.put("staDateTimeFrom", pojo.getStaDateFrom());

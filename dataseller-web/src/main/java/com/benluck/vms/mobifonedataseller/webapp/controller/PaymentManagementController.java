@@ -105,6 +105,8 @@ public class PaymentManagementController extends ApplicationObjectSupport{
         MBDCostInfoDTO pojo = command.getPojo();
         Map<String, Object> properties = new HashMap<String, Object>();
 
+        convertDate2Timestamp(command);
+
         if(pojo.getStaDateFrom() != null){
             properties.put("staDateTimeFrom", pojo.getStaDateFrom());
         }

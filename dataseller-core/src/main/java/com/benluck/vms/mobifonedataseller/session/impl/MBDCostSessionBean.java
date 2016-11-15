@@ -40,7 +40,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
             sqlMainQuery.append(" AND c.issue_Month >= to_date(substr(:issuedDateTimeFrom,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
         }
         if(properties.get("issuedDateTimeTo") != null){
-            sqlMainQuery.append(" AND c.issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+            sqlMainQuery.append(" AND c.issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') + 1 ");
         }
 
         StringBuilder sqlQuery = new StringBuilder();
@@ -109,7 +109,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
             sqlMainQuery.append(" AND issue_Month >= to_date(substr(:issuedDateTimeFrom,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
         }
         if(properties.get("issuedDateTimeTo") != null){
-            sqlMainQuery.append(" AND issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+            sqlMainQuery.append(" AND issue_Month <= to_date(substr(:issuedDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') + 1 ");
         }
 
         StringBuilder sqlQuery = new StringBuilder();
@@ -186,7 +186,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
             sqlMainQuery.append(" AND c.sta_dateTime >= to_date(substr(:staDateTimeFrom,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
         }
         if(properties.get("staDateTimeTo") != null){
-            sqlMainQuery.append(" AND c.sta_dateTime <= to_date(substr(:staDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') ");
+            sqlMainQuery.append(" AND c.sta_dateTime <= to_date(substr(:staDateTimeTo,1,10), ' ").append(Constants.DB_DATE_FORMAT).append("') + 1 ");
         }
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append(" SELECT c.costId, c.shop_Code, c.shop_Name, c.isdn, c.name, c.bus_Type as loaiHM, c.cust_Type as loaiKH ")
