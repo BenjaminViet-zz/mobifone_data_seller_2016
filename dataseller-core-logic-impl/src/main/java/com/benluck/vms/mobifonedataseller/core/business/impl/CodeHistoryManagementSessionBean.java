@@ -28,13 +28,7 @@ public class CodeHistoryManagementSessionBean implements CodeHistoryManagementLo
     }
 
     @Override
-    public Object[] searchByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems) {
-        properties.put("paymentStatus", Constants.COST_PAYMENT_PAID);
-        Object[] objectResult = this.codeHistoryService.searchByProperties(properties, sortExpression, sortDirection, firstItem, reportMaxPageItems);
-        List<MBDCodeHistoryEntity> entityList = (List<MBDCodeHistoryEntity>)objectResult[1];
-        if(entityList.size() > 0){
-            objectResult[1] = MBDCodeHistoryBeanUtil.entityList2DTOList(entityList);
-        }
-        return objectResult;
+    public Double calculateTotalPaidPackageValue(String isdn) {
+        return this.codeHistoryService.calculateTotalPaidPackageValue(isdn);
     }
 }
