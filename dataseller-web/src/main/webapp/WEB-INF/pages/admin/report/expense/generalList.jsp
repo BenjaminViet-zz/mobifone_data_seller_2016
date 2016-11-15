@@ -87,7 +87,7 @@
                             <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
                             <c:if test="${item.crudaction == 'search' && item.listResult.size() > 0}">
-                                <a class="btn btn-primary" onclick="javascript: exportExcel();"><fmt:message key="label.button.export" /></a>
+                                <a class="btn btn-primary" onclick="javascript: exportExcel();"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="label.button.export" /></a>
                             </c:if>
                         </div>
                     </div>

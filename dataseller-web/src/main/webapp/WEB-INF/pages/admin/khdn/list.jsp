@@ -32,7 +32,7 @@
     <div class="title_right">
         <div class="action-bar">
             <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
-            <a class="btn btn-primary" href="${importUrl}"> <fmt:message key="label.button.import"/></a>
+            <a class="btn btn-primary" href="${importUrl}"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="label.button.import"/></a>
         </div>
     </div>
 
