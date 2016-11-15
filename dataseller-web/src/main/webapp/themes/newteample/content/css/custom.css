@@ -446,6 +446,8 @@
     font-size: 10px;
     min-width: inherit;
     color: #C4CFDA;
+    position: absolute;
+    right: 10px;
 }
 
 .active a span.fa {
