@@ -292,7 +292,18 @@ public class OrderController extends ApplicationObjectSupport{
                     }
                 }
             }else if(pojo.getOrderId() != null){
-                command.setPojo(this.orderService.findById(command.getPojo().getOrderId()));
+                OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
+
+                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                    redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+                    redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.not_allow_update_finish_order"));
+                    if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                        return new ModelAndView("redirect:/admin/order/list.html");
+                    }else{
+                        return new ModelAndView("redirect:/user/order/list.html");
+                    }
+                }
+                command.setPojo(originOrderDTO);
             }
         }catch (Exception e){
             logger.error("Error when add or update Order. \nDetails: " + e.getMessage());
