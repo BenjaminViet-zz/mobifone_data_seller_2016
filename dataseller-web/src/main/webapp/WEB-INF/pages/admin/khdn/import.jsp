@@ -109,7 +109,7 @@
 
                         </div>
                         <div id="step-2" style="width: 100%; min-height: 500px;">
-                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1450px;">
+                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1650px;">
                                 <thead>
                                     <tr>
                                         <th class="table_header text-center"><fmt:message key="label.stt" /></th>
@@ -130,8 +130,8 @@
                                             <td style="width: 200px;">${importKHDNDTO.name}</td>
                                             <td style="width: 200px;" class="text-center">${importKHDNDTO.mst}</td>
                                             <td style="width: 200px;" class="text-center">${importKHDNDTO.gpkd}</td>
-                                            <td style="width: 150px;" class="text-center"><fmt:formatDate value="${importKHDNDTO.issuedContractDate}" pattern="${datePattern}" /></td>
-                                            <td style="width: 100px;" class="text-center">${importKHDNDTO.stb_vas}</td>
+                                            <td style="width: 250px;" class="text-center"><fmt:formatDate value="${importKHDNDTO.issuedContractDate}" pattern="${datePattern}" /></td>
+                                            <td style="width: 200px;" class="text-center">${importKHDNDTO.stb_vas}</td>
                                             <td style="width: 350px;" class="text-error text-center">
                                                 <c:choose>
                                                     <c:when test="${not empty importKHDNDTO.errorMessage}">

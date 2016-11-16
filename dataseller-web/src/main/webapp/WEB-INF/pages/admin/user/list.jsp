@@ -5,6 +5,19 @@
 <head>
     <title><fmt:message key="admin.user_list.heading_page" /></title>
     <meta name="menu" content="<fmt:message key="admin.user_list.heading_page" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
+
+    <style>
+        #tablelist.mobile td.width_50_px{
+            width: 50px;
+        }
+        #tablelist.mobile td.width_250_px{
+            width: 250px;
+        }
+        #tablelist.mobile td.width_200_px{
+            width: 500px;
+        }
+    </style>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -91,34 +104,36 @@
             <div class="x_content">
                 <c:choose>
                     <c:when test="${item.crudaction == Constants.ACTION_SEARCH}">
-                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                        <div id="tableListContainer" style="width: 100%;">
+                            <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                           partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                           id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                            <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
-                                ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                            </display:column>
-                            <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" titleKey="user.label.username" style="20%"/>
-                            <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" titleKey="user.label.displayName" style="25%"/>
-                            <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="" titleKey="user.label.usergroup" style="width: 20%" />
-                            <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center" titleKey="label.status" style="15%">
-                                <c:choose>
-                                    <c:when test = "${tableList.status eq 1}">
-                                        <fmt:message key="label.active" />
-                                    </c:when>
-                                    <c:otherwise>
-                                        <fmt:message key="label.inactive" />
-                                    </c:otherwise>
-                                </c:choose>
-                            </display:column>
-                            <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:15%;">
-                                <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                                | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
-                            </display:column>
-                            <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                            <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                        </display:table>
+                                <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
+                                    ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                                </display:column>
+                                <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" class="width_250_px" titleKey="user.label.username" style="20%"/>
+                                <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" class="width_250_px" titleKey="user.label.displayName" style="25%"/>
+                                <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="width_250_px" titleKey="user.label.usergroup" style="width: 20%" />
+                                <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center width_200_px" titleKey="label.status" style="15%">
+                                    <c:choose>
+                                        <c:when test = "${tableList.status eq 1}">
+                                            <fmt:message key="label.active" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <fmt:message key="label.inactive" />
+                                        </c:otherwise>
+                                    </c:choose>
+                                </display:column>
+                                <display:column headerClass="table_header text-center" class="text-center width_200_px" titleKey="label.action" style="width:15%;">
+                                    <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                                    | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
+                                </display:column>
+                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                            </display:table>
+                        </div>
                     </c:when>
                     <c:otherwise>
                         <fmt:message key="user.label.please_choose_filter" />
@@ -128,7 +143,25 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        initScrollablePane();
+    });
+
+    function initScrollablePane(){
+        if($(window).width() > min_desktop_screen_width){
+            return;
+        }
+
+        var $tableContainer = $('#tableListContainer');
+        if($tableContainer.length){
+            $('#tableList').addClass('mobile').width(1200);
+            $tableContainer.mCustomScrollbar({axis:"x"});
+        }
+    }
+
     function submitForm(){
         $('#listForm').submit();
     }

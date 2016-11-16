@@ -5,6 +5,22 @@
 <head>
     <title><fmt:message key="dashboard.notification.heading" /></title>
     <meta name="menu" content="<fmt:message key="dashboard.notification.heading" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
+
+    <style>
+        #tablelist.mobile td.width_50_px{
+            width: 50px;
+        }
+        #tablelist.mobile td.width_150_px{
+            width: 150px;
+        }
+        #tablelist.mobile td.width_500_px{
+            width: 500px;
+        }
+        #tablelist.mobile td.width_110_px{
+            width: 110px;
+        }
+    </style>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -70,31 +86,33 @@
             <div class="x_content">
                 <c:choose>
                     <c:when test="${not empty item.listResult && item.listResult.size() > 0}">
-                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                        <div id="tableListContainer" style="width: 100%;">
+                            <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                           partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                           id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 5%;" >
-                                ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                            </display:column>
-                            <display:column headerClass="table_header text-center" titleKey="dashboard.notification.status" class="text-center" style="width: 10%">
-                                <c:choose>
-                                    <c:when test="${tableList.read eq Constants.NOTIFICATION_NOT_YET_READ}">
-                                        <fmt:message key="dashboard.notification.message_not_yet_read" />
-                                    </c:when>
-                                    <c:when test="${tableList.read eq Constants.NOTIFICATION_READ_ALREADY}">
-                                        <fmt:message key="dashboard.notification.message_read_already" />
-                                    </c:when>
-                                </c:choose>
-                            </display:column>
-                            <display:column headerClass="table_header" property="message" titleKey="dashboard.notification.message_content" style="width: 75%%"/>
-                            <display:column headerClass="table_header text-center nowrap" class="text-center" titleKey="dashboard.notification.created_date" style="width: 10%;" >
-                                <fmt:formatDate value="${tableList.createdDate}" pattern="${datePattern}" />
-                            </display:column>
-                            <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.notification" /></display:setProperty>
-                            <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.notification" /></display:setProperty>
-                        </display:table>
+                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center width_50_px" style="width: 5%;" >
+                                    ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                                </display:column>
+                                <display:column headerClass="table_header text-center" titleKey="dashboard.notification.status" class="text-center width_150_px" style="width: 15%">
+                                    <c:choose>
+                                        <c:when test="${tableList.read eq Constants.NOTIFICATION_NOT_YET_READ}">
+                                            <fmt:message key="dashboard.notification.message_not_yet_read" />
+                                        </c:when>
+                                        <c:when test="${tableList.read eq Constants.NOTIFICATION_READ_ALREADY}">
+                                            <fmt:message key="dashboard.notification.message_read_already" />
+                                        </c:when>
+                                    </c:choose>
+                                </display:column>
+                                <display:column headerClass="table_header" property="message" titleKey="dashboard.notification.message_content" class="width_500_px" style="width: 70%"/>
+                                <display:column headerClass="table_header text-center nowrap" class="text-center width_110_px" titleKey="dashboard.notification.created_date" style="width: 10%;" >
+                                    <fmt:formatDate value="${tableList.createdDate}" pattern="${datePattern}" />
+                                </display:column>
+                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.notification" /></display:setProperty>
+                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.notification" /></display:setProperty>
+                            </display:table>
+                        </div>
                     </c:when>
                     <c:otherwise>
                         <fmt:message key="dashboard.notification.no_message_found" />
@@ -104,7 +122,25 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        initScrollablePane();
+    });
+
+    function initScrollablePane(){
+        if($(window).width() >= mobile_screen_width){
+            return;
+        }
+
+        var $tableContainer = $('#tableListContainer');
+        if($tableContainer.length){
+            $('#tableList').addClass('mobile').width(810);
+            $tableContainer.mCustomScrollbar({axis:"x"});
+        }
+    }
+
     function submitForm(){
         $('#listForm').submit();
     }

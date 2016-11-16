@@ -5,6 +5,26 @@
 <head>
     <title><fmt:message key="packagedatacodegen.list_page.heading" /></title>
     <meta name="menu" content="<fmt:message key="packagedatacodegen.list_page.heading" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
+
+    <style>
+        #tablelist.mobile td.width_50_px{
+            width: 50px;
+        }
+        #tablelist.mobile td.width_300_px{
+            width: 300px;
+        }
+
+        #tablelist2.mobile td.width_50_px{
+            width: 50px;
+        }
+        #tablelist2.mobile td.width_300_px{
+            width: 300px;
+        }
+        #tablelist2.mobile td.width_250_px{
+            width: 250px;
+        }
+    </style>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -86,34 +106,36 @@
                     <div class="x_content">
                         <c:choose>
                             <c:when test="${items.listResult.size() > 0}">
-                                <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                                               partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                               id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                               class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                                <div id="tableListContainer" style="width: 100%;">
+                                    <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                                   partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                                   id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                                    <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
-                                        ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                                    </display:column>
-                                    <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" sortable="true" titleKey="packagedatacodegen.packagedata.name" style="40%"/>
-                                    <display:column headerClass="table_header text-center" sortName="packageData.value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="35%">
-                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.packageData.value}" />
-                                    </display:column>
-                                    <display:column headerClass="table_header text-center nowrap" class="text-center" titleKey="label.status" style="20%">
-                                        <c:choose>
-                                            <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING}">
-                                                <fmt:message key="packagedatacodegen.generating_card_code" />
-                                            </c:when>
-                                            <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED}">
-                                                <fmt:message key="packagedatacodegen.not_yet_generate_card_code_failed" />
-                                            </c:when>
-                                            <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS}">
-                                                <fmt:message key="packagedatacodegen.generated_card_code" />
-                                            </c:when>
-                                        </c:choose>
-                                    </display:column>
-                                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
-                                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
-                                </display:table>
+                                        <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
+                                            ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                                        </display:column>
+                                        <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" sortable="true" class="width_300_px" titleKey="packagedatacodegen.packagedata.name" style="40%"/>
+                                        <display:column headerClass="table_header text-center" sortName="packageData.value" sortable="true" titleKey="packagedatacodegen.packagedata.price" class="width_300_px" style="35%">
+                                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.packageData.value}" />
+                                        </display:column>
+                                        <display:column headerClass="table_header text-center nowrap" class="text-center width_300_px" titleKey="label.status" style="20%">
+                                            <c:choose>
+                                                <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING}">
+                                                    <fmt:message key="packagedatacodegen.generating_card_code" />
+                                                </c:when>
+                                                <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED}">
+                                                    <fmt:message key="packagedatacodegen.not_yet_generate_card_code_failed" />
+                                                </c:when>
+                                                <c:when test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS}">
+                                                    <fmt:message key="packagedatacodegen.generated_card_code" />
+                                                </c:when>
+                                            </c:choose>
+                                        </display:column>
+                                        <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
+                                        <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
+                                    </display:table>
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <fmt:message key="packagedatacodegen.packagedata.list_not_found" />
@@ -138,27 +160,29 @@
                             <fmt:message key="label.generate_data_code" /></a>
                         <c:choose>
                             <c:when test="${items.packageDataNotGenerateCardCodeListResult.size() > 0}">
-                                <display:table name="items.packageDataNotGenerateCardCodeListResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                                               partialList="true" sort="external" size="${items.totalPackageDataNotGenerateCardCode}" defaultsort="0"
-                                               id="tableList2" pagesize="${items.maxPageItems}" export="false"
-                                               class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                                <div id="tableListContainer2" style="width: 100%;">
+                                    <display:table name="items.packageDataNotGenerateCardCodeListResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                                   partialList="true" sort="external" size="${items.totalPackageDataNotGenerateCardCode}" defaultsort="0"
+                                                   id="tableList2" pagesize="${items.maxPageItems}" export="false"
+                                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                                    <display:column headerClass="table_header text-center" title="<input style=\"width: 15px;\" type=\"checkbox\" class=\"\" name=\"allCheck\" id=\"allCheck\" onclick=\"checkAll('listForm', 'packageDataGenerationCardCodeListId', this)\">" sortable="false" class="text-center" style="width: 5%;" >
-                                        <input type="checkbox" id="${tableList2.packageDataId}" class="" style="width: 15px;" name="packageDataGenerationCardCodeListId" value="${tableList2.packageDataId}" onclick="checkAllIfOne('listForm', 'packageDataGenerationCardCodeListId', this, 'allCheck')" />
-                                    </display:column>
-                                    <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center" style="width: 5%;" >
-                                        ${tableList2_rowNum + (page * Constants.MAXPAGEITEMS)}
-                                    </display:column>
-                                    <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="packagedatacodegen.packagedata.name" style="width: 35;%"/>
-                                    <display:column headerClass="table_header text-center" sortName="value" sortable="true" titleKey="packagedatacodegen.packagedata.price" style="width: 35;%">
-                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList2.value}" />
-                                    </display:column>
-                                    <display:column headerClass="table_header text-center nowrap" class="text-center" sortName="status" sortable="true" titleKey="label.status" style="width: 20%;">
-                                        <fmt:message key="packagedatacodegen.not_yet_generate_card_code" />
-                                    </display:column>
-                                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
-                                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
-                                </display:table>
+                                        <display:column headerClass="table_header text-center" title="<input style=\"width: 15px;\" type=\"checkbox\" class=\"\" name=\"allCheck\" id=\"allCheck\" onclick=\"checkAll('listForm', 'packageDataGenerationCardCodeListId', this)\">" sortable="false" class="text-center width_50_px" style="width: 5%;" >
+                                            <input type="checkbox" id="${tableList2.packageDataId}" class="" style="width: 15px;" name="packageDataGenerationCardCodeListId" value="${tableList2.packageDataId}" onclick="checkAllIfOne('listForm', 'packageDataGenerationCardCodeListId', this, 'allCheck')" />
+                                        </display:column>
+                                        <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
+                                            ${tableList2_rowNum + (page * Constants.MAXPAGEITEMS)}
+                                        </display:column>
+                                        <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="packagedatacodegen.packagedata.name" class="width_300_px" style="width: 35;%"/>
+                                        <display:column headerClass="table_header text-center" sortName="value" sortable="true" titleKey="packagedatacodegen.packagedata.price" class="width_300_px" style="width: 35;%">
+                                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList2.value}" />
+                                        </display:column>
+                                        <display:column headerClass="table_header text-center nowrap" class="text-center width_250_px" sortName="status" sortable="true" titleKey="label.status" style="width: 20%;">
+                                            <fmt:message key="packagedatacodegen.not_yet_generate_card_code" />
+                                        </display:column>
+                                        <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
+                                        <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
+                                    </display:table>
+                                </div>
                             </c:when>
                             <c:otherwise>
                                 <fmt:message key="packagedatacodegen.packagedata.list_not_found" />
@@ -171,13 +195,34 @@
     </c:if>
 </form:form>
 
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
     var $genCardCode = $('#btnGenerateCardCode');
     var $ajaxLoading = $('#ajaxLoading');
     var $tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
+
     $(document).ready(function(){
         hideSinhCardCode();
+        initScrollablePane();
     });
+
+    function initScrollablePane(){
+        if($(window).width() >= mobile_screen_width){
+            return;
+        }
+
+        var $tableContainer = $('#tableListContainer');
+        if($tableContainer.length){
+            $('#tableList').addClass('mobile').width(950);
+            $tableContainer.mCustomScrollbar({axis:"x"});
+        }
+
+        var $tableContainer2 = $('#tableListContainer2');
+        if($tableContainer2.length){
+            $('#tableList2').addClass('mobile').width(950);
+            $tableContainer2.mCustomScrollbar({axis:"x"});
+        }
+    }
 
     $( $tableList2Checkbox ).change(function(){
         if ( $(this).prop( "checked" ) ) {

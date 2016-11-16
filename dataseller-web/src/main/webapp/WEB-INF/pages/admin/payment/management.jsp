@@ -193,19 +193,19 @@
                                         <%--${tableList.developmentPhase1}--%>
                                     <%--</display:column>--%>
                                     <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount1" style="width: 200px">
-                                        ${tableList.developmentAmount1}
+                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount1}" />
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_phase2" style="width: 100px">--%>
                                         <%--${tableList.developmentPhase2}--%>
                                     <%--</display:column>--%>
                                     <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount2" style="width: 200px">
-                                        ${tableList.developmentAmount2}
+                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount2}" />
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_phase3" style="width: 100px">--%>
                                         <%--${tableList.developmentPhase3}--%>
                                     <%--</display:column>--%>
                                     <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount3" style="width: 200px">
-                                        ${tableList.developmentAmount3}
+                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount3}" />
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_phase1" style="width: 100px">--%>
                                         <%--${tableList.maintainPhase1}--%>

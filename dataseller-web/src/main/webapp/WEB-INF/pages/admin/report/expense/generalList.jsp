@@ -6,6 +6,7 @@
 <head>
     <title><fmt:message key="general_expense.heading" /></title>
     <meta name="menu" content="<fmt:message key="general_expense.heading" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -102,37 +103,39 @@
                 <div class="x_content">
                     <c:choose>
                         <c:when test="${item.crudaction eq 'search'}">
-                            <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
-                                           partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                           id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
-                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 5%" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                                <display:column headerClass="table_header text-center" property="shopCode" titleKey="general_expense_report.shop_code" style="width: 10%"/>
-                                <display:column headerClass="table_header text-center" property="shopName" titleKey="general_expense_report.shop_name" style="width:15%"/>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase1" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase2" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount2}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase3" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount3}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase1" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount1}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase2" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount2}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase3" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount3}" />
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.total" style="width: 10%" >
-                                    <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1 + tableList.developmentAmount2 + tableList.developmentAmount3 + tableList.maintainAmount1 + tableList.maintainAmount2 + tableList.maintainAmount3}" />
-                                </display:column>
-                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
-                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
-                            </display:table>
+                            <div id="tableListContainer" style="width: 100%;">
+                                <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                               partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                               id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                               class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1800px;">
+                                    <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px;" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                                    <display:column headerClass="table_header text-center" property="shopCode" titleKey="general_expense_report.shop_code" style="width: 250px;"/>
+                                    <display:column headerClass="table_header text-center" property="shopName" titleKey="general_expense_report.shop_name" style="width: 250px;"/>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase1" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase2" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount2}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.development_phase3" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount3}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase1" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount1}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase2" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount2}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.maintain_phase3" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.maintainAmount3}" />
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="general_expense_report.total" style="width: 150px;" >
+                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.developmentAmount1 + tableList.developmentAmount2 + tableList.developmentAmount3 + tableList.maintainAmount1 + tableList.maintainAmount2 + tableList.maintainAmount3}" />
+                                    </display:column>
+                                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
+                                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
+                                </display:table>
+                            </div>
                         </c:when>
                         <c:otherwise>
                             <fmt:message key="please_choose_filter" />
@@ -145,10 +148,19 @@
     <input id="crudaction" type="hidden" name="crudaction" value="<%=Constants.ACTION_SEARCH%>" />
 </form:form>
 
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
         initDatePicker();
+        initScrollablePane();
     });
+
+    function initScrollablePane(){
+        var $tableContainer = $('#tableListContainer');
+        if($tableContainer.length){
+            $tableContainer.mCustomScrollbar({axis:"x"});
+        }
+    }
 
     function resetForm(){
         $("input[type='text']").val('');

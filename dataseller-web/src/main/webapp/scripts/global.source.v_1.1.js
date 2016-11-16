@@ -1,5 +1,7 @@
 // Show the document's title on the status bar
 window.defaultStatus=document.title;
+var mobile_screen_width = 768;
+var min_desktop_screen_width = 1024;
 
 /**
  * Remove white spaces before submitting the Form.
