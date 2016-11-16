@@ -196,6 +196,8 @@ public class Constants {
     public static final String TAKE_CARD_CODE_4_ORDER_SUCCESS = "ORDER_CARD_SUCCESS";
     public static final String TAKE_CARD_CODE_4_ORDER_FAILED = "ORDER_CARD_FAILED";
 
+    public static final String REDIS_CACHE_KEY_CARD_CODE_TAKING = "REDIS_CACHE_KEY_CARD_CODE_TAKING";
+
     // Code History
     public static final String COST_PAYMENT_NOT_PAID = "0";
     public static final String COST_PAYMENT_PAID = "1";
