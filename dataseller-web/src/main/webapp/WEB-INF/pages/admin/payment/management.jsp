@@ -4,7 +4,7 @@
 
 
 <head>
-    <title><fmt:message key="code_history.heading" /></title>
+    <title><fmt:message key="code_payment_fee.heading" /></title>
     <meta name="menu" content="<fmt:message key="code_history.heading" />"/>
     <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
