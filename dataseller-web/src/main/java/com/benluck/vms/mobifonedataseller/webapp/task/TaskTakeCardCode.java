@@ -10,8 +10,10 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -32,6 +34,7 @@ public class TaskTakeCardCode extends TimerTask{
     private OrderManagementLocalBean orderService = ctx.getBean(OrderManagementLocalBean.class);
     private PackageDataCodeGenManagementLocalBean packageDataCodeGenService = ctx.getBean(PackageDataCodeGenManagementLocalBean.class);
     private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
+    private RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
 
     private Long orderId;
     private String unitPriceCode;
@@ -49,12 +52,19 @@ public class TaskTakeCardCode extends TimerTask{
         logger.info("Getting Order info...");
         boolean hasError = false;
         OrderDTO orderDTO = null;
+        Calendar current = Calendar.getInstance();
+        String yearCode = String.valueOf(current.get(Calendar.YEAR)).replace("0","");
+
         try{
             orderDTO = this.orderService.findById(orderId);
-            Calendar current = Calendar.getInstance();
-            String yearCode = String.valueOf(current.get(Calendar.YEAR)).replace("0","");
+
+            while(RedisUtil.getLockRedisKey(yearCode, unitPriceCode)){
+                Thread.sleep(15000);
+            }
 
             if(orderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+                RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, true);
+
                 PackageDataCodeGenDTO packageDataCodeGenDTO = this.packageDataCodeGenService.findByUniqueCompositeKey(orderDTO.getPackageData().getPackageDataId(), current.get(Calendar.YEAR));
 
                 Object[] cardCodeHSGenerationObject = DataCodeUtil.generateDataCodes(packageDataCodeGenDTO, Calendar.getInstance().get(Calendar.YEAR), yearCode, unitPriceCode, orderDTO.getQuantity());
@@ -70,6 +80,8 @@ public class TaskTakeCardCode extends TimerTask{
 
                 DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
                 createNotificationMessage(true);
+
+                RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, false);
             }else{
                 hasError = true;
                 createNotificationMessage(false);
