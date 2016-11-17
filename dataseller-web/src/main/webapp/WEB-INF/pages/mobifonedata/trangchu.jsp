@@ -19,10 +19,6 @@
         });
 
 
-        highlightKppFocusPage('#kppHomePage');
-
-
-
         /*--------------------------------*/
         /* background-attachment fixed IE */
         /*--------------------------------*/

@@ -3,32 +3,6 @@ window.defaultStatus=document.title;
 var mobile_screen_width = 768;
 var min_desktop_screen_width = 1024;
 
-/**
- * Remove white spaces before submitting the Form.
- * @param formName
- */
-function trimAndSubmitForm(formName) {
-    $(formName).find('input:text').each(function(){
-        var orgValue = $(this).val();
-        $(this).val($.trim(orgValue));
-    });
-    $(formName).validate({
-        errorPlacement: function(error, element) {},
-        invalidHandler: function(event, validator) {
-            bootbox.alert("Warning", validator.errorList[0].message);
-        }
-    });
-    $(formName).submit();
-}
-
-function validateDateFormat(inputId, field) {
-    if (!isDate($("#" + inputId).val(), inputId)) {
-        bootbox.alert("Error", field + ": Invalid date format");
-        return false;
-    }
-    return true;
-}
-
 $(document).ready(function() {
     try{
         $('select').not('.notAutoInitSelect2').select2();
@@ -263,15 +237,6 @@ $(document).ready(function() {
     /*-------------------------------------*/
 });
 
-function checkResizeHeightOfParentPopup(el){
-    if($(el).closest('.sub-container').length){
-        setTimeout(function(){
-            var anchorMegaEl = $(el).closest('.popup_menu');
-            $(anchorMegaEl).find('.sub-container').height($(anchorMegaEl).find('ul').eq(0).outerHeight());
-        }, 300);
-    }
-}
-
 function jQueryMask(){
     $('.date').mask('00/00/0000');
     $('.time').mask('00:00:00');
@@ -328,43 +293,6 @@ function forceNumericInputsOnly(elementInput){
             event.preventDefault();
         }
     });
-}
-
-function displayError4El(el, message){
-    $(el).closest("div[class*='controls']").find("span[class*='error-inline-validate']").each(function(index1, el1){
-        $(el1).remove();
-    });
-    if(message != ''){
-        $(el).closest("div[class*='control-group']").addClass('error');
-        $(el).closest("div[class*='controls']").append("<span class='error-inline-validate' for='" +$(el).attr('id')+ "' generated='true'>" +message+ "</span>");
-    }else{
-        $(el).closest("div[class*='control-group']").addClass('success');
-        $(el).closest("div[class*='controls']").append("<span class='error-inline-validate valid' for='" +$(el).attr('id')+ "' generated='true'></span>");
-    }
-}
-
-function goBack(){
-    document.location = document.referrer;
-}
-
-function validateRequired(element){
-    if($(element).closest('form').length && typeof $(element).closest('form').attr('novalidate') != 'undefined'){
-        $(element).closest('form').validate().element(element);
-    }
-}
-
-function highlightFocusPage(idTab){
-    $('#navigation-header-tab li').each(function(index, el){
-        $(el).removeClass('active');
-    });
-    $(idTab).addClass('active');
-}
-
-function highlightKppFocusPage(idTab){
-    $('#kpp_navigation_bar li').each(function(index, el){
-        $(el).removeClass('active');
-    });
-    $(idTab).addClass('active');
 }
 
 function checkAllIfOne(formId, listName, thisStatus, checkboxAll){
@@ -460,37 +388,3 @@ function getCookie(cname) {
     }
     return "";
 }
-
-function setActiveMenu4Admin(menuTab){
-    $(menuTab).closest('.mega-unit').addClass('selected');
-    $(menuTab).closest('.popup_menu').addClass('selected');
-    $(menuTab).addClass('active-tab');
-}
-
-function initDatePickerWithMinAndMaxDate(datePickerEl, startDate, endDate){
-    $(datePickerEl).datepicker({
-        dateFormat: 'dd/mm/yy',
-        minDate: startDate,
-        maxDate: endDate})
-}
-
-function currencyFormat4El(element){
-    if($(element).is('input')){
-        $(element).formatCurrency({ roundToDecimalPlace: 2, eventOnDecimalsEntered: true });
-    }else{
-        $(element).formatCurrency({ roundToDecimalPlace: 2, eventOnDecimalsEntered: true });
-    }
-}
-
-(function ( $ ) {
-    $.fn.showLoading = function() {
-        var loadingEl = $("<div class='loading_ajax'><span class='content'>Đang tải dữ liệu. Vui lòng đợi...</span></div>");
-        $(loadingEl).height($(document).outerHeight());
-        $(loadingEl).width($(document).outerWidth());
-        $(this).append(loadingEl);
-        $(loadingEl).find('span').css('top', (screen.height / 2) - 100);
-    };
-    $.fn.removeLoading = function() {
-        $(this).find('.loading_ajax').remove();
-    };
-}( jQuery ));

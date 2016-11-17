@@ -24,7 +24,7 @@
     <script src="<c:url value="/themes/mobifonedata/js/jquery.min.js"/>" type="text/javascript"></script>
     <script src='<c:url value="/themes/admin/js/jquery-ui-1.10.3.min.js"/>' type='text/javascript'></script>
     <script src="<c:url value="/themes/mobifonedata/js/bootstrap.min.js"/>" type="text/javascript"></script>
-    </script><script src='<c:url value="/scripts/global.source.v_1.1.js"/>'></script>
+    </script><script src='<c:url value="/scripts/global.source.v_1.2.js"/>'></script>
 </head>
 <body <decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class"
                                                                                                    writeEntireProperty="true"/>>

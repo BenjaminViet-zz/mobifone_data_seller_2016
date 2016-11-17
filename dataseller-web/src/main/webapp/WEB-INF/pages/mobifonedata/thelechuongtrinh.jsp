@@ -1,6 +1,30 @@
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
+<link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 
+<style>
+    #tableList2.mobile tbody tr td:nth-of-type(1){
+        width: 45px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(2){
+        width: 147px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(3){
+        width: 106px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(4){
+        width: 340px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(5){
+        width: 185px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(6){
+        width: 145px;
+    }
+    #tableList2.mobile tbody tr td:nth-of-type(7){
+        width: 56px;
+    }
+</style>
 
 <body class="q_student_q_teen_2015_home_page">
 <section class="content">
@@ -59,127 +83,132 @@
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên IN</b>:</p></li>
                     </ul>
 
-                    <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
-                                   partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                   id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                   class="table text-center" style="margin: 1em 0 1.5em;">
+                    <div id="tableListContainer" style="width: 100%;">
+                        <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                       class="table text-center" style="margin: 1em 0 1.5em; width: 1024px;">
 
-                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 3%;" >
-                            ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                        </display:column>
-                        <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="15%"/>
-                        <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="15%">
-                            ${tableList.value}
-                        </display:column>
-                        <display:column headerClass="table_header text-center breakTwoLines" property="volume" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" >
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 45px;" >
+                                ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                            </display:column>
+                            <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="width: 170px;"/>
+                            <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="125px;">
+                                <fmt:formatNumber var="value" type='number' maxFractionDigits='0' value='${tableList.value}' />
+                                ${fn:replace(value, ',', '.')}
+                            </display:column>
+                            <display:column headerClass="table_header text-center breakTwoLines" property="volume" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 300px;" >
 
-                        </display:column>
-                        <display:column headerClass="table_header text-center" property="durationText" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
-                        <display:column headerClass="table_header text-center" property="numberOfExtend" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
-                        <display:column headerClass="table_header text-center" property="tk" class="text-center" titleKey="packagedata.label.tk" style="width: 7%" />
-                    </display:table>
-
+                            </display:column>
+                            <display:column headerClass="table_header text-center" property="durationText" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 155px;" />
+                            <display:column headerClass="table_header text-center" property="numberOfExtend" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 155px;" />
+                            <display:column headerClass="table_header text-center" property="tk" class="text-center" titleKey="packagedata.label.tk" style="width: 70px;" />
+                        </display:table>
+                    </div>
 
 
                     <ul class="ul-thele-q-student">
                         <li><p><i class="fa fa-check" aria-hidden="true"></i> <b>Các gói khai trên PCRF</b>:</p></li>
                     </ul>
 
-                    <table class="table text-center">
-                        <thead>
-                        <tr>
-                            <th class="text-center">TT</th>
-                            <th class="text-center">Tên gói</th>
-                            <th class="text-center">Giá gói(đ)</th>
-                            <th class="text-center">DL miễn phí (MB)</th>
-                            <th class="text-center">Thời gian sử dụng</th>
-                            <th class="text-center">Số lần gia hạn</th>
-                            <th class="text-center">TK</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>DataQT1A</td>
-                            <td>1.000</td>
-                            <td>100MB</td>
-                            <td>01 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>DataQT3A</td>
-                            <td>3.000</td>
-                            <td>300MB</td>
-                            <td>01 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>DataQT5A</td>
-                            <td>5.000</td>
-                            <td>500MB</td>
-                            <td>01 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>DataQT8A</td>
-                            <td>8.000</td>
-                            <td>600MB</td>
-                            <td>03 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>DataQT10A</td>
-                            <td>10.000</td>
-                            <td>1000MB</td>
-                            <td>10 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>DataQT50A</td>
-                            <td>50.000</td>
-                            <td>1500MB</td>
-                            <td>31 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>DataQT70A</td>
-                            <td>70.000</td>
-                            <td>2000MB</td>
-                            <td>31 ngày</td>
-                            <td>0</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>DataQT35A(*)</td>
-                            <td>35.000</td>
-                            <td>1.536MB truy cập IP ngoài Facebook<span class="line_separator"></span>Miễn phí truy cập IP Facebook</td>
-                            <td>31 ngày</td>
-                            <td>11</td>
-                            <td>N/A</td>
-                        </tr>
+                    <div id="tableListContainer2" style="width: 100%;">
+                        <table id="tableList2" class="table text-center" style="width: 1024px;">
+                            <thead>
+                            <tr>
+                                <th class="text-center">TT</th>
+                                <th class="text-center">Tên gói</th>
+                                <th class="text-center">Giá gói(đ)</th>
+                                <th class="text-center">DL miễn phí (MB)</th>
+                                <th class="text-center">Thời gian sử dụng</th>
+                                <th class="text-center">Số lần gia hạn</th>
+                                <th class="text-center">TK</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>DataQT1A</td>
+                                <td>1.000</td>
+                                <td>100MB</td>
+                                <td>01 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>DataQT3A</td>
+                                <td>3.000</td>
+                                <td>300MB</td>
+                                <td>01 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>DataQT5A</td>
+                                <td>5.000</td>
+                                <td>500MB</td>
+                                <td>01 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>DataQT8A</td>
+                                <td>8.000</td>
+                                <td>600MB</td>
+                                <td>03 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>DataQT10A</td>
+                                <td>10.000</td>
+                                <td>1000MB</td>
+                                <td>10 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>DataQT50A</td>
+                                <td>50.000</td>
+                                <td>1500MB</td>
+                                <td>31 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>DataQT70A</td>
+                                <td>70.000</td>
+                                <td>2000MB</td>
+                                <td>31 ngày</td>
+                                <td>0</td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>DataQT35A(*)</td>
+                                <td>35.000</td>
+                                <td>1.536MB truy cập IP ngoài Facebook<span class="line_separator"></span>Miễn phí truy cập IP Facebook</td>
+                                <td>31 ngày</td>
+                                <td>11</td>
+                                <td>N/A</td>
+                            </tr>
 
-                        </tbody>
-                    </table>
-
+                            </tbody>
+                        </table>
+                    </div>
                      <!-- InstanceEndEditable -->
                 </article>
             </div>
         </div>
     </div>
 </section>
+
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script type="text/javascript">
     $(document).ready(function(){
 
@@ -217,7 +246,22 @@
             }
         }
         replaceSpecialCharacter();
-        highlightKppFocusPage('#kppTheLeCt');
+        initScrollablePane();
     });
+
+    function initScrollablePane(){
+        if($(window).width() > min_desktop_screen_width){
+            return;
+        }
+
+        var $tableContainer = $('#tableListContainer');
+        $tableContainer.height($tableContainer.height() + 50);
+        $tableContainer.mCustomScrollbar({axis:"x"});
+
+        var $tableContainer2 = $('#tableListContainer2');
+        $('#tableList2').addClass('mobile');
+        $tableContainer2.height($tableContainer2.height() + 50);
+        $tableContainer2.mCustomScrollbar({axis:"x"});
+    }
 </script>
 </body>
