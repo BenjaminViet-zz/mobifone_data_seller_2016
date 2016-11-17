@@ -78,7 +78,8 @@ public class OrderController extends ApplicationObjectSupport{
     @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html"} )
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                              HttpServletRequest request,
-                             HttpServletResponse response){
+                             HttpServletResponse response,
+                             RedirectAttributes redirectAttributes){
 
         if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/list.html page. ACCESS DENIED FOR BIDDEN!");
@@ -93,8 +94,15 @@ public class OrderController extends ApplicationObjectSupport{
                 if(command.getPojo().getOrderId() != null){
                     try{
                         this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
-                        mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
+
+                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                            return new ModelAndView("redirect:/admin/order/list.html");
+                        }else{
+                            return new ModelAndView("redirect:/user/order/list.html");
+                        }
+
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));

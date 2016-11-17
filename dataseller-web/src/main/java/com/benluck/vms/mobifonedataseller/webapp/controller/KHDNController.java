@@ -52,7 +52,8 @@ public class KHDNController extends ApplicationObjectSupport {
     @RequestMapping( value = {"/admin/khdn/list.html", "/user/khdn/list.html"})
     public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
                              HttpServletRequest request,
-                             BindingResult bindingResult) throws RemoveException {
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) throws RemoveException {
         if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/list.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
@@ -67,8 +68,14 @@ public class KHDNController extends ApplicationObjectSupport {
                         validator.validate(command, bindingResult);
                         if(StringUtils.isBlank(command.getErrorMessage())){
                             this.khdnService.deleteItemById(command.getPojo().getKHDNId());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.khdn.delete_successfully"));
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.khdn.delete_successfully"));
+
+                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                return new ModelAndView("redirect:/admin/khdn/list.html");
+                            }else{
+                                return new ModelAndView("redirect:/user/khdn/list.html");
+                            }
                         }else{
                             mav.addObject(Constants.ALERT_TYPE, "danger");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage(command.getErrorMessage()));

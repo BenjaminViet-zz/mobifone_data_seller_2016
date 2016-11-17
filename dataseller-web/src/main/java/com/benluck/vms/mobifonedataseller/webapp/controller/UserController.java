@@ -58,7 +58,8 @@ public class UserController extends ApplicationObjectSupport {
     @RequestMapping(value = {"/admin/user/list.html", "/user/user/list.html"})
 	public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY)UserCommand command,
                              HttpServletRequest request,
-                             BindingResult bindingResult) throws RemoveException {
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) throws RemoveException {
 
         if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/user/list.html user page. ACCESS DENIED FOR BIDDEN!");
@@ -74,8 +75,14 @@ public class UserController extends ApplicationObjectSupport {
                     if(StringUtils.isBlank(command.getErrorMessage())){
                         try{
                             this.userService.deleteItemById(command.getPojo().getUserId());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+
+                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                return new ModelAndView("redirect:/admin/user/list.html");
+                            }else{
+                                return new ModelAndView("redirect:/user/user/list.html");
+                            }
                         }catch (Exception e){
                             mav.addObject(Constants.ALERT_TYPE, "info");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));

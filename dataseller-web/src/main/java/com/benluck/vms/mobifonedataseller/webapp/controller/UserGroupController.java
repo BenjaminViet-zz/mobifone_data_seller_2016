@@ -107,7 +107,8 @@ public class UserGroupController extends ApplicationObjectSupport {
     @RequestMapping(value = {"/admin/usergroup/list.html", "/user/usergroup/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              HttpServletRequest request,
-                             BindingResult bindingResult){
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes){
         ModelAndView mav = new ModelAndView("/admin/usergroup/list");
 
         if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_GROUP_MANAGER)){
@@ -123,8 +124,14 @@ public class UserGroupController extends ApplicationObjectSupport {
                     if(StringUtils.isBlank(command.getErrorMessage())){
                         try{
                             this.userGroupService.deleteItem(command.getPojo().getUserGroupId());
-                            mav.addObject(Constants.ALERT_TYPE, "success");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
+
+                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                return new ModelAndView("redirect:/admin/usergroup/list.html");
+                            }else{
+                                return new ModelAndView("redirect:/user/usergroup/list.html");
+                            }
                         }catch (Exception e){
                             mav.addObject(Constants.ALERT_TYPE, "info");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.can_not_delete_user_group"));
