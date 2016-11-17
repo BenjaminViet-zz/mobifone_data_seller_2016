@@ -89,15 +89,30 @@ public class KHDNValidator extends ApplicationObjectSupport implements Validator
         }catch (ObjectNotFoundException one){}
 
         try{
-            if(StringUtils.isNotBlank(pojo.getGpkd())){
-                KHDNDTO dto = khdnService.findEqualUnique("shopCode", pojo.getGpkd());
+            if(StringUtils.isNotBlank(pojo.getShopCode())){
+                KHDNDTO dto = khdnService.findEqualUnique("shopCode", pojo.getShopCode());
                 if(pojo.getKHDNId() != null){
                     if(!dto.getKHDNId().equals(pojo.getKHDNId())){
-                        errors.rejectValue("pojo.gpkd", "label.khdn.shopCode.errors_duplicated");
+                        errors.rejectValue("pojo.shopCode", "label.khdn.shopCode.errors_duplicated");
                     }
                 }else{
                     if(dto != null){
-                        errors.rejectValue("pojo.gpkd", "label.khdn.shopCode.errors_duplicated");
+                        errors.rejectValue("pojo.shopCode", "label.khdn.shopCode.errors_duplicated");
+                    }
+                }
+            }
+        }catch (ObjectNotFoundException one){}
+
+        try{
+            if(StringUtils.isNotBlank(pojo.getStb_vas())){
+                KHDNDTO dto = khdnService.findEqualUnique("stb_vas", pojo.getStb_vas());
+                if(pojo.getKHDNId() != null){
+                    if(!dto.getKHDNId().equals(pojo.getKHDNId())){
+                        errors.rejectValue("pojo.stb_vas", "label.khdn.stb_vas.errors_duplicated");
+                    }
+                }else{
+                    if(dto != null){
+                        errors.rejectValue("pojo.stb_vas", "label.khdn.stb_vas.errors_duplicated");
                     }
                 }
             }

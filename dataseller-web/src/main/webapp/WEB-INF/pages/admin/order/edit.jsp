@@ -99,7 +99,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="unitPrice" type="text" name="pojo.unitPrice" min="1" class="form-control required money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.unitPrice}" /> " />
+                            <input id="unitPrice" type="text" name="pojo.unitPrice" min="1" readonly="readonly"  class="form-control required money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.unitPrice}" /> " />
                             <form:errors for="unitPrice" path="pojo.unitPrice" cssClass="error-inline-validate"/>
                         </div>
                     </div>

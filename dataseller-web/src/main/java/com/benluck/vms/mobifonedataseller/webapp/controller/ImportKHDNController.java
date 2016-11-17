@@ -66,9 +66,13 @@ public class ImportKHDNController extends ApplicationObjectSupport{
                     command.setStepImportIndex(Constants.IMPORT_ORDER_STEP_2_UPLOAD);
 
                     if(StringUtils.isNotBlank(command.getErrorMessage())){
+                        mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }else{
                         request.getSession().setAttribute(Constants.ORDER_IMPORT_FILE_CACHE_KEY + RequestUtil.getClusterSessionId(request), command.getImportKHDNDTOList());
+
+                        mav.addObject(Constants.ALERT_TYPE, "success");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import.correct_data"));
                     }
                 }else{
                     mav.addObject(Constants.ALERT_TYPE, "danger");

@@ -68,6 +68,7 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
         HashSet<String> shopCodeHS = new HashSet<String>();
         HashSet<String> mstHS = new HashSet<String>();
         HashSet<String> gpkdHS = new HashSet<String>();
+        HashSet<String> stbHS = new HashSet<String>();
         List<ImportKHDNDTO> importKHDNDTOLIst = new ArrayList<ImportKHDNDTO>();
         try{
             WorkbookSettings ws = new WorkbookSettings();
@@ -111,11 +112,16 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
 
                     dto = new ImportKHDNDTO(shopCode.toString(), shopName.toString(), mst.toString(), gpkd.toString(), issuedContractDate.toString(), stb_vas.toString());
 
-                    boolean  hasError = validateRequiredFields(dto, shopCodeHS, mstHS, gpkdHS, rowIndex);
+                    boolean  hasError = validateRequiredFields(dto, shopCodeHS, mstHS, gpkdHS, stbHS, rowIndex);
                     importKHDNDTOLIst.add(dto);
 
                     if(hasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.some_error_found_in_import_file"));
+                    }else{
+                        shopCodeHS.add(dto.getShopCode());
+                        gpkdHS.add(dto.getGpkd());
+                        stbHS.add(dto.getStb_vas());
+                        mstHS.add(dto.getMst());
                     }
                 }
             }else{
@@ -130,8 +136,23 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
         return importKHDNDTOLIst;
     }
 
-    private boolean validateRequiredFields(ImportKHDNDTO dto, HashSet<String> shopCodeHS, HashSet<String> mstHS, HashSet<String> gpkdHS, int rowIndex) throws ObjectNotFoundException{
+    private boolean validateRequiredFields(ImportKHDNDTO dto, HashSet<String> shopCodeHS, HashSet<String> mstHS, HashSet<String> gpkdHS, HashSet<String> stbHS, int rowIndex) throws ObjectNotFoundException{
         KHDNDTO khdnDTO = null;
+
+        if(StringUtils.isBlank(dto.getIssuedContractDateStr())){
+            dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_issuedContractDate"));
+            return true;
+        }else{
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                Date d = (Date) format.parse(dto.getIssuedContractDateStr());
+                dto.setIssuedContractDate(new Timestamp(d.getTime()));
+            } catch (Exception e) {
+                logger.error("Invalid date format [" + dto.getIssuedContractDateStr() + "] of ShopCode at rowIndex: " + rowIndex);
+                logger.error(e.getMessage());
+                return true;
+            }
+        }
 
         if(StringUtils.isBlank(dto.getShopCode())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_shop_code"));
@@ -183,23 +204,23 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
             }
         }
 
-        if(StringUtils.isBlank(dto.getIssuedContractDateStr())){
-            dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_issuedContractDate"));
+        if(StringUtils.isBlank(dto.getStb_vas())){
+            dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_stb_vas"));
             return true;
+        }else{
+            try{
+                khdnDTO = null;
+                khdnDTO = khdnService.findEqualUnique("stb_vas", dto.getStb_vas().trim());
+            }catch (ObjectNotFoundException oe){}
+
+            if(khdnDTO != null || stbHS.contains(dto.getStb_vas().trim())){
+                dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.duplicated_stb_vas"));
+                return true;
+            }
         }
 
         if(StringUtils.isBlank(dto.getStb_vas())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.not_empty_stb"));
-            return true;
-        }
-
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            Date d = (Date) format.parse(dto.getIssuedContractDateStr());
-            dto.setIssuedContractDate(new Timestamp(d.getTime()));
-        } catch (Exception e) {
-            logger.error("Invalid date format [" + dto.getIssuedContractDateStr() + "] of ShopCode at rowIndex: " + rowIndex);
-            logger.error(e.getMessage());
             return true;
         }
         return false;
