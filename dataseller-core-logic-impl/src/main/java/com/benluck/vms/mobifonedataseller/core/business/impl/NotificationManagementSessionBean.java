@@ -62,9 +62,7 @@ public class NotificationManagementSessionBean implements NotificationManagement
     }
 
     @Override
-    public void updateIsRead(Long notificationId) throws ObjectNotFoundException, DuplicateKeyException {
-        NotificationEntity dbItem = this.notificationService.findById(notificationId);
-        dbItem.setRead(Constants.NOTIFICATION_READ_ALREADY);
-        this.notificationService.update(dbItem);
+    public void updateIsRead(List<Long> notificationIds) {
+        this.notificationService.updateNotificationIsRead(notificationIds);
     }
 }

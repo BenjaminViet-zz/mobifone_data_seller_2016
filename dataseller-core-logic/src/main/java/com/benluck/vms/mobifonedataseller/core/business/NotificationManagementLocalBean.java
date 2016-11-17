@@ -24,5 +24,5 @@ public interface NotificationManagementLocalBean {
 
     void addItem(NotificationDTO pojo) throws DuplicateKeyException;
 
-    void updateIsRead(Long notificationId) throws ObjectNotFoundException, DuplicateKeyException;
+    void updateIsRead(List<Long> notificationIds);
 }

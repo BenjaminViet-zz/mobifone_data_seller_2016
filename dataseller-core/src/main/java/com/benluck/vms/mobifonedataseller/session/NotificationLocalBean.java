@@ -15,4 +15,5 @@ public interface NotificationLocalBean extends GenericSessionBean<NotificationEn
 
     List<NotificationEntity> fetchNotificationNewestList(Long userId);
 
+    void updateNotificationIsRead(List<Long> notificationIds);
 }

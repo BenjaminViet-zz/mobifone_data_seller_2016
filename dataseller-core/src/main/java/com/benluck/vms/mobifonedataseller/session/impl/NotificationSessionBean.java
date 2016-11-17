@@ -30,4 +30,14 @@ public class NotificationSessionBean extends AbstractSessionBean<NotificationEnt
         query.setMaxResults(Constants.MAX_NOTIFICATION_MESSAGE_POPUP);
         return (List<NotificationEntity>)query.getResultList();
     }
+
+    @Override
+    public void updateNotificationIsRead(List<Long> notificationIds) {
+        StringBuilder sqlUpdate = new StringBuilder();
+        sqlUpdate.append(" UPDATE NotificationEntity SET isRead = :isRead WHERE notificationId in :notificationIds ");
+        Query query = entityManager.createQuery(sqlUpdate.toString())
+                .setParameter("notificationIds", notificationIds)
+                .setParameter("isRead", Constants.NOTIFICATION_READ_ALREADY);
+        query.executeUpdate();
+    }
 }

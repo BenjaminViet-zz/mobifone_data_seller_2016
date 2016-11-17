@@ -197,13 +197,19 @@
 
 <script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
-    var $genCardCode = $('#btnGenerateCardCode');
+    var $btnGenCardCode = $('#btnGenerateCardCode');
     var $ajaxLoading = $('#ajaxLoading');
     var $tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
 
     $(document).ready(function(){
-        hideSinhCardCode();
         initScrollablePane();
+        
+        if($btnGenCardCode.length){
+            enableOrDisableButtonGenCardCode();
+            $( $tableList2Checkbox ).change(function(){
+                enableOrDisableButtonGenCardCode();
+            });
+        }
     });
 
     function initScrollablePane(){
@@ -224,22 +230,12 @@
         }
     }
 
-    $( $tableList2Checkbox ).change(function(){
-        if ( $(this).prop( "checked" ) ) {
-            $genCardCode.removeClass("disabled")
-                    .css('pointer-events', 'auto');
-        } else {
-            $genCardCode.addClass("disabled")
-                    .css('pointer-events', 'visible');
-        }
-    });
-
-    function hideSinhCardCode(){
+    function enableOrDisableButtonGenCardCode(){
         if ( $tableList2Checkbox.is(":checked") ) {
-            $genCardCode.removeClass("disabled")
+            $btnGenCardCode.removeClass("disabled")
                 .css('pointer-events', 'auto');
         } else {
-            $genCardCode.addClass("disabled")
+            $btnGenCardCode.addClass("disabled")
                     .css('pointer-events', 'visible');
         }
     }
