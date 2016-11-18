@@ -57,9 +57,9 @@
                                 <a href="#step-1">
                                     <span class="step_no">1</span>
                                     <span class="step_descr text-primary">
-                                        <fmt:message key="label.step_1" /><br />
-                                        <small><fmt:message key="admin.khdn.import_page.step_1_title" /></small>
-                                    </span>
+                                            <fmt:message key="label.step_1" /><br />
+                                            <small><fmt:message key="admin.khdn.import_page.step_1_title" /></small>
+                                        </span>
                                 </a>
                             </li>
                             <li>
@@ -85,28 +85,25 @@
                             <div class="row-fluid pane_info">
                                 <div class="widget-box">
                                     <div class="widget-content nopadding">
-                                        <div>
-                                            <p>
-                                                <fmt:message key="import.import_page.step1.instruction1"></fmt:message>
-                                            </p>
-                                            <p>
-                                                <a class="text-primary" id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
-                                            </p>
+                                        <div class="m-t-30">
+                                            <p><fmt:message key="import.import_page.step1.instruction1"></fmt:message></p>
                                             <p><fmt:message key="import.import_page.step1.instruction3"/></p>
+                                            <div class="m-b-10">
+                                                <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
 
-                                        </div>
-                                        <div class="clear"></div>
-                                        <div class="control-group">
-                                            <label class="control-label"></label>
-                                            <div class="controls">
-                                                <input type="file" name="file" id="file"  size="40"/>
+                                            <div class="chonFileImport">
+                                                <label for="file" class="btn btn-info">
+                                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>
+                                                </label>
+                                                <input id="file" type="file" name="file" accept="application/vnd.ms-excel" />
+                                            </div>
+
                                             </div>
                                         </div>
                                         <div class="clear"></div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div id="step-2" style="width: 100%; min-height: 500px;">
                             <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1650px;">
@@ -148,7 +145,9 @@
                             </table>
                         </div>
                         <div id="step-3">
-                            <fmt:message key="admin.khdn.import_page.step_3_content" />
+                            <div class="m-t-30">
+                                <fmt:message key="admin.khdn.import_page.step_3_content" />
+                            </div>
                         </div>
 
                     </div>
@@ -184,9 +183,16 @@
         var $buttonNext = $('.buttonNext');
 
         $('#file').on('change', function(){
-            enableOrDisableNextButton(false);
+            if ( $(this).val() != '' ) {
+                $(this).closest('.chonFileImport').find('label').addClass('btn-success').removeClass('btn-info').html('<i class="fa fa-check" aria-hidden="true"></i> <fmt:message key="import.selectFileSuccess"></fmt:message>');
+                isShowNextButton(true);
+            } else {
+                $(this).closest('.chonFileImport').find('label').addClass('btn-info').removeClass('btn-success').html('<i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>');
+                isShowNextButton(false);
+            }
         });
     }
+
 
     function handleButtons(){
         // check step index == 1
@@ -203,9 +209,10 @@
 
         $buttonFinish.data('manual-handle', true);
 
-        if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
-            enableOrDisableNextButton(true);
-        }else if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_2_UPLOAD}){
+        if( curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE} ){
+            isShowNextButton(false);
+
+        } else if( curStepIndex == ${Constants.IMPORT_ORDER_STEP_2_UPLOAD} ){
 
             // trigger click on button Next to go to Step 2
             $buttonNext.trigger('click');
@@ -215,7 +222,7 @@
 
             if(${not empty item.errorMessage}){
                 // disable button next in case of errors in Import file.
-                enableOrDisableNextButton(true);
+                isShowNextButton(false);
             }
 
             // process for button Finish
@@ -242,16 +249,15 @@
         }
 
         $buttonNext.on('click', function(e){
+            console.log(curStepIndex);
             if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
                 e.stopPropagation();
                 e.preventDefault();
 
                 $('#crudaction').val('${Constants.ACTION_UPLOAD}');
                 $('#listForm').submit();
-            }else{
-                curStepIndex++;
             }
-        })
+        });
 
         // handle button previous
         $buttonPrev.on('click', function(){
@@ -260,7 +266,7 @@
             }
             curStepIndex--;
             if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
-                enableOrDisableNextButton(true);
+                isShowNextButton(false);
             }
         });
     }
@@ -269,13 +275,13 @@
     *   Disable or enable button next.
     * @param flag True: disable, else enables
     */
-    function enableOrDisableNextButton(flag){
-        if(flag){
-            $buttonNext.addClass('buttonDisabled');
-            $buttonNext.data('prevent-goforward', true);
+    function isShowNextButton(flag){
+        if(!flag){
+            $buttonNext.addClass('buttonDisabled')
+                    .data('prevent-goforward', true);
         }else{
-            $buttonNext.removeClass('buttonDisabled');
-            $buttonNext.removeData('prevent-goforward');
+            $buttonNext.removeClass('buttonDisabled')
+                    .removeData('prevent-goforward');
         }
     }
 </script>

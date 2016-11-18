@@ -4616,6 +4616,7 @@ fieldset {
     opacity: .65;
     filter: alpha(opacity=65);
     box-shadow: none;
+    display: none;
 }
 
 .actionBar a {
