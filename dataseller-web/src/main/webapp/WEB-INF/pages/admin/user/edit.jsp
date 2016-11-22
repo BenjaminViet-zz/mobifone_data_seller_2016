@@ -118,12 +118,12 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i>
                                  <fmt:message key="label.huy" /></a>&nbsp;
-                            <button id="btnSave" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            <a id="btnSave" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 <c:choose>
                                     <c:when test="${not empty item.pojo.userId}"><fmt:message key="label.update" /></c:when>
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                                 </c:choose>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <input type="hidden" name="crudaction" value="insert-update" />
@@ -138,7 +138,16 @@
     $(document).ready(function(){
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
-                $("#formEdit").submit();
+                if ( $('#status option:selected').text() == '<fmt:message key="label.inactive" />' ) {
+                    bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.user_status_inactive" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                        if( r ){
+                            $("#formEdit").submit();
+                        }
+                    });
+
+                } else {
+                    $("#formEdit").submit();
+                }
             }
         });
     });

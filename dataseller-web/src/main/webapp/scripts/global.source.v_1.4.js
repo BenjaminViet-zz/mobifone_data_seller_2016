@@ -4,6 +4,9 @@ var mobile_screen_width = 768;
 var min_desktop_screen_width = 1024;
 
 $(document).ready(function() {
+
+    $('[data-toggle="tooltip"]').tooltip();
+
     try{
         $('select').not('.notAutoInitSelect2').select2();
 

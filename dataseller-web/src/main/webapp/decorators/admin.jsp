@@ -43,7 +43,7 @@
     <!-- Custom Theme Style -->
     <link href="<c:url value="/themes/newteample/content/css/custom_v1.2.css" />" rel="stylesheet" />
 
-    <link href="<c:url value="/themes/admin/css/admin_v1.3.css" />" rel="stylesheet" />
+    <link href="<c:url value="/themes/admin/css/admin_v1.4.css" />" rel="stylesheet" />
 
     <!-- jQuery -->
     <script src="<c:url value="/themes/admin/js/jquery-1.11.1.min.js" />"></script>
@@ -52,7 +52,7 @@
     <script src="<c:url value="/themes/admin/js/jquery.validate.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/jquery.mask.min.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/spin.js"/>"></script>
-    <script src="<c:url value="/scripts/global.source.v_1.3.js"/>"></script>
+    <script src="<c:url value="/scripts/global.source.v_1.4.js"/>"></script>
     <decorator:head/>
 </head>
 <body <decorator:getProperty property="body.id" writeEntireProperty="true"/>

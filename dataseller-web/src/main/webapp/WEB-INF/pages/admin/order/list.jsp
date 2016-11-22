@@ -157,13 +157,13 @@
                                     </c:choose>
                                 </display:column>
                                 <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width: 250px;">
-                                    <a href="${historyUrl}?pojo.order.orderId=${tableList.orderId}" class="tip-top action-group btn-primary" data-toggle="tooltip" title="<fmt:message key="label.view_history" />"><i class="fa fa-history" aria-hidden="true"></i></a>
+                                    <a href="${historyUrl}?pojo.order.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.view_history" />"><i class="fa fa-history" aria-hidden="true"></i></a>
                                     <c:if test="${tableList.orderStatus ne Constants.ORDER_STATUS_FINISH}">
-                                         <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top action-group btn-primary" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                         <a class="tip-top action-group btn-danger" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteOrder(${tableList.orderId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                         <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                         <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteOrder(${tableList.orderId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                     </c:if>
                                     <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus ne  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
-                                         <a class="tip-top action-group btn-primary" data-toggle="tooltip" title="<fmt:message key="label.button.export" />" onclick="javascript: exportExcel(${tableList.orderId});"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                                         <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.button.export" />" onclick="javascript: exportExcel(${tableList.orderId});"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                                     </c:if>
                                 </display:column>
                                 <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.order" /></display:setProperty>
