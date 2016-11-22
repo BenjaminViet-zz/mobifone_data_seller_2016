@@ -2,8 +2,10 @@ package com.benluck.vms.mobifonedataseller.core.business;
 
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Local;
 import javax.ejb.ObjectNotFoundException;
+import javax.ejb.RemoveException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +28,14 @@ public interface PackageDataManagementLocalBean {
     PackageDataDTO findById(Long packageDataId) throws ObjectNotFoundException;
 
     List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year);
+
+    PackageDataDTO findEqualUnique(String propertyName, String propertyValue) throws ObjectNotFoundException;
+
+    PackageDataDTO addItem(PackageDataDTO pojo) throws DuplicateKeyException;
+
+    void updateItem(PackageDataDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
+
+    Integer findUsageBeforeDelete(Long packageDataId);
+
+    void deleteItem(Long packageDataId) throws RemoveException;
 }

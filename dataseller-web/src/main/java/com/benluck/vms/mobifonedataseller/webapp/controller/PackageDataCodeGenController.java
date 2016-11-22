@@ -1,7 +1,6 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.ejb.ObjectNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -76,6 +74,7 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
             properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
         }
 
+        // Danh sach Package Data da sinh Card Code.
         Object[] resultObject = this.packageDataCodeGenService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<PackageDataCodeGenDTO>)resultObject[1]);
@@ -126,7 +125,7 @@ public class PackageDataCodeGenController extends ApplicationObjectSupport{
                 resultMap.put("r", false);
                 resultMap.put("msg", this.getMessageSourceAccessor().getMessage("packagedatacodegen.generation.at_least_one_package_data_has_generated_card_code_success"));
             }else{
-                this.packageDataCodeGenService.updateProcessing(year, packageDataIdsStr, Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
+                this.packageDataCodeGenService.AddOrUpdateProcessing(year, packageDataIdsStr, Constants.PACKAGE_DATA_CODE_GEN_STATUS_PROCESSING);
 
                 TaskGenerateCardCode generateCardCodeTask = new TaskGenerateCardCode(SecurityUtils.getLoginUserId(), year, packageDataIdsStr);
                 Timer timer = new Timer(true);

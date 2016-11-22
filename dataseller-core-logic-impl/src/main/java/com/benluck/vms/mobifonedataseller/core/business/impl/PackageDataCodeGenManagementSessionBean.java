@@ -122,7 +122,7 @@ public class PackageDataCodeGenManagementSessionBean implements PackageDataCodeG
     }
 
     @Override
-    public void updateProcessing(Integer year, String[] packageDataIds, Integer statusCode) throws ObjectNotFoundException, DuplicateKeyException {
+    public void AddOrUpdateProcessing(Integer year, String[] packageDataIds, Integer statusCode) throws ObjectNotFoundException, DuplicateKeyException {
         Long packageDataId = null;
         PackageDataCodeGenEntity dbItem = null;
         for (String packageDataIdStr : packageDataIds){

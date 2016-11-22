@@ -143,8 +143,6 @@ public class KHDNController extends ApplicationObjectSupport {
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
         preferenceData(mav);
-        mav.addObject("page", command.getPage() - 1);
-        mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 

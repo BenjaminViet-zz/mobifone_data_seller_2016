@@ -52,7 +52,7 @@
     <script src="<c:url value="/themes/admin/js/jquery.validate.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/jquery.mask.min.js"/>"></script>
     <script src="<c:url value="/themes/admin/js/spin.js"/>"></script>
-    <script src="<c:url value="/scripts/global.source.v_1.2.js"/>"></script>
+    <script src="<c:url value="/scripts/global.source.v_1.3.js"/>"></script>
     <decorator:head/>
 </head>
 <body <decorator:getProperty property="body.id" writeEntireProperty="true"/>

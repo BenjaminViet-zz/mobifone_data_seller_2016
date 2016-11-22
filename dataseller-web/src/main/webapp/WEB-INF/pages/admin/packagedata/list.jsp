@@ -1,3 +1,4 @@
+<%@ page import="com.benluck.vms.mobifonedataseller.common.Constants" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
@@ -30,10 +31,18 @@
     <c:set var="prefix" value="/khdn" />
 </security:authorize>
 <c:url var="formUrl" value="${prefix}/package_data/list.html"/>
+<c:url var="editUrl" value="${prefix}/package_data/edit.html"/>
+<c:url var="addUrl" value="${prefix}/package_data/add.html"/>
 
 <div class="page-title">
     <div class="title_left">
         <h3><fmt:message key="admin.data_code_list.heading_page" /></h3>
+    </div>
+
+    <div class="title_right">
+        <div class="action-bar">
+            <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+        </div>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -63,19 +72,25 @@
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
                                    class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center width_50_px" style="width: 3%;" >
+                        <display:column headerClass="table_header text-center vertical-middle" titleKey="label.stt" class="text-center width_50_px" style="width: 3%;" >
                             ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                         </display:column>
-                        <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center width_200_px" titleKey="packagedata.label.tenGoiCuoc" style="15%"/>
-                        <display:column headerClass="table_header text-center" sortName="value" class="text-center width_150_px" titleKey="packagedata.label.giaGoiCuoc" style="15%">
-                            <fmt:formatNumber type="number" value="${tableList.value}" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="name" sortName="name" class="text-center width_200_px" titleKey="packagedata.label.tenGoiCuoc" style="width: 10%"/>
+                        <display:column headerClass="table_header text-center vertical-middle" sortName="value" class="text-center width_150_px" titleKey="packagedata.label.giaGoiCuoc" style="width: 15%">
+                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.value}" />
                         </display:column>
-                        <display:column headerClass="table_header text-center" property="volume" sortable="false" class="text-center width_350_px" titleKey="packagedata.label.dungLuongMienPhi" style="width: 30%" />
-                        <display:column headerClass="table_header text-center" property="durationText" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
-                        <display:column headerClass="table_header text-center" property="numberOfExtend" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
-                        <display:column headerClass="table_header text-center" property="tk" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.tk" style="width: 7%" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="volume" sortable="false" class="text-center width_350_px" titleKey="packagedata.label.dungLuongMienPhi" style="width: 25%" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="durationText" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="numberOfExtend" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="tk" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.tk" style="width: 7%" />
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
+                        <display:column headerClass="table_header text-center vertical-middle" class="text-center width_200_px" titleKey="label.action" style="width: 10%">
+                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                            <c:if test="${tableList.generatedCardCode == false}">
+                                | <a class="tip-top" onclick="javascript: deletePackageData(${tableList.packageDataId});"><fmt:message key="label.delete" /></a>
+                            </c:if>
+                        </display:column>
                     </display:table>
                 </div>
             </div>
@@ -97,7 +112,7 @@
 
         var $tableContainer = $('#tableListContainer');
         if($tableContainer.length){
-            $('#tableList').addClass('mobile').width(1200);
+            $('#tableList').addClass('mobile').width(1400);
             $tableContainer.mCustomScrollbar({axis:"x"});
         }
     }
@@ -118,6 +133,13 @@
 
     function resetForm(){
         $("input[type='text']").val('');
-        selectFirstItemSelect2('#chonGoiCuoc');
+    }
+
+    function deletePackageData(packageDataId){
+        bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+            if(r){
+                document.location.href = '${formUrl}?pojo.packageDataId=' + packageDataId + '&crudaction=<%=Constants.ACTION_DELETE%>';
+            }
+        });
     }
 </script>

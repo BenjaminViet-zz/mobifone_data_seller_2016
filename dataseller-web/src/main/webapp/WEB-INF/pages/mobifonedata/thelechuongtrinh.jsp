@@ -89,11 +89,11 @@
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table text-center" style="margin: 1em 0 1.5em; width: 1024px;">
 
-                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 45px;" >
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 49px;" >
                                 ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                             </display:column>
                             <display:column headerClass="table_header text-center" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="width: 170px;"/>
-                            <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="125px;">
+                            <display:column headerClass="table_header text-center" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="width: 125px;">
                                 <fmt:formatNumber var="value" type='number' maxFractionDigits='0' value='${tableList.value}' />
                                 ${fn:replace(value, ',', '.')}
                             </display:column>
@@ -208,6 +208,7 @@
     </div>
 </section>
 
+<script src="<c:url value="/themes/admin/js/jquery.mask.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script type="text/javascript">
     $(document).ready(function(){

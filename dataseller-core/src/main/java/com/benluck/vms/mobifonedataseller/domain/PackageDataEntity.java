@@ -3,6 +3,7 @@ package com.benluck.vms.mobifonedataseller.domain;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +24,7 @@ public class PackageDataEntity {
     private String durationText;
     private Integer numberOfExtend;
     private String tk;
+    private List<PackageDataCodeGenEntity> packageDataCodeGenList;
 
     @Column(name = "PACKAGEDATAID")
     @Id
@@ -104,6 +106,16 @@ public class PackageDataEntity {
 
     public void setTk(String tk) {
         this.tk = tk;
+    }
+
+    @OneToMany(cascade=CascadeType.REMOVE, orphanRemoval = false)
+    @JoinColumn(name="PACKAGEDATAID", insertable = false, updatable = false)
+    public List<PackageDataCodeGenEntity> getPackageDataCodeGenList() {
+        return packageDataCodeGenList;
+    }
+
+    public void setPackageDataCodeGenList(List<PackageDataCodeGenEntity> packageDataCodeGenList) {
+        this.packageDataCodeGenList = packageDataCodeGenList;
     }
 
     @Override
