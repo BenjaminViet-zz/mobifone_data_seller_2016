@@ -127,8 +127,8 @@
                                     </c:choose>
                                 </display:column>
                                 <display:column headerClass="table_header text-center" class="text-center width_200_px" titleKey="label.action" style="width:15%;">
-                                    <a href="${editUrl}?pojo.userId=${tableList.userId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                                    | <a class="tip-top" onclick="javascript: deleteUser(${tableList.userId});"><fmt:message key="label.delete" /></a>
+                                    <a class="tip-top action-group btn-primary" data-toggle="tooltip" title="<fmt:message key="label.edit" />" href="${editUrl}?pojo.userId=${tableList.userId}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                     <a class="tip-top action-group btn-danger" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteUser(${tableList.userId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                 </display:column>
                                 <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
                                 <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
@@ -148,6 +148,7 @@
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
         initScrollablePane();
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
     function initScrollablePane(){

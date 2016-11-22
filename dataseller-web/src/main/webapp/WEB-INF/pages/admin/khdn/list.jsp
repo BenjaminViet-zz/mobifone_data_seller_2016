@@ -124,8 +124,8 @@
                         </display:column>
                         <display:column headerClass="table_header text-center" property="stb_vas" sortName="stb_vas" sortable="true" class="text-center" titleKey="admin.khdn.label.stb_vas" style="width: 200px;" />
                         <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:250px;">
-                            <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
-                            | <a class="tip-top" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><fmt:message key="label.delete" /></a>
+                            <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top action-group btn-primary" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                             <a class="tip-top action-group btn-danger" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                         </display:column>
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>--%>
@@ -141,6 +141,7 @@
     $(document).ready(function(){
         jQueryMaskNonThousandFormat();
         initScrollablePane();
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
     function initScrollablePane(){
