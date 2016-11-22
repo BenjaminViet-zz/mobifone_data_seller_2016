@@ -123,6 +123,8 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        var $codeInput = $('#code');
+        notAllowedEnterSpaceIn();
         $("#btnSave").click(function(){
             if($('#formEdit').valid()){
                 $("#formEdit").submit();
@@ -132,5 +134,15 @@
         $("input[type='checkbox'][class='js-switch']").change(function(){
             $(this).closest('tr').find("input[type='hidden']")
         });
+
+
+        function notAllowedEnterSpaceIn(){
+            $codeInput.on('keypress', function(e){
+                if ( e.which == 32 ) {
+                    return false;
+                }
+            })
+        }
     });
+
 </script>
