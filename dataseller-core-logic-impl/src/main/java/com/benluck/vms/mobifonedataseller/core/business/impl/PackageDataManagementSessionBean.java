@@ -74,6 +74,7 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
         dbItem.setDurationText(pojo.getDuration() + " Ngày");
         dbItem.setNumberOfExtend(pojo.getNumberOfExtend());
         dbItem.setTk(pojo.getTk());
+        dbItem.setCustomPrefixUnitPrice(pojo.getCustomPrefixUnitPrice() != null ? (pojo.getCustomPrefixUnitPrice().length() == 1 ? "0" + pojo.getCustomPrefixUnitPrice() : pojo.getCustomPrefixUnitPrice()) : null);
         this.packageDataService.update(dbItem);
     }
 
@@ -87,6 +88,7 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
         entity.setDurationText(pojo.getDuration() + " Ngày");
         entity.setNumberOfExtend(pojo.getNumberOfExtend());
         entity.setTk(pojo.getTk());
+        entity.setCustomPrefixUnitPrice(pojo.getCustomPrefixUnitPrice() != null ? (pojo.getCustomPrefixUnitPrice().length() == 1 ? "0" + pojo.getCustomPrefixUnitPrice() : pojo.getCustomPrefixUnitPrice()) : null);
         return PackageDataBeanUtil.entity2DTO(this.packageDataService.save(entity));
     }
 

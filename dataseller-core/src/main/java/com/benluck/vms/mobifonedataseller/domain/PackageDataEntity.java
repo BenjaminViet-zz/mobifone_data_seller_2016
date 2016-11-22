@@ -24,6 +24,7 @@ public class PackageDataEntity {
     private String durationText;
     private Integer numberOfExtend;
     private String tk;
+    private String customPrefixUnitPrice;
     private List<PackageDataCodeGenEntity> packageDataCodeGenList;
 
     @Column(name = "PACKAGEDATAID")
@@ -106,6 +107,16 @@ public class PackageDataEntity {
 
     public void setTk(String tk) {
         this.tk = tk;
+    }
+
+    @Column(name = "CUSTOM_PREFIX_UNIT_PRICE")
+    @Basic
+    public String getCustomPrefixUnitPrice() {
+        return customPrefixUnitPrice;
+    }
+
+    public void setCustomPrefixUnitPrice(String customPrefixUnitPrice) {
+        this.customPrefixUnitPrice = customPrefixUnitPrice;
     }
 
     @OneToMany(cascade=CascadeType.REMOVE, orphanRemoval = false)

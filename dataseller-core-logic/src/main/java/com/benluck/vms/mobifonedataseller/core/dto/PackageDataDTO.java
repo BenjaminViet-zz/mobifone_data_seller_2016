@@ -22,6 +22,7 @@ public class PackageDataDTO implements Serializable {
     private Integer numberOfExtend;
     private String tk;
     private Boolean isGeneratedCardCode = false;
+    private String customPrefixUnitPrice;
 
     public PackageDataDTO() {
     }
@@ -105,5 +106,13 @@ public class PackageDataDTO implements Serializable {
 
     public void setGeneratedCardCode(Boolean generatedCardCode) {
         isGeneratedCardCode = generatedCardCode;
+    }
+
+    public String getCustomPrefixUnitPrice() {
+        return customPrefixUnitPrice;
+    }
+
+    public void setCustomPrefixUnitPrice(String customPrefixUnitPrice) {
+        this.customPrefixUnitPrice = customPrefixUnitPrice;
     }
 }

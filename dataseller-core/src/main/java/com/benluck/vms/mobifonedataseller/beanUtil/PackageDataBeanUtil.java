@@ -24,6 +24,7 @@ public class PackageDataBeanUtil {
         dto.setDurationText(entity.getDurationText());
         dto.setNumberOfExtend(entity.getNumberOfExtend());
         dto.setTk(entity.getTk());
+        dto.setCustomPrefixUnitPrice(entity.getCustomPrefixUnitPrice());
 
         if(entity.getPackageDataCodeGenList() != null && entity.getPackageDataCodeGenList().size() > 0){
             dto.setGeneratedCardCode(true);

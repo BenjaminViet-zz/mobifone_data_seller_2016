@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.*;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
@@ -263,7 +264,13 @@ public class OrderController extends ApplicationObjectSupport{
                         updatedBy.setUserId(SecurityUtils.getLoginUserId());
                         pojo.setCreatedBy(updatedBy);
 
-                        String unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
+                        PackageDataDTO packageDataDTO = this.packageDataService.findById(pojo.getPackageData().getPackageDataId());
+                        String unitPriceCode = null;
+                        if(StringUtils.isNotBlank(packageDataDTO.getCustomPrefixUnitPrice())){
+                            unitPriceCode = packageDataDTO.getCustomPrefixUnitPrice();
+                        }else{
+                            unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
+                        }
 
                         if(unitPriceCode.length() > 2){
                             mav.addObject(Constants.ALERT_TYPE, "info");

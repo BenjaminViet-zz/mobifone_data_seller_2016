@@ -10,6 +10,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -75,7 +76,11 @@ public class TaskGenerateCardCode extends TimerTask{
                             Long packageDataId = Long.valueOf(packageDataIdStr);
                             PackageDataDTO packageDataDTO = this.packageDataService.findById(packageDataId);
 
-                            tmpUnitPriceCode = new StringBuilder(String.valueOf(packageDataDTO.getValue() / 1000).replaceAll("\\.\\d*", ""));
+                            if(StringUtils.isNotBlank(packageDataDTO.getCustomPrefixUnitPrice())){
+                                tmpUnitPriceCode = new StringBuilder(packageDataDTO.getCustomPrefixUnitPrice());
+                            }else{
+                                tmpUnitPriceCode = new StringBuilder(String.valueOf(packageDataDTO.getValue() / 1000).replaceAll("\\.\\d*", ""));
+                            }
 
                             if(tmpUnitPriceCode.toString().length() > 2){
                                 logger.error("The system does not support to generate Card Code for unit price larger than 100! ");
