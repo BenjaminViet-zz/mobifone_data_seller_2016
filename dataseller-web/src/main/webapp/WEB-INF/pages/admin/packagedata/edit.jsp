@@ -69,6 +69,14 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customPrefixUnitPrice"><fmt:message key="packagedata.label.prefix_card_code" />
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="customPrefixUnitPrice" type="text" name="pojo.customPrefixUnitPrice" min="0" max="99" class="form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.customPrefixUnitPrice}" /> " />
+                            <form:errors for="customPrefixUnitPrice" path="pojo.customPrefixUnitPrice" cssClass="error-inline-validate"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="volume"><fmt:message key="packagedata.label.dungLuongMienPhi" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -106,8 +114,8 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <form:select cssClass="form-control" id="generatedCardCode" path="pojo.generatedCardCode" cssStyle="width: 150px;">
-                                    <option <c:if test="${item.pojo.generatedCardCode eq true}">selected="true"</c:if> value="${true}"><fmt:message key="packagedata.label.yes" /></option>
-                                    <option <c:if test="${item.pojo.generatedCardCode eq false}">selected="true"</c:if> value="${false}"><fmt:message key="packagedata.label.no" /></option>
+                                    <option <c:if test="${item.pojo.generatedCardCode eq false}">selected="true"</c:if> value="false"><fmt:message key="packagedata.label.no" /></option>
+                                    <option <c:if test="${item.pojo.generatedCardCode eq true}">selected="true"</c:if> value="true"><fmt:message key="packagedata.label.yes" /></option>
                                 </form:select>
                             </div>
                         </div>

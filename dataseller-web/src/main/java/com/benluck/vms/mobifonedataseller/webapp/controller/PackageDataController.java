@@ -125,11 +125,13 @@ public class PackageDataController extends ApplicationObjectSupport{
                     if (!bindingResult.hasErrors()){
                         if (pojo.getPackageDataId() == null ){
                             command.setPojo(this.packageDataService.addItem(command.getPojo()));
+                            command.getPojo().setGeneratedCardCode(pojo.getGeneratedCardCode());
                             check2GenerateCardCode(command);
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                         } else {
                             this.packageDataService.updateItem(command.getPojo());
+                            command.getPojo().setGeneratedCardCode(pojo.getGeneratedCardCode());
                             check2GenerateCardCode(command);
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));

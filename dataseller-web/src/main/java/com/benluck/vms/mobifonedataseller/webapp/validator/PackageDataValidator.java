@@ -43,6 +43,7 @@ public class PackageDataValidator extends ApplicationObjectSupport implements Va
         }else{
             checkRequiredFields(command, errors);
             checkUnique(command, errors);
+            checkCustomPrefixUnitPrice(command,errors);
         }
     }
 
@@ -82,6 +83,16 @@ public class PackageDataValidator extends ApplicationObjectSupport implements Va
         Integer countUsage = this.packageDataService.findUsageBeforeDelete(command.getPojo().getPackageDataId());
         if(countUsage.intValue() > 0){
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage("packagedata.used_to_generate_card_code"));
+        }
+    }
+
+    private void checkCustomPrefixUnitPrice(PackageDataCommand command, Errors errors){
+        if(StringUtils.isNotBlank(command.getPojo().getCustomPrefixUnitPrice())){
+            try{
+                Integer.valueOf(command.getPojo().getCustomPrefixUnitPrice());
+            }catch (NumberFormatException nfe){
+                errors.rejectValue("pojo.customPrefixUnitPrice", "packagedata.only_number_allowed_for_custom_prefix_unit_price");
+            }
         }
     }
 }
