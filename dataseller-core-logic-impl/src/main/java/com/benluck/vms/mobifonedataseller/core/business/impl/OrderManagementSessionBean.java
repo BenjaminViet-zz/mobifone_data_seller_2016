@@ -134,15 +134,15 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
 
         StringBuilder tmpEncodedCardCode = null;
         StringBuilder serial = null;
-        StringBuilder tmpCodecodeCardCode = null;
+        StringBuilder tmpCardCode = null;
         Iterator<String> ito = cardCodeHashSetList2Store.iterator();
 
         while (ito.hasNext()){
             tmpEncodedCardCode = new StringBuilder(ito.next());
-            tmpCodecodeCardCode = new StringBuilder(MobiFoneSecurityBase64Util.decode(tmpEncodedCardCode.toString()));
+            tmpCardCode = new StringBuilder(MobiFoneSecurityBase64Util.decode(tmpEncodedCardCode.toString()));
 
             // Take same 5 characters in Card Code.
-            serial = new StringBuilder(tmpCodecodeCardCode.toString().substring(0, 5));
+            serial = new StringBuilder(tmpCardCode.toString().substring(0, 5));
 
             // Generate full Serial.
             if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){

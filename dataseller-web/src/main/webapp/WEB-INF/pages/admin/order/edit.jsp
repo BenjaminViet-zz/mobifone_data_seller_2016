@@ -175,6 +175,12 @@
         </c:forEach>
     </c:if>
 
+    $(document).ready(function(){
+        storeDOMData();
+        bindMask();
+        bindEvent();
+    });
+
     function checkPackageDataCardCodeGeneration(){
         <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
             var selectedPackageDataId = $('#packageData').val();
@@ -191,19 +197,6 @@
             }
         </c:if>
     }
-
-    $("#btnSave").click(function(e){
-        var statusVal = $('#status').val();
-        if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
-            bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
-                if(r && $('#formEdit').valid() ){
-                    $("#formEdit").submit();
-                }
-            });
-        }else{
-            $("#formEdit").submit();
-        }
-    });
 
     function updateTotalPaidPackageRemainingValue(){
         var $khdnSelectMenu =  $('#KHDN');
@@ -224,11 +217,17 @@
         });
     }
 
-    function storeKHDN_ISDN(){
+    function storeDOMData(){
         $('#KHDN').find("option:not(:first-child)").each(function(index, el){
             var $optEl = $(el);
             $optEl.data("isdn", $optEl.attr('data-isdn')).removeAttr('data-isdn');
         });
+
+        $('option:not(:first-child)', '#packageData').each(function(idx, el){
+            $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
+        });
+
+        $('#orderId').data("remainingBalance", '${remainingBalance}');
     }
 
     function checkOrderCost(){
@@ -252,25 +251,12 @@
         }
     }
 
-    $(document).ready(function(){
-        storeKHDN_ISDN();
-
+    function bindMask(){
         var $totalEl = $('.calcOrderTotal');
         $totalEl.val(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
         $totalEl.mask('000,000,000,000,000,000', {
             reverse: true
         });
-
-
-        /*-------------------------------*/
-        /* Calculator order total*/
-        /*-------------------------------*/
-        jQueryMask();
-
-        /* Replace with comma thousand */
-        function numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
 
         $('#quantity').keyup(function() {
             $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
@@ -287,23 +273,20 @@
             $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
             /*jQueryMask();*/
         });
+    }
 
-        /*-------------------------------*/
-        /* //Calculator order total*/
-        /*-------------------------------*/
-
-
-
-
-
-
-
-
-
-        $('option:not(:first-child)', '#packageData').each(function(idx, el){
-            $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
+    function bindEvent(){
+        $("#btnSave").click(function(e){
+            var statusVal = $('#status').val();
+            if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
+                bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                    if(r && $('#formEdit').valid() ){
+                        $("#formEdit").submit();
+                    }
+                });
+            }else{
+                $("#formEdit").submit();
+            }
         });
-        
-        $('#orderId').data("remainingBalance", '${remainingBalance}');
-    });
+    }
 </script>

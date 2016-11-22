@@ -54,4 +54,14 @@ public class PackageDataSessionBean extends AbstractSessionBean<PackageDataEntit
         Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("year", year);
         return (List<Long>)query.getResultList();
     }
+
+    @Override
+    public Integer findUsageBeforeDelete(Long packageDataId) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT (SELECT COUNT(o.orderId) FROM MOBI_DATA_ORDER o WHERE o.packageDataId = p.packageDataId) + ")
+                .append("           (SELECT COUNT(pdcg.packageDataCodeGenId) FROM MOBI_DATA_PACKAGEDATA_CODE_GEN pdcg WHERE pdcg.packageDataId = p.packageDataId ) ")
+                .append(" FROM MOBI_DATA_PACKAGE_DATA p WHERE p.packageDataId = :packageDataId ");
+        Query query = entityManager.createNativeQuery(sqlQuery.toString()).setParameter("packageDataId", packageDataId);
+        return Integer.valueOf(query.getSingleResult().toString());
+    }
 }

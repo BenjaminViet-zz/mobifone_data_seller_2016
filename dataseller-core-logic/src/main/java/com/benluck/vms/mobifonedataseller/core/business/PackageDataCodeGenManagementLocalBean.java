@@ -22,7 +22,7 @@ public interface PackageDataCodeGenManagementLocalBean {
 
     void insertUpdatePackageDataCodeGenAndBatch(Long packageDataId, Integer year, Integer batchIndex, Integer numberOfCardCodesGeneratedOrRemain, Boolean isLastBatchGenerated) throws ObjectNotFoundException, DuplicateKeyException, Exception;
 
-    void updateProcessing(Integer year, String[] packageDataIds, Integer statusCode) throws ObjectNotFoundException, DuplicateKeyException;
+    void AddOrUpdateProcessing(Integer year, String[] packageDataIds, Integer statusCode) throws ObjectNotFoundException, DuplicateKeyException;
 
     PackageDataCodeGenDTO findByUniqueCompositeKey(Long packageDataId, Integer year) throws ObjectNotFoundException;
 

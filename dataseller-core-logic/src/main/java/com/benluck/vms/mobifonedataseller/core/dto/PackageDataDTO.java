@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +21,7 @@ public class PackageDataDTO implements Serializable {
     private String durationText;
     private Integer numberOfExtend;
     private String tk;
+    private Boolean isGeneratedCardCode = false;
 
     public PackageDataDTO() {
     }
@@ -95,5 +97,13 @@ public class PackageDataDTO implements Serializable {
 
     public void setTk(String tk) {
         this.tk = tk;
+    }
+
+    public Boolean getGeneratedCardCode() {
+        return isGeneratedCardCode;
+    }
+
+    public void setGeneratedCardCode(Boolean generatedCardCode) {
+        isGeneratedCardCode = generatedCardCode;
     }
 }

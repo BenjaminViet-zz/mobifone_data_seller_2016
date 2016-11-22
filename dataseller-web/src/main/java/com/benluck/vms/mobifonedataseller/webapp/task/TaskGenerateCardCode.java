@@ -96,7 +96,7 @@ public class TaskGenerateCardCode extends TimerTask{
                                 tmpCardCodeHS = generateCardCode(yearCode, tmpUnitPriceCode.toString(), batchIndex);
 
                                 logger.info("Saving batch " + batchIndex + " with " + tmpCardCodeHS.size() + " Card Codes.");
-                                this.packageCodeDataGenService.insertUpdatePackageDataCodeGenAndBatch(Long.valueOf(packageDataId), year, batchIndex, tmpCardCodeHS.size(), (batchIndex == 0 ? true : false));
+                                this.packageCodeDataGenService.insertUpdatePackageDataCodeGenAndBatch(packageDataId, year, batchIndex, tmpCardCodeHS.size(), (batchIndex == 0 ? true : false));
                                 logger.info("Saved batch " + batchIndex + " into PackageDataCodeGen table for tracking");
 
                                 logger.info("Saving batch "  + batchIndex + " to Redis Database");
@@ -127,7 +127,7 @@ public class TaskGenerateCardCode extends TimerTask{
             logger.info("================FINISH GENERATION CARD CODE TASK================");
         }else{
             try{
-                this.packageCodeDataGenService.updateProcessing(year, packageDataIds, Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED);
+                this.packageCodeDataGenService.AddOrUpdateProcessing(year, packageDataIds, Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED);
                 createNotificationMessage(false, null);
             }catch (Exception e){
                 createNotificationMessage(false, null);

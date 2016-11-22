@@ -6,9 +6,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 import com.benluck.vms.mobifonedataseller.domain.PackageDataEntity;
 import com.benluck.vms.mobifonedataseller.session.PackageDataLocalBean;
 
-import javax.ejb.EJB;
-import javax.ejb.ObjectNotFoundException;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import java.util.List;
 import java.util.Map;
 
@@ -59,5 +57,46 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
     @Override
     public List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year) {
         return this.packageDataService.findPackageDataIdListHasGeneratedCardCode(year);
+    }
+
+    @Override
+    public PackageDataDTO findEqualUnique(String propertyName, String propertyValue) throws ObjectNotFoundException {
+        return PackageDataBeanUtil.entity2DTO(this.packageDataService.findEqualUnique(propertyName, propertyValue));
+    }
+
+    @Override
+    public void updateItem(PackageDataDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
+        PackageDataEntity dbItem = this.packageDataService.findById(pojo.getPackageDataId());
+        dbItem.setName(pojo.getName());
+        dbItem.setValue(pojo.getValue());
+        dbItem.setVolume(pojo.getVolume());
+        dbItem.setDuration(pojo.getDuration());
+        dbItem.setDurationText(pojo.getDuration() + " Ngày");
+        dbItem.setNumberOfExtend(pojo.getNumberOfExtend());
+        dbItem.setTk(pojo.getTk());
+        this.packageDataService.update(dbItem);
+    }
+
+    @Override
+    public PackageDataDTO addItem(PackageDataDTO pojo) throws DuplicateKeyException {
+        PackageDataEntity entity = new PackageDataEntity();
+        entity.setName(pojo.getName());
+        entity.setValue(pojo.getValue());
+        entity.setVolume(pojo.getVolume());
+        entity.setDuration(pojo.getDuration());
+        entity.setDurationText(pojo.getDuration() + " Ngày");
+        entity.setNumberOfExtend(pojo.getNumberOfExtend());
+        entity.setTk(pojo.getTk());
+        return PackageDataBeanUtil.entity2DTO(this.packageDataService.save(entity));
+    }
+
+    @Override
+    public Integer findUsageBeforeDelete(Long packageDataId) {
+        return this.packageDataService.findUsageBeforeDelete(packageDataId);
+    }
+
+    @Override
+    public void deleteItem(Long packageDataId) throws RemoveException {
+        this.packageDataService.delete(packageDataId);
     }
 }
