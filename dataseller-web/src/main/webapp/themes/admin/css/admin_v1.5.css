@@ -345,8 +345,8 @@ ul.to_do,
 }
 
 .add-on-attach + span#password-error {
-    position: relative !important;
-    left: 53px !important;
+    /*position: relative !important;
+    left: 53px !important;*/
     top: 0 !important;
 }
 

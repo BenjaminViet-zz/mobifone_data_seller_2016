@@ -106,7 +106,7 @@
                             </div>
                         </div>
                         <div id="step-2" style="width: 100%; min-height: 500px;">
-                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1650px;">
+                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="width: 1650px; margin: 1em 0 1.5em">
                                 <thead>
                                     <tr>
                                         <th class="table_header text-center"><fmt:message key="label.stt" /></th>
@@ -161,7 +161,7 @@
 </div>
 
 <!-- jQuery Smart Wizard -->
-<script src="<c:url value="/themes/newteample/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js" />"></script>
+<script src="<c:url value="/themes/newteample/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard_v1.1.js" />"></script>
 <script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
     var curStepIndex = ${item.stepImportIndex};
@@ -197,6 +197,9 @@
     function handleButtons(){
         // check step index == 1
         // add class 'hide' on step content 1
+        if ( curStepIndex == ${Constants.IMPORT_ORDER_STEP_2_UPLOAD} ) {
+            $('#step-1').addClass('hidden');
+        }
 
         var $wizardForm = $('#wizard');
         $wizardForm.smartWizard({
@@ -213,11 +216,11 @@
             isShowNextButton(false);
 
         } else if( curStepIndex == ${Constants.IMPORT_ORDER_STEP_2_UPLOAD} ){
-
             // trigger click on button Next to go to Step 2
             $buttonNext.trigger('click');
 
             // remove class hide in step 1
+            $('#step-1').removeClass('hidden');
             // to do code here
 
             if(${not empty item.errorMessage}){
@@ -235,10 +238,11 @@
                                 type: "GET",
                                 dataType: "json",
                                 success: function(res){
-                                    if(!res.r){
+                                    if( !res.r ){
                                         bootbox.alert('<fmt:message key="import.popup.title" />', (res.msg != null ? res.msg : '<fmt:message key="import.unknown_error" />'), function(){});
-                                    }else{
+                                    } else{
                                         // REDIRECT TO import page for step 1.
+                                        document.location.href = '${formUrl}';
                                     }
                                 }
                             });
@@ -249,19 +253,19 @@
         }
 
         $buttonNext.on('click', function(e){
-            console.log(curStepIndex);
             if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
                 e.stopPropagation();
                 e.preventDefault();
-
                 $('#crudaction').val('${Constants.ACTION_UPLOAD}');
                 $('#listForm').submit();
+            } else {
+                curStepIndex++;
             }
         });
 
         // handle button previous
         $buttonPrev.on('click', function(){
-            if(!$buttonFinish.hasClass('buttonDisabled')){
+            if( !$buttonFinish.hasClass('buttonDisabled') ){
                 $buttonFinish.addClass('buttonDisabled');
             }
             curStepIndex--;
@@ -273,10 +277,10 @@
 
     /**
     *   Disable or enable button next.
-    * @param flag True: disable, else enables
+    * @param flag True: enable, else disable
     */
     function isShowNextButton(flag){
-        if(!flag){
+        if( !flag ){
             $buttonNext.addClass('buttonDisabled')
                     .data('prevent-goforward', true);
         }else{

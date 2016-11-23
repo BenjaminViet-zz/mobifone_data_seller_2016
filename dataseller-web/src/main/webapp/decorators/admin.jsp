@@ -43,7 +43,7 @@
     <!-- Custom Theme Style -->
     <link href="<c:url value="/themes/newteample/content/css/custom_v1.2.css" />" rel="stylesheet" />
 
-    <link href="<c:url value="/themes/admin/css/admin_v1.4.css" />" rel="stylesheet" />
+    <link href="<c:url value="/themes/admin/css/admin_v1.5.css" />" rel="stylesheet" />
 
     <!-- jQuery -->
     <script src="<c:url value="/themes/admin/js/jquery-1.11.1.min.js" />"></script>

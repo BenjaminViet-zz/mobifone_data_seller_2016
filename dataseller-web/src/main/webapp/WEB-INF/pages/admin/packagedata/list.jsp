@@ -86,9 +86,9 @@
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
                         <display:column headerClass="table_header text-center vertical-middle" class="text-center width_200_px" titleKey="label.action" style="width: 10%">
-                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" title="<fmt:message key="label.edit" />"><fmt:message key="label.edit" /></a>
+                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                             <c:if test="${tableList.generatedCardCode == false}">
-                                | <a class="tip-top" onclick="javascript: deletePackageData(${tableList.packageDataId});"><fmt:message key="label.delete" /></a>
+                                | <a class="tip-top action-group" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </c:if>
                         </display:column>
                     </display:table>
