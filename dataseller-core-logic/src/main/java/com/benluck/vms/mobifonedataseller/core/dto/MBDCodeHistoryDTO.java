@@ -22,6 +22,10 @@ public class MBDCodeHistoryDTO implements Serializable{
     private Timestamp staDateTime;
     private String tin;
     private Timestamp insertDateTime;
+    private Timestamp regDateTimeFrom;
+    private Timestamp regDateTimeTo;
+    private Timestamp staDateTimeTo;
+    private Timestamp staDateTimeFrom;
 
     public Long getTransId() {
         return transId;
@@ -93,5 +97,37 @@ public class MBDCodeHistoryDTO implements Serializable{
 
     public void setInsertDateTime(Timestamp insertDateTime) {
         this.insertDateTime = insertDateTime;
+    }
+
+    public Timestamp getRegDateTimeFrom() {
+        return regDateTimeFrom;
+    }
+
+    public void setRegDateTimeFrom(Timestamp regDateTimeFrom) {
+        this.regDateTimeFrom = regDateTimeFrom;
+    }
+
+    public Timestamp getRegDateTimeTo() {
+        return regDateTimeTo;
+    }
+
+    public void setRegDateTimeTo(Timestamp regDateTimeTo) {
+        this.regDateTimeTo = regDateTimeTo;
+    }
+
+    public Timestamp getStaDateTimeTo() {
+        return staDateTimeTo;
+    }
+
+    public void setStaDateTimeTo(Timestamp staDateTimeTo) {
+        this.staDateTimeTo = staDateTimeTo;
+    }
+
+    public Timestamp getStaDateTimeFrom() {
+        return staDateTimeFrom;
+    }
+
+    public void setStaDateTimeFrom(Timestamp staDateTimeFrom) {
+        this.staDateTimeFrom = staDateTimeFrom;
     }
 }

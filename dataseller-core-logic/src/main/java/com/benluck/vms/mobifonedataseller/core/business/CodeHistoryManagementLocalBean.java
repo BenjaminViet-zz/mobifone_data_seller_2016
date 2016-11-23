@@ -15,4 +15,5 @@ public interface CodeHistoryManagementLocalBean {
 
     Double calculateTotalPaidPackageValue(String isdn);
 
+    Object[] searchPaymentHistoryByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

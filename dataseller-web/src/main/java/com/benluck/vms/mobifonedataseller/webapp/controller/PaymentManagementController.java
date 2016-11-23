@@ -59,7 +59,7 @@ public class PaymentManagementController extends ApplicationObjectSupport{
             throw new ForBiddenException();
         }
 
-        ModelAndView mav = new ModelAndView("/admin/payment/management");
+        ModelAndView mav = new ModelAndView("/admin/expensepayment/management");
         String action = command.getCrudaction();
 
         if(StringUtils.isNotBlank(action)  ){

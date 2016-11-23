@@ -2,16 +2,14 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
-import com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.MBDCostInfoDTO;
+import com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.MBDCodeHistoryDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
-import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
-import com.benluck.vms.mobifonedataseller.webapp.command.MBDCostCommand;
+import com.benluck.vms.mobifonedataseller.webapp.command.MBDCodeHistoryCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
-import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Alignment;
@@ -25,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,36 +39,38 @@ import java.util.Map;
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
- * Date: 11/11/16
- * Time: 19:41
+ * Date: 11/15/16
+ * Time: 21:14
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-public class PaymentHistoryListController extends ApplicationObjectSupport{
-    private Logger logger = Logger.getLogger(PaymentHistoryListController.class);
-    private final Integer TOTAL_COLUMN_EXPORT = 19;
-
-    @Autowired
-    private MBDCostManagementLocalBean costService;
+public class PaymentHistoryController extends ApplicationObjectSupport{
+    private Logger logger = Logger.getLogger(PaymentHistoryController.class);
+    private final Integer TOTAL_COLUMN_EXPORT = 6;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping(value = {"/admin/payment/history.html", "/user/payment/history.html"})
-    public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCostCommand command,
-                             HttpServletRequest request,
-                             HttpServletResponse response){
+    @Autowired
+    private CodeHistoryManagementLocalBean codeHistoryService;
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/history.html page. ACCESS DENIED FOR BIDDEN!");
-            throw new ForBiddenException();
-        }
+    @RequestMapping(value = {"/ajax/calculateTotalPaidPackageValue.html"})
+    public @ResponseBody Map calculateTotalPaidPackageValue(@RequestParam(value = "isdn", required = true) String isdn){
+        Map<String, Object> mapRes = new HashMap<>();
 
-        ModelAndView mav = new ModelAndView("/admin/payment/history");
+        mapRes.put("value", this.codeHistoryService.calculateTotalPaidPackageValue(isdn));
+
+        return mapRes;
+    }
+
+    @RequestMapping(value = {"/admin/payment/payment-history.html", "/user/payment/payment-history.html"})
+    public ModelAndView paymentHistory(@ModelAttribute(value = Constants.FORM_MODEL_KEY) MBDCodeHistoryCommand command,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response){
+        ModelAndView mav = new ModelAndView("/admin/paymenthistory/history");
         String action = command.getCrudaction();
-
         if(StringUtils.isNotBlank(action)){
             if(action.equals(Constants.ACTION_EXPORT)){
                 try{
@@ -88,61 +86,65 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
                 mav.addObject(Constants.LIST_MODEL_KEY, command);
             }
         }
-
         return mav;
     }
 
-    private void executeSearch(MBDCostCommand command, HttpServletRequest request){
+    private void executeSearch(MBDCodeHistoryCommand command, HttpServletRequest request){
         RequestUtil.initSearchBean(request, command);
 
         Map<String, Object> properties = buildProperties(command);
-        command.setSortExpression("issue_month");
+        command.setSortExpression("staDateTime");
         command.setSortDirection(Constants.SORT_DESC);
 
-        Object[] resultObject = this.costService.searchPaymentListByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
+        Object[] resultObject = this.codeHistoryService.searchPaymentHistoryByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
-        command.setListResult((List<MBDCostInfoDTO>)resultObject[1]);
+        command.setListResult((List<MBDCodeHistoryDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
-    private void convertDate2Timestamp(MBDCostCommand command){
-        if(command.getPaymentDate() != null){
-            command.getPojo().setPaymentDate(DateUtil.dateToTimestamp(command.getPaymentDate(), Constants.VI_DATE_FORMAT));
+    private void convertDate2Timestamp(MBDCodeHistoryCommand command){
+        if(command.getRegDateFrom() != null){
+            command.getPojo().setRegDateTimeFrom(DateUtil.dateToTimestamp(command.getRegDateFrom(), Constants.VI_DATE_FORMAT));
+        }
+        if(command.getRegDateTo() != null){
+            command.getPojo().setRegDateTimeTo(DateUtil.dateToTimestamp(command.getRegDateTo(), Constants.VI_DATE_FORMAT));
         }
         if(command.getStaDateFrom() != null){
-            command.getPojo().setStaDateFrom(DateUtil.dateToTimestamp(command.getStaDateFrom(), Constants.VI_DATE_FORMAT));
+            command.getPojo().setStaDateTimeFrom(DateUtil.dateToTimestamp(command.getStaDateFrom(), Constants.VI_DATE_FORMAT));
         }
         if(command.getStaDateTo() != null){
-            command.getPojo().setStaDateTo(DateUtil.dateToTimestamp(command.getStaDateTo(), Constants.VI_DATE_FORMAT));
+            command.getPojo().setStaDateTimeTo(DateUtil.dateToTimestamp(command.getStaDateTo(), Constants.VI_DATE_FORMAT));
         }
     }
 
-    private Map<String, Object> buildProperties(MBDCostCommand command){
-        MBDCostInfoDTO pojo = command.getPojo();
+    private Map<String, Object> buildProperties(MBDCodeHistoryCommand command){
+        MBDCodeHistoryDTO pojo = command.getPojo();
         Map<String, Object> properties = new HashMap<String, Object>();
 
         convertDate2Timestamp(command);
 
-        if(pojo.getStaDateFrom() != null){
-            properties.put("staDateTimeFrom", pojo.getStaDateFrom());
+        if(pojo.getRegDateTimeFrom() != null){
+            properties.put("regDateTimeFrom", pojo.getRegDateTimeFrom());
         }
-        if(pojo.getStaDateFrom() != null){
-            properties.put("staDateTimeTo", pojo.getStaDateTo());
+        if(pojo.getRegDateTimeTo() != null){
+            properties.put("regDateTimeTo", pojo.getRegDateTimeTo());
         }
-        if(StringUtils.isNotBlank(pojo.getName())){
-            properties.put("name", pojo.getName().trim());
+        if(pojo.getStaDateTimeFrom() != null){
+            properties.put("staDateTimeFrom", pojo.getStaDateTimeFrom());
+        }
+        if(pojo.getStaDateTimeTo() != null){
+            properties.put("staDateTimeTo", pojo.getStaDateTimeTo());
         }
         if(StringUtils.isNotBlank(pojo.getIsdn())){
             properties.put("isdn", pojo.getIsdn().trim());
         }
-        if(StringUtils.isNotBlank(pojo.getShopCode())){
-            properties.put("shopCode", pojo.getShopCode().trim());
+        if(StringUtils.isNotBlank(pojo.getTin())){
+            properties.put("tin", pojo.getTin().trim());
         }
-        properties.put("paymentStatus", Constants.COST_PAYMENT_PAID);
         return properties;
     }
 
-    private void export2Excel(MBDCostCommand command, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    private void export2Excel(MBDCodeHistoryCommand command, HttpServletRequest request, HttpServletResponse response) throws Exception{
         SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         String exportDate = df.format(currentTimestamp);
@@ -151,16 +153,16 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
         command.setSortExpression("issue_month");
         command.setSortDirection(Constants.SORT_DESC);
 
-        Object[] resultObject = this.costService.searchPaymentListByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
-        List<MBDCostInfoDTO> dtoList = (List<MBDCostInfoDTO>)resultObject[1];
+        Object[] resultObject = this.codeHistoryService.searchPaymentHistoryByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems());
+        List<MBDCodeHistoryDTO> dtoList = (List<MBDCodeHistoryDTO>)resultObject[1];
 
         if(dtoList.size() == 0){
             logger.error("Error happened when fetching payment history.");
             throw new Exception("Error happened when fetching payment history.");
         }
 
-        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/lich_su_chi_tra.xls");
-        String outputFileName = "/files/temp/export/lich_su_chi_tra_" + exportDate + ".xls";
+        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/lich_su_thanh_toan.xls");
+        String outputFileName = "/files/temp/export/lich_su_thanh_toan_" + exportDate + ".xls";
         String export2FileName = request.getSession().getServletContext().getRealPath(outputFileName);
         WorkbookSettings ws = new WorkbookSettings();
         ExcelUtil.setEncoding4Workbook(ws);
@@ -193,7 +195,7 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
 
         if(dtoList.size() > 0){
             int indexRow = 1;
-            for(MBDCostInfoDTO dto : dtoList){
+            for(MBDCodeHistoryDTO dto : dtoList){
                 CellValue[] resValue = addCellValues(dto, indexRow);
                 ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
                 indexRow++;
@@ -203,29 +205,16 @@ public class PaymentHistoryListController extends ApplicationObjectSupport{
             response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
         }
     }
-    private CellValue[] addCellValues(MBDCostInfoDTO dto, int indexRow){
+    private CellValue[] addCellValues(MBDCodeHistoryDTO dto, int indexRow){
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, this.getMessageSourceAccessor().getMessage("payment.manager.table.payment_status_paid"));
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getPaymentDate()));
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getShopCode().toString());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getShopName().toString());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getIsdn().toString());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getName());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getEmpCode());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getBusType());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getCustType());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getIsdn());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getName().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getTin().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getRegDateTime()));
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getStaDateTime()));
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getActStatus());
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getIssueMonth()));
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getDevelopmentAmount1());
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getDevelopmentAmount2());
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getDevelopmentAmount3());
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getMaintainAmount1());
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getMaintainAmount2());
-        resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getMaintainAmount3());
         return resValue;
     }
 }
