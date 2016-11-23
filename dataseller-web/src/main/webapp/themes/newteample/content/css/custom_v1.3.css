@@ -4610,6 +4610,7 @@ fieldset {
     margin-top: 10px;
 }
 
+.disableBtnFinish,
 .actionBar .buttonDisabled {
     cursor: not-allowed;
     pointer-events: none;

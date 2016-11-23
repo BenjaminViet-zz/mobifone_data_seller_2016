@@ -265,9 +265,7 @@
 
         // handle button previous
         $buttonPrev.on('click', function(){
-            if( !$buttonFinish.hasClass('buttonDisabled') ){
-                $buttonFinish.addClass('buttonDisabled');
-            }
+            $buttonFinish.addClass('disableBtnFinish');
             curStepIndex--;
             if(curStepIndex == ${Constants.IMPORT_ORDER_STEP_1_CHOOSE_FILE}){
                 isShowNextButton(false);
