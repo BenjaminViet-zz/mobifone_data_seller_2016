@@ -7,6 +7,7 @@ import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,5 +29,10 @@ public class OrderDataCodeManagementSessionBean implements OrderDataCodeManageme
     @Override
     public List<OrderDataCodeDTO> fetchByOrderId(Long orderId) {
         return OrderDataCodeBeanUtil.entityList2DTOList(this.orderDataCodeService.findProperty("order.orderId", orderId));
+    }
+
+    @Override
+    public List<String> findListCardCodeByOrder(Long orderId) {
+        return (List<String>) this.orderDataCodeService.findListCardCodeByOrder(orderId);
     }
 }

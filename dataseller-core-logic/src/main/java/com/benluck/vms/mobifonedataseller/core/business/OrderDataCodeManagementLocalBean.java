@@ -17,4 +17,5 @@ public interface OrderDataCodeManagementLocalBean{
 
     List<OrderDataCodeDTO> fetchByOrderId(Long orderId);
 
+    List<String> findListCardCodeByOrder(Long orderId);
 }
