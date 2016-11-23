@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.MBDCodeHistoryEntity;
 
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
@@ -13,4 +15,5 @@ public interface CodeHistoryLocalBean extends GenericSessionBean<MBDCodeHistoryE
 
     Double calculateTotalPaidPackageValue(String isdn);
 
+    Object[] searchPaymentHistoryByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

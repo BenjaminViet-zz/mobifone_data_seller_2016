@@ -77,8 +77,9 @@
                     <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'EXPENSE_MANAGER')">
                         <li><a><i class="fa fa-money" aria-hidden="true"></i> <fmt:message key="cost.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
+                                <li><a href="<c:url value="${prefix}/payment/payment-history.html"/> "><fmt:message key="left_nav_payment_history" /> </a></li>
                                 <li><a href="<c:url value="${prefix}/payment/management.html"/> "><fmt:message key="left_nav_payment_fee" /> </a></li>
-                                <li><a href="<c:url value="${prefix}/payment/history.html"/> "><fmt:message key="left_nav_payment_history" /></a></li>
+                                <li><a href="<c:url value="${prefix}/payment/expense-payment-history.html"/> "><fmt:message key="left_nav_expense_payment_history" /></a></li>
                             </ul>
                         </li>
                     </security:authorize>

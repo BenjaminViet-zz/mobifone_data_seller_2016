@@ -226,8 +226,8 @@
                                         <fmt:formatNumber type="number" value="${tableList.maintainAmount3}" />
                                     </display:column>
 
-                                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.payment.item" /></display:setProperty>
-                                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.payment.item" /></display:setProperty>
+                                    <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expensepayment.item" /></display:setProperty>
+                                    <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expensepayment.item" /></display:setProperty>
                                 </display:table>
                             </div>
                         </c:when>

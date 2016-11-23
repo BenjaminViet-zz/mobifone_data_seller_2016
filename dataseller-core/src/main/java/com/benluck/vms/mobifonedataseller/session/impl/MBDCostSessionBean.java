@@ -50,13 +50,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
 
         Query query = entityManager.createNativeQuery(sqlQuery.toString());
         if(properties.get("shopCode") != null){
-            query.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+            query.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("empCode") != null){
-            query.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+            query.setParameter("empCode", "%" + properties.get("empCode").toString() + "%");
         }
         if(properties.get("isdn") != null){
-            query.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+            query.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if(properties.get("issuedDateTimeFrom") != null){
             query.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
@@ -73,13 +73,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         sqlCountQuery.append(" SELECT COUNT(CostID) ").append(sqlMainQuery.toString());
         Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString());
         if(properties.get("shopCode") != null){
-            countQuery.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+            countQuery.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("empCode") != null){
-            countQuery.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+            countQuery.setParameter("empCode", "%" + properties.get("empCode").toString() + "%");
         }
         if(properties.get("isdn") != null){
-            countQuery.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+            countQuery.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if(properties.get("issuedDateTimeFrom") != null){
             countQuery.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
@@ -124,13 +124,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
 
         Query query = entityManager.createNativeQuery(sqlQuery.toString());
         if(properties.get("shopCode") != null){
-            query.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+            query.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("empCode") != null){
-            query.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+            query.setParameter("empCode", "%" + properties.get("empCode").toString() + "%");
         }
         if(properties.get("isdn") != null){
-            query.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+            query.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if(properties.get("issuedDateTimeFrom") != null){
             query.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
@@ -148,13 +148,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         sqlCountQuery.append(" SELECT COUNT(CostID) ").append(sqlMainQuery.toString());
         Query countQuery = entityManager.createNativeQuery(sqlCountQuery.toString());
         if(properties.get("shopCode") != null){
-            countQuery.setParameter("shopCode", "'%" + properties.get("shopCode").toString() + "%'");
+            countQuery.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("empCode") != null){
-            countQuery.setParameter("empCode", "'%" + properties.get("empCode").toString() + "%'");
+            countQuery.setParameter("empCode", "%" + properties.get("empCode").toString() + "%");
         }
         if(properties.get("isdn") != null){
-            countQuery.setParameter("isdn", "'%" + properties.get("isdn").toString() + "%'");
+            countQuery.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if(properties.get("issuedDateTimeFrom") != null){
             countQuery.setParameter("issuedDateTimeFrom", properties.get("issuedDateTimeFrom").toString());
@@ -208,13 +208,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         Query query = entityManager.createNativeQuery(sqlQuery.toString());
         query.setParameter("paymentStatus", properties.get("paymentStatus".toString()));
         if(properties.get("isdn") != null){
-            query.setParameter("isdn", "%'" + properties.get("isdn").toString() + "%'");
+            query.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if (properties.get("name") != null){
-            query.setParameter("name", "%'" + properties.get("name").toString() + "%'");
+            query.setParameter("name", "%" + properties.get("name").toString() + "%");
         }
         if(properties.get("shopCode") != null){
-            query.setParameter("shopCode", "%'" + properties.get("shopCode").toString() + "%'");
+            query.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("staDateTimeFrom") != null){
             query.setParameter("staDateTimeFrom", properties.get("staDateTimeFrom").toString());
@@ -233,13 +233,13 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         Query countQuery = entityManager.createNativeQuery(sqlCount.toString());
         countQuery.setParameter("paymentStatus", properties.get("paymentStatus".toString()));
         if(properties.get("isdn") != null){
-            countQuery.setParameter("isdn", "%'" + properties.get("isdn").toString() + "%'");
+            countQuery.setParameter("isdn", "%" + properties.get("isdn").toString() + "%");
         }
         if (properties.get("name") != null){
-            countQuery.setParameter("name", "%'" + properties.get("name").toString() + "%'");
+            countQuery.setParameter("name", "%" + properties.get("name").toString() + "%");
         }
         if(properties.get("shopCode") != null){
-            countQuery.setParameter("shopCode", "%'" + properties.get("shopCode").toString() + "%'");
+            countQuery.setParameter("shopCode", "%" + properties.get("shopCode").toString() + "%");
         }
         if(properties.get("staDateTimeFrom") != null){
             countQuery.setParameter("staDateTimeFrom", properties.get("staDateTimeFrom").toString());
