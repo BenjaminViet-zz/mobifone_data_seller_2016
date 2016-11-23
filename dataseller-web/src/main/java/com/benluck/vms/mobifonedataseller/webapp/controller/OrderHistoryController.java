@@ -42,7 +42,7 @@ public class OrderHistoryController extends ApplicationObjectSupport{
     @Autowired
     private KHDNManagementLocalBean KHDNService;
 
-    @RequestMapping(value = {"/admin/orderhistory/list.html", "/user/orderhistory/list.html"})
+    @RequestMapping(value = {"/admin/orderhistory/list.html", "/user/orderhistory/list.html", "/khdn/orderhistory/list.html"})
     public ModelAndView history(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderHistoryCommand command,
                                 BindingResult bindingResult,
                                 HttpServletRequest request){

@@ -34,7 +34,7 @@
 
     <div class="title_right">
         <div class="action-bar">
-            <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+            <a class="btn btn-success" href="${backUrl}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> <fmt:message key="label.back" /></a>
         </div>
     </div>
 
@@ -55,49 +55,6 @@
         </div>
     </div>
 </c:if>
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_content">
-                <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm">
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control">
-                                <option value=""><fmt:message key="label.all" /></option>
-                                <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
-                                </c:forEach>
-                            </form:select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="packageData"><fmt:message key="admin.donhang.label.tenGoiCuoc" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="packageData" path="pojo.packageData.packageDataId" cssClass="form-control">
-                                <option value=""><fmt:message key="label.all" /></option>
-                                <c:forEach items="${packageDataList}" var="packageData">
-                                    <option <c:if test="${item.pojo.packageData.packageDataId eq packageData.packageDataId}">selected="true"</c:if> value="${packageData.packageDataId}">${packageData.name}</option>
-                                </c:forEach>
-                            </form:select>
-                        </div>
-                    </div>
-                    <div class="form-group last">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <a class="btn btn-success" href="${backUrl}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> <fmt:message key="label.back" /></a>
-                            <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
-                            <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
-                        </div>
-                    </div>
-                    <input type="hidden" name="crudaction" value="search" />
-                    <input type="hidden" name="pojo.order.orderId" value="${item.pojo.order.orderId}" />
-                </form:form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">

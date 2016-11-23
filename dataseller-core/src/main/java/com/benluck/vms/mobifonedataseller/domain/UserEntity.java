@@ -27,6 +27,7 @@ public class UserEntity {
     private Timestamp lastLogin;
     private Integer isLDAP;
     private UserGroupEntity userGroup;
+    private String isdn;
 
     @Column(name = "USERID")
     @Id
@@ -120,6 +121,16 @@ public class UserEntity {
         isLDAP = LDAP;
     }
 
+    @Column(name = "ISDN")
+    @Basic
+    public String getIsdn() {
+        return isdn;
+    }
+
+    public void setIsdn(String isdn) {
+        this.isdn = isdn;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERGROUPID", referencedColumnName = "USERGROUPID")
     public UserGroupEntity getUserGroup() {
@@ -146,6 +157,7 @@ public class UserEntity {
         if (lastLogin != null ? !lastLogin.equals(that.lastLogin) : that.lastLogin != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (isLDAP != null ? !isLDAP.equals(that.isLDAP) : that.isLDAP != null) return false;
+        if (isdn != null ? !isdn.equals(that.isdn) : that.isdn != null) return false;
 
         return true;
     }
@@ -161,6 +173,7 @@ public class UserEntity {
         result = 31 * result + (lastLogin != null ? lastLogin.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (isLDAP != null ? isLDAP.hashCode() : 0);
+        result = 31 * result + (isdn != null ? isdn.hashCode() : 0);
         return result;
     }
 }

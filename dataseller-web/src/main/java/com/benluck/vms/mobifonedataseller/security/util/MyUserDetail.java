@@ -20,6 +20,7 @@ public class MyUserDetail extends User {
 	private Long userId;
     private String userName;
 	private String displayName;
+    private String isdn;
     private List<NotificationDTO> notificationList = new ArrayList<NotificationDTO>();
 
     public Long getUserId() {
@@ -52,5 +53,13 @@ public class MyUserDetail extends User {
 
     public void setNotificationList(List<NotificationDTO> notificationList) {
         this.notificationList = notificationList;
+    }
+
+    public String getIsdn() {
+        return isdn;
+    }
+
+    public void setIsdn(String isdn) {
+        this.isdn = isdn;
     }
 }

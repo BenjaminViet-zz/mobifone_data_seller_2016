@@ -23,6 +23,7 @@ public class UserDTO implements Serializable {
     private Timestamp lastLogin;
     private UserGroupDTO userGroup;
     private Integer isLDAP;
+    private String isdn;
 
     public UserDTO(){}
 
@@ -114,5 +115,13 @@ public class UserDTO implements Serializable {
 
     public void setLDAP(Integer LDAP) {
         isLDAP = LDAP;
+    }
+
+    public String getIsdn() {
+        return isdn;
+    }
+
+    public void setIsdn(String isdn) {
+        this.isdn = isdn;
     }
 }
