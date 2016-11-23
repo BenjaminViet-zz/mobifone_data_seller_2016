@@ -6,6 +6,7 @@ import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,5 +30,13 @@ public class OrderDataCodeSessionBean extends AbstractSessionBean<OrderDataCodeE
             return Integer.valueOf(maxRecords.toString());
         }
         return Constants.ORDER_DATA_CODE_SERIAL_OFFSET;
+    }
+
+    @Override
+    public List<String> findListCardCodeByOrder(Long orderId) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT dataCode FROM MOBI_DATA_ORDER_DATA_CODE WHERE orderId = :orderId ORDER BY serial ASC ");
+        Query query = entityManager.createNativeQuery(sqlQuery.toString()).setParameter("orderId", orderId);
+        return query.getResultList();
     }
 }

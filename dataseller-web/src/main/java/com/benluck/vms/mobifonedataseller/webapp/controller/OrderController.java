@@ -76,13 +76,13 @@ public class OrderController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html"} )
+    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html", "/khdn/order/list.html"} )
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response,
                              RedirectAttributes redirectAttributes){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN) && !SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/list.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -94,19 +94,23 @@ public class OrderController extends ApplicationObjectSupport{
             if(action.equals("delete")){
                 if(command.getPojo().getOrderId() != null){
                     try{
-                        this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
-                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
+                        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_vms_user_can_delete_order"));
+                        }else{
+                            this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));
+                        }
 
                         if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
                             return new ModelAndView("redirect:/admin/order/list.html");
                         }else{
                             return new ModelAndView("redirect:/user/order/list.html");
                         }
-
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
@@ -225,6 +229,10 @@ public class OrderController extends ApplicationObjectSupport{
             properties.put("packageData.packageDataId", pojo.getPackageData().getPackageDataId());
         }
 
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+            properties.put("khdn.stb_vas", SecurityUtils.getPrincipal().getIsdn() != null ? SecurityUtils.getPrincipal().getIsdn() : "-1");
+        }
+
         StringBuilder whereClause = new StringBuilder("A.activeStatus = " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
 
         Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems(), whereClause.toString());
@@ -245,7 +253,7 @@ public class OrderController extends ApplicationObjectSupport{
                                             BindingResult bindingResult,
                                             RedirectAttributes redirectAttributes){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }

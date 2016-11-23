@@ -64,12 +64,16 @@
                             </security:authorize>
                         </ul>
                     </li>
-                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER', 'GENERATE_CARD_CODE_MANAGER')">
+                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'KHDN', 'ORDER_MANAGER', 'GENERATE_CARD_CODE_MANAGER')">
                     <li><a><i class="fa fa-files-o" aria-hidden="true"></i> <fmt:message key="left_nav_order_management" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="<c:url value="${prefix}/order/add.html"/>"><fmt:message key="left_nav_order_create" /></a></li>
+                            <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER')">
+                                <li><a href="<c:url value="${prefix}/order/add.html"/>"><fmt:message key="left_nav_order_create" /></a></li>
+                            </security:authorize>
                             <li><a href="<c:url value="${prefix}/order/list.html"/>"><fmt:message key="left_nav_order_research" /></a></li>
-                            <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="left_nav_data_code_research" /></a></li>
+                            <security:authorize access="hasAnyAuthority('ADMIN', 'GENERATE_CARD_CODE_MANAGER')">
+                                <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="left_nav_data_code_research" /></a></li>
+                            </security:authorize>
                         </ul>
                     </li>
                     </security:authorize>

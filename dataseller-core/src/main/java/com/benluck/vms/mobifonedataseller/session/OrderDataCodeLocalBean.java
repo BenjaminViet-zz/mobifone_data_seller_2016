@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.OrderDataCodeEntity;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
@@ -12,4 +14,6 @@ import com.benluck.vms.mobifonedataseller.domain.OrderDataCodeEntity;
 public interface OrderDataCodeLocalBean extends GenericSessionBean<OrderDataCodeEntity, Long>{
 
     Integer countTotal();
+
+    List<String> findListCardCodeByOrder(Long orderId);
 }

@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderHistoryDTO;
@@ -37,23 +38,26 @@ public class OrderHistoryController extends ApplicationObjectSupport{
     @Autowired
     private PackageDataManagementLocalBean packageDataService;
     @Autowired
+    private OrderDataCodeManagementLocalBean orderDataCodeService;
+    @Autowired
     private KHDNManagementLocalBean KHDNService;
 
-    @RequestMapping(value = {"/admin/orderhistory/list.html", "/user/orderhistory/list.html"})
+    @RequestMapping(value = {"/admin/orderhistory/list.html", "/user/orderhistory/list.html", "/khdn/orderhistory/list.html"})
     public ModelAndView history(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderHistoryCommand command,
                                 BindingResult bindingResult,
                                 HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/orderhistory/list");
 
         executeSearch(command, request);
-        preferenceData(mav);
+        preferenceData(mav, command.getPojo().getOrder().getOrderId());
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
-    private void preferenceData(ModelAndView mav){
+    private void preferenceData(ModelAndView mav, Long orderId){
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
+        mav.addObject("cardCodeList", this.orderDataCodeService.findListCardCodeByOrder(orderId));
     }
 
     private void executeSearch(OrderHistoryCommand command, HttpServletRequest request){

@@ -201,14 +201,15 @@ public class MyUserDetailService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(Constants.LOGON_ROLE));
 
         MyUserDetail loginUser = new MyUserDetail(username, username + Constants.SECURITY_CREDENTIAL_DELIMITER + account.getPassword(), true, true, true, true, authorities);
-        populateUserInfo(account.getUserId(), loginUser);
+        populateUserInfo(account.getUserId(), loginUser, account.getIsdn());
         BeanUtils.copyProperties(account, loginUser);
         return loginUser;
     }
 
 
-    private void populateUserInfo(Long userId, MyUserDetail loginUser){
+    private void populateUserInfo(Long userId, MyUserDetail loginUser, String isdn){
         List<NotificationDTO> notificationList = this.notificationService.fetchNotificationNewestList(userId);
         loginUser.setNotificationList(notificationList);
+        loginUser.setIsdn(isdn);
     }
 }

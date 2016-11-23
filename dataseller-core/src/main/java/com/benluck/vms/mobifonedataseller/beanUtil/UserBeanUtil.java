@@ -27,6 +27,7 @@ public class UserBeanUtil {
         dto.setUserGroup(UserGroupBeanUtil.entity2DTO(entity.getUserGroup()));
         dto.setStatus(entity.getStatus());
         dto.setLDAP(entity.getLDAP());
+        dto.setIsdn(entity.getIsdn());
         return dto;
     }
 

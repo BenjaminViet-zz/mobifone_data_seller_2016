@@ -61,6 +61,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         UserEntity dbItem = this.userService.findById(pojo.getUserId());
         dbItem.setUserName(pojo.getUserName());
         dbItem.setDisplayName(pojo.getDisplayName());
+        dbItem.setIsdn(pojo.getIsdn());
         dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
 
@@ -87,6 +88,7 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         entity.setUserName(dto.getUserName());
         entity.setPassword(DesEncrypterUtils.getInstance().encrypt(dto.getPassword()));
         entity.setDisplayName(dto.getDisplayName());
+        entity.setIsdn(dto.getIsdn());
         entity.setStatus(Constants.USER_ACTIVE);
         if(dto.getLDAP() != null){
             entity.setLDAP(dto.getLDAP());
