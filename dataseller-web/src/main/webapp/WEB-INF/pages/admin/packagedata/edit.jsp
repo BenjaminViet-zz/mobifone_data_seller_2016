@@ -82,7 +82,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="volume"><fmt:message key="packagedata.label.dungLuongMienPhi" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="volume" path="pojo.volume" class="form-control required" />
+                            <form:textarea id="volume" path="pojo.volume" cssClass="form-control required nohtml" cssStyle="min-height: 100px;" />
                             <form:errors for="volume" path="pojo.volume" cssClass="error-inline-validate"/>
                         </div>
                     </div>
