@@ -107,7 +107,7 @@
                                 <fmt:message key="label.user_stb_vas" />
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <form:input id="isdn" path="pojo.isdn" cssClass="required nohtml form-control"></form:input>
+                                <form:input id="isdn" path="pojo.isdn" cssClass="nohtml form-control"></form:input>
                             </div>
                         </div>
                         <div class="form-group">
