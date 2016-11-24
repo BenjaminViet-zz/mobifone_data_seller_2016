@@ -29,7 +29,7 @@ public interface PackageDataManagementLocalBean {
 
     List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year);
 
-    PackageDataDTO findEqualUnique(String propertyName, String propertyValue) throws ObjectNotFoundException;
+    PackageDataDTO findEqualUnique(String propertyName, Object propertyValue) throws ObjectNotFoundException;
 
     PackageDataDTO addItem(PackageDataDTO pojo) throws DuplicateKeyException;
 
@@ -38,4 +38,6 @@ public interface PackageDataManagementLocalBean {
     Integer findUsageBeforeDelete(Long packageDataId);
 
     void deleteItem(Long packageDataId) throws RemoveException;
+
+    PackageDataDTO checkDuplicateValueOrPrefixCardCode(Long packageDataId, Double value, String customPrefixCardCode);
 }

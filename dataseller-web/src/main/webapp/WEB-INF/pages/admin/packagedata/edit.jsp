@@ -68,14 +68,16 @@
                             <form:errors for="value" path="pojo.value" cssClass="error-inline-validate"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customPrefixUnitPrice"><fmt:message key="packagedata.label.prefix_card_code" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="customPrefixUnitPrice" type="text" name="pojo.customPrefixUnitPrice" min="0" max="99" class="form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.customPrefixUnitPrice}" /> " />
-                            <form:errors for="customPrefixUnitPrice" path="pojo.customPrefixUnitPrice" cssClass="error-inline-validate"/>
+                    <c:if test="${empty item.pojo.packageDataId || (not empty item.pojo.packageDataId && item.pojo.generatedCardCode eq false)}">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="customPrefixUnitPrice"><fmt:message key="packagedata.label.prefix_card_code" />
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="customPrefixUnitPrice" type="text" name="pojo.customPrefixUnitPrice" min="0" max="99" class="form-control money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.customPrefixUnitPrice}" /> " />
+                                <form:errors for="customPrefixUnitPrice" path="pojo.customPrefixUnitPrice" cssClass="error-inline-validate"/>
+                            </div>
                         </div>
-                    </div>
+                    </c:if>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="volume"><fmt:message key="packagedata.label.dungLuongMienPhi" />
                         </label>

@@ -60,7 +60,7 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
     }
 
     @Override
-    public PackageDataDTO findEqualUnique(String propertyName, String propertyValue) throws ObjectNotFoundException {
+    public PackageDataDTO findEqualUnique(String propertyName, Object propertyValue) throws ObjectNotFoundException {
         return PackageDataBeanUtil.entity2DTO(this.packageDataService.findEqualUnique(propertyName, propertyValue));
     }
 
@@ -74,7 +74,11 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
         dbItem.setDurationText(pojo.getDuration() + " Ngày");
         dbItem.setNumberOfExtend(pojo.getNumberOfExtend());
         dbItem.setTk(pojo.getTk());
-        dbItem.setCustomPrefixUnitPrice(pojo.getCustomPrefixUnitPrice() != null ? (pojo.getCustomPrefixUnitPrice().length() == 1 ? "0" + pojo.getCustomPrefixUnitPrice() : pojo.getCustomPrefixUnitPrice()) : null);
+
+        if(dbItem.getPackageDataCodeGenList() == null || dbItem.getPackageDataCodeGenList().size() == 0){
+            dbItem.setCustomPrefixUnitPrice(pojo.getCustomPrefixUnitPrice() != null ? (pojo.getCustomPrefixUnitPrice().length() == 1 ? "0" + pojo.getCustomPrefixUnitPrice() : pojo.getCustomPrefixUnitPrice()) : null);
+        }
+
         this.packageDataService.update(dbItem);
     }
 
@@ -100,5 +104,14 @@ public class PackageDataManagementSessionBean implements PackageDataManagementLo
     @Override
     public void deleteItem(Long packageDataId) throws RemoveException {
         this.packageDataService.delete(packageDataId);
+    }
+
+    @Override
+    public PackageDataDTO checkDuplicateValueOrPrefixCardCode(Long packageDataId, Double value, String customPrefixCardCode) {
+        PackageDataEntity entity = this.packageDataService.checkDuplicateValueOrPrefixCardCode(packageDataId, value, customPrefixCardCode);
+        if(entity != null){
+            return PackageDataBeanUtil.entity2DTO(entity);
+        }
+        return null;
     }
 }

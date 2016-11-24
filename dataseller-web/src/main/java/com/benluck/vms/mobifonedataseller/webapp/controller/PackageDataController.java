@@ -122,7 +122,7 @@ public class PackageDataController extends ApplicationObjectSupport{
             if (StringUtils.isNotBlank(crudaction)){
                 validator.validate(command, bindingResult);
                 if(crudaction.equals("insert-update")){
-                    if (!bindingResult.hasErrors()){
+                    if (!bindingResult.hasErrors() && StringUtils.isBlank(command.getErrorMessage())){
                         if (pojo.getPackageDataId() == null ){
                             command.setPojo(this.packageDataService.addItem(command.getPojo()));
                             command.getPojo().setGeneratedCardCode(pojo.getGeneratedCardCode());
@@ -137,6 +137,11 @@ public class PackageDataController extends ApplicationObjectSupport{
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
                         return new ModelAndView("redirect:/admin/package_data/list.html");
+                    }else{
+                        if(StringUtils.isNotBlank(command.getErrorMessage())){
+                            mav.addObject(Constants.ALERT_TYPE, "danger");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                        }
                     }
                 }
             } else if( pojo.getPackageDataId() != null ) {

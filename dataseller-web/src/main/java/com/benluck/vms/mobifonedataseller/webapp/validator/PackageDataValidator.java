@@ -44,6 +44,7 @@ public class PackageDataValidator extends ApplicationObjectSupport implements Va
             checkRequiredFields(command, errors);
             checkUnique(command, errors);
             checkCustomPrefixUnitPrice(command,errors);
+            checkDuplicated(command, errors);
         }
     }
 
@@ -92,6 +93,35 @@ public class PackageDataValidator extends ApplicationObjectSupport implements Va
                 Integer.valueOf(command.getPojo().getCustomPrefixUnitPrice());
             }catch (NumberFormatException nfe){
                 errors.rejectValue("pojo.customPrefixUnitPrice", "packagedata.only_number_allowed_for_custom_prefix_unit_price");
+            }
+        }
+    }
+
+    private void checkDuplicated(PackageDataCommand command, Errors errors){
+        PackageDataDTO pojo = command.getPojo();
+        if(pojo.getPackageDataId() != null){
+            try{
+                PackageDataDTO originalPojo = this.packageDataService.findById(pojo.getPackageDataId());
+                if(originalPojo.getGeneratedCardCode() == null || !originalPojo.getGeneratedCardCode()){
+                    verifyDuplicated(command);
+                }
+            }catch (ObjectNotFoundException one){}
+        }else{
+            verifyDuplicated(command);
+        }
+
+    }
+
+    private void verifyDuplicated(PackageDataCommand command){
+        PackageDataDTO pojo = command.getPojo();
+        if(StringUtils.isBlank(command.getErrorMessage())){
+            PackageDataDTO packageDataDTO = this.packageDataService.checkDuplicateValueOrPrefixCardCode(pojo.getPackageDataId(), pojo.getValue(), pojo.getCustomPrefixUnitPrice());
+            if(packageDataDTO != null){
+                if(StringUtils.isNotBlank(pojo.getCustomPrefixUnitPrice())){
+                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("packagedata.duplicate_prefix_card_code"));
+                }else{
+                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("packagedata.duplicate_package_value"));
+                }
             }
         }
     }

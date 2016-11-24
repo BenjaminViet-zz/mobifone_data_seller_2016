@@ -6,21 +6,6 @@
     <title><fmt:message key="packagedata.list.heading" /></title>
     <meta name="menu" content="<fmt:message key="packagedata.list.heading" />"/>
     <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
-
-    <style>
-        #tablelist.mobile td.width_50_px{
-            width: 50px;
-        }
-        #tablelist.mobile td.width_200_px{
-            width: 200px;
-        }
-        #tablelist.mobile td.width_150_px{
-            width: 150px;
-        }
-        #tablelist.mobile td.width_350_px{
-            width: 350px;
-        }
-    </style>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -70,27 +55,28 @@
                     <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
                                    partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1550px;">
 
-                        <display:column headerClass="table_header text-center vertical-middle" titleKey="label.stt" class="text-center width_50_px" style="width: 3%;" >
+                        <display:column headerClass="table_header text-center vertical-middle" titleKey="label.stt" class="text-center" style="width: 50px;" >
                             ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                         </display:column>
-                        <display:column headerClass="table_header text-center vertical-middle" property="name" sortName="name" class="text-center width_200_px" titleKey="packagedata.label.tenGoiCuoc" style="width: 10%"/>
-                        <display:column headerClass="table_header text-center vertical-middle" sortName="value" class="text-center width_150_px" titleKey="packagedata.label.giaGoiCuoc" style="width: 15%">
+                        <display:column headerClass="table_header text-center vertical-middle" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="width: 200px;"/>
+                        <display:column headerClass="table_header text-center vertical-middle" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="width: 150px;">
                             <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.value}" />
                         </display:column>
-                        <display:column headerClass="table_header text-center vertical-middle" property="volume" sortable="false" class="text-center width_350_px" titleKey="packagedata.label.dungLuongMienPhi" style="width: 25%" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="durationText" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.thoiGianSuDung" style="width: 15%" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="numberOfExtend" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.soLanGiaHan" style="width: 15%" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="tk" sortable="false" class="text-center width_150_px" titleKey="packagedata.label.tk" style="width: 7%" />
-                        <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
-                        <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
-                        <display:column headerClass="table_header text-center vertical-middle" class="text-center width_200_px" titleKey="label.action" style="width: 10%">
+                        <display:column headerClass="table_header text-center vertical-middle" property="customPrefixUnitPrice" sortable="false" class="text-center" titleKey="packagedata.label.prefixCardCode" style="width: 150px;" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 350px;" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="durationText" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 150px;" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 150px;" />
+                        <display:column headerClass="table_header text-center vertical-middle" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 150px;" />
+                        <display:column headerClass="table_header text-center vertical-middle" class="text-center" titleKey="label.action" style="width: 200px;">
                             <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                             <c:if test="${tableList.generatedCardCode == false}">
                                 | <a class="tip-top action-group" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </c:if>
                         </display:column>
+                        <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
+                        <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
                     </display:table>
                 </div>
             </div>
@@ -106,15 +92,7 @@
     });
 
     function initScrollablePane(){
-        if($(window).width() > mobile_screen_width){
-            return;
-        }
-
-        var $tableContainer = $('#tableListContainer');
-        if($tableContainer.length){
-            $('#tableList').addClass('mobile').width(1400);
-            $tableContainer.mCustomScrollbar({axis:"x"});
-        }
+        $('#tableListContainer').mCustomScrollbar({axis:"x"});
     }
 
     function replaceSpecialCharacter() {

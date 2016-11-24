@@ -18,4 +18,6 @@ public interface PackageDataLocalBean extends GenericSessionBean<PackageDataEnti
     List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year);
 
     Integer findUsageBeforeDelete(Long packageDataId);
+
+    PackageDataEntity checkDuplicateValueOrPrefixCardCode(Long packageDataId, Double value, String customPrefixCardCode);
 }

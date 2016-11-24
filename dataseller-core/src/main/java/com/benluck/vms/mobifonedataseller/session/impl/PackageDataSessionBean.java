@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -63,5 +64,36 @@ public class PackageDataSessionBean extends AbstractSessionBean<PackageDataEntit
                 .append(" FROM MOBI_DATA_PACKAGE_DATA p WHERE p.packageDataId = :packageDataId ");
         Query query = entityManager.createNativeQuery(sqlQuery.toString()).setParameter("packageDataId", packageDataId);
         return Integer.valueOf(query.getSingleResult().toString());
+    }
+
+    @Override
+    public PackageDataEntity checkDuplicateValueOrPrefixCardCode(Long packageDataId, Double value, String customPrefixCardCode) {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" FROM PackageDataEntity p WHERE 1 = 1 ");
+        if(StringUtils.isNotBlank(customPrefixCardCode)){
+            sqlQuery.append(" AND (p.customPrefixUnitPrice = :customPrefixUnitPrice OR (p.customPrefixUnitPrice IS NULL AND p.value = :value)) ");
+        }else{
+            sqlQuery.append(" AND p.customPrefixUnitPrice = :customPrefixUnitPrice  AND p.value = :value ");
+        }
+        if(packageDataId != null){
+            sqlQuery.append(" AND p.packageDataId != :packageDataId ");
+        }
+        Query query = entityManager.createQuery(sqlQuery.toString());
+        if(StringUtils.isNotBlank(customPrefixCardCode)){
+            query.setParameter("value", value);
+            query.setParameter("customPrefixUnitPrice", customPrefixCardCode);
+        }else{
+            query.setParameter("value", value);
+            query.setParameter("customPrefixUnitPrice", new DecimalFormat("#").format(value/1000));
+        }
+
+        if(packageDataId != null){
+            query.setParameter("packageDataId", packageDataId);
+        }
+        List<PackageDataEntity> entityList = (List<PackageDataEntity>) query.getResultList();
+        if(entityList.size() > 0){
+            return entityList.get(0);
+        }
+        return null;
     }
 }
