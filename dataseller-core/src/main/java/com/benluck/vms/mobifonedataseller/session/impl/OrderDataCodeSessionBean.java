@@ -21,10 +21,24 @@ public class OrderDataCodeSessionBean extends AbstractSessionBean<OrderDataCodeE
     }
 
     @Override
-    public Integer countTotal() {
+    public Integer countTotal(Integer year, String prefixCardCode) {
         StringBuilder sqlCount = new StringBuilder();
-        sqlCount.append(" SELECT MAX(orderDataCodeId) FROM MOBI_DATA_ORDER_DATA_CODE odc ");
+        sqlCount.append(" SELECT COUNT(orderDataCodeId) ")
+                .append(" FROM MOBI_DATA_ORDER_DATA_CODE odc ")
+                .append(" WHERE EXISTS (SELECT 1 FROM MOBI_DATA_ORDER o ")
+                .append("              WHERE o.orderId = odc.orderId ")
+                .append("                  AND EXISTS (SELECT 1 FROM MOBI_DATA_PACKAGE_DATA p ")
+                .append("                                WHERE o.packageDataId = p.packageDataId ")
+                .append("                                    AND ((p.custom_Prefix_Unit_Price IS NULL AND p.value = :value) ")
+                .append("                                        OR ")
+                .append("                                        (p.custom_Prefix_Unit_Price IS NOT NULL AND p.custom_Prefix_Unit_Price = :customPrefixUnitPrice)) ")
+                .append("                                    AND EXISTS (SELECT 1 FROM MOBI_DATA_PACKAGEDATA_CODE_GEN pdcg ")
+                .append("                                                WHERE pdcg.packageDataId = p.packageDataId ")
+                .append("                                                    AND pdcg.year = :year))) ");
         Query query = entityManager.createNativeQuery(sqlCount.toString());
+        query.setParameter("year", year);
+        query.setParameter("value", Double.valueOf(prefixCardCode) * 1000);
+        query.setParameter("customPrefixUnitPrice", prefixCardCode);
         Object maxRecords = query.getSingleResult();
         if(maxRecords != null){
             return Integer.valueOf(maxRecords.toString());

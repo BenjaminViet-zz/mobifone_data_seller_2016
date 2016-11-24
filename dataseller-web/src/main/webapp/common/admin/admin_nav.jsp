@@ -69,6 +69,7 @@
                         <ul class="nav child_menu">
                             <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER')">
                                 <li><a href="<c:url value="${prefix}/order/add.html"/>"><fmt:message key="left_nav_order_create" /></a></li>
+                                <li><a href="<c:url value="${prefix}/order/oldorder.html"/>"><fmt:message key="left_nav_old_order" /></a></li>
                             </security:authorize>
                             <li><a href="<c:url value="${prefix}/order/list.html"/>"><fmt:message key="left_nav_order_research" /></a></li>
                             <security:authorize access="hasAnyAuthority('ADMIN', 'GENERATE_CARD_CODE_MANAGER')">

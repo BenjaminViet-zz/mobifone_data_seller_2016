@@ -13,6 +13,7 @@ import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
+import org.apache.commons.lang.StringUtils;
 
 import javax.ejb.*;
 import java.sql.Timestamp;
@@ -118,14 +119,25 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     private void saveDataCodes4Order(OrderEntity orderEntity, HashSet<String> cardCodeHashSetList2Store) throws DuplicateKeyException{
-        Integer totalDataCode = this.orderDataCodeService.countTotal();
-        if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
-            totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + 1;
+        String prefixCardCode = String.valueOf(orderEntity.getPackageData().getValue() / 1000);
+        if(StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice())){
+            prefixCardCode = orderEntity.getPackageData().getCustomPrefixUnitPrice();
         }
 
         Calendar current = Calendar.getInstance();
+        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), prefixCardCode);
+
+        if(current.get(Calendar.YEAR) == 2016){
+            if((StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && orderEntity.getPackageData().getCustomPrefixUnitPrice().equals(Constants.USED_CARD_CODE_PREFIX))
+                || (StringUtils.isBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && (orderEntity.getPackageData().getValue() / 1000 == Integer.valueOf(Constants.USED_CARD_CODE_PREFIX).intValue()))){
+                if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
+                    totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + totalDataCode + 1;
+                }
+            }
+        }
+
         Integer expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2016"));
-        if(current.get(Calendar.YEAR) == 2017){
+        if(current.get(Calendar.YEAR) >= 2017){
             expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2017_or_later"));
         }
         Calendar expiredDate = Calendar.getInstance();
@@ -145,9 +157,17 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
             serial = new StringBuilder(tmpCardCode.toString().substring(0, 5));
 
             // Generate full Serial.
-            if(totalDataCode > Constants.ORDER_DATA_CODE_SERIAL_OFFSET && totalDataCode < 99999){
+            if(totalDataCode >= 0 && totalDataCode < 10){
+                serial.append("000000");
+            }else if(totalDataCode >= 10 && totalDataCode < 100){
+                serial.append("00000");
+            }else if(totalDataCode >= 100 && totalDataCode < 1000){
+                serial.append("0000");
+            }else if(totalDataCode >= 1000 && totalDataCode < 10000){
+                serial.append("000");
+            }else if(totalDataCode >= 10000 && totalDataCode < 100000){
                 serial.append("00");
-            }else if(totalDataCode > 99999 && totalDataCode < 999999){
+            }else if(totalDataCode >= 100000 && totalDataCode < 1000000){
                 serial.append("0");
             }
             serial.append(totalDataCode.toString());

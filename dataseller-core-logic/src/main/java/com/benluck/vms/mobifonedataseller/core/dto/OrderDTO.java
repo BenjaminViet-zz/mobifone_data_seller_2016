@@ -33,6 +33,7 @@ public class OrderDTO implements Serializable{
     private HashSet<String> cardCodeHashSet2Store;
     private Integer cardCodeProcessStatus;
     private boolean adminExport4KHDN = false;
+    private Integer serialNumberFrom;
 
     public OrderDTO() {
     }
@@ -177,5 +178,13 @@ public class OrderDTO implements Serializable{
 
     public void setAdminExport4KHDN(boolean adminExport4KHDN) {
         this.adminExport4KHDN = adminExport4KHDN;
+    }
+
+    public Integer getSerialNumberFrom() {
+        return serialNumberFrom;
+    }
+
+    public void setSerialNumberFrom(Integer serialNumberFrom) {
+        this.serialNumberFrom = serialNumberFrom;
     }
 }

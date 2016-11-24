@@ -88,6 +88,7 @@ public class TaskTakeCardCode extends TimerTask{
                 logger.error("TAKING CARD CODE TASK is cancelled. The Order is only with status FINISH will be processing for Card Code list.");
             }
         }catch (Exception e){
+            RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, false);
             hasError = true;
             createNotificationMessage(false);
             logger.error("Error happen in TAKING CARD CODE for OrderId: " + orderId);

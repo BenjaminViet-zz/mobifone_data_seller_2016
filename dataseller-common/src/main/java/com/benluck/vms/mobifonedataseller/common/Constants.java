@@ -214,4 +214,7 @@ public class Constants {
 
     // Code History
     public static final Double PACKAGE_KHDN_DATA_VALUE = 100000000D;
+
+    //
+    public static final String USED_CARD_CODE_PREFIX = "10";
 }

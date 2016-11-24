@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface OrderDataCodeLocalBean extends GenericSessionBean<OrderDataCodeEntity, Long>{
 
-    Integer countTotal();
+    Integer countTotal(Integer year, String prefixCardCode);
 
     List<String> findListCardCodeByOrder(Long orderId);
 }

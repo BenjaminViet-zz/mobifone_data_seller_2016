@@ -186,7 +186,7 @@ CREATE TABLE MOBI_DATA_COST
    Payment_Date           TIMESTAMP                     NULL
 )  TABLESPACE "USERS";
 
-CREATE TABLE MOBI_DATA_NOTIFICATION
+  CREATE TABLE MOBI_DATA_NOTIFICATION
 (
    NotificationID         NUMBER(24,0)                  NOT NULL PRIMARY KEY,
    UserID                 NUMBER(24,0)                  NOT NULL,
