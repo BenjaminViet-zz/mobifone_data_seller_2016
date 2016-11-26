@@ -4,6 +4,8 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
+import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import org.apache.log4j.Logger;
@@ -67,6 +69,8 @@ public class StartupListener implements ServletContextListener {
         initializeApplicationSetting(context);
 
         storeDataCodeHashSet2Redis();
+
+        fetchUsedCardCode2Cache();
     }
 
 
@@ -131,5 +135,10 @@ public class StartupListener implements ServletContextListener {
         }
 
         return result;
+    }
+
+    private void fetchUsedCardCode2Cache(){
+        UsedCardCodeManagementLocalBean usedCardCodeService = (UsedCardCodeManagementLocalBean)AppContext.getApplicationContext().getBean(UsedCardCodeManagementLocalBean.class);
+        CacheUtil.getInstance().putValue(Constants.USED_CARD_CODE_CACHE_KEY, usedCardCodeService.findAllListCardCode());
     }
 }

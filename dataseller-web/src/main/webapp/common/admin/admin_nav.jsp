@@ -62,6 +62,9 @@
                                     </ul>
                                 </li>
                             </security:authorize>
+                            <security:authorize access="hasAuthority('ADMIN')">
+                                <li><a href="<c:url value="${prefix}/import_used_card_code.html" />"><fmt:message key="left_nav_import_used_card_code" /></a></li>
+                            </security:authorize>
                         </ul>
                     </li>
                     <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'KHDN', 'ORDER_MANAGER', 'GENERATE_CARD_CODE_MANAGER')">

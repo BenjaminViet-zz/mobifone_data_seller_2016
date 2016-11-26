@@ -23,6 +23,7 @@
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/MBDCostManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.MBDCostManagementLocalBean" id="mbdCostManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/CodeHistoryManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean" id="codeHistoryManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/NotificationManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean" id="notificationManagementLocalBean"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UsedCardCodeManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean" id="usedCardCodeManagementLocalBean"/>
 
     <jee:local-slsb jndi-name="java:app/dataseller-mail-service-1.0/EmailSessionBeanEJB!com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" business-interface="com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" id="emailLocalBean"/>
 
