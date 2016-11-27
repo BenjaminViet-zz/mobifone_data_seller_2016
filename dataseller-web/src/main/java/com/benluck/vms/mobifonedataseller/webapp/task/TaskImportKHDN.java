@@ -1,8 +1,12 @@
 package com.benluck.vms.mobifonedataseller.webapp.task;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.ImportKHDNDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -20,11 +24,14 @@ public class TaskImportKHDN extends TimerTask{
     private Logger logger = Logger.getLogger(TaskImportKHDN.class);
 
     private List<ImportKHDNDTO> importDTOList;
+    private Long userId;
 
     private ApplicationContext ctx = AppContext.getApplicationContext();
     private KHDNManagementLocalBean khdnService = ctx.getBean(KHDNManagementLocalBean.class);
+    private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
 
-    public TaskImportKHDN(List<ImportKHDNDTO> importDTOList) {
+    public TaskImportKHDN(Long createdById, List<ImportKHDNDTO> importDTOList) {
+        this.userId = createdById;
         this.importDTOList = importDTOList;
     }
 
@@ -35,11 +42,40 @@ public class TaskImportKHDN extends TimerTask{
             logger.error("Import list is empty. Import task is cancelled.");
         }else{
             try{
+                logger.info("Importing KHDN list to Database");
                 khdnService.importData(importDTOList);
+
+                logger.info("Creating notification for importing completely.");
+                createNotificationMessage(true);
+
             }catch (Exception e){
                 logger.error(e.getMessage());
+                logger.info("Creating notification for importing failed.");
+                createNotificationMessage(false);
             }
         }
         logger.info("============Import completed============");
+    }
+
+    private void createNotificationMessage(Boolean isSuccess){
+        try{
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserId(this.userId);
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setUser(userDTO);
+
+            if(isSuccess){
+                notificationDTO.setMessageType(Constants.IMPORT_KHDN_SUCCESS);
+                notificationDTO.setMessage("Import KHDN list hoàn tất." );
+            }else{
+                notificationDTO.setMessageType(Constants.IMPORT_KHDN_FAILED);
+                notificationDTO.setMessage("Import KHDN list thất bại." );
+            }
+
+            notificationService.addItem(notificationDTO);
+        }catch (Exception e){
+            logger.error("Could not create notification message for Task Import KHDN with status: " + (isSuccess ? "SUCCESS" : "FAILED"));
+        }
     }
 }

@@ -85,7 +85,7 @@ public class ImportKHDNController extends ApplicationObjectSupport{
     }
 
     private void startJobImport(List<ImportKHDNDTO> importDTOList){
-        TaskImportKHDN importTask = new TaskImportKHDN(importDTOList);
+        TaskImportKHDN importTask = new TaskImportKHDN(SecurityUtils.getLoginUserId(), importDTOList);
         Timer timer = new Timer(true);
         timer.schedule(importTask, 0);
     }
