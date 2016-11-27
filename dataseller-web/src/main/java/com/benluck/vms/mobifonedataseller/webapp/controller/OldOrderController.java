@@ -52,8 +52,7 @@ public class OldOrderController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/order/oldorder", "/user/order/oldorder",
-            "/admin/olorder/edit.html", "/user/olorder/edit.html"})
+    @RequestMapping(value = {"/admin/order/oldorder/add.html", "/user/order/oldorder/add.html"})
     public ModelAndView oldOrder(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                                  HttpServletRequest request,
                                  BindingResult bindingResult){

@@ -62,7 +62,11 @@
                             <fmt:message key="usergroup.label.code" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="code" path="pojo.code" cssClass="required nohtml form-control"></form:input>
+                            <c:set var="disabledEditCode" value="${false}" />
+                            <c:if test="${not empty item.pojo.userGroupId && (item.pojo.code eq Constants.USERGROUP_ADMIN || item.pojo.code eq Constants.USERGROUP_KHDN || item.pojo.code eq Constants.USERGROUP_VMS_USER)}">
+                                <c:set var="disabledEditCode" value="${true}" />
+                            </c:if>
+                            <input id="code" type="text" name="pojo.code" <c:if test="${disabledEditCode}">readonly="readonly"</c:if> class="required nohtml form-control" value="${item.pojo.code}" />
                             <form:errors for="code" path="pojo.code" cssClass="error-inline-validate"/>
                         </div>
                     </div>
