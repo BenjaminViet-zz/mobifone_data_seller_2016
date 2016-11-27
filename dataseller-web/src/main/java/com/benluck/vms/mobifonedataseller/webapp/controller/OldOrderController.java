@@ -7,7 +7,10 @@ import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
@@ -55,6 +58,20 @@ public class OldOrderController extends ApplicationObjectSupport{
                                  HttpServletRequest request,
                                  BindingResult bindingResult){
         ModelAndView mav = new ModelAndView("/admin/order/oldorder");
+
+        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+        Boolean hasImportedUsedCardCode = (Boolean) RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
+        if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
+            logger.warn("Please import Used Card Code list before using this feature.");
+            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                return new ModelAndView("redirect:/admin/order/list.html");
+            }else{
+                return new ModelAndView("redirect:/user/order/list.html");
+            }
+        }
 
         return mav;
     }

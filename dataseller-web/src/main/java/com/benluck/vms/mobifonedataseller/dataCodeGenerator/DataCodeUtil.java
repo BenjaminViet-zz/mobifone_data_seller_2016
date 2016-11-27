@@ -8,6 +8,7 @@ import com.benluck.vms.mobifonedataseller.core.business.PackageDataCodeGenManage
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import org.apache.log4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -45,28 +46,6 @@ public class DataCodeUtil {
     }
 
     /**
-     * Perform loading Used Card Code from DB to Cache.
-     */
-    public static void fetchUsedCardCodeHS2Cache(){
-        CacheUtil.getInstance().putValue(Constants.USED_CARD_CODE_CACHE_KEY, usedCardCodeService.findAllListCardCode());
-    }
-
-    /**
-     * Get Used Card Code Hash Set from Cache by Key.
-     * @return
-     */
-    public static HashSet<String> getUsedDataCodeHashSetFromCache(){
-        return (HashSet<String>)CacheUtil.getInstance().getValue(Constants.USED_CARD_CODE_CACHE_KEY);
-    }
-
-    /**
-     * Perform updating Used Card Code list.
-     */
-    public static void updateCardCodeHSInCache(HashSet<String> newUsedCardCodeHS){
-        CacheUtil.getInstance().putValue(Constants.USED_CARD_CODE_CACHE_KEY, newUsedCardCodeHS);
-    }
-
-    /**
      *  Function sinh ra danh sách Data Code theo params.
      * @param packageDataCodeGenDTO     Used to search nearest available batch index in the PackageDataCodeGen this packageDataId.
      * @param yearCode          Prefix 3 ký tự đầu của năm trong mỗi Data Code
@@ -81,14 +60,14 @@ public class DataCodeUtil {
         int cardCodeSizeCounter = 0;
 
         if(Config.getInstance().getProperty("redis.turn_on").equals("false")){
-            tmpCardCodeHSFromCache = getUsedDataCodeHashSetFromCache();
+            tmpCardCodeHSFromCache = RedisUtil.getUsedCardCodeByKey();
             mapCardCodeHSRemainingInBatches.put("NULL", tmpCardCodeHSFromCache);
             return new Object[]{tmpCardCodeHSFromCache.size(), tmpCardCodeHSFromCache, mapCardCodeHSRemainingInBatches};
         }else{
             HashSet<String> usedCardCode21610HashSet = new HashSet<String>();
             Calendar current = Calendar.getInstance();
             if(current.get(Calendar.YEAR) == 2016 && unitPriceCode.equals(Constants.USED_UNIT_PRICE_CODE)){
-                usedCardCode21610HashSet = getUsedDataCodeHashSetFromCache();
+                usedCardCode21610HashSet = RedisUtil.getUsedCardCodeByKey();
             }
 
             HashSet<String> cardCodeHashSet = new HashSet<String>();

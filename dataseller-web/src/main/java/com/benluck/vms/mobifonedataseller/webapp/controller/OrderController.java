@@ -12,6 +12,7 @@ import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SHA256Util;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
@@ -43,6 +44,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.lang.Boolean;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -245,6 +247,7 @@ public class OrderController extends ApplicationObjectSupport{
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
         mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
+        mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
     }
 
     @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html",
@@ -256,6 +259,16 @@ public class OrderController extends ApplicationObjectSupport{
         if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
+        }
+
+        Boolean hasImportedUsedCardCode = (Boolean)RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
+        if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
+            logger.warn("Please import Used Card Code list before using this feature.");
+            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                return new ModelAndView("redirect:/admin/order/list.html");
+            }else{
+                return new ModelAndView("redirect:/user/order/list.html");
+            }
         }
 
         ModelAndView mav = new ModelAndView("/admin/order/edit");

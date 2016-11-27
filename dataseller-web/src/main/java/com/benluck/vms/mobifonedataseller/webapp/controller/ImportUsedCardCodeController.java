@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.ImportUsedCardCodeValidator;
@@ -83,8 +84,13 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
                     mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.data_card_code_is_expired"));
                 }else{
                     try{
+                        logger.info("Saving Used Card Code list to Database...");
                         usedCardCodeService.importCardCodeList(importUsedCardCodeList);
-                        DataCodeUtil.updateCardCodeHSInCache(usedCardCodeService.findAllListCardCode());
+
+                        logger.info("Saving Used Card Code list to Redis Database...");
+                        RedisUtil.updateUsedCardCodeByKey(usedCardCodeService.findAllListCardCode());
+
+                        logger.info("Saving Used Card Code completely!");
                         mav.addObject(Constants.ALERT_TYPE, "success");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.import_success"));
                     }catch (Exception e){

@@ -222,7 +222,7 @@ public class Constants {
     public static final String USED_CARD_CODE_PREFIX = "10";
 
     // Used Card Code Cache Key
-    public static final String USED_CARD_CODE_CACHE_KEY = "USED_CARD_CODE_CACHE_KEY";
+    public static final String IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY = "IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY";
     public static final Integer IMPORT_CARD_CODE_STEP_1_CHOOSE_FILE = 0;
     public static final Integer IMPORT_CARD_CODE_STEP_2_UPLOAD = 1;
     public static final String IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY = "IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY";

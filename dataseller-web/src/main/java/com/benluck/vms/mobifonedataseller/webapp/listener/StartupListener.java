@@ -64,10 +64,6 @@ public class StartupListener implements ServletContextListener {
         context.setAttribute(Constants.CONFIG, config);
 
         initializeApplicationSetting(context);
-
-        storeDataCodeHashSet2Redis();
-
-        DataCodeUtil.fetchUsedCardCodeHS2Cache();
     }
 
 
@@ -79,24 +75,6 @@ public class StartupListener implements ServletContextListener {
         ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
         Map<String, String> applicationSettingMap = new HashMap<String, String>();
         context.setAttribute("applicationSettingMap", applicationSettingMap);
-    }
-
-
-    private void storeDataCodeHashSet2Redis(){
-        if(Config.getInstance().getProperty("redis.turn_on").equals("true")){
-            Calendar calendar = Calendar.getInstance();
-            if(calendar.get(Calendar.YEAR) == 2016){
-                RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)AppContext.getApplicationContext().getBean("redisTemplate");
-                DataCode dataCode = (DataCode)redisTemplate.opsForHash().get(Constants.KEY_USED_2016, Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-                if(dataCode == null){
-                    dataCode = new DataCode();
-                    dataCode.setKeyByYear(Constants.KEY_USED_2016);
-                    dataCode.setHasKeyByUnitPrice(Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-                    dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSetFromCache());
-                    redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
-                }
-            }
-        }
     }
 
     /**

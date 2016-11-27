@@ -26,11 +26,13 @@
     </div>
 
     <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER')">
-        <div class="title_right">
-            <div class="action-bar">
-                <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+        <c:if test="${not empty hasImportedUsedCardCode && hasImportedUsedCardCode}">
+            <div class="title_right">
+                <div class="action-bar">
+                    <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+                </div>
             </div>
-        </div>
+        </c:if>
     </security:authorize>
 </div>
 <div class="clearfix"></div>
@@ -42,6 +44,21 @@
                     <div class="alert alert-${alertType} no-bottom">
                         <a class="close" data-dismiss="alert" href="#">&times;</a>
                             ${messageResponse}
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:if>
+<c:if test ="${empty hasImportedUsedCardCode || !hasImportedUsedCardCode}">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="alert alert-danger no-bottom">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <fmt:message key="order.not_yet_import_used_card_code" />
                     </div>
                     <div class="clear"></div>
                 </div>
