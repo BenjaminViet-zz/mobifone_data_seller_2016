@@ -18,7 +18,7 @@
     <link href="<c:url value="/themes/newteample/vendors/animate.css/animate.min.css" />" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="<c:url value="/themes/newteample/content/css/custom_v1.4.css" />" rel="stylesheet">
+    <link href="<c:url value="/themes/newteample/content/css/custom_v1.5.css" />" rel="stylesheet">
 </head>
 <body <decorator:getProperty property="body.id" writeEntireProperty="true"/>
         class='login <decorator:getProperty property="body.class" writeEntireProperty="false"/>'
