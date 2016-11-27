@@ -37,7 +37,6 @@
             <a class="btn btn-success" href="${backUrl}" ><i class="fa fa-arrow-left" aria-hidden="true"></i> <fmt:message key="label.back" /></a>
         </div>
     </div>
-
 </div>
 <div class="clearfix"></div>
 <c:if test ="${not empty messageResponse}">

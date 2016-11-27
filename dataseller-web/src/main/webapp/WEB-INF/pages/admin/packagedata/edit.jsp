@@ -31,6 +31,12 @@
 </c:if>
 <c:url var="backUrl" value="${prefix}/package_data/list.html" />
 
+<div class="page-title">
+    <div class="title_left">
+        <h3><fmt:message key="${titlePage}" /></h3>
+    </div>
+</div>
+
 <div class="clearfix"></div>
 <div id="message_section">
     <c:if test ="${not empty messageResponse}">

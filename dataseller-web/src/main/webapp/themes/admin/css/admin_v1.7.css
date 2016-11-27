@@ -35,6 +35,8 @@ span.valid {
     display: inline-block;
     position: absolute;
     padding: 3px;
+    left: 60%;
+    top: 0;
     color: #fff;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -221,6 +223,7 @@ span.valid {
     color: #000000;
 }
 
+.form-group textarea,
 ul.to_do,
 .form-group input[type='number'],
 .form-group input[type='number'],
@@ -301,9 +304,6 @@ ul.to_do,
     font-size: 14px;
 }
 
-.form-group textarea {
-    width: 70%;
-}
 
 .word-break {
     word-break: break-all;

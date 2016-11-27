@@ -70,9 +70,9 @@
                         <display:column headerClass="table_header text-center vertical-middle" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 150px;" />
                         <display:column headerClass="table_header text-center vertical-middle" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 150px;" />
                         <display:column headerClass="table_header text-center vertical-middle" class="text-center" titleKey="label.action" style="width: 200px;">
-                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                             <c:if test="${tableList.generatedCardCode == false}">
-                                | <a class="tip-top action-group" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                 <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </c:if>
                         </display:column>
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>

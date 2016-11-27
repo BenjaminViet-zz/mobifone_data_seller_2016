@@ -21,6 +21,22 @@
     <c:url var="formUrl" value="${prefix}/order/edit.html" />
 </c:if>
 
+<div class="page-title">
+    <div class="title_left">
+        <h3>
+            <c:choose>
+                <c:when test="${not empty item.pojo.orderId}">
+                    <fmt:message key="old_order.page_title" />
+                </c:when>
+                <c:otherwise>
+                    <fmt:message key="${titlePage}" />
+                </c:otherwise>
+            </c:choose>
+        </h3>
+    </div>
+</div>
+
+
 <div class="clearfix"></div>
 <div id="message_section">
     <c:if test ="${not empty messageResponse}">
