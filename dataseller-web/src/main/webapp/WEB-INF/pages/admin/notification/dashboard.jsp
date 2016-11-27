@@ -30,6 +30,9 @@
 <security:authorize access="hasAnyAuthority('KHDN')">
     <c:set var="prefix" value="/khdn" />
 </security:authorize>
+<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
+    <c:set var="prefix" value="/custom_user" />
+</security:authorize>
 <c:url var="formUrl" value="${prefix}/notification.html"/>
 
 <div class="page-title">

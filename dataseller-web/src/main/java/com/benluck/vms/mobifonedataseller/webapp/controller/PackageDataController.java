@@ -52,7 +52,9 @@ public class PackageDataController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/package_data/list.html", "/user/package_data/list.html"})
+    @RequestMapping(value = {"/admin/package_data/list.html",
+                            "/user/package_data/list.html",
+                            "/custom_user/package_data/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCommand command,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes,
@@ -77,8 +79,10 @@ public class PackageDataController extends ApplicationObjectSupport{
 
                         if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
                             return new ModelAndView("redirect:/admin/package_data/list.html");
-                        }else{
+                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
                             return new ModelAndView("redirect:/user/package_data/list.html");
+                        }else{
+                            return new ModelAndView("redirect:/custom_user/package_data/list.html");
                         }
                     }else{
                         mav.addObject(Constants.ALERT_TYPE, "danger");
@@ -104,7 +108,9 @@ public class PackageDataController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getMaxPageItems());
     }
 
-    @RequestMapping(value = {"/admin/package_data/add.html", "/admin/package_data/edit.html", "/user/package_data/add.html", "/user/package_data/edit.html"})
+    @RequestMapping(value = {"/admin/package_data/add.html", "/admin/package_data/edit.html",
+                                "/user/package_data/add.html", "/user/package_data/edit.html",
+                                "/custom_user/package_data/add.html", "/custom_user/package_data/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) PackageDataCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
@@ -136,7 +142,13 @@ public class PackageDataController extends ApplicationObjectSupport{
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        return new ModelAndView("redirect:/admin/package_data/list.html");
+                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                            return new ModelAndView("redirect:/admin/package_data/list.html");
+                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                            return new ModelAndView("redirect:/user/package_data/list.html");
+                        }else{
+                            return new ModelAndView("redirect:/custom_user/package_data/list.html");
+                        }
                     }else{
                         if(StringUtils.isNotBlank(command.getErrorMessage())){
                             mav.addObject(Constants.ALERT_TYPE, "danger");

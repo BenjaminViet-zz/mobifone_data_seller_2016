@@ -48,7 +48,7 @@ public class UserGroupController extends ApplicationObjectSupport {
         binder.registerCustomEditor(Date.class, new CustomDateEditor());
     }
 
-    @RequestMapping(value = {"/admin/usergroup/edit.html", "/admin/usergroup/add.html","/user/usergroup/edit.html", "/user/usergroup/add.html"})
+    @RequestMapping(value = {"/admin/usergroup/edit.html", "/admin/usergroup/add.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {

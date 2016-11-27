@@ -41,7 +41,7 @@ public class ImportKHDNController extends ApplicationObjectSupport{
     @Autowired
     private ImportKHDNValidator validator;
 
-    @RequestMapping(value = {"/admin/khdn/import.html", "/user/khdn/import.html"})
+    @RequestMapping(value = {"/admin/khdn/import.html", "/user/khdn/import.html", "/custom_user/khdn/import.html"})
     public ModelAndView importFile(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportKHDNCommand command,
                                    HttpServletRequest request,
                                    BindingResult bindingResult){

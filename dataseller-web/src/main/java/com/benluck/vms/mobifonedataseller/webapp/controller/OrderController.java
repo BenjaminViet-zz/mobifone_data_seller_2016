@@ -80,7 +80,7 @@ public class OrderController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html", "/khdn/order/list.html"} )
+    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html", "/khdn/order/list.html", "/custom_user/order/list.html"} )
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response,
@@ -109,8 +109,12 @@ public class OrderController extends ApplicationObjectSupport{
 
                         if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
                             return new ModelAndView("redirect:/admin/order/list.html");
-                        }else{
+                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
                             return new ModelAndView("redirect:/user/order/list.html");
+                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                            return new ModelAndView("redirect:/khdn/order/list.html");
+                        }if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                            return new ModelAndView("redirect:/custom_user/order/list.html");
                         }
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");

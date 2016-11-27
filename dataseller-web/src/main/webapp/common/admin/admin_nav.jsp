@@ -8,6 +8,9 @@
 <security:authorize access="hasAnyAuthority('KHDN')">
     <c:set var="prefix" value="/khdn" />
 </security:authorize>
+<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
+    <c:set var="prefix" value="/custom_user" />
+</security:authorize>
 
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
@@ -29,7 +32,7 @@
                     <li><a><i class="fa fa-user" aria-hidden="true"></i> <fmt:message key="left_nav_management_system" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="<c:url value="${prefix}/notification.html" />"><fmt:message key="left_nav_notification" /></a></li>
-                            <security:authorize access="hasAnyAuthority('ADMIN', 'USER_MANAGER')">
+                            <security:authorize access="hasAuthority('ADMIN')">
                                 <li><a><fmt:message key="left_nav_user_management" /><span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="<c:url value="${prefix}/user/add.html"/>"><fmt:message key="left_nav_user_add" /></a></li>
@@ -37,7 +40,7 @@
                                     </ul>
                                 </li>
                             </security:authorize>
-                            <security:authorize access="hasAnyAuthority('ADMIN', 'USER_GROUP_MANAGER')">
+                            <security:authorize access="hasAuthority('ADMIN')">
                                 <li><a><fmt:message key="left_nav_access_permission" /><span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="<c:url value="${prefix}/usergroup/add.html"/>"><fmt:message key="left_nav_permission_add" /></a></li>
@@ -67,22 +70,20 @@
                     <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'KHDN', 'ORDER_MANAGER', 'GENERATE_CARD_CODE_MANAGER')">
                     <li><a><i class="fa fa-files-o" aria-hidden="true"></i> <fmt:message key="left_nav_order_management" /> <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER')">
+                            <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
                                 <li><a href="<c:url value="${prefix}/order/add.html"/>"><fmt:message key="left_nav_order_create" /></a></li>
                                 <li><a href="<c:url value="${prefix}/order/oldorder/add.html"/>"><fmt:message key="left_nav_old_order" /></a></li>
                             </security:authorize>
                             <li><a href="<c:url value="${prefix}/order/list.html"/>"><fmt:message key="left_nav_order_research" /></a></li>
-                            <security:authorize access="hasAnyAuthority('ADMIN', 'GENERATE_CARD_CODE_MANAGER')">
-                                <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="left_nav_data_code_research" /></a></li>
-                            </security:authorize>
                             <security:authorize access="hasAuthority('ADMIN')">
+                                <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="left_nav_data_code_research" /></a></li>
                                 <li><a href="<c:url value="${prefix}/import_used_card_code.html" />"><fmt:message key="left_nav_import_used_card_code" /></a></li>
                             </security:authorize>
                         </ul>
                     </li>
                     </security:authorize>
 
-                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'EXPENSE_MANAGER')">
+                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
                         <li><a><i class="fa fa-money" aria-hidden="true"></i> <fmt:message key="cost.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li><a href="<c:url value="${prefix}/payment/payment-history.html"/> "><fmt:message key="left_nav_payment_history" /> </a></li>
@@ -92,7 +93,7 @@
                         </li>
                     </security:authorize>
 
-                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'REPORT_MANAGER')">
+                    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
                         <li><a><i class="fa fa-pie-chart" aria-hidden="true"></i> <fmt:message key="report.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li><a href="<c:url value="${prefix}/reportGeneralExpense/list.html"/> "><fmt:message key="report.baocaotonghopchiphiphattrien_duytri" /></a></li>

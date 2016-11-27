@@ -19,6 +19,9 @@
 <security:authorize access="hasAnyAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
+<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
+    <c:set var="prefix" value="/custom_user" />
+</security:authorize>
 <c:url var="formUrl" value="${prefix}/khdn/import.html"/>
 <c:url var="ajaxProcessImportUrl" value="/ajax/khdn/import.html"/>
 

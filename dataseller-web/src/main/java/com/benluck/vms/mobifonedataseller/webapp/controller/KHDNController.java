@@ -49,7 +49,9 @@ public class KHDNController extends ApplicationObjectSupport {
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping( value = {"/admin/khdn/list.html", "/user/khdn/list.html"})
+    @RequestMapping( value = {"/admin/khdn/list.html",
+                                "/user/khdn/list.html",
+                                "/custom_user/khdn/list.html"})
     public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult,
@@ -98,7 +100,9 @@ public class KHDNController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html", "/user/khdn/add.html", "/user/khdn/edit.html"})
+    @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html"
+                            , "/user/khdn/add.html", "/user/khdn/edit.html"
+                            , "/custom_user/khdn/add.html", "/custom_user/khdn/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
@@ -127,7 +131,13 @@ public class KHDNController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        return new ModelAndView("redirect:/admin/khdn/list.html");
+                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                            return new ModelAndView("redirect:/admin/khdn/list.html");
+                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                            return new ModelAndView("redirect:/user/khdn/list.html");
+                        }else{
+                            return new ModelAndView("redirect:/custom_user/khdn/list.html");
+                        }
                     }
                 }
             } else if( pojo.getKHDNId() != null ) {
