@@ -4,8 +4,6 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
-import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import org.apache.log4j.Logger;
@@ -19,7 +17,6 @@ import javax.servlet.ServletContextListener;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 
@@ -70,7 +67,7 @@ public class StartupListener implements ServletContextListener {
 
         storeDataCodeHashSet2Redis();
 
-        fetchUsedCardCode2Cache();
+        DataCodeUtil.fetchUsedCardCodeHS2Cache();
     }
 
 
@@ -95,7 +92,7 @@ public class StartupListener implements ServletContextListener {
                     dataCode = new DataCode();
                     dataCode.setKeyByYear(Constants.KEY_USED_2016);
                     dataCode.setHasKeyByUnitPrice(Constants.HAS_KEY_USED_2016UNIT_PRICE_10);
-                    dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSet());
+                    dataCode.setDataCodeHashSet(DataCodeUtil.getUsedDataCodeHashSetFromCache());
                     redisTemplate.opsForHash().put(dataCode.getKey(), dataCode.getHashKey(), dataCode);
                 }
             }
@@ -135,10 +132,5 @@ public class StartupListener implements ServletContextListener {
         }
 
         return result;
-    }
-
-    private void fetchUsedCardCode2Cache(){
-        UsedCardCodeManagementLocalBean usedCardCodeService = (UsedCardCodeManagementLocalBean)AppContext.getApplicationContext().getBean(UsedCardCodeManagementLocalBean.class);
-        CacheUtil.getInstance().putValue(Constants.USED_CARD_CODE_CACHE_KEY, usedCardCodeService.findAllListCardCode());
     }
 }

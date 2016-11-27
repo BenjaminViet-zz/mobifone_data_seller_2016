@@ -154,6 +154,9 @@ public class Constants {
     public static final Integer ADMIN_EXPORT_4_KHDN = 0;
     public static final Integer ADMIN_EXPORT_4_MOBIFONE = 1;
 
+    public static final Integer IS_NOT_IMPORTED_ORDER = 0;
+    public static final Integer IS_IMPORTED_ORDER = 1;
+
     // Import Constants
     public static final String ORDER_IMPORT_FILE_CACHE_KEY = "ORDER_IMPORT_FILE_CACHE_KEY";
 

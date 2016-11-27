@@ -4,6 +4,7 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
+import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
 import com.benluck.vms.mobifonedataseller.webapp.validator.ImportUsedCardCodeValidator;
@@ -83,7 +84,7 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
                 }else{
                     try{
                         usedCardCodeService.importCardCodeList(importUsedCardCodeList);
-                        CacheUtil.getInstance().putValue(Constants.USED_CARD_CODE_CACHE_KEY, usedCardCodeService.findAllListCardCode());
+                        DataCodeUtil.updateCardCodeHSInCache(usedCardCodeService.findAllListCardCode());
                         mav.addObject(Constants.ALERT_TYPE, "success");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.import_success"));
                     }catch (Exception e){

@@ -30,6 +30,7 @@ public class OrderBeanUtil {
         dto.setLastModified(entity.getLastModified());
         dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
         dto.setCardCodeProcessStatus(entity.getCardCodeProcessStatus());
+        dto.setImportedOrder(entity.getImportedOrder());
         return dto;
     }
 
