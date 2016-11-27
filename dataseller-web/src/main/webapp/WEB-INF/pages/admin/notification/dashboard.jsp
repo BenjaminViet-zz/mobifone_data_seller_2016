@@ -74,7 +74,7 @@
                             <a class="btn btn-success" onclick="javascript: resetForm();" ><i class="fa fa-refresh" aria-hidden="true"></i> <fmt:message key="label.reset" /></a>
                             <a class="btn btn-primary" onclick="javascript: submitForm();"><i class="fa fa-search" aria-hidden="true"></i> <fmt:message key="label.search" /></a>
                             <c:if test="${not empty item.listResult && item.listResult.size() > 0}">
-                                <a id="btnUpdate" class="btn btn-primary" onclick="javascript: updateNotification();"><i class="fa fa-floppy-o" aria-hidden="true"></i> <fmt:message key="label.update_notification" /></a>
+                                <a id="btnUpdate" class="btn btn-primary" onclick="javascript: updateNotification();"><i class="fa fa-check" aria-hidden="true"></i> <fmt:message key="label.update_notification" /></a>
                             </c:if>
                         </div>
                     </div>
