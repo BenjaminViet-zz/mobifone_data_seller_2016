@@ -142,7 +142,7 @@ public class OldOrderController extends ApplicationObjectSupport{
             }catch (Exception e){
                 logger.error("Error when create Old Order. \nDetails: " + e.getMessage());
                 mav.addObject(Constants.ALERT_TYPE, "danger");
-                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
+                mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("old_order.create_exception_duplicated_card_code"));
             }
         }
 
