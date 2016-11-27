@@ -4,6 +4,7 @@ import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLo
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.domain.UsedCardCodeEntity;
 import com.benluck.vms.mobifonedataseller.session.UsedCardCodeLocalBean;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 
 import javax.ejb.DuplicateKeyException;
 import javax.ejb.EJB;
@@ -38,7 +39,7 @@ public class UsedCardCodeManagementSessionBean implements UsedCardCodeManagement
 
         for (UsedCardCodeDTO dto : importUsedCardCodeList){
             UsedCardCodeEntity entity = new UsedCardCodeEntity();
-            entity.setCardCode(dto.getCardCode());
+            entity.setCardCode(MobiFoneSecurityBase64Util.encode(dto.getCardCode()));
             this.usedCardCodeService.save(entity);
         }
     }

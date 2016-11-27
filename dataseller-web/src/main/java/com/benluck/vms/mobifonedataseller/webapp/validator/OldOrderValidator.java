@@ -28,7 +28,7 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
     public void validate(Object o, Errors errors) {
         OrderCommand command = (OrderCommand)o;
         checkRequiredFields(command, errors);
-        checkSerialNumberDuplicated(command);
+        validateCardCodeList(command);
     }
 
     /**
@@ -45,8 +45,7 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.serialNumberFrom", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("order.label.status")}, "non-empty value required.");
     }
 
-    private void checkSerialNumberDuplicated(OrderCommand command){
-        Integer serialNumberFrom = command.getPojo().getSerialNumberFrom();
+    private void validateCardCodeList(OrderCommand command){
         Integer numberOfCardCode = command.getPojo().getQuantity();
 
 

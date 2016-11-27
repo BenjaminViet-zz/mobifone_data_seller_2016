@@ -94,13 +94,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="old_order.serial_number_from" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:input id="serialNumber" path="pojo.serialNumberFrom" cssClass="required form-control calcOrderTotal number" />
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="issuedDate"><fmt:message key="admin.donhang.label.issueDate" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12 xdisplay_inputx form-group has-feedback">
@@ -116,17 +109,6 @@
                             <input type="text" class="form-control has-feedback-left data_picker" name="shippingDate" value="<fmt:formatDate pattern="${datePattern}" value="${item.pojo.shippingDate}" />" id="shippingDate" aria-describedby="inputSuccess2Status4">
                             <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                             <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                            <fmt:message key="admin.donhang.label.status" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select cssClass="form-control" id="status" path="pojo.orderStatus" cssStyle="width: 150px;">
-                                <option <c:if test="${Constants.ORDER_STATUS_PROCESSING eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_PROCESSING}"><fmt:message key="label.in_progress" /></option>
-                                <option <c:if test="${Constants.ORDER_STATUS_FINISH eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_FINISH}"><fmt:message key="label.finish" /></option>
-                            </form:select>
                         </div>
                     </div>
                     <div class="form-group last">
@@ -215,7 +197,6 @@
             $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
         });
 
-        $('#orderId').data("remainingBalance", '${remainingBalance}');
     }
 
     function checkOrderCost(){

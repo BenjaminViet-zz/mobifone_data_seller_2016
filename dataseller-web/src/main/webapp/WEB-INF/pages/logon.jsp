@@ -2,13 +2,15 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ include file="/common/taglibs.jsp"%>
 
-<c:set var="prefix" value="/user" />
 <security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
+    <c:redirect url="/admin/notification.html"/>
+</security:authorize>
+<security:authorize access="hasAnyAuthority('VMS_USER')">
+    <c:redirect url="/user/notification.html"/>
 </security:authorize>
 <security:authorize access="hasAnyAuthority('KHDN')">
-    <c:set var="prefix" value="/khdn" />
+    <c:redirect url="/khdn/notification.html"/>
 </security:authorize>
-<c:redirect url="${prefix}/notification.html"/>
+<c:redirect url="/custom_user/notification.html"/>
 
 

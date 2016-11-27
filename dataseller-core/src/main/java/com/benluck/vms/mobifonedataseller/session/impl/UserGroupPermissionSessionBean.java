@@ -48,7 +48,7 @@ public class UserGroupPermissionSessionBean extends AbstractSessionBean<UserGrou
     @Override
     public void deleteOutUpdatePermissionIds(Long userGroupId, List<Long> permissionIds) {
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" DELETE FROM UserGroupPermissionEntity WHERE userGroup.userGroupId = :userGroupId AND permission.permissionId NOT IN :permissionIds ");
+        sqlQuery.append(" DELETE FROM UserGroupPermissionEntity WHERE userGroup.userGroupId = :userGroupId AND permission.permissionId IN :permissionIds ");
         entityManager.createQuery(sqlQuery.toString())
                     .setParameter("userGroupId", userGroupId)
                     .setParameter("permissionIds", permissionIds)

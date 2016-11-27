@@ -8,6 +8,7 @@ import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.*;
 import com.benluck.vms.mobifonedataseller.security.util.MyUserDetail;
 import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,6 +193,13 @@ public class MyUserDetailService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for(PermissionDTO roleDTO : permissionDTOList) {
             authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
+
+            if(StringUtils.isNotBlank(account.getUserGroup().getCode())
+                    &&!account.getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN)
+                    && !account.getUserGroup().getCode().equals(Constants.USERGROUP_VMS_USER)
+                    && !account.getUserGroup().getCode().equals(Constants.USERGROUP_KHDN)){
+                authorities.add(new SimpleGrantedAuthority(Constants.USERGROUP_CUSTOM_USER));
+            }
         }
 
         if(account != null && account.getUserGroup() != null) {

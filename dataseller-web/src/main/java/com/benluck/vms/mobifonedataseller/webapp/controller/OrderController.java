@@ -69,6 +69,8 @@ public class OrderController extends ApplicationObjectSupport{
     @Autowired
     private OrderDataCodeManagementLocalBean orderDataCodeService;
     @Autowired
+    private CodeHistoryManagementLocalBean codeHistoryService;
+    @Autowired
     private OrderValidator validator;
 
     @InitBinder
@@ -129,7 +131,7 @@ public class OrderController extends ApplicationObjectSupport{
             }
         }
 
-        preferenceData(mav);
+        preferenceData(mav, command);
 
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
@@ -243,11 +245,17 @@ public class OrderController extends ApplicationObjectSupport{
         command.setMaxPageItems(command.getReportMaxPageItems());
     }
 
-    private void preferenceData(ModelAndView mav){
+    private void preferenceData(ModelAndView mav, OrderCommand command){
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
         mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
         mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
+
+        if(command.getPojo() != null && command.getPojo().getOrderId() != null ){
+            mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas()));
+        }else{
+            mav.addObject("totalRemainingPaidPackageValue", 0D);
+        }
     }
 
     @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html",
@@ -347,9 +355,7 @@ public class OrderController extends ApplicationObjectSupport{
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
 
-        preferenceData(mav);
-        mav.addObject("remainingBalance", calculateRemainingBalance());
-        mav.addObject("totalRemainingPaidPackageValue", 0D);
+        preferenceData(mav, command);
         return mav;
     }
 
@@ -357,10 +363,6 @@ public class OrderController extends ApplicationObjectSupport{
         TaskTakeCardCode taskTakeCardCode = new TaskTakeCardCode(SecurityUtils.getLoginUserId(), orderId, unitPriceCode);
         Timer timer = new Timer(true);
         timer.schedule(taskTakeCardCode, 0);
-    }
-
-    private Double calculateRemainingBalance(){
-        return new Double(100);
     }
 
     /**

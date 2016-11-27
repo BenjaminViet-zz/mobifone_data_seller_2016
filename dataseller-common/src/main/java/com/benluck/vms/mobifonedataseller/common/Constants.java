@@ -136,6 +136,7 @@ public class Constants {
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
     public static final String USERGROUP_VMS_USER = "VMS_USER";
+    public static final String USERGROUP_CUSTOM_USER = "CUSTOM_USER";
 
     public static final String ALERT_TYPE = "alertType";
 

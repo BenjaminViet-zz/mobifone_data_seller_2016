@@ -1,10 +1,7 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.*;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -43,7 +41,7 @@ public class OldOrderController extends ApplicationObjectSupport{
     @Autowired
     private KHDNManagementLocalBean KHDNService;
     @Autowired
-    private OrderDataCodeManagementLocalBean orderDataCodeService;
+    private CodeHistoryManagementLocalBean codeHistoryService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -72,6 +70,20 @@ public class OldOrderController extends ApplicationObjectSupport{
             }
         }
 
+        preferenceData(mav, command);
         return mav;
+    }
+
+    private void preferenceData(ModelAndView mav, OrderCommand command){
+        mav.addObject("packageDataList", packageDataService.findAll());
+        mav.addObject("KHDNList", KHDNService.findAll());
+        mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
+        mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
+
+        if(command.getPojo() != null && command.getPojo().getOrderId() != null ){
+            mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas()));
+        }else{
+            mav.addObject("totalRemainingPaidPackageValue", 0D);
+        }
     }
 }

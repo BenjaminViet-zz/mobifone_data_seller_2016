@@ -226,8 +226,6 @@
         $('option:not(:first-child)', '#packageData').each(function(idx, el){
             $(el).data("unitPrice", $(el).attr('data-unitPrice')).removeAttr('data-unitPrice');
         });
-
-        $('#orderId').data("remainingBalance", '${remainingBalance}');
     }
 
     function checkOrderCost(){
