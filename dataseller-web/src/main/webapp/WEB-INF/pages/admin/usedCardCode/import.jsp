@@ -89,7 +89,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <div id="step-1">
+                        <div id="step-1" style="<c:if test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD}">display: none;</c:if>">
                             <div class="row-fluid pane_info">
                                 <div class="widget-box">
                                     <div class="widget-content nopadding">
@@ -116,15 +116,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="step-2" style="width: 100%; height: 500px;">
+                        <div id="step-2">
                             <c:if test="${item.importUsedCardCode}">
                                 <div class="alert alert-info alert-dismissible fade in">
                                     <fmt:message key="import_used_card_code.review_list.imported_used_card_code_before_message" />
                                 </div>
                             </c:if>
-
-                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em; height: ${39 + (item.importUsedCardCodeList.size() * 38)}px">
-                                <thead>
+                            <div id="tableListContainer" style="width: 100%; height: 400px;">
+                                <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em; height: ${39 + (item.importUsedCardCodeList.size() * 38)}px">
+                                    <thead>
                                     <tr>
                                         <th class="table_header text-center"><fmt:message key="label.stt" /></th>
                                         <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.card_code" /></th>
@@ -132,19 +132,20 @@
                                             <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.status" /></th>
                                         </c:if>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${item.importUsedCardCodeList}" var="usedCardCodeDTO" varStatus="status">
-                                    <tr class="<c:if test="${not empty importKHDNDTO.errorMessage}">line-error</c:if> ">
-                                        <td style="width: 3%;" class="text-center width_50px">${status.count}</td>
-                                        <td style="width: 37%;" class="text-center width_200px">${usedCardCodeDTO.cardCode}</td>
-                                        <c:if test="${not empty item.errorMessage && !item.hasError}">
-                                            <td style="width: 60%;" class="width_350px">${usedCardCodeDTO.errorMessage}</td>
-                                        </c:if>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${item.importUsedCardCodeList}" var="usedCardCodeDTO" varStatus="status">
+                                        <tr class="<c:if test="${not empty importKHDNDTO.errorMessage}">line-error</c:if> ">
+                                            <td style="width: 3%;" class="text-center width_50px">${status.count}</td>
+                                            <td style="width: 37%;" class="text-center width_200px">${usedCardCodeDTO.cardCode}</td>
+                                            <c:if test="${not empty item.errorMessage && !item.hasError}">
+                                                <td style="width: 60%;" class="width_350px">${usedCardCodeDTO.errorMessage}</td>
+                                            </c:if>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div id="step-3">
                             <div class="m-t-30">
@@ -183,14 +184,15 @@
         <c:choose>
             <c:when test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD && not empty item.errorMessage && !item.hasError}">
                 if($(window).width() >= mobile_screen_width){
+                    $('#tableListContainer').mCustomScrollbar();
                     return;
                 }else{
                     $('#tableList').addClass('mobile').width(600);
-                    $('#step-2').mCustomScrollbar();
+                    $('#tableListContainer').mCustomScrollbar();
                 }
             </c:when>
             <c:otherwise>
-                $('#step-2').mCustomScrollbar();
+                $('#tableListContainer').mCustomScrollbar();
             </c:otherwise>
         </c:choose>
     }
