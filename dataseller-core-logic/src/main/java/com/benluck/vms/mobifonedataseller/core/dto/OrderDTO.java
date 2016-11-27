@@ -34,6 +34,7 @@ public class OrderDTO implements Serializable{
     private Integer cardCodeProcessStatus;
     private boolean adminExport4KHDN = false;
     private Integer isImportedOrder = 0;        // 0: not imported order, 1 otherwise.
+    private List<UsedCardCodeDTO> importCardCodeList4OldOrder;
 
     public OrderDTO() {
     }
@@ -186,5 +187,13 @@ public class OrderDTO implements Serializable{
 
     public void setImportedOrder(Integer importedOrder) {
         isImportedOrder = importedOrder;
+    }
+
+    public List<UsedCardCodeDTO> getImportCardCodeList4OldOrder() {
+        return importCardCodeList4OldOrder;
+    }
+
+    public void setImportCardCodeList4OldOrder(List<UsedCardCodeDTO> importCardCodeList4OldOrder) {
+        this.importCardCodeList4OldOrder = importCardCodeList4OldOrder;
     }
 }

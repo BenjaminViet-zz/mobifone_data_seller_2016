@@ -1,17 +1,16 @@
 package com.benluck.vms.mobifonedataseller.core.business.impl;
 
 import com.benluck.vms.mobifonedataseller.beanUtil.OrderBeanUtil;
+import com.benluck.vms.mobifonedataseller.beanUtil.PackageDataBeanUtil;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
-import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
-import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.*;
 import com.benluck.vms.mobifonedataseller.domain.*;
 import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
+import com.benluck.vms.mobifonedataseller.session.PackageDataLocalBean;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import org.apache.commons.lang.StringUtils;
 
@@ -35,6 +34,8 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     private OrderHistoryLocalBean orderHistoryService;
     @EJB
     private OrderDataCodeLocalBean orderDataCodeService;
+    @EJB
+    private PackageDataLocalBean packageDataService;
 
     public OrderManagementSessionBean() {
     }
@@ -53,7 +54,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public OrderDTO addItem(OrderDTO pojo) throws DuplicateKeyException {
+    public OrderDTO addItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
 
         OrderEntity entity = new OrderEntity();
 
@@ -61,9 +62,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         khdnEntity.setKHDNId(pojo.getKhdn().getKHDNId());
         entity.setKhdn(khdnEntity);
 
-        PackageDataEntity packageDataEntity = new PackageDataEntity();
-        packageDataEntity.setPackageDataId(pojo.getPackageData().getPackageDataId());
-        entity.setPackageData(packageDataEntity);
+        entity.setPackageData(this.packageDataService.findById(pojo.getPackageData().getPackageDataId()));
 
         UserEntity createdBy = new UserEntity();
         createdBy.setUserId(pojo.getCreatedBy().getUserId());
@@ -99,9 +98,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         }
 
         if(!dbItem.getPackageData().getPackageDataId().equals(pojo.getPackageData().getPackageDataId())){
-            PackageDataEntity packageDataEntity = new PackageDataEntity();
-            packageDataEntity.setPackageDataId(pojo.getPackageData().getPackageDataId());
-            dbItem.setPackageData(packageDataEntity);
+            dbItem.setPackageData(this.packageDataService.findById(pojo.getPackageData().getPackageDataId()));
         }
 
         dbItem.setQuantity(pojo.getQuantity());
@@ -120,13 +117,10 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     private void saveDataCodes4Order(OrderEntity orderEntity, HashSet<String> cardCodeHashSetList2Store) throws DuplicateKeyException{
-        String prefixCardCode = String.valueOf(orderEntity.getPackageData().getValue() / 1000);
-        if(StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice())){
-            prefixCardCode = orderEntity.getPackageData().getCustomPrefixUnitPrice();
-        }
+        PackageDataDTO packageDataDTO = PackageDataBeanUtil.entity2DTO(orderEntity.getPackageData());
 
         Calendar current = Calendar.getInstance();
-        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), prefixCardCode);
+        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode());
 
         if(current.get(Calendar.YEAR) == 2016){
             if((StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && orderEntity.getPackageData().getCustomPrefixUnitPrice().equals(Constants.USED_CARD_CODE_PREFIX))
@@ -243,5 +237,93 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         pojo.setOrderStatus(dbItem.getOrderStatus());
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_DELETED, null);
+    }
+
+    @Override
+    public OrderDTO createOldOrder(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
+        OrderEntity entity = new OrderEntity();
+
+        KHDNEntity khdnEntity = new KHDNEntity();
+        khdnEntity.setKHDNId(pojo.getKhdn().getKHDNId());
+        entity.setKhdn(khdnEntity);
+
+        entity.setPackageData(this.packageDataService.findById(pojo.getPackageData().getPackageDataId()));
+
+        UserEntity createdBy = new UserEntity();
+        createdBy.setUserId(pojo.getCreatedBy().getUserId());
+        entity.setCreatedBy(createdBy);
+
+        entity.setQuantity(pojo.getQuantity());
+        entity.setUnitPrice(pojo.getUnitPrice());
+        entity.setIssuedDate(pojo.getIssuedDate());
+        entity.setShippingDate(pojo.getShippingDate());
+        entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        entity.setOrderStatus(Constants.ORDER_STATUS_FINISH);
+        entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        entity.setImportedOrder(Constants.IS_IMPORTED_ORDER);
+        entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_COMPLETED_STATUS);
+        entity = this.orderService.save(entity);
+
+        createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
+        saveDataCodes4Order(entity, pojo.getImportCardCodeList4OldOrder());
+        return OrderBeanUtil.entity2DTO(entity);
+    }
+
+    private void saveDataCodes4Order(OrderEntity orderEntity, List<UsedCardCodeDTO> cardCodeDTOList) throws DuplicateKeyException{
+        PackageDataDTO packageDataDTO = PackageDataBeanUtil.entity2DTO(orderEntity.getPackageData());
+
+        Calendar current = Calendar.getInstance();
+        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode());
+
+        if(current.get(Calendar.YEAR) == 2016){
+            if((StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && orderEntity.getPackageData().getCustomPrefixUnitPrice().equals(Constants.USED_CARD_CODE_PREFIX))
+                    || (StringUtils.isBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && (orderEntity.getPackageData().getValue() / 1000 == Integer.valueOf(Constants.USED_CARD_CODE_PREFIX).intValue()))){
+                if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
+                    totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + totalDataCode + 1;
+                }
+            }
+        }
+
+        Integer expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2016"));
+        if(current.get(Calendar.YEAR) >= 2017){
+            expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2017_or_later"));
+        }
+        Calendar expiredDate = Calendar.getInstance();
+        expiredDate.add(Calendar.DAY_OF_YEAR, expiredDays);
+        Timestamp expiredDate4CardCode = new Timestamp(expiredDate.getTimeInMillis());
+
+        StringBuilder serial = null;
+        StringBuilder tmpCardCode = null;
+
+        for (UsedCardCodeDTO usedCardCodeDTO : cardCodeDTOList){
+            tmpCardCode = new StringBuilder(usedCardCodeDTO.getCardCode());
+
+            // Take same 5 characters in Card Code.
+            serial = new StringBuilder(tmpCardCode.toString().substring(0, 5));
+
+            // Generate full Serial.
+            if(totalDataCode >= 0 && totalDataCode < 10){
+                serial.append("000000");
+            }else if(totalDataCode >= 10 && totalDataCode < 100){
+                serial.append("00000");
+            }else if(totalDataCode >= 100 && totalDataCode < 1000){
+                serial.append("0000");
+            }else if(totalDataCode >= 1000 && totalDataCode < 10000){
+                serial.append("000");
+            }else if(totalDataCode >= 10000 && totalDataCode < 100000){
+                serial.append("00");
+            }else if(totalDataCode >= 100000 && totalDataCode < 1000000){
+                serial.append("0");
+            }
+            serial.append(totalDataCode.toString());
+
+            OrderDataCodeEntity entity = new OrderDataCodeEntity();
+            entity.setOrder(orderEntity);
+            entity.setSerial(Long.valueOf(serial.toString()));
+            entity.setDataCode(MobiFoneSecurityBase64Util.encode(tmpCardCode.toString()));
+            entity.setExpiredDate(expiredDate4CardCode);
+            this.orderDataCodeService.save(entity);
+            totalDataCode++;
+        }
     }
 }

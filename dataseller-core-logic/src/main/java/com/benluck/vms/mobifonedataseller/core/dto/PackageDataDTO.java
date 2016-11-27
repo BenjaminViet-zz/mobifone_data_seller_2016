@@ -1,5 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.dto;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class PackageDataDTO implements Serializable {
     private String tk;
     private Boolean isGeneratedCardCode = false;
     private String customPrefixUnitPrice;
+    private String unitPrice4CardCode;
 
     public PackageDataDTO() {
     }
@@ -114,5 +117,13 @@ public class PackageDataDTO implements Serializable {
 
     public void setCustomPrefixUnitPrice(String customPrefixUnitPrice) {
         this.customPrefixUnitPrice = customPrefixUnitPrice;
+    }
+
+    public String getUnitPrice4CardCode() {
+        if(StringUtils.isNotBlank(this.getCustomPrefixUnitPrice())){
+            return this.getCustomPrefixUnitPrice();
+        }else{
+            return String.valueOf(this.getValue()/1000).replaceAll("\\.\\d*", "");
+        }
     }
 }

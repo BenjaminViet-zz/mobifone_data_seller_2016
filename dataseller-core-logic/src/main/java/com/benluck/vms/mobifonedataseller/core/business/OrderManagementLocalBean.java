@@ -32,7 +32,7 @@ public interface OrderManagementLocalBean {
 
     OrderDTO findById(Long orderId) throws ObjectNotFoundException;
 
-    OrderDTO addItem(OrderDTO pojo) throws DuplicateKeyException;
+    OrderDTO addItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 
     void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 
@@ -45,4 +45,6 @@ public interface OrderManagementLocalBean {
      * @throws RemoveException
      */
     void deleteItem(Long orderId, Long modifiedByUserId) throws ObjectNotFoundException, DuplicateKeyException, RemoveException;
+
+    OrderDTO createOldOrder(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 }
