@@ -100,15 +100,15 @@ public class TaskGenerateCardCode extends TimerTask{
                                 logger.info("Generating Card Code for batch " + batchIndex);
                                 tmpCardCodeHS = generateCardCode(yearCode, tmpUnitPriceCode.toString(), batchIndex);
 
-                                logger.info("Saving batch " + batchIndex + " with " + tmpCardCodeHS.size() + " Card Codes.");
+                                logger.info("Saving batch " + batchIndex + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + " with " + tmpCardCodeHS.size() + " Card Codes.");
                                 this.packageCodeDataGenService.insertUpdatePackageDataCodeGenAndBatch(packageDataId, year, batchIndex, tmpCardCodeHS.size(), (batchIndex == 0 ? true : false));
-                                logger.info("Saved batch " + batchIndex + " into PackageDataCodeGen table for tracking");
+                                logger.info("Saved batch " + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + batchIndex + " into PackageDataCodeGen table for tracking.");
 
-                                logger.info("Saving batch "  + batchIndex + " to Redis Database");
+                                logger.info("Saving batch "  + batchIndex + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + " to Redis Database");
                                 redisTemplate.opsForHash().put(this.prefixYearCode.toString(), tmpUnitPriceCodeBatchIndex.toString(), tmpCardCodeHS);
                             }
                             createNotificationMessage(true, packageDataDTO.getName());
-                            logger.info("Finish generating 10 batches of Card Code " + tmpCardCodeHS.size() + " Card Code for KEY: '" + VMS_CODE_PREFIX + yearCode + "', HASHKEY: '" + tmpUnitPriceCode.toString() + "'");
+                            logger.info("Finish generating 10 batches of Card Code " + tmpCardCodeHS.size() + " Card Code for KEY: '" + VMS_CODE_PREFIX + yearCode + "', HASH_KEY: '" + tmpUnitPriceCode.toString() + "'");
                         }catch (DuplicateKeyException dke){
                             createNotificationMessage(false, "packageId: " + packageDataIdStr);
                             logger.error("Duplicated PackageDataCodeGen for PackageDataId: " + packageDataIdStr + " in year " + year.toString());
@@ -119,7 +119,7 @@ public class TaskGenerateCardCode extends TimerTask{
                             logger.error("Details: " + one.getMessage());
                         }catch (Exception e){
                             createNotificationMessage(false, "packageId: " + packageDataIdStr);
-                            logger.error(" Error happened while update PackageDateCodeGenEntity. See details as below.");
+                            logger.error(" Error happened while updating PackageDateCodeGenEntity. See details as below.");
                             logger.error(e.getMessage());
                         }
                     }

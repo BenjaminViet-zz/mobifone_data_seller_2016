@@ -90,7 +90,7 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
                     }
                 }
             }else{
-                command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.exceed_min_row_to_read"));
+                command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.no_data_import"));
                 command.setHasError(true);
             }
         }catch (Exception e){

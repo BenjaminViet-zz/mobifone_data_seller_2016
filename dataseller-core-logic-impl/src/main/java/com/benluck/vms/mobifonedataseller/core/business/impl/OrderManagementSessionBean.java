@@ -76,6 +76,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         entity.setOrderStatus(pojo.getOrderStatus());
         entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
+        entity.setImportedOrder(pojo.getImportedOrder());
         if(pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
             entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
         }else{

@@ -235,9 +235,17 @@ ul.to_do,
     height: 10px !important;
 }
 
+.mCSB_scrollTools.mCSB_scrollTools_vertical .mCSB_dragger .mCSB_dragger_bar{
+    width: 10px;
+}
+
 .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_draggerRail {
     height: 10px !important;
     margin-top: 6px !important;
+}
+
+.mCSB_scrollTools.mCSB_scrollTools_vertical .mCSB_draggerRail {
+    width: 10px !important;
 }
 
 .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar,
@@ -251,7 +259,7 @@ ul.to_do,
 }
 
 .mCSB_container {
-    top: 10px !important;
+    margin-top: 10px !important;
 }
 
 .add-on-attach {

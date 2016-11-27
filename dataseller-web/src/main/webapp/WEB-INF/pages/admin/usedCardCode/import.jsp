@@ -59,7 +59,7 @@
 
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm" enctype="multipart/form-data">
                     <!-- Start SmartWizard Content -->
-                    <div id="wizard" class="form_wizard wizard_horizontal">
+                    <div id="wizard" class="form_wizard wizard_horizontal" style="max-height: 700px;">
                         <ul class="wizard_steps">
                             <li>
                                 <a href="#step-1">
@@ -116,14 +116,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="step-2" style="width: 100%;">
+                        <div id="step-2" style="width: 100%; height: 500px;">
                             <c:if test="${item.importUsedCardCode}">
                                 <div class="alert alert-info alert-dismissible fade in">
                                     <fmt:message key="import_used_card_code.review_list.imported_used_card_code_before_message" />
                                 </div>
                             </c:if>
 
-                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em">
+                            <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em; height: ${39 + (item.importUsedCardCodeList.size() * 38)}px">
                                 <thead>
                                     <tr>
                                         <th class="table_header text-center"><fmt:message key="label.stt" /></th>
@@ -171,21 +171,28 @@
     var $buttonPrev = null;
     var $buttonFinish = null;
     var $formEl = $('#listForm');
+    var tableHeaderHeight = 39;
+    var tableTrHeight = 38;
 
     $(document).ready(function() {
         handleButtons();
         handleFile();
-        initScrollablePane();
     });
 
     function initScrollablePane(){
-        <c:if test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD && not empty item.errorMessage && !item.hasError}">
-            if($(window).width() >= mobile_screen_width){
-                return;
-            }
-            $('#tableList').addClass('mobile').width(600);
-            $('#step-2').mCustomScrollbar({axis:"x"});
-        </c:if>
+        <c:choose>
+            <c:when test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD && not empty item.errorMessage && !item.hasError}">
+                if($(window).width() >= mobile_screen_width){
+                    return;
+                }else{
+                    $('#tableList').addClass('mobile').width(600);
+                    $('#step-2').mCustomScrollbar();
+                }
+            </c:when>
+            <c:otherwise>
+                $('#step-2').mCustomScrollbar();
+            </c:otherwise>
+        </c:choose>
     }
 
     function handleFile(){
@@ -227,6 +234,8 @@
         } else if( curStepIndex == ${Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD} ){
             // trigger click on button Next to go to Step 2
             $buttonNext.trigger('click');
+
+            initScrollablePane();
 
             // remove class hide in step 1
             $('#step-1').removeClass('hidden');
