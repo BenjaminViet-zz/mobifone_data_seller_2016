@@ -298,14 +298,7 @@ public class OrderController extends ApplicationObjectSupport{
                         pojo.setCreatedBy(updatedBy);
 
                         PackageDataDTO packageDataDTO = this.packageDataService.findById(pojo.getPackageData().getPackageDataId());
-                        String unitPriceCode = null;
-                        if(StringUtils.isNotBlank(packageDataDTO.getCustomPrefixUnitPrice())){
-                            unitPriceCode = packageDataDTO.getCustomPrefixUnitPrice();
-                        }else{
-                            unitPriceCode = String.valueOf(pojo.getUnitPrice()/1000).replaceAll("\\.\\d*", "");
-                        }
-
-                        if(unitPriceCode.length() > 2){
+                        if(packageDataDTO.getUnitPrice4CardCode().length() > 2){
                             mav.addObject(Constants.ALERT_TYPE, "info");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_support_unit_price_2_digit"));
                         }else{
@@ -313,7 +306,7 @@ public class OrderController extends ApplicationObjectSupport{
                             if (pojo.getOrderId() == null ){
                                 pojo = this.orderService.addItem(pojo);
 
-                                startTaskTakingCardCode(pojo.getOrderId(), unitPriceCode);
+                                startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
@@ -330,12 +323,17 @@ public class OrderController extends ApplicationObjectSupport{
                                 // Update Card Code size in DB nd Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
                                         && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    startTaskTakingCardCode(pojo.getOrderId(), unitPriceCode);
+                                    startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
                                 }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                             }
-                            return new ModelAndView("redirect:/admin/order/list.html");
+
+                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                return new ModelAndView("redirect:/admin/order/list.html");
+                            }else{
+                                return new ModelAndView("redirect:/user/order/list.html");
+                            }
                         }
                     }
                 }

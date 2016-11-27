@@ -12,14 +12,15 @@
 </head>
 
 <c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
+<security:authorize access="hasAuthority('ADMIN')">
     <c:set var="prefix" value="/admin" />
 </security:authorize>
 
-<c:url var="formUrl" value="${prefix}/oldorder/add.html" />
+<c:url var="formUrl" value="${prefix}/order/oldorder/add.html" />
 <c:if test="${not empty item.pojo.orderId}">
-    <c:url var="formUrl" value="${prefix}/order/edit.html" />
+    <c:url var="formUrl" value="${prefix}/order/oldorder/edit.html" />
 </c:if>
+<c:url var="backUrl" value="${prefix}/order/list.html" />
 
 <div class="clearfix"></div>
 <div id="message_section">
@@ -44,7 +45,24 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
-                <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate">
+                <c:choose>
+                    <c:when test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                        <div class="x_title">
+                            <div class="alert alert-danger no-bottom">
+                                <fmt:message key="packagedatacodegen.there_are_not_any_package_data_generate_card_code" />
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="x_title hide" id="page_message_title">
+                            <div class="alert alert-danger no-bottom">
+                                <span></span>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+
+                <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
                         </label>
@@ -70,14 +88,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="quantity"><fmt:message key="admin.donhang.label.quantity" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="quantity" type="text" name="pojo.quantity" min="1" class="form-control required money" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${item.pojo.quantity}" /> " />
-                            <form:errors for="quantity" path="pojo.quantity" cssClass="error-inline-validate"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="unitPrice"><fmt:message key="admin.donhang.label.UnitPrice" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -86,11 +96,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="admin.donhang.label.total" />
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="old_order.import_card_code_file" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="calcOrderTotal" type="text" readonly="readonly" class="form-control calcOrderTotal"/>
-                            <form:errors for="calcOrderTotal" cssClass="error-inline-validate"/>
+                            <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_card_code_4_old_order.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
+                            <div class="chonFileImport">
+                                <label for="file" class="btn btn-info">
+                                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>
+                                </label>
+                                <input id="file" type="file" name="file" accept="application/vnd.ms-excel" />
+                            </div>
+                            <span id="file-upload-error" class="error-inline-validate"><fmt:message key="label.not_empty_file_upload" /></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -113,6 +129,7 @@
                     </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;
                             <c:set var="allowUpdateOrInsert" value="${true}" />
                             <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
                                 <c:set var="allowUpdateOrInsert" value="${false}" />
@@ -137,18 +154,24 @@
 <script type="text/javascript">
     var totalRemainingPaidPackageValue = ${totalRemainingPaidPackageValue};
     var $message_sectionEl = $('#message_section');
+    var $fileUpload = $('#file');
+    var $fileUploadError = $('#file-upload-error');
+    var $pageMessageTitle = $('#page_message_title');
+    var $btnSave = $('#btnSave');
+    var $khdnSelectMenu = $('#KHDN');
 
     var packageDataIdsHasGenerateCardCodeList = [];
     <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
-            <c:forEach items="${packageDataIdListHasGeneratedCardCode}" var="packageDataId">
-    packageDataIdsHasGenerateCardCodeList.push('${packageDataId}');
-    </c:forEach>
+        <c:forEach items="${packageDataIdListHasGeneratedCardCode}" var="packageDataId">
+            packageDataIdsHasGenerateCardCodeList.push('${packageDataId}');
+        </c:forEach>
     </c:if>
 
     $(document).ready(function(){
         storeDOMData();
         bindMask();
         bindEvent();
+        handleFile();
     });
 
     function checkPackageDataCardCodeGeneration(){
@@ -156,22 +179,20 @@
             var selectedPackageDataId = $('#packageData').val();
         if(packageDataIdsHasGenerateCardCodeList.length > 0 && selectedPackageDataId != ''){
             if(packageDataIdsHasGenerateCardCodeList.indexOf(selectedPackageDataId) == -1){
-                $('#page_message_title').removeClass('hide').find('span:first').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
-                $('#btnSave').attr('disabled', 'disabled');
+                $pageMessageTitle.removeClass('hide').find('span:first').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
+                $btnSave.attr('disabled', 'disabled');
             }else{
-                $('#page_message_title').addClass('hide').find('span:first').html('');
-                $('#btnSave').removeAttr('disabled');
+                $pageMessageTitle.addClass('hide').find('span:first').html('');
+                $btnSave.removeAttr('disabled');
             }
         }else{
-            $('#page_message_title').addClass('hide');
+            $pageMessageTitle.addClass('hide');
         }
     </c:if>
     }
 
     function updateTotalPaidPackageRemainingValue(){
-        var $khdnSelectMenu =  $('#KHDN');
-        var selectedKHDNId = $khdnSelectMenu.val();
-        if(selectedKHDNId == -1){
+        if($khdnSelectMenu.val() == -1){
             return;
         }
 
@@ -182,13 +203,12 @@
             data: {isdn: isdn},
             success: function(r){
                 totalRemainingPaidPackageValue = r.value;
-                checkOrderCost();
             }
         });
     }
 
     function storeDOMData(){
-        $('#KHDN').find("option:not(:first-child)").each(function(index, el){
+        $khdnSelectMenu.find("option:not(:first-child)").each(function(index, el){
             var $optEl = $(el);
             $optEl.data("isdn", $optEl.attr('data-isdn')).removeAttr('data-isdn');
         });
@@ -199,48 +219,9 @@
 
     }
 
-    function checkOrderCost(){
-        var orderCost = eval($('#calcOrderTotal').val().replace(/\,/g, ''));
-        if(orderCost > totalRemainingPaidPackageValue){
-            $message_sectionEl.html("<div class=\"row\">" +
-                    "<div class=\"col-md-12 col-sm-12 col-xs-12\">" +
-                    "<div class=\"x_panel\">" +
-                    "<div class=\"x_content\">" +
-                    "<div class=\"alert alert-warning alert-dismissible fade in\">" +
-                    "<a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>" +
-                    "<fmt:message key='donhang.popup.exceed_remaining_paid_package' />" +
-                    "</div>" +
-                    "<div class=\"clear\"></div>" +
-                    "</div>" +
-                    "</div>" +
-                    "</div>" +
-                    "</div>");
-        }else{
-            $message_sectionEl.html('');
-        }
-    }
-
     function bindMask(){
-        var $totalEl = $('.calcOrderTotal');
-        $totalEl.val(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
-        $totalEl.mask('000,000,000,000,000,000', {
-            reverse: true
-        });
-
-        $('#quantity').keyup(function() {
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
-            checkOrderCost();
-        });
-
-        $('#unitPrice').keyup(function() {
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
-            checkOrderCost();
-        });
-
         $('#packageData').on('change', function(){
             $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
-            /*jQueryMask();*/
         });
     }
 
@@ -250,11 +231,35 @@
             if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
                 bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
                     if(r && $('#formEdit').valid() ){
-                        $("#formEdit").submit();
+                        if(checkFileUpload()){
+                            $("#formEdit").submit();
+                        }
                     }
                 });
             }else{
-                $("#formEdit").submit();
+                if(checkFileUpload()){
+                    $("#formEdit").submit();
+                }
+            }
+        });
+    }
+
+    function checkFileUpload(){
+        if($fileUpload.val() !== "" && $fileUpload.val().length > 0){
+            $fileUploadError.hide();
+            return true;
+        }
+        $fileUploadError.show();
+        return false;
+    }
+
+    function handleFile(){
+        $fileUpload.on('change', function(){
+            if ( $fileUpload.val() != '' ) {
+                $fileUpload.closest('.chonFileImport').find('label').addClass('btn-success').removeClass('btn-info').html('<i class="fa fa-check" aria-hidden="true"></i> <fmt:message key="import.selectFileSuccess"></fmt:message>');
+                checkFileUpload();
+            } else {
+                $fileUpload.closest('.chonFileImport').find('label').addClass('btn-info').removeClass('btn-success').html('<i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>');
             }
         });
     }
