@@ -62,9 +62,6 @@
                                     </ul>
                                 </li>
                             </security:authorize>
-                            <security:authorize access="hasAuthority('ADMIN')">
-                                <li><a href="<c:url value="${prefix}/import_used_card_code.html" />"><fmt:message key="left_nav_import_used_card_code" /></a></li>
-                            </security:authorize>
                         </ul>
                     </li>
                     <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'KHDN', 'ORDER_MANAGER', 'GENERATE_CARD_CODE_MANAGER')">
@@ -77,6 +74,9 @@
                             <li><a href="<c:url value="${prefix}/order/list.html"/>"><fmt:message key="left_nav_order_research" /></a></li>
                             <security:authorize access="hasAnyAuthority('ADMIN', 'GENERATE_CARD_CODE_MANAGER')">
                                 <li><a href="<c:url value="${prefix}/packagedatacodegen/list.html" />"><fmt:message key="left_nav_data_code_research" /></a></li>
+                            </security:authorize>
+                            <security:authorize access="hasAuthority('ADMIN')">
+                                <li><a href="<c:url value="${prefix}/import_used_card_code.html" />"><fmt:message key="left_nav_import_used_card_code" /></a></li>
                             </security:authorize>
                         </ul>
                     </li>
