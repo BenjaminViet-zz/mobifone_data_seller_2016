@@ -24,8 +24,8 @@ public class NotificationSessionBean extends AbstractSessionBean<NotificationEnt
     @Override
     public List<NotificationEntity> fetchNotificationNewestList(Long userId) {
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" FROM NotificationEntity WHERE user.userId = :userId ORDER BY createdDate DESC ");
-        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("userId", userId);
+        sqlQuery.append(" FROM NotificationEntity WHERE user.userId = :userId AND read = :read ORDER BY createdDate DESC ");
+        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("userId", userId).setParameter("read", Constants.NOTIFICATION_NOT_YET_READ);
         query.setFirstResult(0);
         query.setMaxResults(Constants.MAX_NOTIFICATION_MESSAGE_POPUP);
         return (List<NotificationEntity>)query.getResultList();
