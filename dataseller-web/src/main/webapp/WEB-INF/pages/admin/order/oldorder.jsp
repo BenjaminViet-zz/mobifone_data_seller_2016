@@ -283,6 +283,10 @@
 
     function bindEvent(){
         $("#btnSave").click(function(e){
+            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                return;
+            </c:if>
+
             var statusVal = $('#status').val();
             if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
                 bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){

@@ -5,10 +5,14 @@ import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderHistoryDTO;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderHistoryCommand;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.displaytag.tags.TableTagParameters;
+import org.displaytag.util.ParamEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -49,15 +53,47 @@ public class OrderHistoryController extends ApplicationObjectSupport{
         ModelAndView mav = new ModelAndView("/admin/orderhistory/list");
 
         executeSearch(command, request);
-        preferenceData(mav, command.getPojo().getOrder().getOrderId());
+        preferenceData(mav);
+        fetchCardCodeList(mav, command, request);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
-    private void preferenceData(ModelAndView mav, Long orderId){
+    private void preferenceData(ModelAndView mav){
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
-        mav.addObject("cardCodeList", this.orderDataCodeService.findListCardCodeByOrder(orderId));
+    }
+
+    private void fetchCardCodeList(ModelAndView mav, OrderHistoryCommand command, HttpServletRequest request){
+        initSearchCardCodeList(request, command);
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put("order.orderId", command.getPojo().getOrder().getOrderId());
+
+        Object[] resultObject = this.orderDataCodeService.findByProperties(properties, command.getSortExpressionCardCode(), command.getSortDirectionCardCode(), command.getFirstCardCodePageItem(), command.getCardCodeMaxPageItems());
+        command.setTotalCardCodeItems(Integer.valueOf(resultObject[0].toString()));
+        command.setCardCodeList((List<OrderDataCodeDTO>)resultObject[1]);
+
+        mav.addObject("cardCodeItem", command);
+    }
+
+    private void initSearchCardCodeList(HttpServletRequest request, OrderHistoryCommand command){
+        if (command != null){
+            String sortExpression = request.getParameter(new ParamEncoder("tableList2").encodeParameterName(TableTagParameters.PARAMETER_SORT));
+            String sortDirection = request.getParameter(new ParamEncoder("tableList2").encodeParameterName(TableTagParameters.PARAMETER_ORDER));
+            String sPage = request.getParameter(new ParamEncoder("tableList2").encodeParameterName(TableTagParameters.PARAMETER_PAGE));
+            Integer page = 1;
+            if (StringUtils.isNotBlank(sPage)) {
+                try {
+                    page = Integer.valueOf(sPage);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+            command.setCardCodePageIndex(page);
+            command.setFirstCardCodePageItem((command.getPage() - 1) * command.getReportMaxPageItems());
+            command.setSortExpressionCardCode(sortExpression);
+            command.setSortDirectionCardCode(sortDirection);
+        }
     }
 
     private void executeSearch(OrderHistoryCommand command, HttpServletRequest request){

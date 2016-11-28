@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import javax.ejb.Local;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,4 +23,5 @@ public interface OrderDataCodeManagementLocalBean{
 
     HashSet<String> findCardCodeImported4OldOrder();
 
+    Object[] findByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

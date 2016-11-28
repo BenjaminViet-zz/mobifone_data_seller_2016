@@ -120,16 +120,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         PackageDataDTO packageDataDTO = PackageDataBeanUtil.entity2DTO(orderEntity.getPackageData());
 
         Calendar current = Calendar.getInstance();
-        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode());
-
-        if(current.get(Calendar.YEAR) == 2016){
-            if((StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && orderEntity.getPackageData().getCustomPrefixUnitPrice().equals(Constants.USED_CARD_CODE_PREFIX))
-                || (StringUtils.isBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && (orderEntity.getPackageData().getValue() / 1000 == Integer.valueOf(Constants.USED_CARD_CODE_PREFIX).intValue()))){
-                if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
-                    totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + totalDataCode + 1;
-                }
-            }
-        }
+        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode()) + 1;
 
         Integer expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2016"));
         if(current.get(Calendar.YEAR) >= 2017){
@@ -273,16 +264,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         PackageDataDTO packageDataDTO = PackageDataBeanUtil.entity2DTO(orderEntity.getPackageData());
 
         Calendar current = Calendar.getInstance();
-        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode());
-
-        if(current.get(Calendar.YEAR) == 2016){
-            if((StringUtils.isNotBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && orderEntity.getPackageData().getCustomPrefixUnitPrice().equals(Constants.USED_CARD_CODE_PREFIX))
-                    || (StringUtils.isBlank(orderEntity.getPackageData().getCustomPrefixUnitPrice()) && (orderEntity.getPackageData().getValue() / 1000 == Integer.valueOf(Constants.USED_CARD_CODE_PREFIX).intValue()))){
-                if(totalDataCode.intValue() <= Constants.ORDER_DATA_CODE_SERIAL_OFFSET){
-                    totalDataCode = Constants.ORDER_DATA_CODE_SERIAL_OFFSET + totalDataCode + 1;
-                }
-            }
-        }
+        Integer totalDataCode = this.orderDataCodeService.countTotal(current.get(Calendar.YEAR), packageDataDTO.getUnitPrice4CardCode()) + 1;
 
         Integer expiredDays = Integer.valueOf(Config.getInstance().getProperty("order_data_code_expired_2016"));
         if(current.get(Calendar.YEAR) >= 2017){

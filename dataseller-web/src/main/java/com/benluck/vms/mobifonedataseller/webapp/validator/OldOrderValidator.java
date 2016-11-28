@@ -82,8 +82,8 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
     private List<UsedCardCodeDTO> extractFileImport(MultipartFile fileUpload, OrderCommand command)throws Exception{
         HashSet<String> cardCodeHS = new HashSet<String>();
         List<UsedCardCodeDTO> importKHDNDTOLIst = new ArrayList<UsedCardCodeDTO>();
-        HashSet<String> usedCardCodeHS = decodeUsedCardCodeHS();;
-        HashSet<String> usedCardCodeOldOrderHS = this.orderDataCodeService.findCardCodeImported4OldOrder();
+        HashSet<String> usedCardCodeHS = decodeUsedCardCodeHS();
+        HashSet<String> usedCardCodeOldOrderHS = fetchImportedUsedCardCode();
         try{
             WorkbookSettings ws = new WorkbookSettings();
             ExcelUtil.setEncoding4Workbook(ws);
@@ -123,6 +123,20 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
             command.setHasError(true);
         }
         return importKHDNDTOLIst;
+    }
+
+    private HashSet<String> fetchImportedUsedCardCode(){
+        HashSet<String> usedCardCodeOldOrderHS = this.orderDataCodeService.findCardCodeImported4OldOrder();
+        HashSet<String> decodedImportedUsedCardCodeHS = new HashSet<String>();
+        Iterator<String> ito = usedCardCodeOldOrderHS.iterator();
+        StringBuilder tmpEncodedCardCode = null;
+
+        while(ito.hasNext()){
+            tmpEncodedCardCode = new StringBuilder(ito.next());
+            decodedImportedUsedCardCodeHS.add(MobiFoneSecurityBase64Util.decode(tmpEncodedCardCode.toString()));
+        }
+
+        return decodedImportedUsedCardCodeHS;
     }
 
     private HashSet<String> decodeUsedCardCodeHS(){

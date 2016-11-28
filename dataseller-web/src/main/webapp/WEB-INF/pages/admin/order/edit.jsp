@@ -283,6 +283,10 @@
 
     function bindEvent(){
         $("#btnSave").click(function(e){
+            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+                return;
+            </c:if>
+
             if($('#formEdit').valid()){
                 var statusVal = $('#status').val();
                 if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){

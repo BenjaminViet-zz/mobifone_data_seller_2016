@@ -105,7 +105,7 @@
     </div>
 </div>
 
-<c:if test="${cardCodeList != null && cardCodeList.size() > 0}">
+<c:if test="${cardCodeItem.cardCodeList != null && cardCodeItem.cardCodeList.size() > 0}">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_title">
@@ -114,26 +114,19 @@
             </div>
             <div class="x_panel">
                 <div class="x_content">
-                    <div id="tableListContainer2" style="width: 100%;">
-                        <table id="tableList2" class="table table-striped table-bordered" cellspacing="0" cellpadding="0" >
-                            <thead>
-                            <tr>
-                                <th class="table_header text-center width_50_px"><fmt:message key="label.stt" /></th>
-                                <th class="table_header text-center width_400_px"><fmt:message key="order.card_code" /></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${cardCodeList}" var="cardCode" varStatus="status">
-                                <tr>
-                                    <td class="text-center">${status.count}</td>
-                                    <td class="text-center">${cardCode}</td>
-                                </tr>
-                            </c:forEach>
-                            <tr>
-                                <td colspan="2" class="text-right">${cardCodeList.size()} <fmt:message key="order.total_card_code" /></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div id="tableListContainer2" style="width: 100%; height: 700px;">
+                        <display:table name="cardCodeItem.cardCodeList" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                       partialList="true" sort="external" size="${cardCodeItem.totalCardCodeItems}" defaultsort="0"
+                                       id="tableList2" pagesize="${cardCodeItem.cardCodeMaxPageItems}" export="false"
+                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center width_50_px" style="width:5%;" >${tableList2_rowNum + (page * cardCodeItem.cardCodeMaxPageItems)}</display:column>
+                        <display:column headerClass="table_header text-center" sortable="false" class="text-center width_400_px" property="dataCode" titleKey="order.card_code" style="width: 95%;"/>
+                        <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.card_code" /></display:setProperty>
+                        <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.card_code" /></display:setProperty>
+                    </display:table>
+                    </div>
+                    <div id="pagelinksContainer2">
+
                     </div>
                 </div>
             </div>
@@ -143,6 +136,9 @@
 
 <script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script language="javascript" type="text/javascript">
+    var $tableContainer2 = $('#tableListContainer2');
+    var $tableList2 = $('#tableList2');
+
     $(document).ready(function(){
         initScrollablePane();
     });
@@ -158,14 +154,21 @@
     function initScrollablePane(){
         $('#tableListContainer').mCustomScrollbar({axis:"x"});
 
-        if($(window).width() >= mobile_screen_width){
-            return;
-        }
-
-        var $tableContainer2 = $('#tableListContainer2');
         if($tableContainer2.length){
-            $('#tableList2').addClass('mobile').width(450);
-            $tableContainer2.mCustomScrollbar({axis:"x"});
+            if($(window).width() >= mobile_screen_width){
+                $tableList2.height(39 + ${cardCodeItem.cardCodeList.size() * 38});
+                $tableContainer2.mCustomScrollbar({axis:"y"});
+            }else{
+                $tableList2.addClass('mobile').width(450).height(39 + ${cardCodeItem.cardCodeList.size() * 38});
+                $tableContainer2.mCustomScrollbar({axis:"yx"});
+            }
+
+            movePageLinks();
         }
+    }
+
+    function movePageLinks(){
+        $tableContainer2.find('.pagelinks').appendTo($('#pagelinksContainer2'));
+        $tableContainer2.find('.pagebanner').appendTo($('#pagelinksContainer2'));
     }
 </script>
