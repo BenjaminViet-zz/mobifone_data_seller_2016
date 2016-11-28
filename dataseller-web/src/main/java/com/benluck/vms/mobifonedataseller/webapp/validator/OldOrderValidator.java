@@ -1,9 +1,11 @@
 package com.benluck.vms.mobifonedataseller.webapp.validator;
 
+import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.ImportFileValidator;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import jxl.Cell;
 import jxl.Sheet;
@@ -11,6 +13,7 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +36,9 @@ import java.util.List;
 @Component
 public class OldOrderValidator extends ApplicationObjectSupport implements Validator{
     private Logger logger = Logger.getLogger(OldOrderValidator.class);
+
+    @Autowired
+    private OrderDataCodeManagementLocalBean orderDataCodeService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -75,7 +82,8 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
     private List<UsedCardCodeDTO> extractFileImport(MultipartFile fileUpload, OrderCommand command)throws Exception{
         HashSet<String> cardCodeHS = new HashSet<String>();
         List<UsedCardCodeDTO> importKHDNDTOLIst = new ArrayList<UsedCardCodeDTO>();
-        HashSet<String> usedCardCodeHS = RedisUtil.getUsedCardCodeByKey();
+        HashSet<String> usedCardCodeHS = decodeUsedCardCodeHS();;
+        HashSet<String> usedCardCodeOldOrderHS = this.orderDataCodeService.findCardCodeImported4OldOrder();
         try{
             WorkbookSettings ws = new WorkbookSettings();
             ExcelUtil.setEncoding4Workbook(ws);
@@ -96,11 +104,11 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
 
                     dto = new UsedCardCodeDTO(rowData[0].getContents().trim());
 
-                    boolean  hasError = validateCardCode(dto, cardCodeHS);
+                    boolean  hasError = validateCardCode(dto, cardCodeHS, usedCardCodeHS, usedCardCodeOldOrderHS);
                     importKHDNDTOLIst.add(dto);
 
                     if(hasError){
-                        command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.some_error_found_in_import_file"));
+                        command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.some_error_found_in_import_card_cord_file"));
                     }else{
                         cardCodeHS.add(dto.getCardCode());
                     }
@@ -117,13 +125,27 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
         return importKHDNDTOLIst;
     }
 
+    private HashSet<String> decodeUsedCardCodeHS(){
+        HashSet<String> usedCardCodeHS = RedisUtil.getUsedCardCodeByKey();
+        HashSet<String> decodedUsedCardCodeHS = new HashSet<String>();
+        Iterator<String> ito = usedCardCodeHS.iterator();
+        StringBuilder tmpEncodedCardCode = null;
+
+        while(ito.hasNext()){
+            tmpEncodedCardCode = new StringBuilder(ito.next());
+            decodedUsedCardCodeHS.add(MobiFoneSecurityBase64Util.decode(tmpEncodedCardCode.toString()));
+        }
+
+        return decodedUsedCardCodeHS;
+    }
+
     /**
      * Validate Card Code and make sure it is not used before.
      * @param dto
      * @param cardCodeHS
      * @return
      */
-    private boolean validateCardCode(UsedCardCodeDTO dto, HashSet<String> cardCodeHS){
+    private boolean validateCardCode(UsedCardCodeDTO dto, HashSet<String> cardCodeHS, HashSet<String> usedCardCodeHS, HashSet<String> usedCardCodeOldOrderHS){
         if(StringUtils.isBlank(dto.getCardCode())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.not_empty_card_code"));
             return true;
@@ -132,6 +154,12 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
             return true;
         }else if(cardCodeHS.contains(dto.getCardCode())){
             dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.duplicated_card_code"));
+            return true;
+        }else if(!usedCardCodeHS.contains(dto.getCardCode())){
+            dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.not_found_card_code"));
+            return true;
+        }else if(usedCardCodeOldOrderHS.contains(dto.getCardCode())){
+            dto.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.used_card_code_old_order"));
             return true;
         }
         return false;

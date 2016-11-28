@@ -6,6 +6,7 @@ import com.benluck.vms.mobifonedataseller.session.OrderDataCodeLocalBean;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -52,5 +53,13 @@ public class OrderDataCodeSessionBean extends AbstractSessionBean<OrderDataCodeE
         sqlQuery.append(" SELECT dataCode FROM MOBI_DATA_ORDER_DATA_CODE WHERE orderId = :orderId ORDER BY serial ASC ");
         Query query = entityManager.createNativeQuery(sqlQuery.toString()).setParameter("orderId", orderId);
         return query.getResultList();
+    }
+
+    @Override
+    public HashSet<String> findCardCodeImported4OldOrder() {
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append(" SELECT odc.dataCode FROM OrderDataCodeEntity odc WHERE odc.order.importedOrder = :importedOrder ");
+        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("importedOrder", Constants.IS_IMPORTED_ORDER);
+        return new HashSet<String>(query.getResultList());
     }
 }

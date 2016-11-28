@@ -9,6 +9,19 @@
 <head>
     <title><fmt:message key="${titlePage}" /></title>
     <meta name="menu" content="<fmt:message key="${titlePage}" />"/>
+    <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
+
+    <style>
+        #tablelist.mobile td.width_50_px{
+            width: 50px;
+        }
+        #tablelist.mobile td.width_150_px{
+            width: 150px;
+        }
+        #tablelist.mobile td.width_350_px{
+            width: 350px;
+        }
+    </style>
 </head>
 
 <c:set var="prefix" value="/user" />
@@ -158,6 +171,7 @@
                             </a>
                         </div>
                     </div>
+
                     <input type="hidden" name="crudaction" value="insert-update" />
                     <form:hidden id="orderId" path="pojo.orderId" />
                     <form:hidden path="pojo.cardCodeProcessStatus" />
@@ -167,6 +181,31 @@
     </div>
 </div>
 
+<c:if test="${not empty messageResponse && item.usedCardCodeImportList != null && item.usedCardCodeImportList.size() > 0}">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div id="tableListContainer" style="width: 100%; height: 500px;">
+                        <display:table name="items.usedCardCodeImportList" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                                       partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                       id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                       class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                            <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center width_50px" style="width: 3%;" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                            <display:column headerClass="table_header text-center" property="cardCode" sortName="khdn.name" sortable="true" class="width_150px" titleKey="old_order.card_code" style="width: 20%"/>
+                            <display:column headerClass="table_header text-center" property="errorMessage" sortName="packageData.name" class="text-center width_350px" sortable="true" titleKey="old_order.error_message" style="width: 75%;"/>
+
+                            <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.card_code" /></display:setProperty>
+                            <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.card_code" /></display:setProperty>
+                        </display:table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:if>
+
+<script type="text/javascript" src="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.concat.min.js"/>"></script>
 <script type="text/javascript">
     var totalRemainingPaidPackageValue = ${totalRemainingPaidPackageValue};
     var $message_sectionEl = $('#message_section');
@@ -188,6 +227,7 @@
         bindMask();
         bindEvent();
         handleFile();
+        initScrollablePane();
     });
 
     function checkPackageDataCardCodeGeneration(){
@@ -278,5 +318,15 @@
                 $fileUpload.closest('.chonFileImport').find('label').addClass('btn-info').removeClass('btn-success').html('<i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>');
             }
         });
+    }
+
+    function initScrollablePane(){
+        <c:if test="${not empty messageResponse && item.usedCardCodeImportList != null && item.usedCardCodeImportList.size() > 0}">
+            if($(window).width() >= mobile_screen_width){
+                return;
+            }
+            $('#tableList').addClass('mobile').width(550);
+            $('#tableListContainer').mCustomScrollbar({axis:"yx"});
+        </c:if>
     }
 </script>

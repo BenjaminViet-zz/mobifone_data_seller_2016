@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.webapp.command;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
     private Date shippingDate;
     private Integer exportOptionType = Constants.ADMIN_EXPORT_4_KHDN;
     private MultipartFile fileUpload;
+    private List<UsedCardCodeDTO> usedCardCodeImportList;
 
     public Date getIssuedDate() {
         return issuedDate;
@@ -54,5 +56,13 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
 
     public void setFileUpload(MultipartFile fileUpload) {
         this.fileUpload = fileUpload;
+    }
+
+    public List<UsedCardCodeDTO> getUsedCardCodeImportList() {
+        return usedCardCodeImportList;
+    }
+
+    public void setUsedCardCodeImportList(List<UsedCardCodeDTO> usedCardCodeImportList) {
+        this.usedCardCodeImportList = usedCardCodeImportList;
     }
 }

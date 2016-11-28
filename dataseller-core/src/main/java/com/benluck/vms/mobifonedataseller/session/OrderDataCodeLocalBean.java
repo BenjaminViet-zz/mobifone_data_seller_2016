@@ -2,6 +2,7 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.OrderDataCodeEntity;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -16,4 +17,7 @@ public interface OrderDataCodeLocalBean extends GenericSessionBean<OrderDataCode
     Integer countTotal(Integer year, String prefixCardCode);
 
     List<String> findListCardCodeByOrder(Long orderId);
+
+    HashSet<String> findCardCodeImported4OldOrder();
+
 }

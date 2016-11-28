@@ -243,6 +243,9 @@ public class OrderController extends ApplicationObjectSupport{
 
         StringBuilder whereClause = new StringBuilder("A.activeStatus = " + Constants.ORDER_ACTIVE_STATUS_ALIVE);
 
+        command.setSortExpression(" createdDate ");
+        command.setSortDirection(Constants.SORT_DESC);
+
         Object[] resultObject = this.orderService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getReportMaxPageItems(), whereClause.toString());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<OrderDTO>)resultObject[1]);

@@ -3,6 +3,7 @@ package com.benluck.vms.mobifonedataseller.core.business;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 
 import javax.ejb.Local;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -18,4 +19,7 @@ public interface OrderDataCodeManagementLocalBean{
     List<OrderDataCodeDTO> fetchByOrderId(Long orderId);
 
     List<String> findListCardCodeByOrder(Long orderId);
+
+    HashSet<String> findCardCodeImported4OldOrder();
+
 }

@@ -77,9 +77,9 @@ public class OldOrderController extends ApplicationObjectSupport{
         if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
             logger.warn("Please import Used Card Code list before using this feature.");
             if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                return new ModelAndView("redirect:/admin/order/oldorder/add.html");
+                return new ModelAndView("redirect:/admin/order/list.html");
             }else{
-                return new ModelAndView("redirect:/user/order/oldorder/add.html");
+                return new ModelAndView("redirect:/user/order/list.html");
             }
         }
 
@@ -137,6 +137,9 @@ public class OldOrderController extends ApplicationObjectSupport{
                                 return new ModelAndView("redirect:/user/order/list.html");
                             }
                         }
+                    }else if(StringUtils.isNotBlank(command.getErrorMessage())){
+                        mav.addObject(Constants.ALERT_TYPE, "danger");
+                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
                 }
             }catch (Exception e){
@@ -147,6 +150,13 @@ public class OldOrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav, command);
+
+        if(StringUtils.isNotBlank(command.getErrorMessage()) && command.getPojo() != null && command.getPojo().getImportCardCodeList4OldOrder().size() > 0){
+            command.setUsedCardCodeImportList(command.getPojo().getImportCardCodeList4OldOrder());
+            command.setTotalItems(command.getPojo().getImportCardCodeList4OldOrder().size());
+            command.setMaxPageItems(command.getTotalItems());
+            mav.addObject(Constants.LIST_MODEL_KEY, command);
+        }
         return mav;
     }
 
