@@ -23,7 +23,7 @@ public class CodeHistorySessionBean extends AbstractSessionBean<MBDCodeHistoryEn
     }
 
     @Override
-    public Double calculateTotalPaidPackageValue(String isdn) {
+    public Double calculateTotalPaidPackageValue(String isdn, Long orderId) {
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append(" SELECT COUNT(trans_ID) FROM MOBI_DATA_CODE_HISTORY WHERE isdn = :isdn ");
         Query query = entityManager.createNativeQuery(sqlQuery.toString()).setParameter("isdn", isdn);
@@ -31,8 +31,18 @@ public class CodeHistorySessionBean extends AbstractSessionBean<MBDCodeHistoryEn
         Double totalPaidPackageValue = count * Constants.PACKAGE_KHDN_DATA_VALUE;
 
         StringBuilder sqlQueryTotalOrderValue = new StringBuilder();
-        sqlQueryTotalOrderValue.append(" SELECT NVL(SUM(v.total), 0) as total FROM (select (o.quantity * o.unitPrice) as total FROM MOBI_DATA_ORDER o WHERE o.KHDNID = (select k.KHDNID FROM MOBI_DATA_KHDN k WHERE k.STB_VAS = :isdn)) v ");
+        sqlQueryTotalOrderValue.append(" SELECT NVL(SUM(v.total), 0) as total FROM (select (o.quantity * o.unitPrice) as total FROM MOBI_DATA_ORDER o WHERE o.KHDNID = (select k.KHDNID FROM MOBI_DATA_KHDN k WHERE k.STB_VAS = :isdn)");
+
+        if(orderId != null){
+            sqlQueryTotalOrderValue.append(" AND o.orderId != :orderId ");
+        }
+
+        sqlQueryTotalOrderValue.append("   ) v ");
         Query queryTotalOrderValue = entityManager.createNativeQuery(sqlQueryTotalOrderValue.toString()).setParameter("isdn", isdn);
+        if(orderId != null){
+            queryTotalOrderValue.setParameter("orderId", orderId);
+        }
+
         Double totalUsedValue = Double.valueOf(queryTotalOrderValue.getSingleResult().toString());
         return totalPaidPackageValue - totalUsedValue;
     }

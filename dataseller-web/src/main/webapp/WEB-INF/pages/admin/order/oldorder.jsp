@@ -253,10 +253,19 @@
         }
 
         var isdn = $khdnSelectMenu.find('option:selected').data('isdn');
+
+        var orderId = null;
+
+        <c:if test="${not empty item.pojo.orderId}">
+            orderId = ${item.pojo.orderId};
+        </c:if>
+
+        var params = {isdn: isdn, orderId: orderId}
+
         $.ajax({
             url: '<c:url value="/ajax/calculateTotalPaidPackageValue.html" />',
             type: 'get',
-            data: {isdn: isdn},
+            data: params,
             success: function(r){
                 totalRemainingPaidPackageValue = r.value;
             }

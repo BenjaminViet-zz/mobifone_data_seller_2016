@@ -57,10 +57,11 @@ public class PaymentHistoryController extends ApplicationObjectSupport{
     private CodeHistoryManagementLocalBean codeHistoryService;
 
     @RequestMapping(value = {"/ajax/calculateTotalPaidPackageValue.html"})
-    public @ResponseBody Map calculateTotalPaidPackageValue(@RequestParam(value = "isdn", required = true) String isdn){
+    public @ResponseBody Map calculateTotalPaidPackageValue(@RequestParam(value = "isdn", required = true) String isdn,
+                                                            @RequestParam(value = "orderId", required = false) Long orderId){
         Map<String, Object> mapRes = new HashMap<>();
 
-        mapRes.put("value", this.codeHistoryService.calculateTotalPaidPackageValue(isdn));
+        mapRes.put("value", this.codeHistoryService.calculateTotalPaidPackageValue(isdn, orderId));
 
         return mapRes;
     }

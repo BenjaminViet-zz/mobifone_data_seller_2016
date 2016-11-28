@@ -13,7 +13,7 @@ import java.util.Map;
 @Local
 public interface CodeHistoryManagementLocalBean {
 
-    Double calculateTotalPaidPackageValue(String isdn);
+    Double calculateTotalPaidPackageValue(String isdn, Long orderId);
 
     Object[] searchPaymentHistoryByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }

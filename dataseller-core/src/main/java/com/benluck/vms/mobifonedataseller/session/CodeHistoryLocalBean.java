@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface CodeHistoryLocalBean extends GenericSessionBean<MBDCodeHistoryEntity, Long>{
 
-    Double calculateTotalPaidPackageValue(String isdn);
+    Double calculateTotalPaidPackageValue(String isdn, Long orderId);
 
     Object[] searchPaymentHistoryByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
 }
