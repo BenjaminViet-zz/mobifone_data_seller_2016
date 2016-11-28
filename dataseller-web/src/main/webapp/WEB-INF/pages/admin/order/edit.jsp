@@ -264,6 +264,11 @@
             reverse: true
         });
 
+        $('#quantity').blur(function(){
+            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+            checkOrderCost();
+        });
+
         $('#quantity').keyup(function() {
             $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
             checkOrderCost();
