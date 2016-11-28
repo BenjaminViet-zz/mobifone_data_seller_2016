@@ -197,7 +197,7 @@ public class ReportDetailExpenseController extends ApplicationObjectSupport{
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
-        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getEmpCode().toString());
+        resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getCustId().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getIsdn().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getName().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getEmpCode().toString());

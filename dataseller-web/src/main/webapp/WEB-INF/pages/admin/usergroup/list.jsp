@@ -68,9 +68,9 @@
                         <display:column headerClass="table_header text-center" sortable="false" titleKey="label.stt" class="text-center width_50_px" style="width: 5%;" >
                             ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                         </display:column>
-                        <display:column headerClass="table_header text-center" property="code" sortName="code" sortable="true" class="width_300_px" titleKey="usergroup.label.code" style="20%"/>
-                        <display:column headerClass="table_header text-center" property="description" sortName="displayName" class="width_350_px" sortable="false" titleKey="usergroup.label.description" style="45%"/>
-                        <display:column headerClass="table_header  text-center" class="text-center width_300_px" titleKey="label.action" style="width:30%;">
+                        <display:column headerClass="table_header text-center" property="code" sortName="code" sortable="true" class="width_300_px" titleKey="usergroup.label.code" style="width: 30%"/>
+                        <display:column headerClass="table_header text-center" property="description" sortName="displayName" class="width_350_px" sortable="false" titleKey="usergroup.label.description" style="width: 55%"/>
+                        <display:column headerClass="table_header  text-center" class="text-center width_300_px" titleKey="label.action" style="width: 10%;">
                             <a href="${editUrl}?pojo.userGroupId=${tableList.userGroupId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                             <c:if test="${tableList.code != Constants.USERGROUP_ADMIN && tableList.code != Constants.USERGROUP_KHDN && tableList.code != Constants.USERGROUP_VMS_USER}">
                                  <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete"/>" onclick="javascript: deleteUserGroup(${tableList.userGroupId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>

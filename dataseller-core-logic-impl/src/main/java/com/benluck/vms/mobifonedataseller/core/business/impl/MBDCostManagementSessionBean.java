@@ -66,7 +66,7 @@ public class MBDCostManagementSessionBean implements MBDCostManagementLocalBean{
         for (Object tmpObject : listObject){
             tmpObjectArr = (Object[]) tmpObject;
             MBDReportDetailExpenseDTO dto = new MBDReportDetailExpenseDTO();
-            dto.setShopCode(tmpObjectArr[0] != null ? tmpObjectArr[0].toString() : "");
+            dto.setCustId(tmpObjectArr[0] != null ? Long.valueOf(tmpObjectArr[0].toString()) : null);
             dto.setIsdn(tmpObjectArr[1] != null ? tmpObjectArr[1].toString() : "");
             dto.setName(tmpObjectArr[2] != null ? tmpObjectArr[2].toString() : "");
             dto.setEmpCode(tmpObjectArr[3] != null ? tmpObjectArr[3].toString() : "");

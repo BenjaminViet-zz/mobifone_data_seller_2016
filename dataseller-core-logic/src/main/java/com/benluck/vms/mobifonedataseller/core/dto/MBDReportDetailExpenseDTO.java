@@ -15,6 +15,7 @@ public class MBDReportDetailExpenseDTO implements Serializable{
     private Long costId;
     private String shopCode;
     private String isdn;
+    private Long custId;
     private String name;
     private String empCode;
     private String busType;
@@ -200,5 +201,13 @@ public class MBDReportDetailExpenseDTO implements Serializable{
 
     public void setMaintainAmount3(Double maintainAmount3) {
         this.maintainAmount3 = maintainAmount3;
+    }
+
+    public Long getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Long custId) {
+        this.custId = custId;
     }
 }

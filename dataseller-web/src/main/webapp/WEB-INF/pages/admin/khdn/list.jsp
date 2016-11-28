@@ -116,19 +116,33 @@
                     <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
                                    partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1850px;">
-                        <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="label.stt" style="width: 50px">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                        <display:column headerClass="table_header text-center" property="shopCode" sortName="shopCode" sortable="true" titleKey="admin.khdn.shopCode" style="width: 200px;" />
-                        <display:column headerClass="table_header text-center" property="name" sortName="name" sortable="true" titleKey="admin.khdn.label.name" style="width: 300px;" />
-                        <display:column headerClass="table_header text-center" property="mst" sortName="mst" sortable="true" titleKey="admin.khdn.label.mst" style="width: 300px;" />
-                        <display:column headerClass="table_header text-center" property="gpkd" sortName="gpkd" sortable="true" titleKey="admin.khdn.label.gpkd" style="width: 300px;" />
-                        <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedContractDate" titleKey="admin.khdn.label.issuedContractDate" style="width: 250px;">
-                            <fmt:formatDate value="${tableList.issuedContractDate}" pattern="${datePattern}" />
+                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1700px;">
+                        <display:column headerClass="table_header text-center" sortable="false" class="text-center" titleKey="label.stt"><div style="width: 50px">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
+                        <display:column headerClass="table_header text-center" sortName="shopCode" sortable="true" titleKey="admin.khdn.shopCode">
+                            <div style="width: 200px;">${tableList.shopCode}</div>
                         </display:column>
-                        <display:column headerClass="table_header text-center" property="stb_vas" sortName="stb_vas" sortable="true" class="text-center" titleKey="admin.khdn.label.stb_vas" style="width: 200px;" />
-                        <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action" style="width:250px;">
-                            <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                             <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        <display:column headerClass="table_header text-center" sortName="name" sortable="true" titleKey="admin.khdn.label.name">
+                            <div style="width: 300px;">${tableList.name}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortName="mst" sortable="true" titleKey="admin.khdn.label.mst">
+                            <div style="width: 300px;">${tableList.mst}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortName="gpkd" sortable="true" titleKey="admin.khdn.label.gpkd">
+                            <div style="width: 300px;">${tableList.gpkd}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedContractDate" titleKey="admin.khdn.label.issuedContractDate">
+                            <div style="width: 250px;">
+                                <fmt:formatDate value="${tableList.issuedContractDate}" pattern="${datePattern}" />
+                            </div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortName="stb_vas" sortable="true" class="text-center" titleKey="admin.khdn.label.stb_vas">
+                            <div style="width: 200px;">${tableList.stb_vas}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" class="text-center" titleKey="label.action">
+                            <div style="width: 100px;">
+                                <a href="${editUrl}?pojo.KHDNId=${tableList.KHDNId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteKHDN(${tableList.KHDNId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            </div>
                         </display:column>
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="admin.khdn.footer.label.doanhnghiep" /></display:setProperty>--%>

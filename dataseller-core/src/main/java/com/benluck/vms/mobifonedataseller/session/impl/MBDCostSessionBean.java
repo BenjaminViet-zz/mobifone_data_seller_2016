@@ -113,7 +113,7 @@ public class MBDCostSessionBean extends AbstractSessionBean<MBDCostEntity, Long>
         }
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" SELECT shop_Code, isdn, name as tenKhachHang, emp_Code as maNVPhatTrien, bus_Type as loaiHM, '' as laiTB, cust_Type as loaiKH ")
+        sqlQuery.append(" SELECT cust_Id, isdn, name as tenKhachHang, emp_Code as maNVPhatTrien, bus_Type as loaiHM, '' as laiTB, cust_Type as loaiKH ")
                 .append("           , sta_DateTime as ngayDauNoi, act_Status as trangThaiChanCat ")
                 .append("           , status as trangThaiThueBao")
                 .append("           , development_amount1 as chPhiPTDot1, development_amount2 as chPhiPTDot2, development_amount3 as chPhiPTDot3 ")

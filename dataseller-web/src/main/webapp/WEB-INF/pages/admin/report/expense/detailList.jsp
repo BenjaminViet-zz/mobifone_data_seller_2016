@@ -108,43 +108,73 @@
                                                partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                                id="tableList" pagesize="${items.maxPageItems}" export="false"
                                                class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 3700px;">
-                                    <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                                    <display:column headerClass="table_header text-center" property="empCode" titleKey="detail_expense_report.emp_code" style="width: 200px;"/>
-                                    <display:column headerClass="table_header text-center" property="isdn" titleKey="detail_expense_report.isdn" style="width: 250px;"/>
-                                    <display:column headerClass="table_header text-center" property="name" class="text-center" titleKey="detail_expense_report.emp_name" style="width: 200px;" />
-                                    <display:column headerClass="table_header text-center" property="empCode" class="text-center" titleKey="detail_expense_report.ma_nvpt" style="width: 200px;" />
-                                    <display:column headerClass="table_header text-center" property="busType" class="text-center" titleKey="detail_expense_report.loai_hm" style="width: 200px;" />
-                                    <display:column headerClass="table_header text-center" property="loaiTB" class="text-center" titleKey="detail_expense_report.loai_tb" style="width: 200px;" />
-                                    <display:column headerClass="table_header text-center" property="custType" class="text-center" titleKey="detail_expense_report.loai_kh" style="width: 200px;" />
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.ngay_dau_noi" style="width: 200px;" >
-                                        <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
+                                    <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" ><div style="width: 50px">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="detail_expense_report.custId">
+                                        <div style="width: 200px;">${tableList.custId}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.act_status" style="width: 200px;" >
-                                        ${tableList.actStatus}
+                                    <display:column headerClass="table_header text-center" titleKey="detail_expense_report.isdn">
+                                        <div style="width: 250px;">${tableList.isdn}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.status" style="width: 200px;" >
-                                        ${tableList.status}
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.emp_name">
+                                        <div style="width: 200px;">${tableList.name}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.cuoc_thuc_thu" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.cuocThucThu}" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.ma_nvpt">
+                                        <div style="width: 200px;">${tableList.empCode}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount1" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount1}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.loai_hm">
+                                        <div style="width: 200px;">${tableList.busType}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount2" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount2}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.loai_tb">
+                                        <div style="width: 200px;">${tableList.loaiTB}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount3" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount3}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.loai_kh">
+                                        <div style="width: 200px;">${tableList.custType}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount1" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount1}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.ngay_dau_noi">
+                                        <div style="width: 200px;">
+                                            <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
+                                        </div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount2" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount2}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.act_status">
+                                        <div style="width: 200px;">${tableList.actStatus}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount3" style="width: 200px;" >
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount3}" maxFractionDigits="0" />
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.status">
+                                        <div style="width: 200px;">${tableList.status}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.cuoc_thuc_thu">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.cuocThucThu}" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount1">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount1}" maxFractionDigits="0" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount2">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount2}" maxFractionDigits="0" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.developmentAmount3">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount3}" maxFractionDigits="0" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount1">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount1}" maxFractionDigits="0" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount2">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount2}" maxFractionDigits="0" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="detail_expense_report.maintainAmount3">
+                                        <div style="width: 200px;">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount3}" maxFractionDigits="0" />
+                                        </div>
                                     </display:column>
                                     <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>
                                     <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.expense" /></display:setProperty>

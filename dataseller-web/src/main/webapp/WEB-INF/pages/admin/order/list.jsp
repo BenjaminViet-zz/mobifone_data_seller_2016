@@ -133,61 +133,79 @@
                             <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
                                            partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                            id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width : 1850px;">
-                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px;" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                                <display:column headerClass="table_header text-center" property="khdn.name" sortName="khdn.name" sortable="true" titleKey="admin.donhang.label.DN" style="width: 250px;"/>
-                                <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 250px;"/>
-                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity" style="width: 150px;" >
-                                    <fmt:formatNumber type="number" value="${tableList.quantity}" />
+                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width : 1700px;">
+                                <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center"><div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
+                                <display:column headerClass="table_header text-center" sortName="khdn.name" sortable="true" titleKey="admin.donhang.label.DN">
+                                    <div style="width: 250px;">${tableList.khdn.name}</div>
                                 </display:column>
-                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice" style="width: 150px;">
-                                    <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
+                                <display:column headerClass="table_header text-center" sortName="packageData.name" class="text-center" sortable="true" titleKey="admin.donhang.label.tenGoiCuoc">
+                                    <div style="width: 250px;">${tableList.packageData.name}</div>
                                 </display:column>
-                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate" style="width: 150px;">
-                                    <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
+                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="quantity" titleKey="admin.donhang.label.quantity">
+                                    <div style="width: 150px;">
+                                        <fmt:formatNumber type="number" value="${tableList.quantity}" maxFractionDigits="0" />
+                                    </div>
                                 </display:column>
-                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="shippingDate" titleKey="admin.donhang.label.shippingDate" style="width: 200px;">
-                                    <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
+                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice">
+                                    <div style="width: 150px;">
+                                        <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
+                                    </div>
                                 </display:column>
-                                <display:column headerClass="table_header text-center" sortable="true" property="createdBy.displayName" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy" style="width: 200px;" />
-                                <display:column headerClass="table_header text-center" sortable="true" sortName="orderStatus" class="text-center" titleKey="admin.donhang.label.status" style="width: 200px;">
-                                    <c:choose>
-                                       <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus eq Constants.ORDER_CARD_CODE_PROCESSING_STATUS}">
-                                           <fmt:message key="order.card_code_taking_in_progress" />
-                                       </c:when>
-                                        <c:otherwise>
-                                            <c:choose>
-                                                <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
-                                                    <fmt:message key="label.in_progress" />
-                                                </c:when>
-                                                <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
-                                                    <c:choose>
-                                                        <c:when test="${tableList.cardCodeProcessStatus eq  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
-                                                            <fmt:message key="label.failed_generate_card_code" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <fmt:message key="label.finish" />
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:when>
-                                                <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
-                                                    <fmt:message key="label.finish" />
-                                                </c:when>
-                                            </c:choose>
-                                        </c:otherwise>
-                                    </c:choose>
+                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate">
+                                    <div style="width: 150px;">
+                                        <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
+                                    </div>
                                 </display:column>
-                                <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action" style="width: 250px;">
-                                    <a href="${historyUrl}?pojo.order.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.view_history" />"><i class="fa fa-history" aria-hidden="true"></i></a>
-                                    <c:if test="${tableList.orderStatus ne Constants.ORDER_STATUS_FINISH}">
-                                        <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
-                                            <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                            <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteOrder(${tableList.orderId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                        </security:authorize>
-                                    </c:if>
-                                    <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus ne  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
-                                         <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.button.export" />" onclick="javascript: exportExcel(${tableList.orderId});"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
-                                    </c:if>
+                                <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="shippingDate" titleKey="admin.donhang.label.shippingDate">
+                                    <div style="width: 200px;">
+                                        <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
+                                    </div>
+                                </display:column>
+                                <display:column headerClass="table_header text-center" sortable="true" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.createdBy">
+                                    <div style="width: 200px;">${tableList.createdBy.displayName}</div>
+                                </display:column>
+                                <display:column headerClass="table_header text-center" sortable="true" sortName="orderStatus" class="text-center" titleKey="admin.donhang.label.status">
+                                    <div style="width: 200px;">
+                                        <c:choose>
+                                           <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus eq Constants.ORDER_CARD_CODE_PROCESSING_STATUS}">
+                                               <fmt:message key="order.card_code_taking_in_progress" />
+                                           </c:when>
+                                            <c:otherwise>
+                                                <c:choose>
+                                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
+                                                        <fmt:message key="label.in_progress" />
+                                                    </c:when>
+                                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                                        <c:choose>
+                                                            <c:when test="${tableList.cardCodeProcessStatus eq  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
+                                                                <fmt:message key="label.failed_generate_card_code" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <fmt:message key="label.finish" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
+                                                        <fmt:message key="label.finish" />
+                                                    </c:when>
+                                                </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </display:column>
+                                <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action">
+                                    <div style="width: 100px;">
+                                        <a href="${historyUrl}?pojo.order.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.view_history" />"><i class="fa fa-history" aria-hidden="true"></i></a>
+                                        <c:if test="${tableList.orderStatus ne Constants.ORDER_STATUS_FINISH}">
+                                            <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER')">
+                                                <a href="${editUrl}?pojo.orderId=${tableList.orderId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteOrder(${tableList.orderId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                            </security:authorize>
+                                        </c:if>
+                                        <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus ne  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
+                                             <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.button.export" />" onclick="javascript: exportExcel(${tableList.orderId});"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                                        </c:if>
+                                    </div>
                                 </display:column>
                                 <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.order" /></display:setProperty>
                                 <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.order" /></display:setProperty>

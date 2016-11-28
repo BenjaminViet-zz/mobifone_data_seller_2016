@@ -57,23 +57,39 @@
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
                                    class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1550px;">
 
-                        <display:column headerClass="table_header text-center vertical-middle" titleKey="label.stt" class="text-center" style="width: 50px;" >
-                            ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                        <display:column headerClass="table_header text-center middle-vertical" titleKey="label.stt" class="text-center">
+                            <div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div>
                         </display:column>
-                        <display:column headerClass="table_header text-center vertical-middle" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc" style="width: 200px;"/>
-                        <display:column headerClass="table_header text-center vertical-middle" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc" style="width: 150px;">
-                            <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.value}" />
+                        <display:column headerClass="table_header text-center middle-vertical" property="name" sortName="name" class="text-center" titleKey="packagedata.label.tenGoiCuoc">
+                            <div style="width: 200px;">${tableList.name}</div>
                         </display:column>
-                        <display:column headerClass="table_header text-center vertical-middle" property="customPrefixUnitPrice" sortable="false" class="text-center" titleKey="packagedata.label.prefixCardCode" style="width: 150px;" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="volume" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi" style="width: 350px;" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="durationText" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung" style="width: 150px;" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="numberOfExtend" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan" style="width: 150px;" />
-                        <display:column headerClass="table_header text-center vertical-middle" property="tk" sortable="false" class="text-center" titleKey="packagedata.label.tk" style="width: 150px;" />
-                        <display:column headerClass="table_header text-center vertical-middle" class="text-center" titleKey="label.action" style="width: 200px;">
-                            <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                            <c:if test="${tableList.generatedCardCode == false}">
-                                 <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                            </c:if>
+                        <display:column headerClass="table_header text-center middle-vertical" sortName="value" class="text-center" titleKey="packagedata.label.giaGoiCuoc">
+                            <div style="width: 150px;">
+                                <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.value}" />
+                            </div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" sortable="false" class="text-center" titleKey="packagedata.label.prefixCardCode">
+                            <div style="width: 150px;">${tableList.customPrefixUnitPrice}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" sortable="false" class="text-center" titleKey="packagedata.label.dungLuongMienPhi">
+                            <div style="width: 350px;">${tableList.volume}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" sortable="false" class="text-center" titleKey="packagedata.label.thoiGianSuDung">
+                            <div style="width: 150px;">${tableList.durationText}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" sortable="false" class="text-center" titleKey="packagedata.label.soLanGiaHan">
+                            <div style="width: 150px;">${tableList.numberOfExtend}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" sortable="false" class="text-center" titleKey="packagedata.label.tk">
+                            <div style="width: 150px;">${tableList.tk}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center middle-vertical" class="text-center" titleKey="label.action">
+                            <div style="width: 200px;">
+                                <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <c:if test="${tableList.generatedCardCode == false}">
+                                    <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                </c:if>
+                            </div>
                         </display:column>
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="packagedata.label.package_item" /></display:setProperty>

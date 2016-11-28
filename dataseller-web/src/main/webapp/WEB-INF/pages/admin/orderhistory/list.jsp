@@ -64,37 +64,55 @@
                                    partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
                                    class="table table-striped table-bordered" style="width: 1650px; margin: 1em 0 1.5em;">
-                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px;" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
-                        <display:column headerClass="table_header text-center" sortable="false" sortName="khdn.name" property="khdn.name" titleKey="admin.donhang.label.DN" style="width: 250px;"/>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="packageData.name" property="packageData.name" class="text-center" titleKey="admin.donhang.label.tenGoiCuoc" style="width: 150px;"/>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="quantity" class="text-center" titleKey="admin.donhang.label.quantity" style="width: 150px;" >
-                            <fmt:formatNumber type="number" value="${tableList.quantity}" />
+                        <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center"><div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
+                        <display:column headerClass="table_header text-center" sortable="false" sortName="khdn.name" titleKey="admin.donhang.label.DN">
+                            <div style="width: 250px;">${tableList.khdn.name}</div>
                         </display:column>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="unitPrice" class="text-center" titleKey="admin.donhang.label.UnitPrice" style="width: 150px;">
-                            <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="packageData.name" class="text-center" titleKey="admin.donhang.label.tenGoiCuoc">
+                            <div style="width: 150px;">${tableList.packageData.name}</div>
                         </display:column>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="issuedDate" class="text-center" titleKey="admin.donhang.label.issueDate" style="width: 150px;">
-                            <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="quantity" class="text-center" titleKey="admin.donhang.label.quantity">
+                            <div style="width: 150px;">
+                                <fmt:formatNumber type="number" value="${tableList.quantity}" maxFractionDigits="0" />
+                            </div>
                         </display:column>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="shippingDate" class="text-center" titleKey="admin.donhang.label.shippingDate" style="width: 200px;">
-                            <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="unitPrice" class="text-center" titleKey="admin.donhang.label.UnitPrice">
+                            <div style="width: 150px;">
+                                <fmt:formatNumber type="number" value="${tableList.unitPrice}" maxFractionDigits="0" />
+                            </div>
                         </display:column>
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.modifiedDate" style="width: 200px;">
-                            <fmt:formatDate value="${tableList.createdDate}" pattern="${datePattern}" />
-                        </display:column>                        s
-                        <display:column headerClass="table_header text-center" sortable="true" sortName="createdBy.displayName" property="createdBy.displayName" class="text-center" titleKey="label.modifiedBy" style="width: 150px;" />
-                        <display:column headerClass="table_header text-center" titleKey="label.operation" class="text-center" style="width: 200px;">
-                            <c:choose>
-                                <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_CREATED}">
-                                    <fmt:message key="orderhistory.operator.created" />
-                                </c:when>
-                                <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_UPDATED}">
-                                    <fmt:message key="orderhistory.operator.updated" />
-                                </c:when>
-                                <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_DELETED}">
-                                    <fmt:message key="orderhistory.operator.deleted" />
-                                </c:when>
-                            </c:choose>
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="issuedDate" class="text-center" titleKey="admin.donhang.label.issueDate">
+                            <div style="width: 150px;">
+                                <fmt:formatDate value="${tableList.issuedDate}" pattern="${datePattern}" />
+                            </div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="shippingDate" class="text-center" titleKey="admin.donhang.label.shippingDate">
+                            <div style="width: 200px;">
+                                <fmt:formatDate value="${tableList.shippingDate}" pattern="${datePattern}" />
+                            </div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="createdDate" class="text-center" titleKey="admin.donhang.label.modifiedDate">
+                            <div style="width: 200px;">
+                                <fmt:formatDate value="${tableList.createdDate}" pattern="${datePattern}" />
+                            </div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" sortable="true" sortName="createdBy.displayName" class="text-center" titleKey="label.modifiedBy">
+                            <div style="width: 150px;">${tableList.createdBy.displayName}</div>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" titleKey="label.operation" class="text-center">
+                            <div style="width: 200px;">
+                                <c:choose>
+                                    <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_CREATED}">
+                                        <fmt:message key="orderhistory.operator.created" />
+                                    </c:when>
+                                    <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_UPDATED}">
+                                        <fmt:message key="orderhistory.operator.updated" />
+                                    </c:when>
+                                    <c:when test="${tableList.operator eq Constants.ORDER_HISTORY_OPERATOR_DELETED}">
+                                        <fmt:message key="orderhistory.operator.deleted" />
+                                    </c:when>
+                                </c:choose>
+                            </div>
                         </display:column>
                         <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.orderhistory" /></display:setProperty>
                         <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.orderhistory" /></display:setProperty>

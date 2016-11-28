@@ -147,83 +147,118 @@
                                                partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                                id="tableList" pagesize="${items.maxPageItems}" export="false"
                                                class="table table-striped table-bordered" style="width: ${tableWidth}px; margin: 1em 0 1.5em;">
-                                    <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" style="width: 50px" >${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center" ><div style="width: 50px">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
                                     <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_NOT_PAID}">
-                                        <display:column headerClass="table_header text-center" class="text-center" style="width: 50px" >
-                                            <input type="checkbox" id="${tableList.costId}" class="" style="width: 15px;" name="checkList" value="${tableList.costId}" onclick="checkAllIfOne('listForm', 'checkList', this, 'allCheck')" />
+                                        <display:column headerClass="table_header text-center" class="text-center" >
+                                            <div style="width: 50px"><input type="checkbox" id="${tableList.costId}" class="" style="width: 15px;" name="checkList" value="${tableList.costId}" onclick="checkAllIfOne('listForm', 'checkList', this, 'allCheck')" /></div>
                                         </display:column>
                                     </c:if>
 
-                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="payment.manager.table.payment_status" style="width: 200px;">
-                                        <c:choose>
-                                            <c:when test="${tableList.paymentStatus eq Constants.COST_PAYMENT_PAID}">
-                                                <fmt:message key="payment.manager.table.payment_status_paid" />
-                                            </c:when>
-                                            <c:otherwise>
-                                                <fmt:message key="payment.manager.table.payment_status_not_paid" />
-                                            </c:otherwise>
-                                        </c:choose>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="payment.manager.table.payment_status">
+                                        <div style="width: 200px;">
+                                            <c:choose>
+                                                <c:when test="${tableList.paymentStatus eq Constants.COST_PAYMENT_PAID}">
+                                                    <fmt:message key="payment.manager.table.payment_status_paid" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <fmt:message key="payment.manager.table.payment_status_not_paid" />
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </</div>
                                     </display:column>
 
                                     <c:if test="${item.pojo.paymentStatus eq Constants.COST_PAYMENT_PAID}">
-                                        <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment_dateTime" class="text-center" style="width: 200px;">
-                                            <fmt:formatDate value="${tableList.paymentDate}" pattern="${datePattern}" />
+                                        <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment_dateTime" class="text-center">
+                                            <div style="width: 200px;">
+                                                <fmt:formatDate value="${tableList.paymentDate}" pattern="${datePattern}" />
+                                            </div>
                                         </display:column>
                                     </c:if>
 
-                                    <display:column headerClass="table_header text-center" property="shopCode" titleKey="payment.manager.table.shop_Code" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="shopName" titleKey="payment.manager.table.shop_Name" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="isdn" titleKey="payment.manager.table.isdn" class="text-center" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="name" titleKey="payment.manager.table.name" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="empCode" titleKey="payment.manager.table.emp_code" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="busType" titleKey="payment.manager.table.bus_type" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" property="custType" titleKey="payment.manager.table.cust_type" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.sta_dateTime" class="text-center" style="width: 200px">
-                                        <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.shop_Code">
+                                        <div style="width: 200px">${tableList.shopCode}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" property="actStatus" class="text-center" titleKey="payment.manager.table.act_status" style="width: 200px"/>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.issue_month" class="text-center" style="width: 200px">
-                                        <fmt:formatDate value="${tableList.issueMonth}" pattern="${datePattern}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.shop_Name">
+                                        <div style="width: 200px">${tableList.shopName}</div>
                                     </display:column>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment" class="text-center" style="width: 200px">
-                                        <%--<fmt:formatDate value="${tableList.payment}" type="number" />--%>
-                                        ___
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.isdn" class="text-center">
+                                        <div style="width: 200px">${tableList.isdn}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.name">
+                                        <div style="width: 200px">${tableList.name}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.emp_code">
+                                        <div style="width: 200px">${tableList.empCode}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.bus_type">
+                                        <div style="width: 200px">${tableList.busType}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.cust_type">
+                                        <div style="width: 200px">${tableList.custType}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.sta_dateTime" class="text-center">
+                                        <div style="width: 200px">
+                                            <fmt:formatDate value="${tableList.staDateTime}" pattern="${datePattern}" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" class="text-center" titleKey="payment.manager.table.act_status">
+                                        <div style="width: 200px">${tableList.actStatus}</div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.issue_month" class="text-center">
+                                        <div style="width: 200px">
+                                            <fmt:formatDate value="${tableList.issueMonth}" pattern="${datePattern}" />
+                                        </div>
+                                    </display:column>
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.payment" class="text-center">
+                                        <div style="width: 200px">___</div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_phase1" style="width: 100px">--%>
                                         <%--${tableList.developmentPhase1}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount1" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount1}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount1">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount1}" />
+                                        </div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_phase2" style="width: 100px">--%>
                                         <%--${tableList.developmentPhase2}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount2" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount2}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount2">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount2}" />
+                                        </div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_phase3" style="width: 100px">--%>
                                         <%--${tableList.developmentPhase3}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount3" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.developmentAmount3}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.development_amount3">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.developmentAmount3}" />
+                                        </div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_phase1" style="width: 100px">--%>
                                         <%--${tableList.maintainPhase1}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount1" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount1}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount1">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount1}" />
+                                        </div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_phase2" style="width: 100px">--%>
                                         <%--${tableList.maintainPhase2}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount2" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount2}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount2">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount2}" />
+                                        </div>
                                     </display:column>
                                     <%--<display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_phase3" style="width: 100px">--%>
                                         <%--${tableList.maintainPhase3}--%>
                                     <%--</display:column>--%>
-                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount3" style="width: 200px">
-                                        <fmt:formatNumber type="number" value="${tableList.maintainAmount3}" />
+                                    <display:column headerClass="table_header text-center" titleKey="payment.manager.table.maintain_amount3">
+                                        <div style="width: 200px">
+                                            <fmt:formatNumber type="number" value="${tableList.maintainAmount3}" />
+                                        </div>
                                     </display:column>
 
                                     <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.expensepayment.item" /></display:setProperty>
