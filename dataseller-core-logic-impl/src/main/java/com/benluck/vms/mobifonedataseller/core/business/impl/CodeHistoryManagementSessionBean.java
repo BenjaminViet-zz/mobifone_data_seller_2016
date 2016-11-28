@@ -31,8 +31,8 @@ public class CodeHistoryManagementSessionBean implements CodeHistoryManagementLo
     }
 
     @Override
-    public Double calculateTotalPaidPackageValue(String isdn) {
-        return this.codeHistoryService.calculateTotalPaidPackageValue(isdn);
+    public Double calculateTotalPaidPackageValue(String isdn, Long orderId) {
+        return this.codeHistoryService.calculateTotalPaidPackageValue(isdn, orderId);
     }
 
     @Override

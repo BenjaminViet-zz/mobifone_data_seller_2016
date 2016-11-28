@@ -167,7 +167,7 @@ public class OldOrderController extends ApplicationObjectSupport{
         mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
 
         if(command.getPojo() != null && command.getPojo().getOrderId() != null ){
-            mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas()));
+            mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas(), command.getPojo().getOrderId()));
         }else{
             mav.addObject("totalRemainingPaidPackageValue", 0D);
         }
