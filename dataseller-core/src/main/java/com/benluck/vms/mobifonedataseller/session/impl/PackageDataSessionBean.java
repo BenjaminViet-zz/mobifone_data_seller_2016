@@ -68,6 +68,11 @@ public class PackageDataSessionBean extends AbstractSessionBean<PackageDataEntit
 
     @Override
     public PackageDataEntity checkDuplicateValueOrPrefixCardCode(Long packageDataId, Double value, String customPrefixCardCode) {
+
+        if(customPrefixCardCode.length() == 1){
+            customPrefixCardCode = "0" + customPrefixCardCode;
+        }
+
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append(" FROM PackageDataEntity p WHERE 1 = 1 ");
         if(StringUtils.isNotBlank(customPrefixCardCode)){

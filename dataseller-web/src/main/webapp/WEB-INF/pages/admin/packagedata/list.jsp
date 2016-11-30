@@ -55,7 +55,7 @@
                     <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
                                    partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                    id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1550px;">
+                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width: 1450px;">
 
                         <display:column headerClass="table_header text-center middle-vertical" titleKey="label.stt" class="text-center">
                             <div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div>
@@ -84,7 +84,7 @@
                             <div style="width: 150px;">${tableList.tk}</div>
                         </display:column>
                         <display:column headerClass="table_header text-center middle-vertical" class="text-center" titleKey="label.action">
-                            <div style="width: 200px;">
+                            <div style="width: 100px;">
                                 <a href="${editUrl}?pojo.packageDataId=${tableList.packageDataId}" class="tip-top" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 <c:if test="${tableList.generatedCardCode == false}">
                                     <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deletePackageData(${tableList.packageDataId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>

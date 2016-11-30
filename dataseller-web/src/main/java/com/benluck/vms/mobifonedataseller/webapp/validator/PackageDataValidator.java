@@ -91,6 +91,10 @@ public class PackageDataValidator extends ApplicationObjectSupport implements Va
         if(StringUtils.isNotBlank(command.getPojo().getCustomPrefixUnitPrice())){
             try{
                 Integer.valueOf(command.getPojo().getCustomPrefixUnitPrice());
+
+                if(command.getPojo().getCustomPrefixUnitPrice().length() > 2){
+                    errors.rejectValue("pojo.customPrefixUnitPrice", "packagedata.custom_prefix_card_Code_not_larger_than_2_digit");
+                }
             }catch (NumberFormatException nfe){
                 errors.rejectValue("pojo.customPrefixUnitPrice", "packagedata.only_number_allowed_for_custom_prefix_unit_price");
             }
