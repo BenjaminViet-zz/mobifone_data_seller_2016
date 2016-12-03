@@ -2,17 +2,16 @@ package com.benluck.vms.mobifonedataseller.webapp.validator;
 
 import com.benluck.vms.mobifonedataseller.core.business.OrderDataCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
-import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.ImportFileValidator;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
@@ -66,7 +65,7 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
     private void validateCardCodeList(OrderCommand command){
         MultipartFile fileUpload = command.getFileUpload();
         List<String> errorCodes = new ArrayList<String>();
-        ImportFileValidator.validateFileImport4ExcelFormat(fileUpload, errorCodes);
+        ImportFileValidator.validateFileImport4ExcelExtenstionFormat(fileUpload, errorCodes);
         if(errorCodes.size() > 0){
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage(errorCodes.get(0)));
         }else{
@@ -80,40 +79,59 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
     }
 
     private List<UsedCardCodeDTO> extractFileImport(MultipartFile fileUpload, OrderCommand command)throws Exception{
-        HashSet<String> cardCodeHS = new HashSet<String>();
         List<UsedCardCodeDTO> importKHDNDTOLIst = new ArrayList<UsedCardCodeDTO>();
         HashSet<String> usedCardCodeHS = decodeUsedCardCodeHS();
         HashSet<String> usedCardCodeOldOrderHS = fetchImportedUsedCardCode();
         try{
-            WorkbookSettings ws = new WorkbookSettings();
-            ExcelUtil.setEncoding4Workbook(ws);
-            Workbook workbook = Workbook.getWorkbook(fileUpload.getInputStream(), ws);
-            Sheet s = workbook.getSheet(0);
+            // Finds the workbook instance for XLSX file
+            XSSFWorkbook myWorkBook = new XSSFWorkbook(fileUpload.getInputStream());
 
-            int rowCount = s.getRows();
-            int minRowIndex = 5;
-            int maxColIndex = 1;
+            // Return first sheet from the XLSX workbook
+            XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
-            Cell rowData[] = new Cell[1];
+            // Get interator to all the rows in current sheet
+            Iterator<Row> rowIterator = mySheet.iterator();
+
+            HashSet<String> cardCodeHS = new HashSet<String>();
             UsedCardCodeDTO dto = null;
+            int cardCodeRowIndexFrom = 5;
+            int rowIndex = 0;
 
-            // Read Data list for importing KHDN
-            if(rowCount > minRowIndex && s.getColumns() >= maxColIndex){
-                for (int rowIndex = minRowIndex; rowIndex < rowCount; rowIndex++){
-                    rowData = s.getRow(rowIndex);
+            // Traversing over each row of XLSX file
+            while(rowIterator.hasNext()){
+                dto = null;
+                Row row = rowIterator.next();
 
-                    dto = new UsedCardCodeDTO(rowData[0].getContents().trim());
+                if(rowIndex < cardCodeRowIndexFrom){
+                    rowIndex++;
+                    continue;
+                }
+
+                // For each row, iterate through each columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext()){
+                    Cell cell = cellIterator.next();
+
+                    if(StringUtils.isBlank(cell.getStringCellValue())){
+                        dto = new UsedCardCodeDTO();
+                    }else{
+                        dto = new UsedCardCodeDTO(cell.getStringCellValue());
+                    }
 
                     boolean  hasError = validateCardCode(dto, cardCodeHS, usedCardCodeHS, usedCardCodeOldOrderHS);
-                    importKHDNDTOLIst.add(dto);
-
                     if(hasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.some_error_found_in_import_card_cord_file"));
                     }else{
                         cardCodeHS.add(dto.getCardCode());
                     }
+                    break;
                 }
-            }else{
+                importKHDNDTOLIst.add(dto);
+                rowIndex++;
+            }
+
+            if(rowIndex < cardCodeRowIndexFrom){
                 command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.exceed_min_row_to_read"));
                 command.setHasError(true);
             }

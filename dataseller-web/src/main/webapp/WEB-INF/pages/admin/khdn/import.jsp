@@ -92,13 +92,13 @@
                                             <p><fmt:message key="import.import_page.step1.instruction1"></fmt:message></p>
                                             <p><fmt:message key="import.import_page.step1.instruction3"/></p>
                                             <div class="m-b-10">
-                                                <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
+                                                <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_khdn.xlsx"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
 
                                             <div class="chonFileImport">
                                                 <label for="file" class="btn btn-info">
                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>
                                                 </label>
-                                                <input id="file" type="file" name="file" accept="application/vnd.ms-excel" />
+                                                <input id="file" type="file" name="file" accept=".xlsx" />
                                             </div>
 
                                             </div>

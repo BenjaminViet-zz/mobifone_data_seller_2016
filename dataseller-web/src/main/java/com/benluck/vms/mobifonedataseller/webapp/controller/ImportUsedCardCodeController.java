@@ -1,10 +1,10 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.common.utils.CacheUtil;
+import com.benluck.vms.mobifonedataseller.common.utils.CommonUtil;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
-import com.benluck.vms.mobifonedataseller.dataCodeGenerator.DataCodeUtil;
+import com.benluck.vms.mobifonedataseller.util.FileUtils;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
@@ -21,8 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.ejb.DuplicateKeyException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ import java.util.Map;
 public class ImportUsedCardCodeController extends ApplicationObjectSupport{
     private Logger logger = Logger.getLogger(ImportKHDNController.class);
 
+    private final Integer TOTAL_COLUMNS_IMPORT_FILE = 1;
+
     @Autowired
     private UsedCardCodeManagementLocalBean usedCardCodeService;
     @Autowired
@@ -45,7 +48,7 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
     @RequestMapping(value = {"/admin/import_used_card_code.html"})
     public ModelAndView importUsedCardCode(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportUsedCardCodeCommand command,
                                            BindingResult bindingResult,
-                                           HttpServletRequest request){
+                                           HttpServletRequest request) throws IOException{
         ModelAndView mav = new ModelAndView("/admin/usedCardCode/import");
         String action = command.getCrudaction();
 
@@ -53,27 +56,38 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
             if(command.getStepImportIndex().equals(Constants.IMPORT_CARD_CODE_STEP_1_CHOOSE_FILE) && action.equals(Constants.ACTION_UPLOAD)){
                 MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
                 Map<String, MultipartFile> map = mRequest.getFileMap();
-                MultipartFile fileUpload = (MultipartFile) map.get("file");
-                command.setFileUpload(fileUpload);
+                MultipartFile csvfile = (MultipartFile) map.get("file");
+                command.setFileUpload(csvfile);
 
-                validator.validate(command, bindingResult);
-                if(!command.getHasError().booleanValue()){
-                    command.setStepImportIndex(Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD);
+                try{
+                    String destFolder = CommonUtil.getBaseFolder() + CommonUtil.getTempFolderName();
+                    String fileName = FileUtils.upload(mRequest, destFolder, csvfile);
 
-                    if(StringUtils.isNotBlank(command.getErrorMessage())){
+                    command.setCsvFileUploadPath(request.getSession().getServletContext().getRealPath(destFolder + "/" + fileName));
+
+                    validator.validate(command, bindingResult);
+                    if(!command.getHasError().booleanValue() && command.getImportUsedCardCodeList() != null){
+                        command.setStepImportIndex(Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD);
+
+                        if(StringUtils.isNotBlank(command.getErrorMessage())){
+                            mav.addObject(Constants.ALERT_TYPE, "danger");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                        }else{
+                            request.getSession().setAttribute(Constants.IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY + RequestUtil.getClusterSessionId(request), command.getImportUsedCardCodeList());
+
+                            mav.addObject(Constants.ALERT_TYPE, "success");
+                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import.correct_data"));
+                        }
+
+                        command.setImportUsedCardCode(this.usedCardCodeService.checkImportUsedCardCode());
+                    }else{
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
-                    }else{
-                        request.getSession().setAttribute(Constants.IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY + RequestUtil.getClusterSessionId(request), command.getImportUsedCardCodeList());
-
-                        mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import.correct_data"));
                     }
-
-                    command.setImportUsedCardCode(this.usedCardCodeService.checkImportUsedCardCode());
-                }else{
+                }catch (ServletException se){
+                    logger.error(se.getMessage());
                     mav.addObject(Constants.ALERT_TYPE, "danger");
-                    mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                    mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import.error.file_import_unknown_error"));
                 }
             }else if(action.equals(Constants.ACTION_IMPORT)){
                 // start import Card Code.

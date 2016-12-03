@@ -3,15 +3,14 @@ package com.benluck.vms.mobifonedataseller.webapp.validator;
 import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.ImportKHDNDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
-import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
 import com.benluck.vms.mobifonedataseller.util.ImportFileValidator;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportKHDNCommand;
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
@@ -52,7 +51,7 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
     private void checkDuplicateKHDNData(ImportKHDNCommand command){
         MultipartFile fileUpload = command.getFileUpload();
         List<String> errorCodes = new ArrayList<String>();
-        ImportFileValidator.validateFileImport4ExcelFormat(fileUpload, errorCodes);
+        ImportFileValidator.validateFileImport4ExcelExtenstionFormat(fileUpload, errorCodes);
         if(errorCodes.size() > 0){
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage(errorCodes.get(0)));
         }else{
@@ -71,25 +70,19 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
         HashSet<String> stbHS = new HashSet<String>();
         List<ImportKHDNDTO> importKHDNDTOLIst = new ArrayList<ImportKHDNDTO>();
         try{
-            WorkbookSettings ws = new WorkbookSettings();
-            ExcelUtil.setEncoding4Workbook(ws);
-            Workbook workbook = Workbook.getWorkbook(fileUpload.getInputStream(), ws);
-            Sheet s = workbook.getSheet(0);
+            // Finds the workbook instance for XLSX file
+            XSSFWorkbook myWorkBook = new XSSFWorkbook(fileUpload.getInputStream());
 
-            int rowCount = s.getRows();
-            int minRowIndex = 5;
-            int maxColIndex = 6;
-            int headerRowIndex = 4;
+            // Return first sheet from the XLSX workbook
+            XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
-            Cell rowData[] = new Cell[7];
+            // Get interator to all the rows in current sheet
+            Iterator<Row> rowIterator = mySheet.iterator();
+
+            int khdnRowHasValueIndexFrom = 3;
+            int headerRowHasValueIndex = 2;
             ImportKHDNDTO dto = null;
-
-            // Read contents for header list
-            List<String> headerList = new ArrayList<String>();
-            for(int colIndex = 0 ; colIndex < maxColIndex; colIndex ++){
-                headerList.add(s.getRow(headerRowIndex)[colIndex].getContents());
-            }
-            command.setHeaderList(headerList);
+            int rowIndex = 0;
 
             StringBuilder shopCode = null;
             StringBuilder shopName = null;
@@ -97,24 +90,65 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
             StringBuilder gpkd = null;
             StringBuilder issuedContractDate = null;
             StringBuilder stb_vas = null;
+            Cell cell = null;
 
-            // Read Data list for importing KHDN
-            if(rowCount > minRowIndex && s.getColumns() >= maxColIndex){
-                for (int rowIndex = minRowIndex; rowIndex < rowCount; rowIndex++){
-                    rowData = s.getRow(rowIndex);
+            // Traversing over each row of XLSX file
+            while(rowIterator.hasNext()){
+                dto = null;
+                Row row = rowIterator.next();
 
-                    shopCode = new StringBuilder(rowData[0].getContents().trim());
-                    shopName = new StringBuilder(rowData[1].getContents().trim());
-                    mst = new StringBuilder(rowData[2].getContents().trim());
-                    gpkd = new StringBuilder(rowData[3].getContents().trim());
-                    issuedContractDate = new StringBuilder(rowData[4].getContents().trim());
-                    stb_vas = new StringBuilder(rowData[5].getContents().trim());
+                if(rowIndex < khdnRowHasValueIndexFrom){
+                    rowIndex++;
+                    continue;
+                }
 
+                // For each row, iterate through each columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+                int colIndex = 0;
+
+                while (cellIterator.hasNext()){
+                    cell = cellIterator.next();
+
+                    switch (colIndex){
+                        case 0:
+                            shopCode = new StringBuilder(cell.getStringCellValue());
+                            break;
+                        case 1:
+                            shopName = new StringBuilder(cell.getStringCellValue());
+                            break;
+                        case 2:
+                            mst = new StringBuilder(cell.getStringCellValue());
+                            break;
+                        case 3:
+                            gpkd = new StringBuilder(cell.getStringCellValue());
+                            break;
+                        case 4:
+                            issuedContractDate = new StringBuilder(cell.getStringCellValue());
+                            break;
+                        case 5:
+                            stb_vas = new StringBuilder(cell.getStringCellValue());
+                            break;
+                    }
+                    colIndex++;
+                }
+
+
+                if(rowIndex == headerRowHasValueIndex){
+                    // build header list
+                    List<String> headerList = new ArrayList<String>();
+                    headerList.add(shopCode.toString());
+                    headerList.add(shopName.toString());
+                    headerList.add(mst.toString());
+                    headerList.add(gpkd.toString());
+                    headerList.add(issuedContractDate.toString());
+                    headerList.add(stb_vas.toString());
+                    command.setHeaderList(headerList);
+
+                }else{
+                    // build khdn content list
                     dto = new ImportKHDNDTO(shopCode.toString(), shopName.toString(), mst.toString(), gpkd.toString(), issuedContractDate.toString(), stb_vas.toString());
 
                     boolean  hasError = validateRequiredFields(dto, shopCodeHS, mstHS, gpkdHS, stbHS, rowIndex);
-                    importKHDNDTOLIst.add(dto);
-
                     if(hasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.some_error_found_in_import_file"));
                     }else{
@@ -124,7 +158,12 @@ public class ImportKHDNValidator extends ApplicationObjectSupport implements Val
                         mstHS.add(dto.getMst());
                     }
                 }
-            }else{
+
+                importKHDNDTOLIst.add(dto);
+                rowIndex++;
+            }
+
+            if(rowIndex < khdnRowHasValueIndexFrom){
                 command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.exceed_min_row_to_read"));
                 command.setHasError(true);
             }

@@ -12,8 +12,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ImportFileValidator {
-    public static void validateFileImport4ExcelFormat(MultipartFile file, List<String> errorCode){
-        if(file == null || file.getSize() == 0 || !file.getOriginalFilename().endsWith(".xls")){
+    public static void validateFileImport4ExcelExtenstionFormat(MultipartFile file, List<String> errorCode){
+        if(file == null || file.getSize() == 0 || !file.getOriginalFilename().endsWith(".xlsx")){
             errorCode.add("import.error.invalid-format_excel_file");
         }
     }

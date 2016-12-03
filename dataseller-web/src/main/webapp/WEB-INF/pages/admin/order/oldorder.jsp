@@ -128,12 +128,12 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" ><fmt:message key="old_order.import_card_code_file" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_card_code_4_old_order.xls"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
+                            <a class="btn btn-info" id="linkTemplate" href="<c:url value="/files/help/template_import_card_code_4_old_order.xlsx"/>"><i class="fa fa-download" aria-hidden="true"></i> <fmt:message key="import.import_page.step1.instruction2"/></a>
                             <div class="chonFileImport">
                                 <label for="file" class="btn btn-info">
                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i> <fmt:message key="import.selectFile"></fmt:message>
                                 </label>
-                                <input id="file" type="file" name="file" accept="application/vnd.ms-excel" />
+                                <input id="file" type="file" name="file" accept=".xlsx" />
                             </div>
                             <span id="file-upload-error" class="error-inline-validate"><fmt:message key="label.not_empty_file_upload" /></span>
                         </div>

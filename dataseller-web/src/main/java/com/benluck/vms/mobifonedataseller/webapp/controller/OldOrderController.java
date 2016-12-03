@@ -109,7 +109,7 @@ public class OldOrderController extends ApplicationObjectSupport{
                         }else{
                             pojo.setUnitPrice(packageDataDTO.getValue());
                             if (pojo.getOrderId() == null ){
-                                pojo = this.orderService.createOldOrder(pojo);
+                                this.orderService.createOldOrder(pojo);
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
                             } else {
