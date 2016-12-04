@@ -5,20 +5,16 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCodeHistoryDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
-import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
+import com.benluck.vms.mobifonedataseller.util.ExcelExtensionUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.MBDCodeHistoryCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.Alignment;
-import jxl.format.Border;
-import jxl.format.BorderLineStyle;
-import jxl.format.Colour;
-import jxl.write.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -28,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -162,47 +158,37 @@ public class PaymentHistoryController extends ApplicationObjectSupport{
             throw new Exception("Error happened when fetching payment history.");
         }
 
-        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/lich_su_thanh_toan.xls");
-        String outputFileName = "/files/temp/export/lich_su_thanh_toan_" + exportDate + ".xls";
-        String export2FileName = request.getSession().getServletContext().getRealPath(outputFileName);
-        WorkbookSettings ws = new WorkbookSettings();
-        ExcelUtil.setEncoding4Workbook(ws);
-        Workbook templateWorkbook = Workbook.getWorkbook(new File(reportTemplate), ws);
-        WritableWorkbook workbook = Workbook.createWorkbook(new File(export2FileName), templateWorkbook);
-        WritableSheet sheet = workbook.getSheet(0);
+        String outputFileName = "/files/temp/export/lich_su_thanh_toan_" + exportDate + ".xlsx";
+        FileOutputStream fileOut = new FileOutputStream(request.getSession().getServletContext().getRealPath(outputFileName));
+        XSSFWorkbook workbook = new XSSFWorkbook(OPCPackage.open(request.getSession().getServletContext().getRealPath("/files/temp/export/lich_su_thanh_toan.xlsx")));
+        XSSFCreationHelper createHelper = workbook.getCreationHelper();
+        XSSFSheet sheet = workbook.getSheetAt(0);
         int startRow = 6;
 
-        WritableFont normalFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD);
-        normalFont.setColour(Colour.BLACK);
+        XSSFFont normalFont = workbook.createFont();
 
-        WritableFont boldFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD);
-        normalFont.setColour(Colour.BLACK);
+        XSSFCellStyle stringCellFormat = workbook.createCellStyle();
+        stringCellFormat.setFont(normalFont);
 
-        WritableCellFormat stringCellFormat = new WritableCellFormat(normalFont);
-        stringCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+        XSSFCellStyle integerCellFormat = workbook.createCellStyle();
+        integerCellFormat.setFont(normalFont);
+        integerCellFormat.setAlignment(HorizontalAlignment.CENTER);
 
-        WritableCellFormat stringNgayBaoCaoCellFormat = new WritableCellFormat(normalFont);
-        stringNgayBaoCaoCellFormat.setBorder(Border.ALL, BorderLineStyle.NONE);
-        stringNgayBaoCaoCellFormat.setAlignment(Alignment.CENTRE);
-
-        WritableCellFormat integerCellFormat = new WritableCellFormat(normalFont);
-        integerCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
-        integerCellFormat.setAlignment(Alignment.CENTRE);
-
-        NumberFormat nf = new NumberFormat("#,###");
-        WritableCellFormat doubleCellFormat = new WritableCellFormat(nf);
+        XSSFCellStyle doubleCellFormat = workbook.createCellStyle();
         doubleCellFormat.setFont(normalFont);
-        doubleCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+        doubleCellFormat.setDataFormat(createHelper.createDataFormat().getFormat("#,###"));
+        doubleCellFormat.setAlignment(HorizontalAlignment.CENTER);
 
         if(dtoList.size() > 0){
-            int indexRow = 1;
+            int indexRow = 0;
             for(MBDCodeHistoryDTO dto : dtoList){
+                XSSFRow row = sheet.createRow(startRow + indexRow);
                 CellValue[] resValue = addCellValues(dto, indexRow);
-                ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
+                ExcelExtensionUtil.addRow(row, resValue, stringCellFormat, integerCellFormat, doubleCellFormat);
                 indexRow++;
             }
-            workbook.write();
-            workbook.close();
+            workbook.write(fileOut);
+            fileOut.close();
             response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
         }
     }

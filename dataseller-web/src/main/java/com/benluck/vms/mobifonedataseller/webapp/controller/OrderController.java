@@ -11,7 +11,7 @@ import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SHA256Util;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
-import com.benluck.vms.mobifonedataseller.util.ExcelUtil;
+import com.benluck.vms.mobifonedataseller.util.ExcelExtensionUtil;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
@@ -21,15 +21,12 @@ import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskTakeCardCode;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OrderValidator;
-import jxl.Workbook;
-import jxl.WorkbookSettings;
-import jxl.format.Alignment;
-import jxl.format.Border;
-import jxl.format.BorderLineStyle;
-import jxl.format.Colour;
-import jxl.write.*;
+import jxl.write.WritableFont;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -43,11 +40,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.Boolean;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by thaihoang on 10/31/2016.
@@ -122,7 +122,7 @@ public class OrderController extends ApplicationObjectSupport{
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){
-                executeSearch(command, request);
+                executeSearch(mav, command, request);
             }else if(action.equals(Constants.ACTION_EXPORT)){
                 try{
                     exportOrder2Excel(command, request, response);
@@ -136,8 +136,6 @@ public class OrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav, command);
-
-        mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
     }
 
@@ -153,37 +151,26 @@ public class OrderController extends ApplicationObjectSupport{
             throw new Exception("Error happened when fetching Data Code by OrderId: " + command.getPojo().getOrderId());
         }
 
-        String reportTemplate = request.getSession().getServletContext().getRealPath("/files/temp/export/don_hang.xls");
-        String outputFileName = "/files/temp/export/don_hang_" + exportDate + ".xls";
-        String export2FileName = request.getSession().getServletContext().getRealPath(outputFileName);
-        WorkbookSettings ws = new WorkbookSettings();
-        ExcelUtil.setEncoding4Workbook(ws);
-        Workbook templateWorkbook = Workbook.getWorkbook(new File(reportTemplate), ws);
-        WritableWorkbook workbook = Workbook.createWorkbook(new File(export2FileName), templateWorkbook);
-        WritableSheet sheet = workbook.getSheet(0);
+        String outputFileName = "/files/temp/export/don_hang_" + exportDate + ".xlsx";
+        FileOutputStream fileOut = new FileOutputStream(request.getSession().getServletContext().getRealPath(outputFileName));
+        XSSFWorkbook workbook = new XSSFWorkbook(OPCPackage.open(request.getSession().getServletContext().getRealPath("/files/temp/export/don_hang.xlsx")));
+        XSSFCreationHelper createHelper = workbook.getCreationHelper();
+        XSSFSheet sheet = workbook.getSheetAt(0);
         int startRow = 5;
 
-        WritableFont normalFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD);
-        normalFont.setColour(Colour.BLACK);
+        XSSFFont normalFont = workbook.createFont();
 
-        WritableFont boldFont = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD);
-        normalFont.setColour(Colour.BLACK);
+        XSSFCellStyle stringCellFormat = workbook.createCellStyle();
+        stringCellFormat.setFont(normalFont);
 
-        WritableCellFormat stringCellFormat = new WritableCellFormat(normalFont);
-        stringCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+        XSSFCellStyle integerCellFormat = workbook.createCellStyle();
+        integerCellFormat.setFont(normalFont);
+        integerCellFormat.setAlignment(HorizontalAlignment.CENTER);
 
-        WritableCellFormat stringNgayBaoCaoCellFormat = new WritableCellFormat(normalFont);
-        stringNgayBaoCaoCellFormat.setBorder(Border.ALL, BorderLineStyle.NONE);
-        stringNgayBaoCaoCellFormat.setAlignment(Alignment.CENTRE);
-
-        WritableCellFormat integerCellFormat = new WritableCellFormat(normalFont);
-        integerCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
-        integerCellFormat.setAlignment(Alignment.CENTRE);
-
-        NumberFormat nf = new NumberFormat("#,###");
-        WritableCellFormat doubleCellFormat = new WritableCellFormat(nf);
+        XSSFCellStyle doubleCellFormat = workbook.createCellStyle();
         doubleCellFormat.setFont(normalFont);
-        doubleCellFormat.setBorder(Border.ALL, BorderLineStyle.MEDIUM);
+        doubleCellFormat.setDataFormat(createHelper.createDataFormat().getFormat("#,###"));
+        doubleCellFormat.setAlignment(HorizontalAlignment.CENTER);
 
         boolean adminExport4MOBIFONE = false;
 
@@ -192,19 +179,20 @@ public class OrderController extends ApplicationObjectSupport{
         }
 
         if(dtoList.size() > 0){
-            int indexRow = 1;
+            int indexRow = 0;
             for(OrderDataCodeDTO dto : dtoList){
+                XSSFRow row = sheet.createRow(startRow + indexRow);
                 CellValue[] resValue = addCellValues(dto, indexRow, adminExport4MOBIFONE);
-                ExcelUtil.addRow(sheet, startRow++, resValue, stringCellFormat, integerCellFormat, doubleCellFormat, null);
+                ExcelExtensionUtil.addRow(row, resValue, stringCellFormat, integerCellFormat, doubleCellFormat);
                 indexRow++;
             }
-            workbook.write();
-            workbook.close();
+            workbook.write(fileOut);
+            fileOut.close();
             response.sendRedirect(request.getSession().getServletContext().getContextPath() + outputFileName);
         }
     }
     private CellValue[] addCellValues(OrderDataCodeDTO dto, int indexRow, boolean adminExport4MOBIFONE){
-        SimpleDateFormat df = new SimpleDateFormat("dd-M-yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
         resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
@@ -224,7 +212,7 @@ public class OrderController extends ApplicationObjectSupport{
         return resValue;
     }
 
-    private void executeSearch(OrderCommand command, HttpServletRequest request){
+    private void executeSearch(ModelAndView mav, OrderCommand command, HttpServletRequest request){
         OrderDTO pojo = command.getPojo();
 
         RequestUtil.initSearchBean(request, command);
@@ -250,6 +238,7 @@ public class OrderController extends ApplicationObjectSupport{
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
         command.setListResult((List<OrderDTO>)resultObject[1]);
         command.setMaxPageItems(command.getReportMaxPageItems());
+        mav.addObject(Constants.LIST_MODEL_KEY, command);
     }
 
     private void preferenceData(ModelAndView mav, OrderCommand command){
@@ -258,7 +247,7 @@ public class OrderController extends ApplicationObjectSupport{
         mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
         mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
 
-        if(command.getPojo() != null && command.getPojo().getOrderId() != null ){
+        if(command.getPojo() != null && command.getPojo().getOrderId() != null && command.getPojo().getKhdn() != null && StringUtils.isNotBlank(command.getPojo().getKhdn().getStb_vas())){
             mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas(), command.getPojo().getOrderId()));
         }else{
             mav.addObject("totalRemainingPaidPackageValue", 0D);
