@@ -9,6 +9,7 @@ import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLo
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataCodeGenDTO;
 import com.benluck.vms.mobifonedataseller.redis.domain.DataCode;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
+import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import org.apache.log4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -109,7 +110,7 @@ public class DataCodeUtil {
                                 Iterator<String> ito = tmpCardCodeHSFromCache.iterator();
                                 while (ito.hasNext()){
                                     tmpCardCode = new StringBuilder(ito.next());
-                                    if(!usedCardCode21610HashSet.contains(tmpCardCode.toString())){
+                                    if(!usedCardCode21610HashSet.contains(MobiFoneSecurityBase64Util.encode(tmpCardCode.toString()))){
                                         cardCodeHashSet.add(tmpCardCode.toString());
                                         cardCodeSizeCounter++;
                                     }
@@ -128,16 +129,29 @@ public class DataCodeUtil {
                             HashSet<String> remainingCardCodeInCacheHS = new HashSet<>();
                             Iterator<String> ito = tmpCardCodeHSFromCache.iterator();
                             while(ito.hasNext()){
+                                tmpCardCode = new StringBuilder(ito.next());
                                 if(cardCodeSizeCounter == numberOfCardCode.intValue()){
-                                    remainingCardCodeInCacheHS.add(ito.next());
+                                    remainingCardCodeInCacheHS.add(tmpCardCode.toString());
                                 }else{
-                                    cardCodeHashSet.add(ito.next());
-                                    cardCodeSizeCounter++;
+                                    if(usedCardCode21610HashSet.size() > 0){
+                                        if(!usedCardCode21610HashSet.contains(MobiFoneSecurityBase64Util.encode(tmpCardCode.toString()))){
+                                            cardCodeHashSet.add(tmpCardCode.toString());
+                                            cardCodeSizeCounter++;
+                                        }
+                                    }else{
+                                        cardCodeHashSet.add(tmpCardCode.toString());
+                                        cardCodeSizeCounter++;
+                                    }
                                 }
                             }
 
-                            mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
-                            break;
+                            if(cardCodeSizeCounter >= numberOfCardCode.intValue()){
+                                mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), remainingCardCodeInCacheHS);
+                                break;
+
+                            }else{
+                                mapCardCodeHSRemainingInBatches.put(tmpUnitPriceCodeWithBatchIndex.toString(), new HashSet<String>());
+                            }
                         }
                     }
                 }
