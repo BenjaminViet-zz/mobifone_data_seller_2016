@@ -24,4 +24,6 @@ public interface OrderDataCodeManagementLocalBean{
     HashSet<String> findCardCodeImported4OldOrder();
 
     Object[] findByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+
+    List<OrderDataCodeDTO> findByOrderId(Long orderId);
 }

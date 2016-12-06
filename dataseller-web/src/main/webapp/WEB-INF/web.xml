@@ -12,7 +12,7 @@
 	<!-- Define the default CSS Theme -->
 	<context-param>
 		<param-name>csstheme</param-name>
-		<param-value>promotion</param-value>
+		<param-value>mobi_data-seller-2016</param-value>
 	</context-param>
 	<!-- Define the basename for common.a resource bundle for I18N -->
 	<context-param>
@@ -239,6 +239,7 @@
 		<url-pattern>*.html</url-pattern>
 		<url-pattern>/logon</url-pattern>
 		<url-pattern>/login</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
     <servlet-mapping>
         <servlet-name>captcha</servlet-name>

@@ -54,4 +54,13 @@ public class OrderDataCodeManagementSessionBean implements OrderDataCodeManageme
         }
         return resultObject;
     }
+
+    @Override
+    public List<OrderDataCodeDTO> findByOrderId(Long orderId) {
+        List<OrderDataCodeEntity> entityList = this.orderDataCodeService.findProperty("order.orderId", orderId);
+        if(entityList.size() > 0){
+            return OrderDataCodeBeanUtil.entityList2DTOList(entityList);
+        }
+        return new ArrayList<>();
+    }
 }
