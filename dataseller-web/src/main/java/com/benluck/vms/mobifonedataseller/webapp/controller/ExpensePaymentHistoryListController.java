@@ -193,7 +193,7 @@ public class ExpensePaymentHistoryListController extends ApplicationObjectSuppor
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
-        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
+        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow + 1);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, this.getMessageSourceAccessor().getMessage("payment.manager.table.payment_status_paid"));
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, df.format(dto.getPaymentDate()));
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getShopCode().toString());

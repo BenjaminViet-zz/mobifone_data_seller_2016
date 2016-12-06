@@ -196,7 +196,7 @@ public class PaymentHistoryController extends ApplicationObjectSupport{
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
-        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
+        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow + 1);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getIsdn());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getName().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getTin().toString());

@@ -191,7 +191,7 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
     private CellValue[] addCellValues(MBDReportGeneralExpenseDTO dto, int indexRow){
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
-        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
+        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow + 1);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getShopCode().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getShopName().toString());
         resValue[columnIndex++] = new CellValue(CellDataType.DOUBLE, dto.getDevelopmentAmount1());

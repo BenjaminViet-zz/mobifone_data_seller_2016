@@ -195,7 +195,7 @@ public class OrderController extends ApplicationObjectSupport{
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         CellValue[] resValue = new CellValue[TOTAL_COLUMN_EXPORT];
         int columnIndex = 0;
-        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow);
+        resValue[columnIndex++] = new CellValue(CellDataType.INT, indexRow + 1);
         resValue[columnIndex++] = new CellValue(CellDataType.STRING, dto.getSerial().toString());
 
         if(adminExport4MOBIFONE){

@@ -79,18 +79,22 @@ public class TaskTakeCardCode extends TimerTask{
                 this.orderService.updateItem(orderDTO);
 
                 DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
-                createNotificationMessage(true);
+                createNotificationMessage(true, null);
 
                 RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, false);
             }else{
                 hasError = true;
-                createNotificationMessage(false);
+                createNotificationMessage(false, null);
                 logger.error("TAKING CARD CODE TASK is cancelled. The Order is only with status FINISH will be processing for Card Code list.");
             }
         }catch (Exception e){
             RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, false);
             hasError = true;
-            createNotificationMessage(false);
+            if(e.getMessage().equals("NOT_ENOUGH_CARD_CORD_2_TAKE")){
+                createNotificationMessage(false, true);
+            }else{
+                createNotificationMessage(false, null);
+            }
             logger.error("Error happen in TAKING CARD CODE for OrderId: " + orderId);
             logger.error("Details: " + e.getMessage());
         }
@@ -107,7 +111,7 @@ public class TaskTakeCardCode extends TimerTask{
         logger.info("=================TAKING CARD CODE TASK - FINISHED");
     }
 
-    private void createNotificationMessage(Boolean isSuccess){
+    private void createNotificationMessage(Boolean isSuccess, Boolean isNotEnoughCardCodeToTake){
         try{
             UserDTO userDTO = new UserDTO();
             userDTO.setUserId(this.userId);
@@ -120,7 +124,11 @@ public class TaskTakeCardCode extends TimerTask{
                 notificationDTO.setMessage("Đơn hàng orderId " + orderId +" đã hoàn tất sinh Card Code");
             }else{
                 notificationDTO.setMessageType(Constants.TAKE_CARD_CODE_4_ORDER_FAILED);
-                notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code");
+                if(isNotEnoughCardCodeToTake != null && !isNotEnoughCardCodeToTake.booleanValue()){
+                    notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code");
+                }else{
+                    notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code. Không đủ Card Code để sinh");
+                }
             }
 
             notificationService.addItem(notificationDTO);

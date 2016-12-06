@@ -41,7 +41,7 @@ public class DataCodeUtil {
      * @param numberOfDataCodes Number of Card Code need to be taken for the Order exporting.
      * @return
      */
-    public static Object[] generateDataCodes(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfDataCodes){
+    public static Object[] generateDataCodes(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfDataCodes) throws Exception{
         return generateDataCodeList(packageDataCodeGenDTO, year, yearCode, (unitPriceCode.length() == 1 ? "0" + unitPriceCode : unitPriceCode), numberOfDataCodes);
     }
 
@@ -53,7 +53,7 @@ public class DataCodeUtil {
      * @param numberOfCardCode      Số lượng Data Code cần sinh ra
      * @return
      */
-    public static Object[] generateDataCodeList(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfCardCode){
+    public static Object[] generateDataCodeList(PackageDataCodeGenDTO packageDataCodeGenDTO, Integer year, String yearCode, String unitPriceCode, Integer numberOfCardCode) throws Exception{
 
         Map<String, HashSet<String>> mapCardCodeHSRemainingInBatches = new HashMap<String, HashSet<String>>();
         HashSet<String> tmpCardCodeHSFromCache = null;
@@ -125,7 +125,6 @@ public class DataCodeUtil {
                                 break;
                             }
                         }else{
-                            int remainingSizeOnDemand = numberOfCardCode.intValue() - tmpCardCodeHSFromCache.size() - cardCodeHashSet.size();
                             HashSet<String> remainingCardCodeInCacheHS = new HashSet<>();
                             Iterator<String> ito = tmpCardCodeHSFromCache.iterator();
                             while(ito.hasNext()){
@@ -144,6 +143,12 @@ public class DataCodeUtil {
                 }
             }catch (Exception e){
                 logger.error(e.getMessage());
+                throw new Exception(e.getMessage());
+            }
+
+            if(cardCodeSizeCounter != numberOfCardCode.intValue()){
+                logger.error("Not enough Card Code in Redis Database to taking for this Order. Please try another one");
+                throw new Exception("NOT_ENOUGH_CARD_CORD_2_TAKE");
             }
 
             return new Object[]{cardCodeSizeCounter, cardCodeHashSet, mapCardCodeHSRemainingInBatches};
