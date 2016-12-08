@@ -101,7 +101,7 @@ public class TaskGenerateCardCode extends TimerTask{
                                 tmpCardCodeHS = generateCardCode(yearCode, tmpUnitPriceCode.toString(), batchIndex);
 
                                 logger.info("Saving batch " + batchIndex + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + " with " + tmpCardCodeHS.size() + " Card Codes.");
-                                this.packageCodeDataGenService.insertUpdatePackageDataCodeGenAndBatch(packageDataId, year, batchIndex, tmpCardCodeHS.size(), (batchIndex == 0 ? true : false));
+                                this.packageCodeDataGenService.insertUpdatePackageDataCodeGenAndBatch(packageDataId, year, batchIndex + 1, tmpCardCodeHS.size(), (batchIndex == 0 ? true : false));
                                 logger.info("Saved batch " + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + batchIndex + " into PackageDataCodeGen table for tracking.");
 
                                 logger.info("Saving batch "  + batchIndex + " of YearCode: " + yearCode + ", UnitPrice: " + tmpUnitPriceCode + " to Redis Database");
