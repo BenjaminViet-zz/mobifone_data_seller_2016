@@ -134,7 +134,7 @@ public class DataCodeUtil {
                                     remainingCardCodeInCacheHS.add(tmpCardCode.toString());
                                 }else{
                                     if(usedCardCode21610HashSet.size() > 0){
-                                        if(!usedCardCode21610HashSet.contains(MobiFoneSecurityBase64Util.encode(tmpCardCode.toString()))){
+                                        if(!usedCardCode21610HashSet.contains(tmpCardCode.toString())){
                                             cardCodeHashSet.add(tmpCardCode.toString());
                                             cardCodeSizeCounter++;
                                         }

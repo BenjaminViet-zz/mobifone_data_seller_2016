@@ -125,9 +125,9 @@ public class TaskTakeCardCode extends TimerTask{
             }else{
                 notificationDTO.setMessageType(Constants.TAKE_CARD_CODE_4_ORDER_FAILED);
                 if(isNotEnoughCardCodeToTake != null && !isNotEnoughCardCodeToTake.booleanValue()){
-                    notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code");
+                    notificationDTO.setMessage("Đơn hàng orderId " + orderId + " thất bại khi sinh Card Code");
                 }else{
-                    notificationDTO.setMessage("Đơn hàng orderId" + orderId + " thất bại khi sinh Card Code. Không đủ Card Code để sinh");
+                    notificationDTO.setMessage("Đơn hàng orderId " + orderId + " thất bại khi sinh Card Code. Không đủ Card Code để sinh");
                 }
             }
 
