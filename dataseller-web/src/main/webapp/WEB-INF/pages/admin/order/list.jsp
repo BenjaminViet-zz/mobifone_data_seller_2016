@@ -202,7 +202,7 @@
                                                 <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteOrder(${tableList.orderId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </security:authorize>
                                         </c:if>
-                                        <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus ne  Constants.ORDER_CARD_CODE_FAILED_STATUS}">
+                                        <c:if test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH && tableList.cardCodeProcessStatus eq  Constants.ORDER_CARD_CODE_COMPLETED_STATUS}">
                                              <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.button.export" />" onclick="javascript: exportExcel(${tableList.orderId});"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                                         </c:if>
                                     </div>
