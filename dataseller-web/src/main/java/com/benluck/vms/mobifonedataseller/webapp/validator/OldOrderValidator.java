@@ -94,7 +94,7 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
 
             HashSet<String> cardCodeHS = new HashSet<String>();
             UsedCardCodeDTO dto = null;
-            int cardCodeRowIndexFrom = 5;
+            int cardCodeRowIndexFrom = 3;
             int rowIndex = 0;
 
             // Traversing over each row of XLSX file
