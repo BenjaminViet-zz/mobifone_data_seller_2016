@@ -56,6 +56,9 @@
                                                             <c:when test="${notification.messageType eq Constants.TAKE_CARD_CODE_4_ORDER_SUCCESS || notification.messageType eq Constants.TAKE_CARD_CODE_4_ORDER_FAILED}">
                                                                 <fmt:message key="notification.popup.take_card_code_message_type" />
                                                             </c:when>
+                                                            <c:when test="${notification.messageType eq Constants.IMPORT_USED_CARD_CODE_SUCCESS || notification.messageType eq Constants.IMPORT_USED_CARD_CODE_FAILED}">
+                                                                <fmt:message key="notification.popup.generate_card_code_message_type" />
+                                                            </c:when>
                                                         </c:choose>
                                                     </span>
                                                       <span class="time">

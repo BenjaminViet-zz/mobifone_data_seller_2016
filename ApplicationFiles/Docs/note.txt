@@ -33,7 +33,7 @@ chmod +x redis-cli
 ./redis-cli
 
 #MacOS Redis command
-redis-server
+redis-server /etc/redis/redis.conf
 
 #Jboss stop
 ./jboss-cli.sh -c --command=:shutdown

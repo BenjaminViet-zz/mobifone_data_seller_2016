@@ -21,6 +21,7 @@ public class ImportUsedCardCodeCommand extends AbstractCommand<UsedCardCodeDTO>{
     private Integer stepImportIndex = Constants.IMPORT_CARD_CODE_STEP_1_CHOOSE_FILE;
     private MultipartFile fileUpload;
     private List<UsedCardCodeDTO> importUsedCardCodeList;
+    private List<UsedCardCodeDTO> errorImportUsedCardCodeList;
     private Boolean importUsedCardCode = false;
     private String csvFileUploadPath;
 
@@ -62,5 +63,13 @@ public class ImportUsedCardCodeCommand extends AbstractCommand<UsedCardCodeDTO>{
 
     public void setCsvFileUploadPath(String csvFileUploadPath) {
         this.csvFileUploadPath = csvFileUploadPath;
+    }
+
+    public List<UsedCardCodeDTO> getErrorImportUsedCardCodeList() {
+        return errorImportUsedCardCodeList;
+    }
+
+    public void setErrorImportUsedCardCodeList(List<UsedCardCodeDTO> errorImportUsedCardCodeList) {
+        this.errorImportUsedCardCodeList = errorImportUsedCardCodeList;
     }
 }

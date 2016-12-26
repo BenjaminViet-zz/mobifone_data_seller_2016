@@ -4,10 +4,11 @@ import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CommonUtil;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.FileUtils;
-import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
+import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportUsedCardCode;
 import com.benluck.vms.mobifonedataseller.webapp.validator.ImportUsedCardCodeValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,8 +41,6 @@ import java.util.Map;
 public class ImportUsedCardCodeController extends ApplicationObjectSupport{
     private Logger logger = Logger.getLogger(ImportKHDNController.class);
 
-    private final Integer TOTAL_COLUMNS_IMPORT_FILE = 1;
-
     @Autowired
     private UsedCardCodeManagementLocalBean usedCardCodeService;
     @Autowired
@@ -48,7 +49,8 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
     @RequestMapping(value = {"/admin/import_used_card_code.html"})
     public ModelAndView importUsedCardCode(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportUsedCardCodeCommand command,
                                            BindingResult bindingResult,
-                                           HttpServletRequest request) throws IOException{
+                                           HttpServletRequest request,
+                                           RedirectAttributes redirectAttributes) throws IOException{
         ModelAndView mav = new ModelAndView("/admin/usedCardCode/import");
         String action = command.getCrudaction();
 
@@ -98,15 +100,13 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
                     mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.data_card_code_is_expired"));
                 }else{
                     try{
-                        logger.info("Saving Used Card Code list to Database...");
-                        usedCardCodeService.importCardCodeList(importUsedCardCodeList);
+                        TaskImportUsedCardCode taskImportUsedCardCode = new TaskImportUsedCardCode(importUsedCardCodeList, SecurityUtils.getLoginUserId());
+                        Timer timer = new Timer(true);
+                        timer.schedule(taskImportUsedCardCode, 0);
 
-                        logger.info("Saving Used Card Code list to Redis Database...");
-                        RedisUtil.updateUsedCardCodeByKey(usedCardCodeService.findAllListCardCode());
-
-                        logger.info("Saving Used Card Code completely!");
-                        mav.addObject(Constants.ALERT_TYPE, "success");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.import_success"));
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.import_in_progress"));
+                        return new ModelAndView("redirect:/admin/import_used_card_code.html");
                     }catch (Exception e){
                         logger.error(e.getMessage());
                         mav.addObject(Constants.ALERT_TYPE, "danger");

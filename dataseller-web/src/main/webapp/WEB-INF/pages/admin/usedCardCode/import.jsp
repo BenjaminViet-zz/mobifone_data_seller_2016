@@ -122,30 +122,32 @@
                                     <fmt:message key="import_used_card_code.review_list.imported_used_card_code_before_message" />
                                 </div>
                             </c:if>
-                            <div id="tableListContainer" style="width: 100%; height: 400px;">
-                                <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em; height: ${39 + (item.importUsedCardCodeList.size() * 38)}px">
-                                    <thead>
-                                    <tr>
-                                        <th class="table_header text-center"><fmt:message key="label.stt" /></th>
-                                        <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.card_code" /></th>
-                                        <c:if test="${not empty item.errorMessage && !item.hasError}">
-                                            <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.status" /></th>
-                                        </c:if>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach items="${item.importUsedCardCodeList}" var="usedCardCodeDTO" varStatus="status">
-                                        <tr class="<c:if test="${not empty importKHDNDTO.errorMessage}">line-error</c:if> ">
-                                            <td style="width: 3%;" class="text-center width_50px">${status.count}</td>
-                                            <td style="width: 37%;" class="text-center width_200px">${usedCardCodeDTO.cardCode}</td>
+                            <c:if test="${not empty item.errorImportUsedCardCodeList && item.errorImportUsedCardCodeList.size() > 0}">
+                                <div id="tableListContainer" style="width: 100%; height: 400px;">
+                                    <table id="tableList" cellspacing="0" cellpadding="0" class="table table-striped table-bordered" style="margin: 1em 0 1.5em; height: ${39 + (item.importUsedCardCodeList.size() * 38)}px">
+                                        <thead>
+                                        <tr>
+                                            <th class="table_header text-center"><fmt:message key="label.stt" /></th>
+                                            <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.card_code" /></th>
                                             <c:if test="${not empty item.errorMessage && !item.hasError}">
-                                                <td style="width: 60%;" class="width_350px">${usedCardCodeDTO.errorMessage}</td>
+                                                <th class="table_header text-center"><fmt:message key="import_used_card_code.review_list.status" /></th>
                                             </c:if>
                                         </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${item.importUsedCardCodeList}" var="usedCardCodeDTO" varStatus="status">
+                                            <tr class="<c:if test="${not empty importKHDNDTO.errorMessage}">line-error</c:if> ">
+                                                <td style="width: 3%;" class="text-center width_50px">${status.count}</td>
+                                                <td style="width: 37%;" class="text-center width_200px">${usedCardCodeDTO.cardCode}</td>
+                                                <c:if test="${not empty item.errorMessage && !item.hasError}">
+                                                    <td style="width: 60%;" class="width_350px">${usedCardCodeDTO.errorMessage}</td>
+                                                </c:if>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </c:if>
                         </div>
                         <div id="step-3">
                             <div class="m-t-30">
@@ -174,6 +176,7 @@
     var $formEl = $('#listForm');
     var tableHeaderHeight = 39;
     var tableTrHeight = 38;
+    var $ajaxLoading = $('#ajaxLoading');
 
     $(document).ready(function() {
         handleButtons();
@@ -181,20 +184,22 @@
     });
 
     function initScrollablePane(){
-        <c:choose>
-            <c:when test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD && not empty item.errorMessage && !item.hasError}">
-                if($(window).width() >= mobile_screen_width){
+        if($('#tableListContainer').length){
+            <c:choose>
+                <c:when test="${item.stepImportIndex == Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD && not empty item.errorMessage && !item.hasError}">
+                    if($(window).width() >= mobile_screen_width){
+                        $('#tableListContainer').mCustomScrollbar();
+                        return;
+                    }else{
+                        $('#tableList').addClass('mobile').width(600);
+                        $('#tableListContainer').mCustomScrollbar();
+                    }
+                </c:when>
+                <c:otherwise>
                     $('#tableListContainer').mCustomScrollbar();
-                    return;
-                }else{
-                    $('#tableList').addClass('mobile').width(600);
-                    $('#tableListContainer').mCustomScrollbar();
-                }
-            </c:when>
-            <c:otherwise>
-                $('#tableListContainer').mCustomScrollbar();
-            </c:otherwise>
-        </c:choose>
+                </c:otherwise>
+            </c:choose>
+        }
     }
 
     function handleFile(){
@@ -265,6 +270,9 @@
                 e.stopPropagation();
                 e.preventDefault();
                 $('#crudaction').val('${Constants.ACTION_UPLOAD}');
+
+                showLoading();
+
                 $formEl.submit();
             } else if(curStepIndex == ${Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD} && ${empty item.errorMessage} && ${!item.hasError}){
                 $buttonFinish.removeClass('disableBtnFinish');
@@ -280,6 +288,55 @@
                 isShowNextButton(false);
             }
         });
+    }
+
+    function showLoading(){
+        /*------------------------
+         Spinner initial
+         ------------------------*/
+        var opts = {
+            lines: 13 // The number of lines to draw
+            , length: 12 // The length of each line
+            , width: 5 // The line thickness
+            , radius: 14 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 0.9 // Corner roundness (0..1)
+            , color: '#000' // #rgb or #rrggbb or array of colors
+            , opacity: 0.25 // Opacity of the lines
+            , rotate: 0 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 60 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+        };
+        var target = document.getElementById('ajaxLoading');
+        /*------------------------
+         //  Spinner initial
+         ------------------------*/
+
+        var spinner = new Spinner(opts).spin(target);
+        overlay();
+    }
+
+    function overlay(){
+        if ( $('#ajaxLoading').children().length ){
+            $('#ajaxLoading').css({'position': 'absolute',
+                        'top': '0', 'left': '0',
+                        'z-index': '9999',
+                        'width': '100%',
+                        'height': '100%',
+                        'background-color': 'rgba(0,0,0,0.5)'}
+            )
+        } else {
+            $('#ajaxLoading').attr('style', '');
+        }
     }
 
     /**

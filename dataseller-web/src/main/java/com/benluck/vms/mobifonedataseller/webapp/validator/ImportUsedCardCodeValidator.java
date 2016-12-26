@@ -6,6 +6,7 @@ import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeComma
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -51,15 +52,18 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage(errorCodes.get(0)));
         }else{
             try{
-                command.setImportUsedCardCodeList(extractFileImport(fileUpload, command));
+                Object[] importUsedCardCodeObjects = extractFileImport(fileUpload, command);
+                command.setErrorImportUsedCardCodeList((List<UsedCardCodeDTO>)importUsedCardCodeObjects[0]);
+                command.setImportUsedCardCodeList((List<UsedCardCodeDTO>)importUsedCardCodeObjects[1]);
             }catch (Exception e){
                 logger.error(e.getMessage());
             }
         }
     }
 
-    private List<UsedCardCodeDTO> extractFileImport(MultipartFile fileUpload, ImportUsedCardCodeCommand command)throws Exception{
-        List<UsedCardCodeDTO> importKHDNDTOLIst = new ArrayList<UsedCardCodeDTO>();
+    private Object[] extractFileImport(MultipartFile fileUpload, ImportUsedCardCodeCommand command)throws Exception{
+        List<UsedCardCodeDTO> errorImportUsedCardCodeList = new ArrayList<UsedCardCodeDTO>();
+        List<UsedCardCodeDTO> importUsedCardCodeList = new ArrayList<UsedCardCodeDTO>();
         try{
             // Finds the workbook instance for XLSX file
             XSSFWorkbook myWorkBook = new XSSFWorkbook(fileUpload.getInputStream());
@@ -70,10 +74,14 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
             // Get interator to all the rows in current sheet
             Iterator<Row> rowIterator = mySheet.iterator();
 
+            DataFormatter formatter = new DataFormatter();
+
             HashSet<String> cardCodeHS = new HashSet<String>();
             UsedCardCodeDTO dto = null;
             int cardCodeRowIndexFrom = 5;
             int rowIndex = 0;
+
+            StringBuilder tmpCardCodeValue = null;
 
             // Traversing over each row of XLSX file
             while(rowIterator.hasNext()){
@@ -89,23 +97,24 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
                 Iterator<Cell> cellIterator = row.cellIterator();
 
                 while (cellIterator.hasNext()){
-                    Cell cell = cellIterator.next();
+                    tmpCardCodeValue = new StringBuilder(formatter.formatCellValue(cellIterator.next()));
 
-                    if(StringUtils.isBlank(cell.getStringCellValue())){
+                    if(StringUtils.isBlank(tmpCardCodeValue.toString())){
                         dto = new UsedCardCodeDTO();
                     }else{
-                        dto = new UsedCardCodeDTO(cell.getStringCellValue());
+                        dto = new UsedCardCodeDTO(tmpCardCodeValue.toString());
                     }
 
                     boolean  hasError = validateFields(dto, cardCodeHS);
                     if(hasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.some_error_found_in_import_file"));
+                        importUsedCardCodeList.add(dto);
                     }else{
                         cardCodeHS.add(dto.getCardCode());
                     }
                     break;
                 }
-                importKHDNDTOLIst.add(dto);
+                importUsedCardCodeList.add(dto);
                 rowIndex++;
             }
 
@@ -118,7 +127,7 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.error_unknown"));
             command.setHasError(true);
         }
-        return importKHDNDTOLIst;
+        return new Object[]{errorImportUsedCardCodeList, importUsedCardCodeList};
     }
 
     /**

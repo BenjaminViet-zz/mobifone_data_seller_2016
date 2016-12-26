@@ -201,6 +201,8 @@ public class Constants {
     public static final String TAKE_CARD_CODE_4_ORDER_FAILED = "ORDER_CARD_FAILED";
     public static final String IMPORT_KHDN_SUCCESS = "IMPORT_KHDN_SUCCESS";
     public static final String IMPORT_KHDN_FAILED = "IMPORT_KHDN_FAILED";
+    public static final String IMPORT_USED_CARD_CODE_FAILED = "IMPORT_UCC_FAILED";
+    public static final String IMPORT_USED_CARD_CODE_SUCCESS = "IMPORT_UCC_SUCCESS";
 
     public static final String REDIS_CACHE_KEY_CARD_CODE_TAKING = "REDIS_CACHE_KEY_CARD_CODE_TAKING";
 
