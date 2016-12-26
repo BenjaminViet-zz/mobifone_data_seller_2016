@@ -68,7 +68,7 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
                     command.setCsvFileUploadPath(request.getSession().getServletContext().getRealPath(destFolder + "/" + fileName));
 
                     validator.validate(command, bindingResult);
-                    if(!command.getHasError().booleanValue() && command.getImportUsedCardCodeList() != null){
+                    if(!command.getHasError().booleanValue() && StringUtils.isBlank(command.getErrorMessage()) && (command.getErrorImportUsedCardCodeList() == null || command.getErrorImportUsedCardCodeList().size() == 0)){
                         command.setStepImportIndex(Constants.IMPORT_CARD_CODE_STEP_2_UPLOAD);
 
                         if(StringUtils.isNotBlank(command.getErrorMessage())){

@@ -31,7 +31,6 @@ import java.util.List;
 @Component
 public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implements Validator{
     private Logger logger = Logger.getLogger(ImportUsedCardCodeValidator.class);
-    private final Integer rowCardCodeIndexFrom = 10;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -82,6 +81,7 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
             int rowIndex = 0;
 
             StringBuilder tmpCardCodeValue = null;
+            boolean rowHasError = false;
 
             // Traversing over each row of XLSX file
             while(rowIterator.hasNext()){
@@ -105,16 +105,20 @@ public class ImportUsedCardCodeValidator extends ApplicationObjectSupport implem
                         dto = new UsedCardCodeDTO(tmpCardCodeValue.toString());
                     }
 
-                    boolean  hasError = validateFields(dto, cardCodeHS);
-                    if(hasError){
+                    rowHasError = validateFields(dto, cardCodeHS);
+                    if(rowHasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.some_error_found_in_import_file"));
-                        importUsedCardCodeList.add(dto);
-                    }else{
-                        cardCodeHS.add(dto.getCardCode());
                     }
                     break;
                 }
-                importUsedCardCodeList.add(dto);
+
+                if(rowHasError){
+                    errorImportUsedCardCodeList.add(dto);
+                }else{
+                    importUsedCardCodeList.add(dto);
+                    cardCodeHS.add(dto.getCardCode());
+                }
+
                 rowIndex++;
             }
 

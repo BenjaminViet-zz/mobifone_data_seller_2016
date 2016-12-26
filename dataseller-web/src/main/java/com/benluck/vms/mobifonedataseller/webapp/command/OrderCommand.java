@@ -25,6 +25,7 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
     private Integer exportOptionType = Constants.ADMIN_EXPORT_4_KHDN;
     private MultipartFile fileUpload;
     private List<UsedCardCodeDTO> usedCardCodeImportList;
+    private List<UsedCardCodeDTO> errorUsedCardCodeImportList;
 
     public Date getIssuedDate() {
         return issuedDate;
@@ -64,5 +65,13 @@ public class OrderCommand extends AbstractCommand<OrderDTO>{
 
     public void setUsedCardCodeImportList(List<UsedCardCodeDTO> usedCardCodeImportList) {
         this.usedCardCodeImportList = usedCardCodeImportList;
+    }
+
+    public List<UsedCardCodeDTO> getErrorUsedCardCodeImportList() {
+        return errorUsedCardCodeImportList;
+    }
+
+    public void setErrorUsedCardCodeImportList(List<UsedCardCodeDTO> errorUsedCardCodeImportList) {
+        this.errorUsedCardCodeImportList = errorUsedCardCodeImportList;
     }
 }

@@ -9,6 +9,7 @@ import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -70,16 +71,23 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage(errorCodes.get(0)));
         }else{
             try{
-                command.getPojo().setImportCardCodeList4OldOrder(extractFileImport(fileUpload, command));
-                command.getPojo().setQuantity(command.getPojo().getImportCardCodeList4OldOrder().size());
+                Object[] usedCardCodeObjects = extractFileImport(fileUpload, command);
+                command.setErrorUsedCardCodeImportList((List<UsedCardCodeDTO>)usedCardCodeObjects[0]);
+                command.setUsedCardCodeImportList((List<UsedCardCodeDTO>)usedCardCodeObjects[1]);
+
+                if(command.getUsedCardCodeImportList() != null && command.getUsedCardCodeImportList().size() > 0){
+                    command.getPojo().setQuantity(command.getUsedCardCodeImportList().size());
+                }
             }catch (Exception e){
                 logger.error(e.getMessage());
             }
         }
     }
 
-    private List<UsedCardCodeDTO> extractFileImport(MultipartFile fileUpload, OrderCommand command)throws Exception{
-        List<UsedCardCodeDTO> importKHDNDTOLIst = new ArrayList<UsedCardCodeDTO>();
+    private Object[] extractFileImport(MultipartFile fileUpload, OrderCommand command)throws Exception{
+        List<UsedCardCodeDTO> errorUsedCardCodeList = new ArrayList<UsedCardCodeDTO>();
+        List<UsedCardCodeDTO> usedCardCodeList = new ArrayList<UsedCardCodeDTO>();
+
         HashSet<String> usedCardCodeHS = decodeUsedCardCodeHS();
         HashSet<String> usedCardCodeOldOrderHS = fetchImportedUsedCardCode();
         try{
@@ -92,10 +100,15 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
             // Get interator to all the rows in current sheet
             Iterator<Row> rowIterator = mySheet.iterator();
 
+            DataFormatter formatter = new DataFormatter();
+
             HashSet<String> cardCodeHS = new HashSet<String>();
             UsedCardCodeDTO dto = null;
             int cardCodeRowIndexFrom = 3;
             int rowIndex = 0;
+
+            StringBuilder tmpCardCodeValue = null;
+            boolean rowHasError = false;
 
             // Traversing over each row of XLSX file
             while(rowIterator.hasNext()){
@@ -111,23 +124,27 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
                 Iterator<Cell> cellIterator = row.cellIterator();
 
                 while (cellIterator.hasNext()){
-                    Cell cell = cellIterator.next();
+                    tmpCardCodeValue = new StringBuilder(formatter.formatCellValue(cellIterator.next()));
 
-                    if(StringUtils.isBlank(cell.getStringCellValue())){
+                    if(StringUtils.isBlank(tmpCardCodeValue.toString())){
                         dto = new UsedCardCodeDTO();
                     }else{
-                        dto = new UsedCardCodeDTO(cell.getStringCellValue());
+                        dto = new UsedCardCodeDTO(tmpCardCodeValue.toString());
                     }
 
-                    boolean  hasError = validateCardCode(dto, cardCodeHS, usedCardCodeHS, usedCardCodeOldOrderHS);
-                    if(hasError){
+                    rowHasError = validateCardCode(dto, cardCodeHS, usedCardCodeHS, usedCardCodeOldOrderHS);
+                    if(rowHasError){
                         command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import_used_card_code.some_error_found_in_import_card_cord_file"));
-                    }else{
-                        cardCodeHS.add(dto.getCardCode());
                     }
                     break;
                 }
-                importKHDNDTOLIst.add(dto);
+
+                if(rowHasError){
+                    errorUsedCardCodeList.add(dto);
+                }else{
+                    usedCardCodeList.add(dto);
+                    cardCodeHS.add(dto.getCardCode());
+                }
                 rowIndex++;
             }
 
@@ -140,7 +157,7 @@ public class OldOrderValidator extends ApplicationObjectSupport implements Valid
             command.setErrorMessage(this.getMessageSourceAccessor().getMessage("import.error_unknown"));
             command.setHasError(true);
         }
-        return importKHDNDTOLIst;
+        return new Object[]{errorUsedCardCodeList, usedCardCodeList};
     }
 
     private HashSet<String> fetchImportedUsedCardCode(){

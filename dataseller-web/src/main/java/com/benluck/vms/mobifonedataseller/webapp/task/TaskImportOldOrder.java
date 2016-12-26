@@ -3,11 +3,11 @@ package com.benluck.vms.mobifonedataseller.webapp.task;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.NotificationDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
-import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -17,47 +17,44 @@ import java.util.TimerTask;
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
- * Date: 12/19/16
- * Time: 22:52
+ * Date: 12/26/16
+ * Time: 13:04
  * To change this template use File | Settings | File Templates.
  */
-public class TaskImportUsedCardCode extends TimerTask{
-    private Logger logger = Logger.getLogger(TaskImportUsedCardCode.class);
+public class TaskImportOldOrder extends TimerTask{
+    private Logger logger = Logger.getLogger(TaskImportOldOrder.class);
 
     private ApplicationContext ctx = AppContext.getApplicationContext();
-    private UsedCardCodeManagementLocalBean usedCardCodeService = ctx.getBean(UsedCardCodeManagementLocalBean.class);
     private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
+    private OrderManagementLocalBean orderService = ctx.getBean(OrderManagementLocalBean.class);
 
     private List<UsedCardCodeDTO> importUsedCardCodeList = null;
     private Long userId = null;
+    private Long orderId;
 
-    public TaskImportUsedCardCode(List<UsedCardCodeDTO> importUsedCardCodeList, Long userId) {
+    public TaskImportOldOrder(List<UsedCardCodeDTO> importUsedCardCodeList, Long userId, Long orderId) {
         this.importUsedCardCodeList = importUsedCardCodeList;
         this.userId = userId;
+        this.orderId = orderId;
     }
 
     @Override
     public void run() {
-        logger.info("================IMPORT USED CARD CODE TASK================");
+        logger.info("================IMPORT USED CARD CODE FOR OLD ORDER TASK================");
         try{
             logger.info("Saving Used Card Code list to Database...");
-            usedCardCodeService.importCardCodeList(importUsedCardCodeList);
-            createNotification(userId, true);
+            orderService.updateOldOrder(orderId, importUsedCardCodeList, Constants.ORDER_STATUS_FINISH);
 
-            logger.info("Saving Used Card Code list to Redis Database...");
-            RedisUtil.updateUsedCardCodeByKey(usedCardCodeService.findAllListCardCode());
-
-            logger.info("Saving Used Card Code completely!");
+            createNotification(orderId, userId, true);
         }catch (Exception e){
-            logger.error("IMPORT USED CARD CODE TASK failed!");
+            logger.error("IMPORT USED CARD CODE FOR OLD ORDER TASK failed!");
             logger.error(e.getMessage());
-//            tmpImportUsedCardCodeService.deleteAll();
-            createNotification(userId, false);
+            createNotification(orderId, userId, false);
         }
-        logger.info("================FINISH IMPORT USED CARD CODE TASK================");
+        logger.info("================FINISH USED CARD CODE FOR OLD ORDER TASK================");
     }
 
-    private void createNotification(Long userId, Boolean isSuccess){
+    private void createNotification(Long orderId, Long userId, Boolean isSuccess){
         try{
             UserDTO userDTO = new UserDTO();
             userDTO.setUserId(userId);
@@ -65,16 +62,16 @@ public class TaskImportUsedCardCode extends TimerTask{
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setUser(userDTO);
             if(isSuccess){
-                notificationDTO.setMessageType(Constants.IMPORT_USED_CARD_CODE_SUCCESS);
-                notificationDTO.setMessage("Import danh sách Card Code đã sử dụng thành công.");
+                notificationDTO.setMessageType(Constants.IMPORT_OLD_ORDER_SUCCESS);
+                notificationDTO.setMessage("Nhập đơn hàng cũ thành công cho đơn hàng: " + orderId + ".");
             }else{
-                notificationDTO.setMessageType(Constants.IMPORT_USED_CARD_CODE_FAILED);
-                notificationDTO.setMessage("Import danh sách Card Code đã sử dụng thất bại.");
+                notificationDTO.setMessageType(Constants.IMPORT_OLD_ORDER_FAILED);
+                notificationDTO.setMessage("Nhập đơn hàng cũ thất bại cho đơn hàng: " + orderId + ".");
             }
 
             notificationService.addItem(notificationDTO);
         }catch (Exception e){
-            logger.error("Could not create notification message for Task Import Used Card Code with status: " + (isSuccess ? "SUCCESS" : "FAILED"));
+            logger.error("Could not create notification message for Task Import Old Order with status: " + (isSuccess ? "SUCCESS" : "FAILED"));
         }
     }
 }

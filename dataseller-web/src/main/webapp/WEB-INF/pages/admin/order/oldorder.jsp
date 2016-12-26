@@ -181,13 +181,13 @@
     </div>
 </div>
 
-<c:if test="${not empty messageResponse && item.usedCardCodeImportList != null && item.usedCardCodeImportList.size() > 0}">
+<c:if test="${not empty messageResponse && items.errorUsedCardCodeImportList != null && items.errorUsedCardCodeImportList.size() > 0}">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_content">
                     <div id="tableListContainer" style="width: 100%; height: 500px;">
-                        <display:table name="items.usedCardCodeImportList" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
+                        <display:table name="items.errorUsedCardCodeImportList" cellspacing="0" cellpadding="0" requestURI="${formUrl}"
                                        partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
                                        id="tableList" pagesize="${items.maxPageItems}" export="false"
                                        class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
@@ -214,6 +214,7 @@
     var $pageMessageTitle = $('#page_message_title');
     var $btnSave = $('#btnSave');
     var $khdnSelectMenu = $('#KHDN');
+    var $ajaxLoading = $('#ajaxLoading');
 
     var packageDataIdsHasGenerateCardCodeList = [];
     <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
@@ -272,6 +273,55 @@
         });
     }
 
+    function showLoading(){
+        /*------------------------
+         Spinner initial
+         ------------------------*/
+        var opts = {
+            lines: 13 // The number of lines to draw
+            , length: 12 // The length of each line
+            , width: 5 // The line thickness
+            , radius: 14 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 0.9 // Corner roundness (0..1)
+            , color: '#000' // #rgb or #rrggbb or array of colors
+            , opacity: 0.25 // Opacity of the lines
+            , rotate: 0 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 60 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+        };
+        var target = document.getElementById('ajaxLoading');
+        /*------------------------
+         //  Spinner initial
+         ------------------------*/
+
+        var spinner = new Spinner(opts).spin(target);
+        overlay();
+    }
+
+    function overlay(){
+        if ( $('#ajaxLoading').children().length ){
+            $('#ajaxLoading').css({'position': 'absolute',
+                        'top': '0', 'left': '0',
+                        'z-index': '9999',
+                        'width': '100%',
+                        'height': '100%',
+                        'background-color': 'rgba(0,0,0,0.5)'}
+            )
+        } else {
+            $('#ajaxLoading').attr('style', '');
+        }
+    }
+
     function storeDOMData(){
         $khdnSelectMenu.find("option:not(:first-child)").each(function(index, el){
             var $optEl = $(el);
@@ -296,20 +346,14 @@
                 return;
             </c:if>
 
-            var statusVal = $('#status').val();
-            if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
-                bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
-                    if(r && $('#formEdit').valid() ){
-                        if(checkFileUpload()){
-                            $("#formEdit").submit();
-                        }
+            bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="old_order.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                if(r && $('#formEdit').valid() ){
+                    if(checkFileUpload()){
+                        showLoading();
+                        $("#formEdit").submit();
                     }
-                });
-            }else{
-                if(checkFileUpload()){
-                    $("#formEdit").submit();
                 }
-            }
+            });
         });
     }
 
@@ -334,11 +378,10 @@
     }
 
     function initScrollablePane(){
-        <c:if test="${not empty messageResponse && item.usedCardCodeImportList != null && item.usedCardCodeImportList.size() > 0}">
-            if($(window).width() >= mobile_screen_width){
-                return;
+        <c:if test="${not empty messageResponse && items.errorUsedCardCodeImportList != null && items.errorUsedCardCodeImportList.size() > 0}">
+            if($(window).width() < mobile_screen_width){
+                $('#tableList').addClass('mobile').width(550);
             }
-            $('#tableList').addClass('mobile').width(550);
             $('#tableListContainer').mCustomScrollbar({axis:"yx"});
         </c:if>
     }

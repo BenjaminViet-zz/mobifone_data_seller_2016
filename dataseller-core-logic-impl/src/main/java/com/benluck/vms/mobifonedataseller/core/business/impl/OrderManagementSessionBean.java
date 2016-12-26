@@ -88,7 +88,7 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     }
 
     @Override
-    public void updateItem(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
+    public void updateItem(OrderDTO pojo, Boolean createdHistory) throws ObjectNotFoundException, DuplicateKeyException {
         OrderEntity dbItem = this.orderService.findById(pojo.getOrderId());
 
         if(!dbItem.getKhdn().getKHDNId().equals(pojo.getKhdn().getKHDNId())){
@@ -110,7 +110,10 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         dbItem.setCardCodeProcessStatus(pojo.getCardCodeProcessStatus());
         this.orderService.update(dbItem);
 
-        createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
+        if(createdHistory != null && createdHistory.booleanValue()){
+            createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_UPDATED, null);
+        }
+
         if(pojo.getCardCodeHashSet2Store() != null && pojo.getCardCodeHashSet2Store().size() > 0 && pojo.getCardCodeProcessStatus().equals(Constants.ORDER_CARD_CODE_COMPLETED_STATUS)){
             saveDataCodes4Order(dbItem, pojo.getCardCodeHashSet2Store());
         }
@@ -249,15 +252,28 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         entity.setIssuedDate(pojo.getIssuedDate());
         entity.setShippingDate(pojo.getShippingDate());
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        entity.setOrderStatus(Constants.ORDER_STATUS_FINISH);
+        entity.setOrderStatus(pojo.getOrderStatus());
         entity.setActiveStatus(Constants.ORDER_ACTIVE_STATUS_ALIVE);
         entity.setImportedOrder(Constants.IS_IMPORTED_ORDER);
-        entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_COMPLETED_STATUS);
+        entity.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
         entity = this.orderService.save(entity);
 
         createdOrderHistory(pojo, Constants.ORDER_HISTORY_OPERATOR_CREATED, entity);
-        saveDataCodes4Order(entity, pojo.getImportCardCodeList4OldOrder());
         return OrderBeanUtil.entity2DTO(entity);
+    }
+
+    @Override
+    public void updateOldOrder(Long orderId, List<UsedCardCodeDTO> usedCardCodeList, Integer orderStatus) throws ObjectNotFoundException, DuplicateKeyException {
+        OrderEntity dbItem = this.orderService.findById(orderId);
+        dbItem.setOrderStatus(orderStatus);
+        if(usedCardCodeList != null && usedCardCodeList.size() > 0){
+            dbItem.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_COMPLETED_STATUS);
+        }else{
+            dbItem.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_FAILED_STATUS);
+        }
+        dbItem = this.orderService.update(dbItem);
+
+        saveDataCodes4Order(dbItem, usedCardCodeList);
     }
 
     private void saveDataCodes4Order(OrderEntity orderEntity, List<UsedCardCodeDTO> cardCodeDTOList) throws DuplicateKeyException{

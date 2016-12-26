@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.*;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
@@ -12,6 +13,7 @@ import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
+import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportOldOrder;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OldOrderValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -29,9 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,10 +93,11 @@ public class OldOrderController extends ApplicationObjectSupport{
                     command.setFileUpload(fileUpload);
 
                     validator.validate(command, bindingResult);
-                    if(StringUtils.isBlank(command.getErrorMessage()) && !bindingResult.hasErrors()){
+                    if(!command.getHasError() && StringUtils.isBlank(command.getErrorMessage()) && (command.getErrorUsedCardCodeImportList() == null || command.getErrorUsedCardCodeImportList().size() == 0)){
                         convertDate2Timestamp(command);
                         OrderDTO pojo = command.getPojo();
-                        pojo.setOrderStatus(Constants.ORDER_STATUS_FINISH);
+
+                        pojo.setOrderStatus(Constants.ORDER_STATUS_PROCESSING);
 
                         UserDTO updatedBy = new UserDTO();
                         updatedBy.setUserId(SecurityUtils.getLoginUserId());
@@ -109,9 +110,23 @@ public class OldOrderController extends ApplicationObjectSupport{
                         }else{
                             pojo.setUnitPrice(packageDataDTO.getValue());
                             if (pojo.getOrderId() == null ){
-                                this.orderService.createOldOrder(pojo);
+                                pojo = this.orderService.createOldOrder(pojo);
+
+                                startJobOldOrderProcessing(pojo.getOrderId(), command.getUsedCardCodeImportList());
+
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("old_order.procseeing_import_used_card_code"));
+
+                                if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                                    return new ModelAndView("redirect:/admin/order/list.html");
+                                }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                                    return new ModelAndView("redirect:/user/order/list.html");
+                                }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN)){
+                                    return new ModelAndView("redirect:/khdn/order/list.html");
+                                }else{
+                                    return new ModelAndView("redirect:/custom_user/order/list.html");
+                                }
+
                             } else {
 //                                OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
 //
@@ -137,7 +152,11 @@ public class OldOrderController extends ApplicationObjectSupport{
                                 return new ModelAndView("redirect:/user/order/list.html");
                             }
                         }
-                    }else if(StringUtils.isNotBlank(command.getErrorMessage())){
+                    }else{
+                        command.setTotalItems(command.getErrorUsedCardCodeImportList().size());
+                        command.setMaxPageItems(command.getTotalItems());
+                        mav.addObject(Constants.LIST_MODEL_KEY, command);
+
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
@@ -150,14 +169,13 @@ public class OldOrderController extends ApplicationObjectSupport{
         }
 
         preferenceData(mav, command);
-
-        if(StringUtils.isNotBlank(command.getErrorMessage()) && command.getPojo() != null && command.getPojo().getImportCardCodeList4OldOrder().size() > 0){
-            command.setUsedCardCodeImportList(command.getPojo().getImportCardCodeList4OldOrder());
-            command.setTotalItems(command.getPojo().getImportCardCodeList4OldOrder().size());
-            command.setMaxPageItems(command.getTotalItems());
-            mav.addObject(Constants.LIST_MODEL_KEY, command);
-        }
         return mav;
+    }
+
+    private void startJobOldOrderProcessing(Long orderId, List<UsedCardCodeDTO> usedCardCodeDTOList){
+        TaskImportOldOrder taskImportOldOrder = new TaskImportOldOrder(usedCardCodeDTOList, SecurityUtils.getLoginUserId(), orderId);
+        Timer timer = new Timer(true);
+        timer.schedule(taskImportOldOrder, 0);
     }
 
     private void preferenceData(ModelAndView mav, OrderCommand command){

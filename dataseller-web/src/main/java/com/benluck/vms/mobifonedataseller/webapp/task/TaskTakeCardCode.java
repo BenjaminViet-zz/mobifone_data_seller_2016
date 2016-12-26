@@ -76,7 +76,7 @@ public class TaskTakeCardCode extends TimerTask{
                 orderDTO.setCardCodeHashSet2Store((HashSet<String>)cardCodeHSGenerationObject[1]);
                 orderDTO.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_COMPLETED_STATUS);
 
-                this.orderService.updateItem(orderDTO);
+                this.orderService.updateItem(orderDTO, false);
 
                 DataCodeUtil.updateRemainingCardCodeSize(packageDataCodeGenDTO.getPackageDataCodeGenId(), yearCode, (Map<String, HashSet<String>>)cardCodeHSGenerationObject[2]);
                 createNotificationMessage(true, null);
@@ -102,7 +102,7 @@ public class TaskTakeCardCode extends TimerTask{
         if(hasError && orderDTO != null){
             try{
                 orderDTO.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_FAILED_STATUS);
-                this.orderService.updateItem(orderDTO);
+                this.orderService.updateItem(orderDTO, false);
             }catch (Exception e){
                 logger.error(e.getMessage());
             }

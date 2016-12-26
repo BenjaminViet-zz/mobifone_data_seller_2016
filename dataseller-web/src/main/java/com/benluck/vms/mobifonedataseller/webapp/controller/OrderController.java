@@ -310,7 +310,7 @@ public class OrderController extends ApplicationObjectSupport{
                                     pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
                                 }
 
-                                this.orderService.updateItem(pojo);
+                                this.orderService.updateItem(pojo, true);
 
                                 // Update Card Code size in DB nd Cache
                                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
