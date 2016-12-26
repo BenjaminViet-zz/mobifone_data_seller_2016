@@ -21,15 +21,15 @@
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
-            <property name="hibernate.default_schema" value="mobifone_data_seller_2016" />
-            <!--<property name="hibernate.default_schema" value="DGNVKHDN_OWNER" />-->
+            <!--<property name="hibernate.default_schema" value="mobifone_data_seller_2016" />-->
+            <property name="hibernate.default_schema" value="DGNVKHDN_OWNER" />
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.default_batch_fetch_size" value="20"/>
-            <property name="hibernate.jdbc.fetch_size" value="20"/>
-            <property name="hibernate.jdbc.batch_size" value="20"/>
-            <property name="hibernate.cache.use_second_level_cache" value="true"/>
-            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.default_batch_fetch_size" value="50"/>
+            <property name="hibernate.jdbc.fetch_size" value="50"/>
+            <property name="hibernate.jdbc.batch_size" value="50"/>
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
             <property name="hibernate.dialect" value="com.benluck.vms.mobifonedataseller.dialect.VMSOracleDialect"/>
             <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
             <property name="jboss.entity.manager.jndi.name" value="java:jboss/mobifoneDataSellerEntityManager"/>
