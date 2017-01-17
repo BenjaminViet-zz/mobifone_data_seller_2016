@@ -40,6 +40,10 @@ public class TaskImportUsedCardCode extends TimerTask{
     public void run() {
         logger.info("================IMPORT USED CARD CODE TASK================");
         try{
+            if (!RedisUtil.pingRedisServer()){
+                logger.error("Redis Server is not reached. Please verify!");
+                logger.error("Could not finish task IMPORT USED CARD CODE");
+            }
             logger.info("Saving Used Card Code list to Database...");
             usedCardCodeService.importCardCodeList(importUsedCardCodeList);
             createNotification(userId, true);

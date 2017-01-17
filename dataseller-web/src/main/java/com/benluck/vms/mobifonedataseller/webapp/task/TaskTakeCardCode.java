@@ -34,7 +34,6 @@ public class TaskTakeCardCode extends TimerTask{
     private OrderManagementLocalBean orderService = ctx.getBean(OrderManagementLocalBean.class);
     private PackageDataCodeGenManagementLocalBean packageDataCodeGenService = ctx.getBean(PackageDataCodeGenManagementLocalBean.class);
     private NotificationManagementLocalBean notificationService = ctx.getBean(NotificationManagementLocalBean.class);
-    private RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
 
     private Long orderId;
     private String unitPriceCode;
@@ -49,6 +48,10 @@ public class TaskTakeCardCode extends TimerTask{
     @Override
     public void run() {
         logger.info("=================TAKING CARD CODE TASK - Starting...=================");
+        if (!RedisUtil.pingRedisServer()){
+            logger.error("Redis Server is not reached. Please verify!");
+            logger.error("Could not finish task TAKING CARD CODE");
+        }
         logger.info("Getting Order info...");
         boolean hasError = false;
         OrderDTO orderDTO = null;

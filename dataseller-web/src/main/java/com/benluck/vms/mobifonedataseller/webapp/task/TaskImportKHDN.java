@@ -67,10 +67,10 @@ public class TaskImportKHDN extends TimerTask{
 
             if(isSuccess){
                 notificationDTO.setMessageType(Constants.IMPORT_KHDN_SUCCESS);
-                notificationDTO.setMessage("Import KHDN list hoàn tất." );
+                notificationDTO.setMessage("Import danh sách KHDN hoàn tất." );
             }else{
                 notificationDTO.setMessageType(Constants.IMPORT_KHDN_FAILED);
-                notificationDTO.setMessage("Import KHDN list thất bại." );
+                notificationDTO.setMessage("Import danh sách KHDN thất bại." );
             }
 
             notificationService.addItem(notificationDTO);

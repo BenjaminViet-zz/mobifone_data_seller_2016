@@ -73,6 +73,17 @@ public class OldOrderController extends ApplicationObjectSupport{
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
+
+        if (!RedisUtil.pingRedisServer()){
+            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
+            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                return new ModelAndView("redirect:/admin/order/list.html");
+            }else{
+                return new ModelAndView("redirect:/user/order/list.html");
+            }
+        }
+
         Boolean hasImportedUsedCardCode = (Boolean) RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
         if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
             logger.warn("Please import Used Card Code list before using this feature.");

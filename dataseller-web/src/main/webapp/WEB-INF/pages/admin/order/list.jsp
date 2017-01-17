@@ -51,7 +51,7 @@
         </div>
     </div>
 </c:if>
-<c:if test ="${empty hasImportedUsedCardCode || !hasImportedUsedCardCode}">
+<c:if test ="${empty messageResponse && (empty hasImportedUsedCardCode || !hasImportedUsedCardCode)}">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">

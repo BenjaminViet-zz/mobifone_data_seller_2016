@@ -2,10 +2,12 @@ package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.common.utils.CommonUtil;
+import com.benluck.vms.mobifonedataseller.context.AppContext;
 import com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UsedCardCodeDTO;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.FileUtils;
+import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportUsedCardCode;
@@ -14,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,6 +56,12 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
                                            RedirectAttributes redirectAttributes) throws IOException{
         ModelAndView mav = new ModelAndView("/admin/usedCardCode/import");
         String action = command.getCrudaction();
+
+        if (!RedisUtil.pingRedisServer()){
+            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
+            return new ModelAndView("redirect:/admin/order/list.html");
+        }
 
         if(StringUtils.isNotBlank(action)){
             if(command.getStepImportIndex().equals(Constants.IMPORT_CARD_CODE_STEP_1_CHOOSE_FILE) && action.equals(Constants.ACTION_UPLOAD)){

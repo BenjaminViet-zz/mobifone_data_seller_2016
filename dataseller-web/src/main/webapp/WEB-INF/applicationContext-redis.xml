@@ -7,7 +7,8 @@
 
     <!-- Redis -->
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:usePool="true" p:hostName="${app.config.redis.host}" p:port="${app.config.redis.port}" p:password="${app.config.redis.password}"/>
+          p:usePool="true" p:hostName="${app.config.redis.host}" p:port="${app.config.redis.port}"
+          p:password="${app.config.redis.password}" p:poolConfig-ref="jedisPoolConfig"/>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
           p:connectionFactory-ref="connectionFactory">
@@ -18,6 +19,12 @@
 
     <bean id="redisStringTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
           p:connectionFactory-ref="connectionFactory"/>
+
+    <bean id="jedisPoolConfig"
+            class="redis.clients.jedis.JedisPoolConfig"
+            p:maxTotal="30"
+            p:maxIdle="10"
+            />
 
     <!--<bean id="userRedisMap" class="org.springframework.data.redis.support.collections.DefaultRedisMap">-->
         <!--<constructor-arg ref="red"/>-->

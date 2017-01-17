@@ -16,7 +16,7 @@ import java.util.HashSet;
  * To change this template use File | Settings | File Templates.
  */
 public class RedisUtil {
-    private Logger logger = Logger.getLogger(RedisUtil.class);
+    private static Logger logger = Logger.getLogger(RedisUtil.class);
 
     private static RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) AppContext.getApplicationContext().getBean("redisTemplate");
 
@@ -72,6 +72,22 @@ public class RedisUtil {
 
             // update flag for Imported Used Card Code list already.
             updateRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, true);
+        }
+    }
+
+    public static boolean pingRedisServer(){
+        logger.info("Pinging to Redis Server...");
+        try{
+            String redisResponse = redisTemplate.getConnectionFactory().getConnection().ping();
+            logger.info("Redis response: " + redisResponse);
+            if(redisResponse.equals("PONG")){
+                return true;
+            }else{
+                return false;
+            }
+        }catch (Exception e){
+            logger.info("Redis is not responsed");
+            return false;
         }
     }
 }

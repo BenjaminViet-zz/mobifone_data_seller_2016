@@ -245,7 +245,12 @@ public class OrderController extends ApplicationObjectSupport{
         mav.addObject("packageDataList", packageDataService.findAll());
         mav.addObject("KHDNList", KHDNService.findAll());
         mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
-        mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
+
+        if (RedisUtil.pingRedisServer()){
+            mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
+        }else{
+            mav.addObject("hasImportedUsedCardCode", null);
+        }
 
         if(command.getPojo() != null && command.getPojo().getOrderId() != null && command.getPojo().getKhdn() != null && StringUtils.isNotBlank(command.getPojo().getKhdn().getStb_vas())){
             mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas(), command.getPojo().getOrderId()));
@@ -265,6 +270,18 @@ public class OrderController extends ApplicationObjectSupport{
             throw new ForBiddenException();
         }
 
+        ModelAndView mav = new ModelAndView("/admin/order/edit");
+
+        if (!RedisUtil.pingRedisServer()){
+            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
+            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
+                return new ModelAndView("redirect:/admin/order/list.html");
+            }else{
+                return new ModelAndView("redirect:/user/order/list.html");
+            }
+        }
+
         Boolean hasImportedUsedCardCode = (Boolean)RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
         if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
             logger.warn("Please import Used Card Code list before using this feature.");
@@ -275,7 +292,6 @@ public class OrderController extends ApplicationObjectSupport{
             }
         }
 
-        ModelAndView mav = new ModelAndView("/admin/order/edit");
         String crudaction = command.getCrudaction();
 
         OrderDTO pojo = command.getPojo();
