@@ -51,4 +51,6 @@ public interface OrderManagementLocalBean {
     OrderDTO createOldOrder(OrderDTO pojo) throws ObjectNotFoundException, DuplicateKeyException;
 
     void updateOldOrder(Long orderId, List<UsedCardCodeDTO> usedCardCodeList, Integer orderStatus) throws ObjectNotFoundException, DuplicateKeyException;
+
+    List<OrderDTO> fetchAllOrderList4KHDNByShopCode(String shopCode);
 }

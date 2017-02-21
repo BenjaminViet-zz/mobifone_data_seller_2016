@@ -11,21 +11,12 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class OrderRestModel {
-    private String khdName;
     private String packageDataName;
     private Integer quantity;
     private Double unitPrice;
     private Timestamp issuedDate;
-    private Timestamp shippingDate;
     private List<String> cardCodeList;
-
-    public String getKhdName() {
-        return khdName;
-    }
-
-    public void setKhdName(String khdName) {
-        this.khdName = khdName;
-    }
+    private String status;
 
     public String getPackageDataName() {
         return packageDataName;
@@ -59,20 +50,19 @@ public class OrderRestModel {
         this.issuedDate = issuedDate;
     }
 
-    public Timestamp getShippingDate() {
-
-        return shippingDate;
-    }
-
-    public void setShippingDate(Timestamp shippingDate) {
-        this.shippingDate = shippingDate;
-    }
-
     public List<String> getCardCodeList() {
         return cardCodeList;
     }
 
     public void setCardCodeList(List<String> cardCodeList) {
         this.cardCodeList = cardCodeList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -40,4 +40,6 @@ public interface UserManagementLocalBean {
     UserDTO addItem(UserDTO pojo) throws DuplicateKeyException;
 
     void updatePasswordUserLDAP(String userName, String rawPassword) throws ObjectNotFoundException, DuplicateKeyException;
+
+    UserDTO loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException;
 }

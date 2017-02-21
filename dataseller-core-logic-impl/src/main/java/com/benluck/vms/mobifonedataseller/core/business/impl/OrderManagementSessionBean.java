@@ -324,4 +324,9 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
             totalDataCode++;
         }
     }
+
+    @Override
+    public List<OrderDTO> fetchAllOrderList4KHDNByShopCode(String shopCode) {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.fetchAllOrderList4KHDNByShopCode(shopCode));
+    }
 }

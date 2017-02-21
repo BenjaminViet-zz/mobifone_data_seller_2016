@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.session.impl;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.domain.UserEntity;
 import com.benluck.vms.mobifonedataseller.session.UserLocalBean;
 import org.apache.commons.lang.StringUtils;
@@ -71,5 +72,17 @@ public class UserSessionBean extends AbstractSessionBean<UserEntity, Long> imple
 
         Integer count = Integer.valueOf(queryCount.getSingleResult().toString());
         return null;
+    }
+
+    @Override
+    public UserEntity loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException{
+        List<UserEntity> entityList = (List<UserEntity>)entityManager.createQuery("FROM UserEntity WHERE userName = :userName AND password = :password AND LDAP = 0")
+                .setParameter("userName", username)
+                .setParameter("password", password)
+                .getResultList();
+        if (entityList != null && entityList.size() > 0){
+            return entityList.get(0);
+        }
+        throw new ObjectNotFoundException("The userName: " + username + ", password: " + password + " does not match to any account in the system.");
     }
 }

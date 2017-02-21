@@ -111,4 +111,9 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(rawPassword));
         userService.update(dbItem);
     }
+
+    @Override
+    public UserDTO loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException {
+        return UserBeanUtil.entity2DTO(this.userService.loadUserByUserNameAndPassword(username, password));
+    }
 }

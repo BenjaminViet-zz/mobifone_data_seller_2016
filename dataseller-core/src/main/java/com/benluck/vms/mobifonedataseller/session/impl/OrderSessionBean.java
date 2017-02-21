@@ -4,6 +4,7 @@ import com.benluck.vms.mobifonedataseller.domain.OrderEntity;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
 
 import javax.ejb.Stateless;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,5 +16,10 @@ import javax.ejb.Stateless;
 @Stateless(name = "OrderSessionEJB")
 public class OrderSessionBean extends AbstractSessionBean<OrderEntity, Long> implements OrderLocalBean{
     public OrderSessionBean() {
+    }
+
+    @Override
+    public List<OrderEntity> fetchAllOrderList4KHDNByShopCode(String shopCode) {
+        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity WHERE khdn.shopCode = :shopCode ORDER BY issuedDate DESC").setParameter("shopCode", shopCode).getResultList();
     }
 }

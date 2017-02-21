@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.webapp.RestModel;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
@@ -18,16 +19,20 @@ public class OrderRestModelBeanUtil {
     public static OrderRestModel dto2RestModel(OrderDTO orderDTO, List<OrderDataCodeDTO> orderDataCodeDTOList){
         OrderRestModel model = new OrderRestModel();
         model.setPackageDataName(orderDTO.getPackageData().getName());
-        model.setKhdName(orderDTO.getKhdn().getName());
         model.setQuantity(orderDTO.getQuantity());
         model.setUnitPrice(orderDTO.getUnitPrice());
         model.setIssuedDate(orderDTO.getIssuedDate());
-        model.setShippingDate(orderDTO.getShippingDate());
         List<String> cardCodeList = new ArrayList<String>();
         for (OrderDataCodeDTO orderDataCodeDTO : orderDataCodeDTOList){
             cardCodeList.add(MobiFoneSecurityBase64Util.decode(orderDataCodeDTO.getDataCode()));
         }
         model.setCardCodeList(cardCodeList);
+
+        if (orderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
+            model.setStatus("Đã hoàn thành");
+        }else{
+            model.setStatus("Đang xử lý");
+        }
         return model;
     }
 }

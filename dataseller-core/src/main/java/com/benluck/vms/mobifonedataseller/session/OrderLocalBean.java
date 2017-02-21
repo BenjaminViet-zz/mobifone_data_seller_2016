@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.OrderEntity;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
@@ -10,4 +12,5 @@ import com.benluck.vms.mobifonedataseller.domain.OrderEntity;
  * To change this template use File | Settings | File Templates.
  */
 public interface OrderLocalBean extends GenericSessionBean<OrderEntity, Long>{
+    List<OrderEntity> fetchAllOrderList4KHDNByShopCode(String shopCode);
 }
