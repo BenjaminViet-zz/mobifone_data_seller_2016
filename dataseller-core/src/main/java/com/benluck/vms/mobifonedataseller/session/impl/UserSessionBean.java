@@ -85,4 +85,9 @@ public class UserSessionBean extends AbstractSessionBean<UserEntity, Long> imple
         }
         throw new ObjectNotFoundException("The userName: " + username + ", password: " + password + " does not match to any account in the system.");
     }
+
+    @Override
+    public List<UserEntity> fetchAllUserIsNotLDAP() {
+        return (List<UserEntity>)entityManager.createQuery("FROM UserEntity WHERE LDAP = 0").getResultList();
+    }
 }

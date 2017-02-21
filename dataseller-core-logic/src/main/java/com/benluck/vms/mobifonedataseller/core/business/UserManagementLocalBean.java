@@ -42,4 +42,6 @@ public interface UserManagementLocalBean {
     void updatePasswordUserLDAP(String userName, String rawPassword) throws ObjectNotFoundException, DuplicateKeyException;
 
     UserDTO loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException;
+
+    List<UserDTO> fetchAllUserIsNotLDAP();
 }

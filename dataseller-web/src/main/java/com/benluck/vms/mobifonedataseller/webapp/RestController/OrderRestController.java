@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
 import java.util.List;
 
 /**
@@ -42,11 +44,13 @@ public class OrderRestController{
                                            @PathVariable("orderId") Long orderId){
         try{
             String encodedPassword = MobiFoneSecurityBase64Util.encode(password);
-            UserDTO userDTO = this.userService.loadUserByUserNameAndPassword(username, password);
-
-            OrderDTO orderDTO = this.orderService.findById(orderId);
-            List<OrderDataCodeDTO> orderDataCodeDTOList = this.orderDataCodeService.findByOrderId(orderId);
-            return OrderRestModelBeanUtil.dto2RestModel(orderDTO, orderDataCodeDTOList);
+            if (validateUser(username, password)){
+                OrderDTO orderDTO = this.orderService.findById(orderId);
+                List<OrderDataCodeDTO> orderDataCodeDTOList = this.orderDataCodeService.findByOrderId(orderId);
+                return OrderRestModelBeanUtil.dto2RestModel(orderDTO, orderDataCodeDTOList);
+            }else{
+                return new OrderRestModel();
+            }
         }catch (Exception e){
             logger.error(e.getMessage());
             return new OrderRestModel();
@@ -59,10 +63,12 @@ public class OrderRestController{
                                                 @PathVariable("shopcode") String shopCode){
         try{
             String encodedPassword = MobiFoneSecurityBase64Util.encode(password);
-            UserDTO userDTO = this.userService.loadUserByUserNameAndPassword(username, password);
-
-            List<OrderDTO> orderDTOList = this.orderService.fetchAllOrderList4KHDNByShopCode(shopCode);
-            return OrderListRestModelBeanUtil.dto2RestModel(orderDTOList);
+            if (validateUser(username, password)){
+                List<OrderDTO> orderDTOList = this.orderService.fetchAllOrderList4KHDNByShopCode(shopCode);
+                return OrderListRestModelBeanUtil.dto2RestModel(orderDTOList);
+            }else{
+                return new OrderListRestModel();
+            }
         }catch (Exception e){
             logger.error(e.getMessage());
             return new OrderListRestModel();
@@ -74,13 +80,36 @@ public class OrderRestController{
                                                    @PathVariable("password") String password){
         try{
 //            String encodedPassword = MobiFoneSecurityBase64Util.encode(password);
-            UserDTO userDTO = this.userService.loadUserByUserNameAndPassword(username, password);
-
-            List<PackageDataDTO> packageDataDTOList = this.packageDataService.findAll();
-            return PackageListRestBeanUtil.dto2Model(packageDataDTOList);
+            if (validateUser(username, password)){
+                List<PackageDataDTO> packageDataDTOList = this.packageDataService.findAll();
+                return PackageListRestBeanUtil.dto2Model(packageDataDTOList);
+            }else{
+                return new PackageListRestModel();
+            }
         }catch (Exception e){
             logger.error(e.getMessage());
             return new PackageListRestModel();
         }
+    }
+
+    private boolean validateUser(String userName, String password) throws Exception{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+        List<UserDTO> allUserList = this.userService.fetchAllUserIsNotLDAP();
+        if (allUserList != null && allUserList.size() > 0){
+            StringBuffer tmpEncryptedPasswordSHA256 = null;
+            for (UserDTO userDTO : allUserList){
+                if (userDTO.getUserName().equals(userName)){
+
+                    tmpEncryptedPasswordSHA256 = new StringBuffer(DatatypeConverter.printHexBinary(md.digest(userDTO.getPassword().getBytes("UTF-8"))));
+                    System.out.println(tmpEncryptedPasswordSHA256.toString());
+                    if (password.equals(tmpEncryptedPasswordSHA256.toString())){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -116,4 +116,9 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     public UserDTO loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException {
         return UserBeanUtil.entity2DTO(this.userService.loadUserByUserNameAndPassword(username, password));
     }
+
+    @Override
+    public List<UserDTO> fetchAllUserIsNotLDAP() {
+        return UserBeanUtil.entityList2DTOList(this.userService.fetchAllUserIsNotLDAP());
+    }
 }

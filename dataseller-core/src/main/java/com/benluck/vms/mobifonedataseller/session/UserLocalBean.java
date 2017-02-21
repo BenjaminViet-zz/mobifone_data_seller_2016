@@ -19,4 +19,6 @@ public interface UserLocalBean extends GenericSessionBean<UserEntity, Long> {
     List<UserEntity> findListByProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer offset, Integer limitItems);
 
     UserEntity loadUserByUserNameAndPassword(String username, String password) throws ObjectNotFoundException;
+
+    List<UserEntity> fetchAllUserIsNotLDAP();
 }
