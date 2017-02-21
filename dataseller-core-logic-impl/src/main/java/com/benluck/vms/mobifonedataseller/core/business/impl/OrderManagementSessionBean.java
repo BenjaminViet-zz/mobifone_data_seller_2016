@@ -329,4 +329,9 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     public List<OrderDTO> fetchAllOrderList4KHDNByShopCode(String shopCode) {
         return OrderBeanUtil.entityList2DTOList(this.orderService.fetchAllOrderList4KHDNByShopCode(shopCode));
     }
+
+    @Override
+    public OrderDTO findByIdAndShopCode(Long orderId, String shopCode) {
+        return OrderBeanUtil.entity2DTO(this.orderService.findByIdAndShopCode(orderId, shopCode));
+    }
 }

@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface OrderLocalBean extends GenericSessionBean<OrderEntity, Long>{
     List<OrderEntity> fetchAllOrderList4KHDNByShopCode(String shopCode);
+
+    OrderEntity findByIdAndShopCode(Long orderId, String shopCode);
 }

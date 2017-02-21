@@ -21,7 +21,7 @@ public class PackageListRestBeanUtil {
                 PackageRestModel packageRestModel = new PackageRestModel();
                 packageRestModel.setPackageName(packageDataDTO.getName());
                 packageRestModel.setPrice(packageDataDTO.getValue());
-                packageRestModel.setVolumn(packageDataDTO.getVolume());
+                packageRestModel.setVolumn(packageDataDTO.getVolume().replace("{delimiter_line}", "|"));
                 packageRestModel.setDuration(packageDataDTO.getDuration());
                 packageRestModel.setExtend(packageDataDTO.getNumberOfExtend());
                 packageRestModelList.add(packageRestModel);
