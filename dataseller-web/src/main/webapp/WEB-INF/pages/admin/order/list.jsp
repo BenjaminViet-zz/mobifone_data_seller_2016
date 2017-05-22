@@ -29,7 +29,7 @@
         <c:if test="${not empty hasImportedUsedCardCode && hasImportedUsedCardCode}">
             <div class="title_right">
                 <div class="action-bar">
-                    <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+                    <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="admin.donhang.label.new_order"/></a>
                 </div>
             </div>
         </c:if>

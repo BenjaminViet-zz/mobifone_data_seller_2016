@@ -86,7 +86,7 @@ public class RedisUtil {
                 return false;
             }
         }catch (Exception e){
-            logger.info("Redis is not responsed");
+            logger.info("Redis server is not responded.");
             return false;
         }
     }

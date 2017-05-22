@@ -49,8 +49,9 @@ public class TaskTakeCardCode extends TimerTask{
     public void run() {
         logger.info("=================TAKING CARD CODE TASK - Starting...=================");
         if (!RedisUtil.pingRedisServer()){
-            logger.error("Redis Server is not reached. Please verify!");
-            logger.error("Could not finish task TAKING CARD CODE");
+            logger.error("Redis Server connection failed to establish. Please check the Redis server.");
+            logger.error("Task TAKING CARD CODE - Finished with errors");
+            return;
         }
         logger.info("Getting Order info...");
         boolean hasError = false;
@@ -93,12 +94,12 @@ public class TaskTakeCardCode extends TimerTask{
         }catch (Exception e){
             RedisUtil.lockOrUnlockRedisKey(yearCode, unitPriceCode, false);
             hasError = true;
-            if(e.getMessage().equals("NOT_ENOUGH_CARD_CORD_2_TAKE")){
+            if(e.getMessage() != null && e.getMessage().equals("NOT_ENOUGH_CARD_CORD_2_TAKE")){
                 createNotificationMessage(false, true);
             }else{
                 createNotificationMessage(false, null);
             }
-            logger.error("Error happen in TAKING CARD CODE for OrderId: " + orderId);
+            logger.error("An error happened in processing for task TAKING CARD CODE for OrderId: " + orderId);
             logger.error("Details: " + e.getMessage());
         }
 

@@ -22,8 +22,8 @@
 
     <bean id="jedisPoolConfig"
             class="redis.clients.jedis.JedisPoolConfig"
-            p:maxTotal="30"
-            p:maxIdle="10"
+            p:maxTotal="-1"
+            p:maxIdle="-1"
             />
 
     <!--<bean id="userRedisMap" class="org.springframework.data.redis.support.collections.DefaultRedisMap">-->

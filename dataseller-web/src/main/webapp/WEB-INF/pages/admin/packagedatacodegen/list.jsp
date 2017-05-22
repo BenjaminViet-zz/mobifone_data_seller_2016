@@ -115,7 +115,7 @@
                                         <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
                                             ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
                                         </display:column>
-                                        <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" sortable="true" class="width_300_px" titleKey="packagedatacodegen.packagedata.name" style="40%"/>
+                                        <display:column headerClass="table_header text-center" property="packageData.name" sortName="packageData.name" sortable="true" class="width_300_px" titleKey="packagedatacodegen.packagedata.name" style="30%"/>
                                         <display:column headerClass="table_header text-center" sortName="packageData.value" sortable="true" titleKey="packagedatacodegen.packagedata.price" class="width_300_px" style="35%">
                                             <fmt:formatNumber type="number" maxFractionDigits="0" value="${tableList.packageData.value}" />
                                         </display:column>
@@ -131,6 +131,11 @@
                                                     <fmt:message key="packagedatacodegen.generated_card_code" />
                                                 </c:when>
                                             </c:choose>
+                                        </display:column>
+                                        <display:column headerClass="table-header text-center" style="width: 10%;">
+                                            <c:if test="${tableList.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED}">
+                                                <a class="btn btn-primary" onclick="javascript: resubmitGenerateCardCode4Package(${tableList.packageData.packageDataId});"><fmt:message key="label.regenerate_data_code" /></a>
+                                            </c:if>
                                         </display:column>
                                         <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
                                         <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.packagedata" /></display:setProperty>
@@ -154,6 +159,7 @@
                     <div class="x_title">
                         <h2><fmt:message key="packagedatacodegen.list_page_not_generate_card_code.title" /></h2>
                         <div class="clearfix"></div>
+                        <fmt:message key="packagedatacodegen.choose_packages_to_generate_card_code" />
                     </div>
                     <div class="x_content">
                         <a class="btn btn-primary" class="btnGenerateCardCode" id="btnGenerateCardCode" onclick="javascript: generateCardCodeForYear();"><i class="fa fa-cc" aria-hidden="true"></i>
@@ -200,6 +206,34 @@
     var $btnGenCardCode = $('#btnGenerateCardCode');
     var $ajaxLoading = $('#ajaxLoading');
     var $tableList2Checkbox = $('#tableList2 input[type="checkbox"]');
+    var failedInCardCodeGenerationList = [];
+
+    /*------------------------
+     Spinner initial
+     ------------------------*/
+    var opts = {
+        lines: 13 // The number of lines to draw
+        , length: 12 // The length of each line
+        , width: 5 // The line thickness
+        , radius: 14 // The radius of the inner circle
+        , scale: 1 // Scales overall size of the spinner
+        , corners: 0.9 // Corner roundness (0..1)
+        , color: '#000' // #rgb or #rrggbb or array of colors
+        , opacity: 0.25 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 1 // Rounds per second
+        , trail: 60 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '50%' // Left position relative to parent
+        , shadow: false // Whether to render a shadow
+        , hwaccel: false // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+    };
+    var target = document.getElementById('ajaxLoading');
 
     $(document).ready(function(){
         initScrollablePane();
@@ -211,6 +245,16 @@
             });
         }
     });
+
+    function storeListOfFailedCardCodeGeneration(){
+        <c:if test="${not empty item.listResult && fn:length(item.listResult) gt 0}">
+            <c:forEach items="${item.listResult}" var="packageDataCodeGenDTO">
+                <c:if test="${packageDataCodeGenDTO.status eq Constants.PACKAGE_DATA_CODE_GEN_STATUS_FAILED}">
+                    failedInCardCodeGenerationList.push('${packageDataCodeGenDTO.packageDataCodeGenId}');
+                </c:if>
+            </c:forEach>
+        </c:if>
+    }
 
     function initScrollablePane(){
         if($(window).width() >= mobile_screen_width){
@@ -272,39 +316,6 @@
     }
 
     function generateCardCodeForYear(){
-
-        /*------------------------
-            Spinner initial
-         ------------------------*/
-        var opts = {
-            lines: 13 // The number of lines to draw
-            , length: 12 // The length of each line
-            , width: 5 // The line thickness
-            , radius: 14 // The radius of the inner circle
-            , scale: 1 // Scales overall size of the spinner
-            , corners: 0.9 // Corner roundness (0..1)
-            , color: '#000' // #rgb or #rrggbb or array of colors
-            , opacity: 0.25 // Opacity of the lines
-            , rotate: 0 // The rotation offset
-            , direction: 1 // 1: clockwise, -1: counterclockwise
-            , speed: 1 // Rounds per second
-            , trail: 60 // Afterglow percentage
-            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-            , zIndex: 2e9 // The z-index (defaults to 2000000000)
-            , className: 'spinner' // The CSS class to assign to the spinner
-            , top: '50%' // Top position relative to parent
-            , left: '50%' // Left position relative to parent
-            , shadow: false // Whether to render a shadow
-            , hwaccel: false // Whether to use hardware acceleration
-            , position: 'absolute' // Element positioning
-        };
-        var target = document.getElementById('ajaxLoading');
-        /*------------------------
-            //  Spinner initial
-         ------------------------*/
-
-
-
         var $packageDataCodeEls = $("input[name='packageDataGenerationCardCodeListId']:checked");
 
         if($packageDataCodeEls.length > 0){
@@ -343,6 +354,44 @@
                     });
                 }
             });
+        }
+    }
+
+    function resubmitGenerateCardCode4Package(packageDataId){
+        if(failedInCardCodeGenerationList.indexOf(packageDataId.toString())){
+            var packageDataIdArr = [];
+            packageDataIdArr.push(packageDataId);
+
+            bootbox.confirm('<fmt:message key="packagedatacodegen.generation.popup.title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                if(r){
+                    var params = {
+                        year: $('#year').val(),
+                        packageDataIds: packageDataIdArr.toString()
+                    };
+
+                    $.ajax({
+                        url: "${ajaxGenerateCardCodeUrl}",
+                        type: "GET",
+                        data: params,
+                        dataType: "json",
+                        success: function(res){
+                            if(res.r != null){
+                                if ( res.r ) {
+                                    var spinner = new Spinner(opts).spin(target);
+                                    $ajaxLoading.delay(3000).fadeOut(500);
+                                    overlay();
+                                    setTimeout(function(){
+                                        checkLoadPage();
+                                    },3000);
+                                } else {
+                                    bootbox.alert('<fmt:message key="label.alert_title" />', (res.msg != null ? res.msg : '<fmt:message key="packagedatacodegen.generation.error_generation" />'), function(){});
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+
         }
     }
 </script>

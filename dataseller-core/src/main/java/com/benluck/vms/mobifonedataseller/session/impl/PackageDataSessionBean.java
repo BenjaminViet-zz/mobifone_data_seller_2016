@@ -51,8 +51,8 @@ public class PackageDataSessionBean extends AbstractSessionBean<PackageDataEntit
     @Override
     public List<Long> findPackageDataIdListHasGeneratedCardCode(Integer year) {
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append(" SELECT pdcg.packageData.packageDataId FROM PackageDataCodeGenEntity pdcg WHERE pdcg.year = :year ");
-        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("year", year);
+        sqlQuery.append(" SELECT pdcg.packageData.packageDataId FROM PackageDataCodeGenEntity pdcg WHERE pdcg.year = :year AND pdcg.status = :status");
+        Query query = entityManager.createQuery(sqlQuery.toString()).setParameter("year", year).setParameter("status", Constants.PACKAGE_DATA_CODE_GEN_STATUS_SUCCESS);
         return (List<Long>)query.getResultList();
     }
 

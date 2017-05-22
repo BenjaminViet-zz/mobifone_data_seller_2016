@@ -242,20 +242,21 @@ public class OrderController extends ApplicationObjectSupport{
     }
 
     private void preferenceData(ModelAndView mav, OrderCommand command){
-        mav.addObject("packageDataList", packageDataService.findAll());
-        mav.addObject("KHDNList", KHDNService.findAll());
-        mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
+        if(RedisUtil.pingRedisServer()){
+            mav.addObject("packageDataList", packageDataService.findAll());
+            mav.addObject("KHDNList", KHDNService.findAll());
+            mav.addObject("packageDataIdListHasGeneratedCardCode", this.packageDataService.findPackageDataIdListHasGeneratedCardCode(Calendar.getInstance().get(Calendar.YEAR)));
 
-        if (RedisUtil.pingRedisServer()){
             mav.addObject("hasImportedUsedCardCode", RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY));
-        }else{
-            mav.addObject("hasImportedUsedCardCode", null);
-        }
 
-        if(command.getPojo() != null && command.getPojo().getOrderId() != null && command.getPojo().getKhdn() != null && StringUtils.isNotBlank(command.getPojo().getKhdn().getStb_vas())){
-            mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas(), command.getPojo().getOrderId()));
+            if(command.getPojo() != null && command.getPojo().getOrderId() != null && command.getPojo().getKhdn() != null && StringUtils.isNotBlank(command.getPojo().getKhdn().getStb_vas())){
+                mav.addObject("totalRemainingPaidPackageValue", this.codeHistoryService.calculateTotalPaidPackageValue(command.getPojo().getKhdn().getStb_vas(), command.getPojo().getOrderId()));
+            }else{
+                mav.addObject("totalRemainingPaidPackageValue", 0D);
+            }
         }else{
-            mav.addObject("totalRemainingPaidPackageValue", 0D);
+            mav.addObject(Constants.ALERT_TYPE, "danger");
+            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
         }
     }
 
@@ -273,8 +274,6 @@ public class OrderController extends ApplicationObjectSupport{
         ModelAndView mav = new ModelAndView("/admin/order/edit");
 
         if (!RedisUtil.pingRedisServer()){
-            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
-            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
             if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
                 return new ModelAndView("redirect:/admin/order/list.html");
             }else{
@@ -317,7 +316,7 @@ public class OrderController extends ApplicationObjectSupport{
                                 startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                             } else {
                                 OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
 
@@ -334,7 +333,7 @@ public class OrderController extends ApplicationObjectSupport{
                                     startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
                                 }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                             }
 
                             if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
