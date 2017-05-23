@@ -5,11 +5,13 @@ import com.benluck.vms.mobifonedataseller.common.utils.DateUtil;
 import com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.MBDCodeHistoryDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelExtensionUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.MBDCodeHistoryCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -62,10 +64,16 @@ public class PaymentHistoryController extends ApplicationObjectSupport{
         return mapRes;
     }
 
-    @RequestMapping(value = {"/admin/payment/payment-history.html", "/user/payment/payment-history.html"})
+    @RequestMapping(value = {"/admin/payment-history.html", "/user/payment-history.html", "/khdn/payment-history.html"})
     public ModelAndView paymentHistory(@ModelAttribute(value = Constants.FORM_MODEL_KEY) MBDCodeHistoryCommand command,
                                        HttpServletRequest request,
                                        HttpServletResponse response){
+
+        if(!SecurityUtils.userHasAuthority(Constants.PAYMENT_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment-history.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/paymenthistory/history");
         String action = command.getCrudaction();
         if(StringUtils.isNotBlank(action)){

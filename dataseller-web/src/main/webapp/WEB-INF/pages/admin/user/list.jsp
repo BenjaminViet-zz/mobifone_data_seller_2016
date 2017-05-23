@@ -20,10 +20,7 @@
     </style>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/user/list.html"/>
 <c:url var="editUrl" value="${prefix}/user/edit.html"/>
 <c:url var="addUrl" value="${prefix}/user/add.html"/>

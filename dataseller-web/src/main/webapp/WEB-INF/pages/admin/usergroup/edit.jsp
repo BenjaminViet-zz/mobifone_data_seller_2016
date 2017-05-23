@@ -12,10 +12,7 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="backUrl" value="${prefix}/usergroup/list.html"/>
 <c:url var="formUrl" value="${prefix}/usergroup/add.html"/>
 
@@ -62,14 +59,19 @@
                             <fmt:message key="usergroup.label.code" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <c:set var="disabledEditCode" value="${false}" />
-                            <c:if test="${not empty item.pojo.userGroupId && (item.pojo.code eq Constants.USERGROUP_ADMIN || item.pojo.code eq Constants.USERGROUP_KHDN || item.pojo.code eq Constants.USERGROUP_VMS_USER)}">
-                                <c:set var="disabledEditCode" value="${true}" />
-                            </c:if>
-                            <input id="code" type="text" name="pojo.code" <c:if test="${disabledEditCode}">readonly="readonly"</c:if> class="required nohtml form-control" value="${item.pojo.code}" />
-                            <form:errors for="code" path="pojo.code" cssClass="error-inline-validate"/>
+                            <c:choose>
+                                <c:when test="${not empty item.pojo.userGroupId && item.pojo.code eq Constants.USERGROUP_ADMIN}">
+                                    <span class="form-control" disabled="true">${item.pojo.code}</span>
+                                    <form:hidden path="pojo.code" />
+                                </c:when>
+                                <c:otherwise>
+                                    <input id="code" type="text" name="pojo.code" <c:if test="${disabledEditCode}">readonly="readonly"</c:if> class="required nohtml form-control" value="${item.pojo.code}" />
+                                    <form:errors for="code" path="pojo.code" cssClass="error-inline-validate"/>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
                             <fmt:message key="usergroup.label.description" />

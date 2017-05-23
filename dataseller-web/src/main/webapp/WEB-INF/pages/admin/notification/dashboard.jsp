@@ -23,16 +23,7 @@
     </style>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-<security:authorize access="hasAnyAuthority('KHDN')">
-    <c:set var="prefix" value="/khdn" />
-</security:authorize>
-<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
-    <c:set var="prefix" value="/custom_user" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/notification.html"/>
 
 <div class="page-title">

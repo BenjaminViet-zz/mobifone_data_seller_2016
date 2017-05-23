@@ -56,13 +56,15 @@ public class ExpensePaymentHistoryListController extends ApplicationObjectSuppor
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping(value = {"/admin/payment/expense-payment-history.html", "/user/payment/expense-payment-history.html"})
+    @RequestMapping(value = {"/admin/expense-payment-history.html",
+                            "/user/expense-payment-history.html",
+                            "/khdn/expense-payment-history.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCostCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/expense-payment-history.html page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/expense-payment-history.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 

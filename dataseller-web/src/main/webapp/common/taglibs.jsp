@@ -11,7 +11,7 @@
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator"%>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/page" prefix="page"%>
 <%@ taglib uri="http://jakarta.apache.org/taglibs/string-1.1" prefix="str" %>
-<%@ taglib uri="http://www.banvien.com/vms-taglibs" prefix="vms" %>
+<%@ taglib uri="http://www.benluck.com/vms-taglibs" prefix="vms" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="datePattern"><fmt:message key="date.format"/></c:set>

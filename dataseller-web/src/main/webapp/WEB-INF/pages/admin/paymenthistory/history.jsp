@@ -21,12 +21,8 @@
     </style>
 </head>
 
-<c:set var="prefix" value="/user"/>
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin"/>
-</security:authorize>
-
-<c:set var="formUrl" value="${prefix}/payment/payment-history.html" />
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
+<c:set var="formUrl" value="${prefix}/payment-history.html" />
 
 <div class="page-title">
     <div class="title_left">

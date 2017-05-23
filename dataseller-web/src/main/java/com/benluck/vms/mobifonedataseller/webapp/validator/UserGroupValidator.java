@@ -33,20 +33,36 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
         if(action.equals(Constants.ACTION_DELETE)){
             validateDeleteSystemUserGroup(command);
         }else{
+            UserGroupDTO dbUserGroupDTO = fetchDBUserGroupById(command);
+
             trimmingField(command);
-            checkRequiredFields(command, errors);
+            checkRequiredFields(command, errors, dbUserGroupDTO);
             checkUniqueCode(command, errors);
             checkWhiteSpaceCode(command, errors);
         }
     }
 
+    private UserGroupDTO fetchDBUserGroupById(UserGroupCommand command) {
+        if (StringUtils.isBlank(command.getErrorMessage())){
+            UserGroupDTO pojo = command.getPojo();
+            if (pojo.getUserGroupId() != null){
+                try{
+                    return this.userGroupService.findById(command.getPojo().getUserGroupId());
+                }catch (ObjectNotFoundException one){
+                    logger.error(one.getMessage());
+                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("usergroup.usergroup_does_not_exsist_in_system"));
+                }
+            }
+        }
+        return null;
+    }
+
+
     private void validateDeleteSystemUserGroup(UserGroupCommand command){
         UserGroupDTO pojo = null;
         try{
             pojo = this.userGroupService.findById(command.getPojo().getUserGroupId());
-            if(pojo.getCode().equals(Constants.USERGROUP_ADMIN)
-                    || pojo.getCode().equals(Constants.USERGROUP_KHDN)
-                    || pojo.getCode().equals(Constants.USERGROUP_VMS_USER)){
+            if(pojo.getCode().equals(Constants.USERGROUP_ADMIN)){
                 command.setErrorMessage(this.getMessageSourceAccessor().getMessage("usergroup.not_allow_delete_system_usergroup"));
             }
         }catch (ObjectNotFoundException one){
@@ -59,9 +75,14 @@ public class UserGroupValidator extends ApplicationObjectSupport implements Vali
      * @param command
      * @param errors
      */
-    private void checkRequiredFields(UserGroupCommand command, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.code", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.code")}, "non-empty value required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.description", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.description")}, "non-empty value required.");
+    private void checkRequiredFields(UserGroupCommand command, Errors errors, UserGroupDTO dbUserGroupDTO) {
+        if (dbUserGroupDTO != null && dbUserGroupDTO.getCode().equals(Constants.USERGROUP_ADMIN)){
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.description", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.description")}, "non-empty value required.");
+        }else{
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.code", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.code")}, "non-empty value required.");
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.description", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.description")}, "non-empty value required.");
+        }
+
     }
 
     /**

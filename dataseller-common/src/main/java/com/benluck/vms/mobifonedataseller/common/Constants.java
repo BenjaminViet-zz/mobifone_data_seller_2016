@@ -141,12 +141,11 @@ public class Constants {
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
     public static final String USERGROUP_VMS_USER = "VMS_USER";
-    public static final String USERGROUP_CUSTOM_USER = "CUSTOM_USER";
 
     public static final String ALERT_TYPE = "alertType";
 
 //    Order Constants
-    public static final Integer ORDER_STATUS_PROCESSING = 0;
+    public static final Integer ORDER_STATUS_WAITING = 0;
     public static final Integer ORDER_STATUS_FINISH = 1;
 
     public static final Integer ORDER_CARD_CODE_NOT_START_STATUS = 0;
@@ -220,13 +219,15 @@ public class Constants {
     // Permission Code
     public static final String USER_MANAGER = "USER_MANAGER";
     public static final String USER_GROUP_MANAGER = "USER_GROUP_MANAGER";
-    public static final String KHDN_MANAGER = "KHDN_MANAGER";
     public static final String PACKAGE_DATA_MANAGER = "PACKAGE_DATA_MANAGER";
-    public static final String GENERATE_CARD_CODE_MANAGER = "GENERATE_CARD_CODE_MANAGER";
-    public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
+    public static final String KHDN_MANAGER = "KHDN_MANAGER";
     public static final String ORDER_MANAGER = "ORDER_MANAGER";
     public static final String ORDER_STATUS_MANAGER = "ORDER_STATUS_MANAGER";
-    public static final String REPORT_MANAGER = "REPORT_MANAGER";
+    public static final String GENERATE_CARD_CODE_MANAGER = "GENERATE_CARD_CODE_MANAGER";
+    public static final String PAYMENT_MANAGER = "PAYMENT_MANAGER";
+    public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
+    public static final String GENERAL_EXPENSE_REPORT_MANAGER = "GENERAL_EXPENSE_REPORT_MANAGER";
+    public static final String DETAILED_EXPENSE_REPORT_MANAGER = "DETAILED_EXPENSE_REPORT_MANAGER";
 
     // Code History
     public static final Double PACKAGE_KHDN_DATA_VALUE = 100000000D;

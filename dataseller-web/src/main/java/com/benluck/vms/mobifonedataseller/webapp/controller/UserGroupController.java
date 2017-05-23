@@ -9,6 +9,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.UserGroupCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserGroupValidator;
@@ -48,12 +49,14 @@ public class UserGroupController extends ApplicationObjectSupport {
         binder.registerCustomEditor(Date.class, new CustomDateEditor());
     }
 
-    @RequestMapping(value = {"/admin/usergroup/edit.html", "/admin/usergroup/add.html"})
+    @RequestMapping(value = {"/admin/usergroup/edit.html", "/admin/usergroup/add.html",
+                            "/user/usergroup/edit.html", "/user/usergroup/add.html",
+                            "/khdn/usergroup/edit.html", "/khdn/usergroup/add.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USER_GROUP_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.USER_GROUP_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/usergroup/add.html or /usergroup/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -77,7 +80,7 @@ public class UserGroupController extends ApplicationObjectSupport {
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.group")}));
                     }
-                    return new ModelAndView("redirect:/admin/usergroup/list.html");
+                    return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/usergroup/list.html").toString());
                 }
             }else if (command.getPojo().getUserGroupId() != null){
                 command.setPojo(this.userGroupService.findAndFetchPermissionListById(command.getPojo().getUserGroupId()));
@@ -104,7 +107,7 @@ public class UserGroupController extends ApplicationObjectSupport {
         return mav;
     }
 
-    @RequestMapping(value = {"/admin/usergroup/list.html", "/user/usergroup/list.html"})
+    @RequestMapping(value = {"/admin/usergroup/list.html", "/user/usergroup/list.html", "/khdn/usergroup/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY) UserGroupCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult,
@@ -127,11 +130,7 @@ public class UserGroupController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.delete_successfully"));
 
-                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                return new ModelAndView("redirect:/admin/usergroup/list.html");
-                            }else{
-                                return new ModelAndView("redirect:/user/usergroup/list.html");
-                            }
+                            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/usergroup/list.html").toString());
                         }catch (Exception e){
                             mav.addObject(Constants.ALERT_TYPE, "info");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user_group.can_not_delete_user_group"));

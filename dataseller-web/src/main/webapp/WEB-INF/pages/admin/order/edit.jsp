@@ -1,3 +1,4 @@
+<%@ page import="com.benluck.vms.mobifonedataseller.common.Constants" %>
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8" %>
 
@@ -11,11 +12,7 @@
     <meta name="menu" content="<fmt:message key="${titlePage}" />"/>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/order/add.html" />
 <c:if test="${not empty item.pojo.orderId}">
     <c:url var="formUrl" value="${prefix}/order/edit.html" />
@@ -137,17 +134,6 @@
                                 <%--<span id="inputSuccess2Status4" class="sr-only">(success)</span>--%>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                            <fmt:message key="admin.donhang.label.status" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select cssClass="form-control" id="status" path="pojo.orderStatus" cssStyle="width: 150px;">
-                                <option <c:if test="${Constants.ORDER_STATUS_PROCESSING eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_PROCESSING}"><fmt:message key="label.in_progress" /></option>
-                                <option <c:if test="${Constants.ORDER_STATUS_FINISH eq item.pojo.orderStatus}">selected="true"</c:if> value="${Constants.ORDER_STATUS_FINISH}"><fmt:message key="label.finish" /></option>
-                            </form:select>
-                        </div>
-                    </div>
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;
@@ -161,9 +147,17 @@
                                     <c:otherwise><fmt:message key="label.save" /></c:otherwise>
                                 </c:choose>
                             </a>
+                            <security:authorize access="hasAuthority('ORDER_STATUS_MANAGER')">
+                                <a id="btnSaveAndFinish" <c:if test="${!allowUpdateOrInsert}"> disabled="disabled" </c:if> class="btn btn-danger"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                    <c:choose>
+                                        <c:when test="${not empty item.pojo.orderId}"><fmt:message key="label.update_finish_order" /></c:when>
+                                        <c:otherwise><fmt:message key="label.save_finish_order" /></c:otherwise>
+                                    </c:choose>
+                                </a>
+                            </security:authorize>
                         </div>
                     </div>
-                    <input type="hidden" name="crudaction" value="insert-update" />
+                    <input id="crudaction" type="hidden" name="crudaction" value="insert-update" />
                     <form:hidden id="orderId" path="pojo.orderId" />
                     <form:hidden path="pojo.cardCodeProcessStatus" />
                 </form:form>
@@ -175,6 +169,16 @@
 <script type="text/javascript">
     var totalRemainingPaidPackageValue = ${totalRemainingPaidPackageValue};
     var $message_sectionEl = $('#message_section');
+    var $btnSaveAndFinish = $('#btnSaveAndFinish');
+    var $btnSave = $("#btnSave");
+    var $khdnMenu = $('#KHDN');
+    var $quantity = $('#quantity');
+    var $unitPrice = $('#unitPrice');
+    var $calcOrderTotal = $('#calcOrderTotal');
+    var $form = $('#formEdit');
+    var $packageDataMenu = $('#packageData');
+    var $pageMessageTitle = $('#page_message_title');
+    var $crudaction = $('#crudaction');
 
     var packageDataIdsHasGenerateCardCodeList = [];
     <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
@@ -186,28 +190,28 @@
     $(document).ready(function(){
         storeDOMData();
         bindMask();
-        bindEvent();
+        bindEvents();
     });
 
     function checkPackageDataCardCodeGeneration(){
         <c:if test="${packageDataIdListHasGeneratedCardCode.size() > 0}">
-            var selectedPackageDataId = $('#packageData').val();
+            var selectedPackageDataId = $packageDataMenu.val();
             if(packageDataIdsHasGenerateCardCodeList.length > 0 && selectedPackageDataId != ''){
                 if(packageDataIdsHasGenerateCardCodeList.indexOf(selectedPackageDataId) == -1){
-                    $('#page_message_title').removeClass('hide').find('span:first').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
-                    $('#btnSave').attr('disabled', 'disabled');
+                    $pageMessageTitle.removeClass('hide').find('span:first').html('<fmt:message key="packagedatacodegen.this_package_data_has_not_yet_generate_card_code" />');
+                    $btnSave.attr('disabled', 'disabled');
                 }else{
-                    $('#page_message_title').addClass('hide').find('span:first').html('');
-                    $('#btnSave').removeAttr('disabled');
+                    $pageMessageTitle.addClass('hide').find('span:first').html('');
+                    $btnSave.removeAttr('disabled');
                 }
             }else{
-                $('#page_message_title').addClass('hide');
+                $pageMessageTitle.addClass('hide');
             }
         </c:if>
     }
 
     function updateTotalPaidPackageRemainingValue(){
-        var $khdnSelectMenu =  $('#KHDN');
+        var $khdnSelectMenu =  $khdnMenu;
         var selectedKHDNId = $khdnSelectMenu.val();
         if(selectedKHDNId == -1){
             return;
@@ -234,7 +238,7 @@
     }
 
     function storeDOMData(){
-        $('#KHDN').find("option:not(:first-child)").each(function(index, el){
+        $khdnMenu.find("option:not(:first-child)").each(function(index, el){
             var $optEl = $(el);
             $optEl.data("isdn", $optEl.attr('data-isdn')).removeAttr('data-isdn');
         });
@@ -245,7 +249,7 @@
     }
 
     function checkOrderCost(){
-        var orderCost = eval($('#calcOrderTotal').val().replace(/\,/g, ''));
+        var orderCost = eval($calcOrderTotal.val().replace(/\,/g, ''));
         if(orderCost > totalRemainingPaidPackageValue){
             $message_sectionEl.html("<div class=\"row\">" +
                                         "<div class=\"col-md-12 col-sm-12 col-xs-12\">" +
@@ -266,52 +270,61 @@
     }
 
     function bindMask(){
-        var $totalEl = $('.calcOrderTotal');
-        $totalEl.val(eval($('#quantity').val().replace(/\,/g, '')) * eval($('#unitPrice').val().replace(/\,/g, '')));
+        var $totalEl = $calcOrderTotal;
+        $totalEl.val(eval($quantity.val().replace(/\,/g, '')) * eval($unitPrice.val().replace(/\,/g, '')));
         $totalEl.mask('000,000,000,000,000,000', {
             reverse: true
         });
 
-        $('#quantity').blur(function(){
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+        $quantity.blur(function(){
+            $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
             checkOrderCost();
         });
 
-        $('#quantity').keyup(function() {
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+        $quantity.keyup(function() {
+            $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
             checkOrderCost();
         });
 
-        $('#unitPrice').keyup(function() {
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+        $unitPrice.keyup(function() {
+            $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
             checkOrderCost();
         });
 
-        $('#packageData').on('change', function(){
-            $('#unitPrice').val($(this).find('option:selected').data('unitPrice'));
-            $('.calcOrderTotal').val( numberWithCommas( $('#quantity').val().replace(/\,/g, '')*1 * $('#unitPrice').val().replace(/\,/g, '')*1 )  );
+        $packageDataMenu.on('change', function(){
+            $unitPrice.val($(this).find('option:selected').data('unitPrice'));
+            $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
             /*jQueryMask();*/
         });
     }
 
-    function bindEvent(){
-        $("#btnSave").click(function(e){
-            <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
-                return;
-            </c:if>
-
-            if($('#formEdit').valid()){
-                var statusVal = $('#status').val();
-                if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
-                    bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
-                        if(r && $('#formEdit').valid() ){
-                            $("#formEdit").submit();
-                        }
-                    });
-                }else{
-                    $("#formEdit").submit();
-                }
-            }
+    function bindEvents(){
+        $btnSave.click(function(e){
+            submitOrderForm();
         });
+
+        $btnSaveAndFinish.click(function(e){
+            $crudaction.val('finish-order');
+            submitOrderForm();
+        });
+    }
+
+    function submitOrderForm(){
+        <c:if test="${packageDataIdListHasGeneratedCardCode.size() eq 0}">
+            return;
+        </c:if>
+
+        if($form.valid()){
+            var statusVal = $('#status').val();
+            if(statusVal == '${Constants.ORDER_STATUS_FINISH}'){
+                bootbox.confirm('<fmt:message key="donhang.popup.title" />', '<fmt:message key="donhang.popup.content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                    if(r && $form.valid() ){
+                        $form.submit();
+                    }
+                });
+            }else{
+                $form.submit();
+            }
+        }
     }
 </script>

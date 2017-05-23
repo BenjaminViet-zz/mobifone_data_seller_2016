@@ -14,11 +14,7 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user.heading_page" />"/>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="backUrl" value="${prefix}/user/list.html"/>
 <c:url var="formUrl" value="${prefix}/user/add.html"/>
 

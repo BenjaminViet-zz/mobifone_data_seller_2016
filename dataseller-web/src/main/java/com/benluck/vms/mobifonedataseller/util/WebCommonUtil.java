@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.util;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
 import org.apache.log4j.Logger;
 
@@ -90,5 +91,16 @@ public class WebCommonUtil {
         }
 
         return new String[] {username, password};
+    }
+
+    public static String getPrefixUrl(){
+        if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_ADMIN)){
+            return "/admin";
+        }else if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_VMS_USER)){
+            return "/user";
+        }else if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_KHDN)){
+            return "/khdn";
+        }
+        return "/notsupport_user";
     }
 }

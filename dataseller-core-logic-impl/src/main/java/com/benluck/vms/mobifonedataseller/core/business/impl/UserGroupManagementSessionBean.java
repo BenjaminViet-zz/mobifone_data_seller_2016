@@ -61,18 +61,11 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
     public void updateItem(UserGroupDTO pojo, String[] permissionIdArr) throws ObjectNotFoundException, DuplicateKeyException {
         UserGroupEntity dbItem = this.userGroupService.findById(pojo.getUserGroupId());
         dbItem.setDescription(pojo.getDescription());
-
-        if(!pojo.getCode().equals(Constants.USERGROUP_ADMIN)
-                && !pojo.getCode().equals(Constants.USERGROUP_KHDN)
-                && !pojo.getCode().equals(Constants.USERGROUP_VMS_USER)){
-            dbItem.setCode(pojo.getCode().toUpperCase());
-        }
+        dbItem.setCode(pojo.getCode().toUpperCase());
 
         dbItem = this.userGroupService.update(dbItem);
 
-        if(!pojo.getCode().equals(Constants.USERGROUP_ADMIN)
-                && !pojo.getCode().equals(Constants.USERGROUP_KHDN)
-                && !pojo.getCode().equals(Constants.USERGROUP_VMS_USER)){
+        if(!pojo.getCode().equals(Constants.USERGROUP_ADMIN)){
             if(permissionIdArr != null && permissionIdArr.length > 0){
                 List<Long> updatingPermissionIds = new ArrayList<Long>();
                 List<Long> dbPermissionIds = userGroupPermissionService.findPermissionIsListById(pojo.getUserGroupId());
@@ -116,6 +109,7 @@ public class UserGroupManagementSessionBean implements UserGroupManagementLocalB
                 this.userGroupPermissionService.deleteByUserGroupId(pojo.getUserGroupId());
             }
         }
+
     }
 
     @Override

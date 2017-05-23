@@ -61,13 +61,13 @@ public class ReportDetailExpenseController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping( value = {"/admin/reportDetailExpense/list.html", "/user/reportDetailExpense/list.html"})
+    @RequestMapping( value = {"/admin/reportDetailExpense/list.html", "/user/reportDetailExpense/list.html", "/khdn/reportDetailExpense/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)ReportDetailExpenseCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.REPORT_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + " report page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.DETAILED_EXPENSE_REPORT_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: /reportDetailExpense/list.html report page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 

@@ -41,13 +41,13 @@ public class ImportKHDNController extends ApplicationObjectSupport{
     @Autowired
     private ImportKHDNValidator validator;
 
-    @RequestMapping(value = {"/admin/khdn/import.html", "/user/khdn/import.html", "/custom_user/khdn/import.html"})
+    @RequestMapping(value = {"/admin/khdn/import.html", "/user/khdn/import.html", "/khdn/khdn/import.html"})
     public ModelAndView importFile(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportKHDNCommand command,
                                    HttpServletRequest request,
                                    BindingResult bindingResult){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/import.html user page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/import.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 

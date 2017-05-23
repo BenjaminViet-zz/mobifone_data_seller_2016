@@ -14,6 +14,7 @@ import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.ExcelExtensionUtil;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.dto.CellDataType;
@@ -21,7 +22,6 @@ import com.benluck.vms.mobifonedataseller.webapp.dto.CellValue;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskTakeCardCode;
 import com.benluck.vms.mobifonedataseller.webapp.validator.OrderValidator;
-import jxl.write.WritableFont;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.opc.OPCPackage;
@@ -40,8 +40,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.Boolean;
 import java.sql.Timestamp;
@@ -80,7 +78,7 @@ public class OrderController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html", "/khdn/order/list.html", "/custom_user/order/list.html"} )
+    @RequestMapping(value = {"/admin/order/list.html", "/user/order/list.html", "/khdn/order/list.html"} )
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response,
@@ -107,15 +105,7 @@ public class OrderController extends ApplicationObjectSupport{
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                         }
 
-                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                            return new ModelAndView("redirect:/admin/order/list.html");
-                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/user/order/list.html");
-                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/khdn/order/list.html");
-                        }if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/custom_user/order/list.html");
-                        }
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_exception", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
@@ -260,13 +250,13 @@ public class OrderController extends ApplicationObjectSupport{
         }
     }
 
-    @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html",
-                            "/admin/order/edit.html", "/user/order/edit.html"})
+    @RequestMapping(value = {"/admin/order/add.html", "/user/order/add.html", "/khdn/order/add.html",
+                            "/admin/order/edit.html", "/user/order/edit.html", "/khdn/order/edit.html"})
     public ModelAndView updateOrCreateOrder(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                                             BindingResult bindingResult,
                                             RedirectAttributes redirectAttributes){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+        if(!SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -274,21 +264,13 @@ public class OrderController extends ApplicationObjectSupport{
         ModelAndView mav = new ModelAndView("/admin/order/edit");
 
         if (!RedisUtil.pingRedisServer()){
-            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                return new ModelAndView("redirect:/admin/order/list.html");
-            }else{
-                return new ModelAndView("redirect:/user/order/list.html");
-            }
+            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
         }
 
         Boolean hasImportedUsedCardCode = (Boolean)RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
         if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
             logger.warn("Please import Used Card Code list before using this feature.");
-            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                return new ModelAndView("redirect:/admin/order/list.html");
-            }else{
-                return new ModelAndView("redirect:/user/order/list.html");
-            }
+            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
         }
 
         String crudaction = command.getCrudaction();
@@ -311,35 +293,57 @@ public class OrderController extends ApplicationObjectSupport{
                         }else{
 
                             if (pojo.getOrderId() == null ){
+                                pojo.setOrderStatus(Constants.ORDER_STATUS_WAITING);
                                 pojo = this.orderService.addItem(pojo);
-
-                                startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                             } else {
-                                OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
-
-                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
-                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
-                                }
-
                                 this.orderService.updateItem(pojo, true);
 
-                                // Update Card Code size in DB nd Cache
-                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
-                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
-                                    startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
-                                }
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                             }
 
-                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                return new ModelAndView("redirect:/admin/order/list.html");
+                            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
+                        }
+                    }
+                }else if (crudaction.equals("finish-order")){
+                    if (!SecurityUtils.userHasAuthority(Constants.ORDER_STATUS_MANAGER)){
+                        logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to finish order but no ORDER_STATUS_MANAGER. ACCESS DENIED FOR BIDDEN!");
+                        throw new ForBiddenException();
+                    }else{
+                        validator.validate(command, bindingResult);
+                        convertDate2Timestamp(command);
+                        if (!bindingResult.hasErrors()){
+                            UserDTO updatedBy = new UserDTO();
+                            updatedBy.setUserId(SecurityUtils.getLoginUserId());
+                            pojo.setCreatedBy(updatedBy);
+
+                            PackageDataDTO packageDataDTO = this.packageDataService.findById(pojo.getPackageData().getPackageDataId());
+                            if(packageDataDTO.getUnitPrice4CardCode().length() > 2){
+                                mav.addObject(Constants.ALERT_TYPE, "info");
+                                mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_support_unit_price_2_digit"));
                             }else{
-                                return new ModelAndView("redirect:/user/order/list.html");
+                                pojo.setOrderStatus(Constants.ORDER_STATUS_FINISH);
+                                if (pojo.getOrderId() == null ){
+                                    pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
+                                    pojo = this.orderService.addItem(pojo);
+
+                                    startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
+
+                                    redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                                    redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
+                                } else {
+                                    pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
+                                    this.orderService.updateItem(pojo, true);
+
+                                    startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice4CardCode());
+                                    redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                                    redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
+                                }
+
+                                return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
                             }
                         }
                     }
@@ -350,11 +354,7 @@ public class OrderController extends ApplicationObjectSupport{
                 if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
                     redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
                     redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.not_allow_update_finish_order"));
-                    if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                        return new ModelAndView("redirect:/admin/order/list.html");
-                    }else{
-                        return new ModelAndView("redirect:/user/order/list.html");
-                    }
+                    return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
                 }
                 command.setPojo(originOrderDTO);
             }

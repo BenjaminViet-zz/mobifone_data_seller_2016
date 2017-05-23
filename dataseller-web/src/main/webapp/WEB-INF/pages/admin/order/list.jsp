@@ -9,13 +9,7 @@
     <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-<security:authorize access="hasAnyAuthority('KHDN')">
-    <c:set var="prefix" value="/khdn" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="editUrl" value="${prefix}/order/add.html"/>
 <c:url var="historyUrl" value="${prefix}/orderhistory/list.html"/>
 <c:url var="formUrl" value="${prefix}/order/list.html"/>
@@ -172,8 +166,8 @@
                                            </c:when>
                                             <c:otherwise>
                                                 <c:choose>
-                                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_PROCESSING}">
-                                                        <fmt:message key="label.in_progress" />
+                                                    <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_WAITING}">
+                                                        <fmt:message key="label.wait" />
                                                     </c:when>
                                                     <c:when test="${tableList.orderStatus eq Constants.ORDER_STATUS_FINISH}">
                                                         <c:choose>

@@ -105,7 +105,13 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
         dbItem.setUnitPrice(pojo.getUnitPrice());
         dbItem.setIssuedDate(pojo.getIssuedDate());
         dbItem.setShippingDate(pojo.getShippingDate());
-        dbItem.setOrderStatus(pojo.getOrderStatus());
+
+        if (pojo.getOrderStatus() != null){
+            dbItem.setOrderStatus(pojo.getOrderStatus());
+        }else{
+            pojo.setOrderStatus(dbItem.getOrderStatus());
+        }
+
         dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
         dbItem.setCardCodeProcessStatus(pojo.getCardCodeProcessStatus());
         this.orderService.update(dbItem);

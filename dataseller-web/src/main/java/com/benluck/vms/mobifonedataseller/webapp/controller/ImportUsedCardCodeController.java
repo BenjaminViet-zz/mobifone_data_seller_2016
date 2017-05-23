@@ -9,7 +9,9 @@ import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.FileUtils;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.ImportUsedCardCodeCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportUsedCardCode;
 import com.benluck.vms.mobifonedataseller.webapp.validator.ImportUsedCardCodeValidator;
 import org.apache.commons.lang.StringUtils;
@@ -49,18 +51,23 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
     @Autowired
     private ImportUsedCardCodeValidator validator;
 
-    @RequestMapping(value = {"/admin/import_used_card_code.html"})
+    @RequestMapping(value = {"/admin/import_used_card_code.html","/user/import_used_card_code.html","/khdn/import_used_card_code.html"})
     public ModelAndView importUsedCardCode(@ModelAttribute(Constants.FORM_MODEL_KEY)ImportUsedCardCodeCommand command,
                                            BindingResult bindingResult,
                                            HttpServletRequest request,
                                            RedirectAttributes redirectAttributes) throws IOException{
+        if(!SecurityUtils.userHasAuthority(Constants.GENERATE_CARD_CODE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/import_used_card_code.html. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/usedCardCode/import");
         String action = command.getCrudaction();
 
         if (!RedisUtil.pingRedisServer()){
             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
-            return new ModelAndView("redirect:/admin/order/list.html");
+            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
         }
 
         if(StringUtils.isNotBlank(action)){
@@ -115,7 +122,7 @@ public class ImportUsedCardCodeController extends ApplicationObjectSupport{
 
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("import_used_card_code.import_in_progress"));
-                        return new ModelAndView("redirect:/admin/import_used_card_code.html");
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/import_used_card_code.html").toString());
                     }catch (Exception e){
                         logger.error(e.getMessage());
                         mav.addObject(Constants.ALERT_TYPE, "danger");

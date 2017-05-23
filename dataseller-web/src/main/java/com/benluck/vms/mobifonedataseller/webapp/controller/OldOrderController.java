@@ -11,6 +11,7 @@ import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RedisUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskImportOldOrder;
@@ -62,36 +63,28 @@ public class OldOrderController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
     }
 
-    @RequestMapping(value = {"/admin/order/oldorder/add.html", "/user/order/oldorder/add.html"})
+    @RequestMapping(value = {"/admin/order/oldorder/add.html", "/user/order/oldorder/add.html", "/khdn/order/oldorder/add.html"})
     public ModelAndView oldOrder(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderCommand command,
                                  HttpServletRequest request,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes){
-        ModelAndView mav = new ModelAndView("/admin/order/oldorder");
-
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+        if(!SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/add.html or /order/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 
+        ModelAndView mav = new ModelAndView("/admin/order/oldorder");
+
         if (!RedisUtil.pingRedisServer()){
             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("redis.msg.server_dead"));
-            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                return new ModelAndView("redirect:/admin/order/list.html");
-            }else{
-                return new ModelAndView("redirect:/user/order/list.html");
-            }
+            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
         }
 
         Boolean hasImportedUsedCardCode = (Boolean) RedisUtil.getRedisValueByKey(Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY, Constants.IMPORTED_CARD_CODE_REDIS_KEY_AND_HASKEY);
         if(hasImportedUsedCardCode == null || !hasImportedUsedCardCode.booleanValue()){
             logger.warn("Please import Used Card Code list before using this feature.");
-            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                return new ModelAndView("redirect:/admin/order/list.html");
-            }else{
-                return new ModelAndView("redirect:/user/order/list.html");
-            }
+            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
         }
 
         String crudaction = command.getCrudaction();
@@ -108,7 +101,7 @@ public class OldOrderController extends ApplicationObjectSupport{
                         convertDate2Timestamp(command);
                         OrderDTO pojo = command.getPojo();
 
-                        pojo.setOrderStatus(Constants.ORDER_STATUS_PROCESSING);
+                        pojo.setOrderStatus(Constants.ORDER_STATUS_WAITING);
 
                         UserDTO updatedBy = new UserDTO();
                         updatedBy.setUserId(SecurityUtils.getLoginUserId());
@@ -127,21 +120,10 @@ public class OldOrderController extends ApplicationObjectSupport{
 
                                 redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                                 redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("old_order.procseeing_import_used_card_code"));
-
-                                if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                    return new ModelAndView("redirect:/admin/order/list.html");
-                                }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                                    return new ModelAndView("redirect:/user/order/list.html");
-                                }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN)){
-                                    return new ModelAndView("redirect:/khdn/order/list.html");
-                                }else{
-                                    return new ModelAndView("redirect:/custom_user/order/list.html");
-                                }
-
                             } else {
 //                                OrderDTO originOrderDTO = this.orderService.findById(command.getPojo().getOrderId());
 //
-//                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
+//                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_WAITING)
 //                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
 //                                    pojo.setCardCodeProcessStatus(Constants.ORDER_CARD_CODE_PROCESSING_STATUS);
 //                                }
@@ -149,7 +131,7 @@ public class OldOrderController extends ApplicationObjectSupport{
 //                                this.orderService.updateItem(pojo);
 //
 //                                // Update Card Code size in DB nd Cache
-//                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_PROCESSING)
+//                                if(originOrderDTO.getOrderStatus().equals(Constants.ORDER_STATUS_WAITING)
 //                                        && pojo.getOrderStatus().equals(Constants.ORDER_STATUS_FINISH)){
 //                                    startTaskTakingCardCode(pojo.getOrderId(), packageDataDTO.getUnitPrice());
 //                                }
@@ -157,11 +139,7 @@ public class OldOrderController extends ApplicationObjectSupport{
 //                                redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                             }
 
-                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                return new ModelAndView("redirect:/admin/order/list.html");
-                            }else{
-                                return new ModelAndView("redirect:/user/order/list.html");
-                            }
+                            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/order/list.html").toString());
                         }
                     }else{
                         command.setTotalItems(command.getErrorUsedCardCodeImportList().size());

@@ -24,11 +24,7 @@
     </style>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/order/oldorder/add.html" />
 <c:if test="${not empty item.pojo.orderId}">
     <c:url var="formUrl" value="${prefix}/order/oldorder/edit.html" />

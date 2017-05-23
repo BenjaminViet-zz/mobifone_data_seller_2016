@@ -61,13 +61,13 @@ public class ReportGeneralExpenseController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping(value = {"/admin/reportGeneralExpense/list.html", "/user/reportGeneralExpense/list.html"})
+    @RequestMapping(value = {"/admin/reportGeneralExpense/list.html", "/user/reportGeneralExpense/list.html", "/khdn/reportGeneralExpense/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)ReportGeneralExpenseCommand command,
                              HttpServletRequest request,
                              HttpServletResponse response){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.REPORT_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + " report page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.GENERAL_EXPENSE_REPORT_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: reportGeneralExpense/list.html report page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 

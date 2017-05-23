@@ -9,7 +9,7 @@
 
     <tlib-version>2.0</tlib-version>
     <short-name>vms-taglibs</short-name>
-    <uri>http://www.banvien.com/vms-taglibs</uri>
+    <uri>http://www.benluck.com/vms-taglibs</uri>
 
     <function>
         <name>roundUp</name>
@@ -100,5 +100,10 @@
         <name>convertDateToString</name>
         <function-class>com.benluck.vms.mobifonedataseller.util.MobileUtil</function-class>
         <function-signature>java.lang.String convertDateToString(java.util.Date,java.lang.String))</function-signature>
+    </function>
+    <function>
+        <name>getPrefixUrl</name>
+        <function-class>com.benluck.vms.mobifonedataseller.util.WebCommonUtil</function-class>
+        <function-signature>java.lang.String getPrefixUrl()</function-signature>
     </function>
 </taglib>

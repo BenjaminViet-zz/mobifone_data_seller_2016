@@ -43,6 +43,5 @@ public class OrderValidator extends ApplicationObjectSupport implements Validato
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.khdn.KHDNId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("order.label.khdn")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.quantity", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("order.label.quantity")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.unitPrice", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("order.label.unit_price")}, "non-empty value required.");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.orderStatus", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("order.label.status")}, "non-empty value required.");
     }
 }

@@ -9,11 +9,8 @@
     <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-<c:url var="historyUrl" value="${prefix}/payment/management.html"/>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
+<c:url var="historyUrl" value="${prefix}/expense-payment-management.html"/>
 
 <div class="page-title">
     <div class="title_left">

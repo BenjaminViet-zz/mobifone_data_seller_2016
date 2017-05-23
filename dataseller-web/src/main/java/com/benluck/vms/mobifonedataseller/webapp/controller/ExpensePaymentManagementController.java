@@ -36,8 +36,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-public class PaymentManagementController extends ApplicationObjectSupport{
-    private Logger logger = Logger.getLogger(PaymentManagementController.class);
+public class ExpensePaymentManagementController extends ApplicationObjectSupport{
+    private Logger logger = Logger.getLogger(ExpensePaymentManagementController.class);
 
     @Autowired
     private MBDCostManagementLocalBean costService;
@@ -49,13 +49,13 @@ public class PaymentManagementController extends ApplicationObjectSupport{
         binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
     }
 
-    @RequestMapping(value = {"/admin/payment/management.html", "/user/payment/management.html"})
+    @RequestMapping(value = {"/admin/expense-payment-management.html", "/user/expense-payment-management.html", "/khdn/expense-payment-management.html"})
     public ModelAndView management(@ModelAttribute(Constants.FORM_MODEL_KEY)MBDCostCommand command,
                                    HttpServletRequest request,
                                    BindingResult bindingResult){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/management.html page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.EXPENSE_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/expense-payment-management.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 

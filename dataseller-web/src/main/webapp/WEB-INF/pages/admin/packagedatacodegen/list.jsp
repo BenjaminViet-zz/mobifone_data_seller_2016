@@ -27,10 +27,7 @@
     </style>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/packagedatacodegen/list.html"/>
 <c:url var="ajaxGenerateCardCodeUrl" value="/ajax/admin/packagedatacodegen/generateCardCode.html"/>
 

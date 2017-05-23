@@ -20,14 +20,7 @@
     <meta name="menu" content="<fmt:message key="admin.edit_user_group.edit.heading_page" />"/>
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
-    <c:set var="prefix" value="/custom_user" />
-</security:authorize>
-
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="backUrl" value="${prefix}/khdn/list.html"/>
 <c:url var="formUrl" value="${prefix}/khdn/add.html"/>
 

@@ -8,13 +8,7 @@
     <link href="<c:url value="/themes/admin/mCustomScrollBar/jquery.mCustomScrollbar.min.css"/>" rel="stylesheet">
 </head>
 
-<c:set var="prefix" value="/user" />
-<security:authorize access="hasAnyAuthority('ADMIN')">
-    <c:set var="prefix" value="/admin" />
-</security:authorize>
-<security:authorize access="hasAnyAuthority('CUSTOM_USER')">
-    <c:set var="prefix" value="/custom_user" />
-</security:authorize>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
 <c:url var="formUrl" value="${prefix}/package_data/list.html"/>
 <c:url var="editUrl" value="${prefix}/package_data/edit.html"/>
 <c:url var="addUrl" value="${prefix}/package_data/add.html"/>

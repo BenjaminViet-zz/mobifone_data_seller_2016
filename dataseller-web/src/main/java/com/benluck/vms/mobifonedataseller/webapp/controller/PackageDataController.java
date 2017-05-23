@@ -7,6 +7,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.PackageDataDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.PackageDataCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.task.TaskGenerateCardCode;
@@ -54,14 +55,14 @@ public class PackageDataController extends ApplicationObjectSupport{
 
     @RequestMapping(value = {"/admin/package_data/list.html",
                             "/user/package_data/list.html",
-                            "/custom_user/package_data/list.html"})
+                            "/khdn/package_data/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PackageDataCommand command,
                              HttpServletRequest request,
                              RedirectAttributes redirectAttributes,
                              BindingResult bindingResult){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.PACKAGE_DATA_MANAGER)){
-            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/packagedate/list.html page. ACCESS DENIED FOR BIDDEN!");
+        if(!SecurityUtils.userHasAuthority(Constants.PACKAGE_DATA_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/package_data/list.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
 
@@ -77,13 +78,7 @@ public class PackageDataController extends ApplicationObjectSupport{
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                         redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.packagedata.remove_successfully"));
 
-                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                            return new ModelAndView("redirect:/admin/package_data/list.html");
-                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/user/package_data/list.html");
-                        }else{
-                            return new ModelAndView("redirect:/custom_user/package_data/list.html");
-                        }
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/package_data/list.html").toString());
                     }else{
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
@@ -110,12 +105,12 @@ public class PackageDataController extends ApplicationObjectSupport{
 
     @RequestMapping(value = {"/admin/package_data/add.html", "/admin/package_data/edit.html",
                                 "/user/package_data/add.html", "/user/package_data/edit.html",
-                                "/custom_user/package_data/add.html", "/custom_user/package_data/edit.html"})
+                                "/khdn/package_data/add.html", "/khdn/package_data/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) PackageDataCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.PACKAGE_DATA_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.PACKAGE_DATA_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/package_data/add.html or /package_data/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -142,13 +137,8 @@ public class PackageDataController extends ApplicationObjectSupport{
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                            return new ModelAndView("redirect:/admin/package_data/list.html");
-                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/user/package_data/list.html");
-                        }else{
-                            return new ModelAndView("redirect:/custom_user/package_data/list.html");
-                        }
+
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/package_data/list.html").toString());
                     }else{
                         if(StringUtils.isNotBlank(command.getErrorMessage())){
                             mav.addObject(Constants.ALERT_TYPE, "danger");

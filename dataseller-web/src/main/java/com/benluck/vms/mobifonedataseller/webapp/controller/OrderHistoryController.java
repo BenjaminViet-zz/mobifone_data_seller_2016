@@ -7,8 +7,10 @@ import com.benluck.vms.mobifonedataseller.core.business.OrderHistoryManagementLo
 import com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderDataCodeDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.OrderHistoryDTO;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.OrderHistoryCommand;
+import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.displaytag.tags.TableTagParameters;
@@ -50,6 +52,11 @@ public class OrderHistoryController extends ApplicationObjectSupport{
     public ModelAndView history(@ModelAttribute(Constants.FORM_MODEL_KEY)OrderHistoryCommand command,
                                 BindingResult bindingResult,
                                 HttpServletRequest request){
+        if(!SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/orderhistory/list.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         ModelAndView mav = new ModelAndView("/admin/orderhistory/list");
 
         executeSearch(command, request);
@@ -104,7 +111,7 @@ public class OrderHistoryController extends ApplicationObjectSupport{
         properties.put("order.orderId", command.getPojo().getOrder().getOrderId());
 
         command.setSortExpression("createdDate");
-        command.setSortDirection("1");  // sort DESC
+        command.setSortDirection(Constants.SORT_DESC);  // sort DESC
 
         if(pojo.getKhdn() != null && pojo.getKhdn().getKHDNId() != null){
             properties.put("khdn.KHDNId", pojo.getKhdn().getKHDNId());

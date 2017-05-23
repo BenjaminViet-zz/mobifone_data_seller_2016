@@ -7,6 +7,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.KHDNDTO;
 import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
+import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
 import com.benluck.vms.mobifonedataseller.webapp.command.KHDNCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.KHDNValidator;
@@ -51,12 +52,12 @@ public class KHDNController extends ApplicationObjectSupport {
 
     @RequestMapping( value = {"/admin/khdn/list.html",
                                 "/user/khdn/list.html",
-                                "/custom_user/khdn/list.html"})
+                                "/khdn/khdn/list.html"})
     public ModelAndView list(@ModelAttribute(value = Constants.FORM_MODEL_KEY) KHDNCommand command,
                              HttpServletRequest request,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) throws RemoveException {
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/list.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -73,11 +74,7 @@ public class KHDNController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.khdn.delete_successfully"));
 
-                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                return new ModelAndView("redirect:/admin/khdn/list.html");
-                            }else{
-                                return new ModelAndView("redirect:/user/khdn/list.html");
-                            }
+                            return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/khdn/list.html").toString());
                         }else{
                             mav.addObject(Constants.ALERT_TYPE, "danger");
                             mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage(command.getErrorMessage()));
@@ -102,12 +99,12 @@ public class KHDNController extends ApplicationObjectSupport {
 
     @RequestMapping(value = {"/admin/khdn/add.html", "/admin/khdn/edit.html"
                             , "/user/khdn/add.html", "/user/khdn/edit.html"
-                            , "/custom_user/khdn/add.html", "/custom_user/khdn/edit.html"})
+                            , "/khdn/khdn/add.html", "/khdn/khdn/edit.html"})
     public ModelAndView edit(@ModelAttribute(Constants.FORM_MODEL_KEY) KHDNCommand command,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.KHDN_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/khdn/add.html or /khdn/edit.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -131,13 +128,8 @@ public class KHDNController extends ApplicationObjectSupport {
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
                         }
-                        if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                            return new ModelAndView("redirect:/admin/khdn/list.html");
-                        }else if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                            return new ModelAndView("redirect:/user/khdn/list.html");
-                        }else{
-                            return new ModelAndView("redirect:/custom_user/khdn/list.html");
-                        }
+
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/khdn/list.html").toString());
                     }
                 }
             } else if( pojo.getKHDNId() != null ) {

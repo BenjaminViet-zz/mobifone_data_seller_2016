@@ -28,7 +28,8 @@
     </style>
 </head>
 
-<c:url var="formUrl" value="/admin/import_used_card_code.html"/>
+<c:set var="prefix" value="${vms:getPrefixUrl()}" />
+<c:url var="formUrl" value="${prefix}/import_used_card_code.html"/>
 
 <div class="page-title">
     <div class="title_left">
