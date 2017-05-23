@@ -12,6 +12,7 @@
         http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean" id="userManagementLocalBean"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserTypeManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserTypeManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserTypeManagementLocalBean" id="userTypeManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserGroupManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean" id="userGroupManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PermissionManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PermissionManagementLocalBean" id="permissionManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/PackageDataManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.PackageDataManagementLocalBean" id="packageDataManagementLocalBean"/>
@@ -24,6 +25,7 @@
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/CodeHistoryManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.CodeHistoryManagementLocalBean" id="codeHistoryManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/NotificationManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean" id="notificationManagementLocalBean"/>
     <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UsedCardCodeManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UsedCardCodeManagementLocalBean" id="usedCardCodeManagementLocalBean"/>
+    <jee:local-slsb jndi-name="java:app/dataseller-core-logic-impl-1.0/UserGroupPermissionManagementSessionEJB!com.benluck.vms.mobifonedataseller.core.business.UserGroupPermissionManagementLocalBean" business-interface="com.benluck.vms.mobifonedataseller.core.business.UserGroupPermissionManagementLocalBean" id="userGroupPermissionManagementLocalBean"/>
 
     <jee:local-slsb jndi-name="java:app/dataseller-mail-service-1.0/EmailSessionBeanEJB!com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" business-interface="com.benluck.vms.mobifonedataseller.mail.EmailLocalBean" id="emailLocalBean"/>
 
@@ -33,6 +35,7 @@
         <property name="ldapUserLookup" ref="ldapUserLookup" />
         <property name="userGroupService" ref="userGroupManagementLocalBean" />
         <property name="notificationService" ref="notificationManagementLocalBean" />
+        <property name="userTypeService" ref="userTypeManagementLocalBean" />
     </bean>
 
     <bean id="propertyConfigurer" class="com.benluck.vms.mobifonedataseller.util.MyPropertyConfigurer">

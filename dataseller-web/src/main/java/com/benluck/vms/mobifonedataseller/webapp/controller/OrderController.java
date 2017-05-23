@@ -86,7 +86,7 @@ public class OrderController extends ApplicationObjectSupport{
                              HttpServletResponse response,
                              RedirectAttributes redirectAttributes){
 
-        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_KHDN) && !SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
+        if(!SecurityUtils.userHasAuthority(Constants.ORDER_MANAGER)){
             logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/order/list.html page. ACCESS DENIED FOR BIDDEN!");
             throw new ForBiddenException();
         }
@@ -98,13 +98,13 @@ public class OrderController extends ApplicationObjectSupport{
             if(action.equals("delete")){
                 if(command.getPojo().getOrderId() != null){
                     try{
-                        if(!SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN) && !SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
+                        if(!SecurityUtils.userHasAuthority(Constants.ORDER_STATUS_MANAGER)){
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.only_vms_user_can_delete_order"));
                         }else{
                             this.orderService.deleteItem(command.getPojo().getOrderId(), SecurityUtils.getLoginUserId());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.delete_successfully"));
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                         }
 
                         if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
@@ -118,7 +118,7 @@ public class OrderController extends ApplicationObjectSupport{
                         }
                     }catch (Exception e){
                         mav.addObject(Constants.ALERT_TYPE, "info");
-                        mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("order.can_not_delete"));
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_exception", new Object[]{this.getMessageSourceAccessor().getMessage("admin.donhang.label.order")}));
                     }
                 }
             }else if (action.equals(Constants.ACTION_SEARCH)){

@@ -57,23 +57,26 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
     }
 
     @Override
-    public UserDTO updateItem(UserDTO pojo, Boolean flagUpdateUserGroup) throws DuplicateKeyException, ObjectNotFoundException {
+    public UserDTO updateItem(UserDTO pojo) throws DuplicateKeyException, ObjectNotFoundException {
         UserEntity dbItem = this.userService.findById(pojo.getUserId());
-        dbItem.setUserName(pojo.getUserName());
-        dbItem.setDisplayName(pojo.getDisplayName());
-        dbItem.setIsdn(pojo.getIsdn());
-        dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
-        dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
 
-        if(flagUpdateUserGroup != null && flagUpdateUserGroup.booleanValue() && pojo.getUserGroup() != null){
-            dbItem.setStatus(pojo.getStatus());
+        if(dbItem.getUserType().getCode().equals(Constants.USER_TYPE_ADMIN)){
+            dbItem.setUserName(pojo.getUserName());
+            dbItem.setDisplayName(pojo.getDisplayName());
+            dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
+        }else if(dbItem.getUserType().getCode().equals(Constants.USER_TYPE_KHDN)){
+            dbItem.setUserName(pojo.getUserName());
+            dbItem.setDisplayName(pojo.getDisplayName());
+            dbItem.setPassword(DesEncrypterUtils.getInstance().encrypt(pojo.getPassword()));
+            dbItem.setIsdn(pojo.getIsdn());
+        } else {
             UserGroupEntity userGroupEntity = new UserGroupEntity();
             userGroupEntity.setUserGroupId(pojo.getUserGroup().getUserGroupId());
             dbItem.setUserGroup(userGroupEntity);
         }
-        if(pojo.getStatus() != null){
-            dbItem.setStatus(pojo.getStatus());
-        }
+
+        dbItem.setStatus(pojo.getStatus());
+        dbItem.setLastModified(new Timestamp(System.currentTimeMillis()));
         return UserBeanUtil.entity2DTO(this.userService.update(dbItem));
     }
 
@@ -96,6 +99,10 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
             entity.setLDAP(Constants.USER_NOT_LDAP);
         }
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+
+        UserTypeEntity userTypeEntity = new UserTypeEntity();
+        userTypeEntity.setUserTypeId(dto.getUserType().getUserTypeId());
+        entity.setUserType(userTypeEntity);
 
         UserGroupEntity userGroupEntity = new UserGroupEntity();
         userGroupEntity.setUserGroupId(dto.getUserGroup().getUserGroupId());

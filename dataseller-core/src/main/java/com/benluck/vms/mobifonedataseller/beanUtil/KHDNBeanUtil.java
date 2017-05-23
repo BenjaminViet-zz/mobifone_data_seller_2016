@@ -15,22 +15,28 @@ import java.util.List;
  */
 public class KHDNBeanUtil {
     public static KHDNDTO entity2DTO(KHDNEntity entity){
-        KHDNDTO dto = new KHDNDTO();
-        dto.setKHDNId(entity.getKHDNId());
-        dto.setName(entity.getName());
-        dto.setMst(entity.getMst());
-        dto.setGpkd(entity.getGpkd());
-        dto.setIssuedContractDate(entity.getIssuedContractDate());
-        dto.setStb_vas(entity.getStb_vas());
-        dto.setShopCode(entity.getShopCode());
-        return dto;
+        if (entity != null){
+            KHDNDTO dto = new KHDNDTO();
+            dto.setKHDNId(entity.getKHDNId());
+            dto.setName(entity.getName());
+            dto.setMst(entity.getMst());
+            dto.setGpkd(entity.getGpkd());
+            dto.setIssuedContractDate(entity.getIssuedContractDate());
+            dto.setStb_vas(entity.getStb_vas());
+            dto.setShopCode(entity.getShopCode());
+            return dto;
+        }
+        return null;
     }
 
     public static List<KHDNDTO> entityList2DTOList(List<KHDNEntity> entityList){
-        List<KHDNDTO> khdndtoList = new ArrayList<KHDNDTO>();
-        for (KHDNEntity entity : entityList){
-            khdndtoList.add(KHDNBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<KHDNDTO> khdndtoList = new ArrayList<KHDNDTO>();
+            for (KHDNEntity entity : entityList){
+                khdndtoList.add(KHDNBeanUtil.entity2DTO(entity));
+            }
+            return khdndtoList;
         }
-        return khdndtoList;
+        return null;
     }
 }

@@ -17,6 +17,7 @@ public class UserGroupDTO implements Serializable {
     private Long userGroupId;
     private String code;
     private String description;
+    private List<UserGroupPermissionDTO> userGroupPermissionList;
     private List<PermissionDTO> permissionList;
 
     public Long getUserGroupId() {
@@ -41,6 +42,14 @@ public class UserGroupDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<UserGroupPermissionDTO> getUserGroupPermissionList() {
+        return userGroupPermissionList;
+    }
+
+    public void setUserGroupPermissionList(List<UserGroupPermissionDTO> userGroupPermissionList) {
+        this.userGroupPermissionList = userGroupPermissionList;
     }
 
     public List<PermissionDTO> getPermissionList() {

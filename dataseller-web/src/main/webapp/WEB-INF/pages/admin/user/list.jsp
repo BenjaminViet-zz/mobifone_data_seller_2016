@@ -35,7 +35,7 @@
 
     <div class="title_right">
         <div class="action-bar">
-            <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+            <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="admin.user.label.new_user"/></a>
         </div>
     </div>
 </div>
@@ -102,43 +102,36 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
-                <c:choose>
-                    <c:when test="${item.crudaction == Constants.ACTION_SEARCH}">
-                        <div id="tableListContainer" style="width: 100%;">
-                            <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
-                                           partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
-                                           id="tableList" pagesize="${items.maxPageItems}" export="false"
-                                           class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
+                <div id="tableListContainer" style="width: 100%;">
+                    <display:table name="items.listResult" cellspacing="0" cellpadding="0" requestURI="${formlUrl}"
+                                   partialList="true" sort="external" size="${items.totalItems}" defaultsort="0"
+                                   id="tableList" pagesize="${items.maxPageItems}" export="false"
+                                   class="table table-striped table-bordered" style="margin: 1em 0 1.5em;">
 
-                                <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
-                                    ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
-                                </display:column>
-                                <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" class="width_250_px" titleKey="user.label.username" style="20%"/>
-                                <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" class="width_250_px" titleKey="user.label.displayName" style="25%"/>
-                                <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="width_250_px" titleKey="user.label.usergroup" style="width: 20%" />
-                                <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center width_200_px" titleKey="label.status" style="15%">
-                                    <c:choose>
-                                        <c:when test = "${tableList.status eq 1}">
-                                            <fmt:message key="label.active" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <fmt:message key="label.inactive" />
-                                        </c:otherwise>
-                                    </c:choose>
-                                </display:column>
-                                <display:column headerClass="table_header text-center" class="text-center width_200_px" titleKey="label.action" style="width:15%;">
-                                    <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />" href="${editUrl}?pojo.userId=${tableList.userId}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                     <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteUser(${tableList.userId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                </display:column>
-                                <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                                <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
-                            </display:table>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <fmt:message key="user.label.please_choose_filter" />
-                    </c:otherwise>
-                </c:choose>
+                        <display:column headerClass="table_header text-center" titleKey="label.stt" sortable="false" class="text-center width_50_px" style="width: 5%;" >
+                            ${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}
+                        </display:column>
+                        <display:column headerClass="table_header text-center" property="userName" sortName="userName" sortable="true" class="width_250_px" titleKey="user.label.username" style="20%"/>
+                        <display:column headerClass="table_header text-center" property="displayName" sortName="displayName" sortable="true" class="width_250_px" titleKey="user.label.displayName" style="25%"/>
+                        <display:column headerClass="table_header text-center" property="userGroup.description" sortName="userGroup.description" sortable="true" class="width_250_px" titleKey="user.label.usergroup" style="width: 20%" />
+                        <display:column headerClass="table_header text-center nowrap" sortName="status" sortable="true" class="text-center width_200_px" titleKey="label.status" style="15%">
+                            <c:choose>
+                                <c:when test = "${tableList.status eq 1}">
+                                    <fmt:message key="label.active" />
+                                </c:when>
+                                <c:otherwise>
+                                    <fmt:message key="label.inactive" />
+                                </c:otherwise>
+                            </c:choose>
+                        </display:column>
+                        <display:column headerClass="table_header text-center" class="text-center width_200_px" titleKey="label.action" style="width:15%;">
+                            <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />" href="${editUrl}?pojo.userId=${tableList.userId}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deleteUser(${tableList.userId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        </display:column>
+                        <display:setProperty name="paging.banner.item_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                        <display:setProperty name="paging.banner.items_name"><fmt:message key="display_table.footer.label.nguoi_dung" /></display:setProperty>
+                    </display:table>
+                </div>
             </div>
         </div>
     </div>

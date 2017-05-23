@@ -15,17 +15,23 @@ import java.util.List;
  */
 public class UsedCardCodeBeanUtil {
     public static UsedCardCodeDTO entity2DTO(UsedCardCodeEntity entity){
-        UsedCardCodeDTO dto = new UsedCardCodeDTO();
-        dto.setUsedCardCodeId(entity.getUsedCardCodeId());
-        dto.setCardCode(entity.getCardCode());
-        return dto;
+        if (entity != null){
+            UsedCardCodeDTO dto = new UsedCardCodeDTO();
+            dto.setUsedCardCodeId(entity.getUsedCardCodeId());
+            dto.setCardCode(entity.getCardCode());
+            return dto;
+        }
+        return null;
     }
 
     public static List<UsedCardCodeDTO> entityList2DTOList(List<UsedCardCodeEntity> entityList){
-        List<UsedCardCodeDTO> dtoList = new ArrayList<UsedCardCodeDTO>();
-        for (UsedCardCodeEntity entity : entityList){
-            dtoList.add(entity2DTO(entity));
+        if (entityList != null){
+            List<UsedCardCodeDTO> dtoList = new ArrayList<UsedCardCodeDTO>();
+            for (UsedCardCodeEntity entity : entityList){
+                dtoList.add(entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

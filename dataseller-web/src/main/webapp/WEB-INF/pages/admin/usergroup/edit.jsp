@@ -79,33 +79,64 @@
                             <form:errors for="description" path="pojo.description" cssClass="error-inline-validate"/>
                         </div>
                     </div>
-                    <c:if test="${item.pojo.code != Constants.USERGROUP_ADMIN && item.pojo.code != Constants.USERGROUP_KHDN && item.pojo.code != Constants.USERGROUP_VMS_USER}">
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
-                                <fmt:message key="usergroup.permission" />
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="">
-                                    <ul class="to_do">
-                                        <c:forEach items="${permissionDTOList}" var="permission">
-                                            <li>
-                                                <p>
-                                                    <c:choose>
-                                                        <c:when test="${permission.checked}">
-                                                            <input name="checkList" type="checkbox" class="flat" checked="true" value="${permission.permissionId}"> ${permission.description}
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <input name="checkList" type="checkbox" class="flat" value="${permission.permissionId}"> ${permission.description}
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </p>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
+                    
+                    <c:choose>
+                        <c:when test="${item.pojo.code eq Constants.USERGROUP_ADMIN}">
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
+                                    <fmt:message key="usergroup.permission" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="">
+                                        <ul class="to_do">
+                                            <c:forEach items="${permissionDTOList}" var="permission">
+                                                <li>
+                                                    <p>
+                                                        <c:choose>
+                                                            <c:when test="${permission.checked}">
+                                                                <input name="checkList" type="checkbox" disabled="true" class="flat" checked="true" value="${permission.permissionId}"> ${permission.description}
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input name="checkList" type="checkbox" disabled="true" class="flat" value="${permission.permissionId}"> ${permission.description}
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </p>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">
+                                    <fmt:message key="usergroup.permission" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="">
+                                        <ul class="to_do">
+                                            <c:forEach items="${permissionDTOList}" var="permission">
+                                                <li>
+                                                    <p>
+                                                        <c:choose>
+                                                            <c:when test="${permission.checked}">
+                                                                <input name="checkList" type="checkbox" class="flat" checked="true" value="${permission.permissionId}"> ${permission.description}
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input name="checkList" type="checkbox" class="flat" value="${permission.permissionId}"> ${permission.description}
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </p>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;

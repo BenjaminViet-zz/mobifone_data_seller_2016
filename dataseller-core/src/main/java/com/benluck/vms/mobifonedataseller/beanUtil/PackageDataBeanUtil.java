@@ -15,29 +15,35 @@ import java.util.List;
  */
 public class PackageDataBeanUtil {
     public static PackageDataDTO entity2DTO(PackageDataEntity entity){
-        PackageDataDTO dto = new PackageDataDTO();
-        dto.setPackageDataId(entity.getPackageDataId());
-        dto.setName(entity.getName());
-        dto.setValue(entity.getValue());
-        dto.setVolume(entity.getVolume());
-        dto.setDuration(entity.getDuration());
-        dto.setDurationText(entity.getDurationText());
-        dto.setNumberOfExtend(entity.getNumberOfExtend());
-        dto.setTk(entity.getTk());
-        dto.setCustomPrefixUnitPrice(entity.getCustomPrefixUnitPrice());
+        if (entity != null){
+            PackageDataDTO dto = new PackageDataDTO();
+            dto.setPackageDataId(entity.getPackageDataId());
+            dto.setName(entity.getName());
+            dto.setValue(entity.getValue());
+            dto.setVolume(entity.getVolume());
+            dto.setDuration(entity.getDuration());
+            dto.setDurationText(entity.getDurationText());
+            dto.setNumberOfExtend(entity.getNumberOfExtend());
+            dto.setTk(entity.getTk());
+            dto.setCustomPrefixUnitPrice(entity.getCustomPrefixUnitPrice());
 
-        if(entity.getPackageDataCodeGenList() != null && entity.getPackageDataCodeGenList().size() > 0){
-            dto.setGeneratedCardCode(true);
+            if(entity.getPackageDataCodeGenList() != null && entity.getPackageDataCodeGenList().size() > 0){
+                dto.setGeneratedCardCode(true);
+            }
+
+            return dto;
         }
-
-        return dto;
+        return null;
     }
 
     public static List<PackageDataDTO> entityList2DTOList(List<PackageDataEntity> entityList){
-        List<PackageDataDTO> dtoList = new ArrayList<PackageDataDTO>();
-        for (PackageDataEntity entity : entityList){
-            dtoList.add(PackageDataBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<PackageDataDTO> dtoList = new ArrayList<PackageDataDTO>();
+            for (PackageDataEntity entity : entityList){
+                dtoList.add(PackageDataBeanUtil.entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

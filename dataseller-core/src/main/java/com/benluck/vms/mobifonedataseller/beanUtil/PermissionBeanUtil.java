@@ -15,18 +15,25 @@ import java.util.List;
  */
 public class PermissionBeanUtil {
     public static PermissionDTO entity2DTO(PermissionEntity entity){
-        PermissionDTO dto = new PermissionDTO();
-        dto.setPermissionId(entity.getPermissionId());
-        dto.setCode(entity.getCode());
-        dto.setDescription(entity.getDescription());
-        return dto;
+        if (entity != null){
+            PermissionDTO dto = new PermissionDTO();
+            dto.setPermissionId(entity.getPermissionId());
+            dto.setCode(entity.getCode());
+            dto.setDescription(entity.getDescription());
+            dto.setOrderNo(entity.getOrderNo());
+            return dto;
+        }
+        return null;
     }
 
     public static List<PermissionDTO> entityList2DTOList(List<PermissionEntity> entityList){
-        List<PermissionDTO> dtoList = new ArrayList<PermissionDTO>();
-        for (PermissionEntity entity : entityList){
-            dtoList.add(PermissionBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<PermissionDTO> dtoList = new ArrayList<PermissionDTO>();
+            for (PermissionEntity entity : entityList){
+                dtoList.add(PermissionBeanUtil.entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

@@ -16,27 +16,33 @@ import java.util.List;
  */
 public class OrderHistoryBeanUtil {
     public static OrderHistoryDTO entity2DTO(OrderHistoryEntity entity){
-        OrderHistoryDTO dto = new OrderHistoryDTO();
-        dto.setOrderHistoryId(entity.getOrderHistoryId());
-        dto.setOrder(OrderBeanUtil.entity2DTO(entity.getOrder()));
-        dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
-        dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
-        dto.setOperator(entity.getOperator());
-        dto.setQuantity(entity.getQuantity());
-        dto.setUnitPrice(entity.getUnitPrice());
-        dto.setIssuedDate(entity.getIssuedDate());
-        dto.setShippingDate(entity.getShippingDate());
-        dto.setOrderStatus(entity.getOrderStatus());
-        dto.setCreatedDate(entity.getCreatedDate());
-        dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
-        return dto;
+        if (entity != null){
+            OrderHistoryDTO dto = new OrderHistoryDTO();
+            dto.setOrderHistoryId(entity.getOrderHistoryId());
+            dto.setOrder(OrderBeanUtil.entity2DTO(entity.getOrder()));
+            dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
+            dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
+            dto.setOperator(entity.getOperator());
+            dto.setQuantity(entity.getQuantity());
+            dto.setUnitPrice(entity.getUnitPrice());
+            dto.setIssuedDate(entity.getIssuedDate());
+            dto.setShippingDate(entity.getShippingDate());
+            dto.setOrderStatus(entity.getOrderStatus());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
+            return dto;
+        }
+        return null;
     }
 
     public static List<OrderHistoryDTO> entityList2DTOList(List<OrderHistoryEntity> entityList){
-        List<OrderHistoryDTO> dtoList = new ArrayList<OrderHistoryDTO>();
-        for (OrderHistoryEntity entity : entityList){
-            dtoList.add(OrderHistoryBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<OrderHistoryDTO> dtoList = new ArrayList<OrderHistoryDTO>();
+            for (OrderHistoryEntity entity : entityList){
+                dtoList.add(OrderHistoryBeanUtil.entity2DTO(entity));
+            }
+            return  dtoList;
         }
-        return  dtoList;
+        return null;
     }
 }

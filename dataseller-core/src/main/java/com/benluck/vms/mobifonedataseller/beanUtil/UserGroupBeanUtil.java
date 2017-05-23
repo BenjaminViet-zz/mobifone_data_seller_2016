@@ -1,7 +1,9 @@
 package com.benluck.vms.mobifonedataseller.beanUtil;
 
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
+import com.benluck.vms.mobifonedataseller.core.dto.UserGroupPermissionDTO;
 import com.benluck.vms.mobifonedataseller.domain.UserGroupEntity;
+import com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class UserGroupBeanUtil {
         dto.setUserGroupId(entity.getUserGroupId());
         dto.setCode(entity.getCode());
         dto.setDescription(entity.getDescription());
+        dto.setUserGroupPermissionList(UserGroupPermissionBeanUtil.entityList2DTOList(entity.getUserGroupPermissionList()));
         return dto;
     }
 

@@ -35,7 +35,7 @@
 
     <div class="title_right">
         <div class="action-bar">
-            <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="label.button.them"/></a>
+            <a class="btn btn-primary" href="${addUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="usergroup.label.new_group"/></a>
         </div>
     </div>
 </div>

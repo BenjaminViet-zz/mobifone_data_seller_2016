@@ -21,29 +21,35 @@ import java.util.List;
 public class OrderDataCodeBeanUtil {
 
     private static OrderDataCodeDTO entity2DTO(OrderDataCodeEntity entity){
-        OrderDataCodeDTO dto = new OrderDataCodeDTO();
-        dto.setOrderDataCodeId(entity.getOrderDataCodeId());
+        if (entity != null){
+            OrderDataCodeDTO dto = new OrderDataCodeDTO();
+            dto.setOrderDataCodeId(entity.getOrderDataCodeId());
 
-        KHDNEntity khdnEntity = entity.getOrder().getKhdn();
-        KHDNDTO khdnDTO = new KHDNDTO(khdnEntity.getKHDNId(), khdnEntity.getName(), khdnEntity.getMst(), khdnEntity.getGpkd());
+            KHDNEntity khdnEntity = entity.getOrder().getKhdn();
+            KHDNDTO khdnDTO = new KHDNDTO(khdnEntity.getKHDNId(), khdnEntity.getName(), khdnEntity.getMst(), khdnEntity.getGpkd());
 
-        PackageDataEntity packageDataEntity = entity.getOrder().getPackageData();
-        PackageDataDTO packageDataDTO = new PackageDataDTO(packageDataEntity.getPackageDataId(), packageDataEntity.getName(), packageDataEntity.getValue(), packageDataEntity.getVolume(), packageDataEntity.getDuration(), packageDataEntity.getDurationText());
+            PackageDataEntity packageDataEntity = entity.getOrder().getPackageData();
+            PackageDataDTO packageDataDTO = new PackageDataDTO(packageDataEntity.getPackageDataId(), packageDataEntity.getName(), packageDataEntity.getValue(), packageDataEntity.getVolume(), packageDataEntity.getDuration(), packageDataEntity.getDurationText());
 
-        OrderDTO orderDTO = new OrderDTO(entity.getOrder().getOrderId(), khdnDTO, packageDataDTO);
+            OrderDTO orderDTO = new OrderDTO(entity.getOrder().getOrderId(), khdnDTO, packageDataDTO);
 
-        dto.setOrder(orderDTO);
-        dto.setSerial(entity.getSerial());
-        dto.setDataCode(entity.getDataCode());
-        dto.setExpiredDate(entity.getExpiredDate());
-        return dto;
+            dto.setOrder(orderDTO);
+            dto.setSerial(entity.getSerial());
+            dto.setDataCode(entity.getDataCode());
+            dto.setExpiredDate(entity.getExpiredDate());
+            return dto;
+        }
+        return null;
     }
 
     public static List<OrderDataCodeDTO> entityList2DTOList(List<OrderDataCodeEntity> entityList){
-        List<OrderDataCodeDTO> dtoList = new ArrayList<OrderDataCodeDTO>();
-        for (OrderDataCodeEntity entity : entityList){
-            dtoList.add(entity2DTO(entity));
+        if (entityList != null){
+            List<OrderDataCodeDTO> dtoList = new ArrayList<OrderDataCodeDTO>();
+            for (OrderDataCodeEntity entity : entityList){
+                dtoList.add(entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

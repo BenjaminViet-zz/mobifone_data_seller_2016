@@ -71,11 +71,11 @@ public class UserGroupController extends ApplicationObjectSupport {
                     if(pojo.getUserGroupId() != null && pojo.getUserGroupId() > 0) {
                         this.userGroupService.updateItem(command.getPojo(), command.getCheckList());
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.group")}));
                     } else {
                         this.userGroupService.addItem(command.getPojo(), command.getCheckList());
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("usergroup.label.group")}));
                     }
                     return new ModelAndView("redirect:/admin/usergroup/list.html");
                 }

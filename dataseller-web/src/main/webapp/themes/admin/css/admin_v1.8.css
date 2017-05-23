@@ -482,3 +482,7 @@ table>thead>tr>th.middle-vertical{
     line-height: 18px;
     margin: 5px;
 }
+
+span.form-control[disabled]{
+    width: 60%;
+}

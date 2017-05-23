@@ -4,6 +4,7 @@
     <persistence-unit name="core-data" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/MobiFoneDataSellerDS</jta-data-source>
         <!--<mapping-file>hbm_bk/namedQuery.hbm.xml</mapping-file>-->
+        <class>com.benluck.vms.mobifonedataseller.domain.UserTypeEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UserGroupEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.PermissionEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UserGroupPermissionEntity</class>

@@ -26,6 +26,7 @@ public class UserEntity {
     private Timestamp lastModified;
     private Timestamp lastLogin;
     private Integer isLDAP;
+    private UserTypeEntity userType;
     private UserGroupEntity userGroup;
     private String isdn;
 
@@ -129,6 +130,16 @@ public class UserEntity {
 
     public void setIsdn(String isdn) {
         this.isdn = isdn;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USERTYPEID", referencedColumnName = "USERTYPEID")
+    public UserTypeEntity getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserTypeEntity userType) {
+        this.userType = userType;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

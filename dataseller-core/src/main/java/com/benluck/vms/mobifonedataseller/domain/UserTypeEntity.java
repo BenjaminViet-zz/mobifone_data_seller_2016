@@ -3,36 +3,32 @@ package com.benluck.vms.mobifonedataseller.domain;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * User: benluck
- * Date: 9/21/13
- * Time: 3:22 PM
+ * User: vietquocpham
+ * Date: 5/22/17
+ * Time: 21:45
  * To change this template use File | Settings | File Templates.
  */
-@Table(name = "MOBI_DATA_USERGROUP")
+@Table(name = "MOBI_DATA_USERTYPE")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
-public class UserGroupEntity {
-    private Long userGroupId;
+public class UserTypeEntity {
+    private Long userTypeId;
     private String code;
     private String description;
-    private List<UserGroupPermissionEntity> userGroupPermissionList;
 
-
-    @Column(name = "USERGROUPID")
+    @Column(name = "USERTYPEID")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBI_DATA_USERGROUP_SEQ")
-    @SequenceGenerator(name="MOBI_DATA_USERGROUP_SEQ", sequenceName="MOBI_DATA_USERGROUP_SEQ", allocationSize=1)
-    public Long getUserGroupId() {
-        return userGroupId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MOBI_DATA_USERTYPE_SEQ")
+    @SequenceGenerator(name="MOBI_DATA_USERTYPE_SEQ", sequenceName="MOBI_DATA_USERTYPE_SEQ", allocationSize=1)
+    public Long getUserTypeId() {
+        return userTypeId;
     }
 
-    public void setUserGroupId(Long userGroupId) {
-        this.userGroupId = userGroupId;
+    public void setUserTypeId(Long userTypeId) {
+        this.userTypeId = userTypeId;
     }
 
     @Column(name = "CODE")
@@ -56,19 +52,9 @@ public class UserGroupEntity {
         this.description = description;
     }
 
-    @OneToMany(cascade=CascadeType.REMOVE, orphanRemoval = false)
-    @JoinColumn(name="USERGROUPID", insertable = false, updatable = false)
-    public List<UserGroupPermissionEntity> getUserGroupPermissionList() {
-        return userGroupPermissionList;
-    }
-
-    public void setUserGroupPermissionList(List<UserGroupPermissionEntity> userGroupPermissionList) {
-        this.userGroupPermissionList = userGroupPermissionList;
-    }
-
     @Override
     public int hashCode() {
-        int result = userGroupId != null ? userGroupId.hashCode() : 0;
+        int result = userTypeId != null ? userTypeId.hashCode() : 0;
         result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
@@ -79,9 +65,9 @@ public class UserGroupEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserGroupEntity that = (UserGroupEntity) o;
+        UserTypeEntity that = (UserTypeEntity) o;
 
-        if (userGroupId != null ? !userGroupId.equals(that.userGroupId) : that.userGroupId != null) return false;
+        if (userTypeId != null ? !userTypeId.equals(that.userTypeId) : that.userTypeId != null) return false;
         if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
 

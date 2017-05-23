@@ -16,29 +16,35 @@ import java.util.List;
  */
 public class OrderBeanUtil {
     public static OrderDTO entity2DTO(OrderEntity entity){
-        OrderDTO dto = new OrderDTO();
-        dto.setOrderId(entity.getOrderId());
-        dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
-        dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
-        dto.setQuantity(entity.getQuantity());
-        dto.setUnitPrice(entity.getUnitPrice());
-        dto.setIssuedDate(entity.getIssuedDate());
-        dto.setShippingDate(entity.getShippingDate());
-        dto.setOrderStatus(entity.getOrderStatus());
-        dto.setActiveStatus(entity.getActiveStatus());
-        dto.setCreatedDate(entity.getCreatedDate());
-        dto.setLastModified(entity.getLastModified());
-        dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
-        dto.setCardCodeProcessStatus(entity.getCardCodeProcessStatus());
-        dto.setImportedOrder(entity.getImportedOrder());
-        return dto;
+        if (entity != null){
+            OrderDTO dto = new OrderDTO();
+            dto.setOrderId(entity.getOrderId());
+            dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
+            dto.setPackageData(PackageDataBeanUtil.entity2DTO(entity.getPackageData()));
+            dto.setQuantity(entity.getQuantity());
+            dto.setUnitPrice(entity.getUnitPrice());
+            dto.setIssuedDate(entity.getIssuedDate());
+            dto.setShippingDate(entity.getShippingDate());
+            dto.setOrderStatus(entity.getOrderStatus());
+            dto.setActiveStatus(entity.getActiveStatus());
+            dto.setCreatedDate(entity.getCreatedDate());
+            dto.setLastModified(entity.getLastModified());
+            dto.setCreatedBy(new UserDTO(entity.getCreatedBy().getUserId(), entity.getCreatedBy().getUserName(), entity.getCreatedBy().getDisplayName()));
+            dto.setCardCodeProcessStatus(entity.getCardCodeProcessStatus());
+            dto.setImportedOrder(entity.getImportedOrder());
+            return dto;
+        }
+        return null;
     }
 
     public static List<OrderDTO> entityList2DTOList(List<OrderEntity> entityList){
-        List<OrderDTO> dtoList = new ArrayList<OrderDTO>();
-        for (OrderEntity entity : entityList){
-            dtoList.add(OrderBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<OrderDTO> dtoList = new ArrayList<OrderDTO>();
+            for (OrderEntity entity : entityList){
+                dtoList.add(OrderBeanUtil.entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

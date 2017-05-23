@@ -11,6 +11,6 @@
 <security:authorize access="hasAnyAuthority('KHDN')">
     <c:redirect url="/khdn/notification.html"/>
 </security:authorize>
-<c:redirect url="/custom_user/notification.html"/>
+<c:redirect url="/notsupport_user/notification.html"/>
 
 

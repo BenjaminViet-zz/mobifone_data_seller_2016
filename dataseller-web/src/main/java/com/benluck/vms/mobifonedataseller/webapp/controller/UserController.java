@@ -2,9 +2,10 @@
 package com.benluck.vms.mobifonedataseller.webapp.controller;
 
 import com.benluck.vms.mobifonedataseller.common.Constants;
-import com.benluck.vms.mobifonedataseller.common.security.DesEncrypterUtils;
+import com.benluck.vms.mobifonedataseller.core.business.KHDNManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.UserTypeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserGroupDTO;
 import com.benluck.vms.mobifonedataseller.editor.PojoEditor;
@@ -14,8 +15,7 @@ import com.benluck.vms.mobifonedataseller.webapp.command.UserCommand;
 import com.benluck.vms.mobifonedataseller.webapp.exception.ForBiddenException;
 import com.benluck.vms.mobifonedataseller.webapp.validator.UserValidator;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
@@ -31,7 +31,6 @@ import javax.ejb.DuplicateKeyException;
 import javax.ejb.ObjectNotFoundException;
 import javax.ejb.RemoveException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,11 +41,13 @@ public class UserController extends ApplicationObjectSupport {
     @Autowired
     private UserManagementLocalBean userService;
     @Autowired
+    private UserTypeManagementLocalBean userTypeService;
+    @Autowired
     private UserGroupManagementLocalBean userGroupService;
     @Autowired
     private UserValidator validator;
 
-    private Log log = LogFactory.getLog(UserController.class);
+    private Logger logger = Logger.getLogger(UserController.class);
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -76,7 +77,7 @@ public class UserController extends ApplicationObjectSupport {
                         try{
                             this.userService.deleteItemById(command.getPojo().getUserId());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.delete_successfully"));
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.user.label.user")}));
 
                             if(SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
                                 return new ModelAndView("redirect:/admin/user/list.html");
@@ -84,29 +85,33 @@ public class UserController extends ApplicationObjectSupport {
                                 return new ModelAndView("redirect:/user/user/list.html");
                             }
                         }catch (Exception e){
-                            mav.addObject(Constants.ALERT_TYPE, "info");
-                            mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("admin.user.can_not_delete_user"));
+                            mav.addObject(Constants.ALERT_TYPE, "danger");
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_exception", new Object[]{this.getMessageSourceAccessor().getMessage("admin.user.label.user")}));
                         }
                     }else{
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
                 }
-            }else if (action.equals(Constants.ACTION_SEARCH)){
-                executeSearch(mav, command, request);
             }
         }
 
-        preferenceData(mav);
+        executeSearch(mav, command, request);
+
+        preferenceData4ListPage(mav);
 
         mav.addObject("page", command.getPage() - 1);
         mav.addObject(Constants.LIST_MODEL_KEY, command);
         return mav;
 	}
 
-    private void preferenceData(ModelAndView mav){
-        List<UserGroupDTO> userGroups = this.userGroupService.findAll();
-        mav.addObject("userGroups", userGroups);
+    private void preferenceData4ListPage(ModelAndView mav){
+        mav.addObject("userGroups", this.userGroupService.findAll());
+    }
+
+    private void preferenceData4EditPage(ModelAndView mav){
+        mav.addObject("userGroups", this.userGroupService.findAll());
+        mav.addObject("userTypes", this.userTypeService.findAll());
     }
 
     @RequestMapping(value = {"/admin/user/add.html", "/admin/user/edit.html"})
@@ -122,7 +127,6 @@ public class UserController extends ApplicationObjectSupport {
 
         String crudaction = command.getCrudaction();
         UserDTO pojo = command.getPojo();
-        boolean notSystemUser = true;
 
         try{
             if (StringUtils.isNotBlank(crudaction)){
@@ -132,27 +136,17 @@ public class UserController extends ApplicationObjectSupport {
                         if (pojo.getUserId() == null ){
                             this.userService.addItem(command.getPojo());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add.successful"));
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.user.label.user")}));
                         } else {
-                            boolean flagUpdateUserGroup = false;
-                            if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)
-                                    || SecurityUtils.userHasAuthority(Constants.USERGROUP_ADMIN)){
-                                flagUpdateUserGroup = true;
-                            }
-                            this.userService.updateItem(command.getPojo(), flagUpdateUserGroup);
+                            this.userService.updateItem(command.getPojo());
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
-                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));
+                            redirectAttributes.addFlashAttribute("messageResponse", this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("admin.user.label.user")}));
                         }
                         return new ModelAndView("redirect:/admin/user/list.html");
                     }
                 }
             }else if(pojo.getUserId() != null){
                 command.setPojo(this.userService.findById(command.getPojo().getUserId()));
-
-                if(command.getPojo().getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN)
-                        && command.getPojo().getUserName().equalsIgnoreCase("admin")){
-                    notSystemUser = false;
-                }
             }
         }catch (ObjectNotFoundException one){
             logger.error("Can not get profile of UserId: " + pojo.getUserId());
@@ -164,8 +158,7 @@ public class UserController extends ApplicationObjectSupport {
             mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.exception.duplicated_id"));
         }
 
-        mav.addObject("notSystemUser", notSystemUser);
-        preferenceData(mav);
+        preferenceData4EditPage(mav);
         return mav;
     }
 

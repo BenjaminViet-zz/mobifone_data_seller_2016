@@ -16,24 +16,30 @@ import java.util.List;
 public class MBDReportGeneralExpenseDTOBeanUtil {
 
     public static MBDReportGeneralExpenseDTO entity2DTO(MBDCostEntity entity){
-        MBDReportGeneralExpenseDTO dto = new MBDReportGeneralExpenseDTO();
-        dto.setCostId(entity.getCostId());
-        dto.setShopCode(entity.getShopCode());
-        dto.setShopName(entity.getShopName());
-        dto.setDevelopmentAmount1(entity.getDevelopmentAmount1());
-        dto.setDevelopmentAmount2(entity.getDevelopmentAmount2());
-        dto.setDevelopmentAmount3(entity.getDevelopmentAmount3());
-        dto.setMaintainAmount1(entity.getMaintainAmount1());
-        dto.setMaintainAmount2(entity.getMaintainAmount2());
-        dto.setMaintainAmount3(entity.getMaintainAmount3());
-        return dto;
+        if (entity != null){
+            MBDReportGeneralExpenseDTO dto = new MBDReportGeneralExpenseDTO();
+            dto.setCostId(entity.getCostId());
+            dto.setShopCode(entity.getShopCode());
+            dto.setShopName(entity.getShopName());
+            dto.setDevelopmentAmount1(entity.getDevelopmentAmount1());
+            dto.setDevelopmentAmount2(entity.getDevelopmentAmount2());
+            dto.setDevelopmentAmount3(entity.getDevelopmentAmount3());
+            dto.setMaintainAmount1(entity.getMaintainAmount1());
+            dto.setMaintainAmount2(entity.getMaintainAmount2());
+            dto.setMaintainAmount3(entity.getMaintainAmount3());
+            return dto;
+        }
+        return null;
     }
 
     public static List<MBDReportGeneralExpenseDTO> entityList2DTOList(List<MBDCostEntity> entityList){
-        List<MBDReportGeneralExpenseDTO> dtoList = new ArrayList<MBDReportGeneralExpenseDTO>();
-        for (MBDCostEntity entity : entityList){
-            dtoList.add(entity2DTO(entity));
+        if (entityList != null){
+            List<MBDReportGeneralExpenseDTO> dtoList = new ArrayList<MBDReportGeneralExpenseDTO>();
+            for (MBDCostEntity entity : entityList){
+                dtoList.add(entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

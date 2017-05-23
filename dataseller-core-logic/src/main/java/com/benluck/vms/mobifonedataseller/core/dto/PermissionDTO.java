@@ -16,6 +16,7 @@ public class PermissionDTO implements Serializable {
     private String code;
     private String description;
     private Boolean isChecked = false;
+    private Integer orderNo;
 
     public Long getPermissionId() {
         return permissionId;
@@ -39,6 +40,14 @@ public class PermissionDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
     }
 
     public Boolean getChecked() {

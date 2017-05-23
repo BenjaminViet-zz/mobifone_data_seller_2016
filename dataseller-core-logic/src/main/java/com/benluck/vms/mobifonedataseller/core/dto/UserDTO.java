@@ -21,6 +21,7 @@ public class UserDTO implements Serializable {
     private Timestamp createdDate;
     private Timestamp lastModified;
     private Timestamp lastLogin;
+    private UserTypeDTO userType;
     private UserGroupDTO userGroup;
     private Integer isLDAP;
     private String isdn;
@@ -99,6 +100,14 @@ public class UserDTO implements Serializable {
 
     public void setLastLogin(Timestamp lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public UserTypeDTO getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserTypeDTO userType) {
+        this.userType = userType;
     }
 
     public UserGroupDTO getUserGroup() {

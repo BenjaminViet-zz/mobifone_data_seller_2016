@@ -55,11 +55,7 @@ public class ProfileController extends ApplicationObjectSupport{
                     mav.addObject(Constants.ALERT_TYPE, "danger");
                     mav.addObject("messageResponse", command.getErrorMessage());
                 }else if (!bindingResult.hasErrors()){
-                    boolean flagUpdateUserGroup = false;
-                    if(SecurityUtils.userHasAuthority(Constants.USERGROUP_VMS_USER)){
-                        flagUpdateUserGroup = true;
-                    }
-                    this.userService.updateItem(command.getPojo(), flagUpdateUserGroup);
+                    this.userService.updateItem(command.getPojo());
                     SecurityUtils.getPrincipal().setDisplayName(command.getPojo().getDisplayName());
                     mav.addObject(Constants.ALERT_TYPE, "success");
                     mav.addObject("messageResponse", this.getMessageSourceAccessor().getMessage("database.update.successful"));

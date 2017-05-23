@@ -133,6 +133,11 @@ public class Constants {
     public static final String ACTION_UPLOAD = "upload";
     public static final String ACTION_IMPORT = "import";
 
+    // USER TYPE
+    public static final String USER_TYPE_ADMIN = "ADMIN";
+    public static final String USER_TYPE_VMS_USER = "VMS_USER";
+    public static final String USER_TYPE_KHDN = "KHDN";
+
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
     public static final String USERGROUP_VMS_USER = "VMS_USER";
@@ -220,6 +225,7 @@ public class Constants {
     public static final String GENERATE_CARD_CODE_MANAGER = "GENERATE_CARD_CODE_MANAGER";
     public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
     public static final String ORDER_MANAGER = "ORDER_MANAGER";
+    public static final String ORDER_STATUS_MANAGER = "ORDER_STATUS_MANAGER";
     public static final String REPORT_MANAGER = "REPORT_MANAGER";
 
     // Code History

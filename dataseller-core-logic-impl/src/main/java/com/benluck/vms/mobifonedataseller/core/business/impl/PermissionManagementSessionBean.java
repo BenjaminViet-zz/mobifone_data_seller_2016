@@ -26,6 +26,6 @@ public class PermissionManagementSessionBean implements PermissionManagementLoca
 
     @Override
     public List<PermissionDTO> findAll() {
-        return PermissionBeanUtil.entityList2DTOList(this.permissionService.findAll());
+        return PermissionBeanUtil.entityList2DTOList(this.permissionService.findAllAndSort());
     }
 }

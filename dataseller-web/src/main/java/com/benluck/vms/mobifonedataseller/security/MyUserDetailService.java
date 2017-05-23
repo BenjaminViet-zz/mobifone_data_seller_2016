@@ -5,6 +5,7 @@ import com.benluck.vms.mobifonedataseller.common.utils.Config;
 import com.benluck.vms.mobifonedataseller.core.business.NotificationManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserGroupManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.business.UserManagementLocalBean;
+import com.benluck.vms.mobifonedataseller.core.business.UserTypeManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.*;
 import com.benluck.vms.mobifonedataseller.security.util.MyUserDetail;
 import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
@@ -39,6 +40,7 @@ public class MyUserDetailService implements UserDetailsService {
     protected UserCache userCache = null;
     private LdapUserLookup ldapUserLookup;
     private UserGroupManagementLocalBean userGroupService;
+    private UserTypeManagementLocalBean userTypeService;
     private NotificationManagementLocalBean notificationService;
     private UserManagementLocalBean userService;
 
@@ -56,6 +58,10 @@ public class MyUserDetailService implements UserDetailsService {
 
     public void setNotificationService(NotificationManagementLocalBean notificationService) {
         this.notificationService = notificationService;
+    }
+
+    public void setUserTypeService(UserTypeManagementLocalBean userTypeService) {
+        this.userTypeService = userTypeService;
     }
 
     /**
@@ -123,7 +129,11 @@ public class MyUserDetailService implements UserDetailsService {
                         account.setStatus(Constants.USER_ACTIVE);
                         account.setLDAP(Constants.USER_LDAP);
                         account.setDisplayName(userDTO.getDisplayName());
-                        account = userService.updateItem(account, false);
+
+                        UserTypeDTO userTypeDTO = account.getUserType();
+
+                        account = userService.updateItem(account);
+                        account.setUserType(userTypeDTO);
                     }else{
                         account = new UserDTO();
                         account.setUserName(username);
@@ -132,9 +142,13 @@ public class MyUserDetailService implements UserDetailsService {
                         account.setStatus(Constants.USER_ACTIVE);
                         account.setLDAP(Constants.USER_LDAP);
                         account.setDisplayName(userDTO.getDisplayName());
-                        UserGroupDTO userGroupDTO = this.userGroupService.findByCode(Constants.USERGROUP_VMS_USER);
-                        account.setUserGroup(userGroupDTO);
+
+                        UserTypeDTO userTypeDTO = this.userTypeService.findByCode(Constants.USER_TYPE_VMS_USER);
+                        account.setUserType(userTypeDTO);
+
                         account = userService.addItem(account);
+
+                        account.setUserType(userTypeDTO);
                     }
                     // cheat for check login with DAP
                     account.setPassword(password);
@@ -157,17 +171,10 @@ public class MyUserDetailService implements UserDetailsService {
             log.error("Could not load user info for login with username:" + username);
             throw new UsernameNotFoundException("UserProcessingFilter.usernameNotFound:" + username);
         }else{
-            if(account.getUserGroup().getCode() != null){
-                if(!account.getUserGroup().getCode().equals(Constants.ADMIN_ROLE)){
-                    permissionDTOList = userService.loadPermissionsByUserId(account.getUserId());
+            permissionDTOList = userService.loadPermissionsByUserId(account.getUserId());
 
-                    if(permissionDTOList.size() == 0){
-                        log.error("User " + account.getUserName() + " did not grant to any permission");
-                    }
-
-                }else {
-                    permissionDTOList = new ArrayList<PermissionDTO>();
-                }
+            if(permissionDTOList.size() == 0){
+                log.error("User " + account.getUserName() + " did not grant to any permission");
             }
         }
 
@@ -191,19 +198,10 @@ public class MyUserDetailService implements UserDetailsService {
 
         //this line of code is used to check whether the user has login or not
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(account.getUserType().getCode()));
+
         for(PermissionDTO roleDTO : permissionDTOList) {
             authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
-
-            if(StringUtils.isNotBlank(account.getUserGroup().getCode())
-                    &&!account.getUserGroup().getCode().equals(Constants.USERGROUP_ADMIN)
-                    && !account.getUserGroup().getCode().equals(Constants.USERGROUP_VMS_USER)
-                    && !account.getUserGroup().getCode().equals(Constants.USERGROUP_KHDN)){
-                authorities.add(new SimpleGrantedAuthority(Constants.USERGROUP_CUSTOM_USER));
-            }
-        }
-
-        if(account != null && account.getUserGroup() != null) {
-            authorities.add(new SimpleGrantedAuthority(account.getUserGroup().getCode()));
         }
 
         authorities.add(new SimpleGrantedAuthority(Constants.LOGON_ROLE));
