@@ -47,6 +47,20 @@
         </div>
     </div>
 </c:if>
+<security:authorize access="hasAuthority('NOT_GRANTTED_USER')">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="alert alert-danger no-bottom">
+                            <fmt:message key="user.not_grantted" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</security:authorize>
 
 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="listForm" action="${formUrl}" method="post" autocomplete="off" name="listForm">
     <div class="row">

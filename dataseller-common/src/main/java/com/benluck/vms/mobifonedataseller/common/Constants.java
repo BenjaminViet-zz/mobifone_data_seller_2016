@@ -138,6 +138,8 @@ public class Constants {
     public static final String USER_TYPE_VMS_USER = "VMS_USER";
     public static final String USER_TYPE_KHDN = "KHDN";
 
+    public static final String NOT_GRANTTED_USER = "NOT_GRANTTED_USER";
+
     public static final String USERGROUP_ADMIN = "ADMIN";
     public static final String USERGROUP_KHDN = "KHDN";
     public static final String USERGROUP_VMS_USER = "VMS_USER";

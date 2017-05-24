@@ -17,19 +17,25 @@ import java.util.List;
  */
 public class UserGroupBeanUtil {
     public static UserGroupDTO entity2DTO(UserGroupEntity entity){
-        UserGroupDTO dto = new UserGroupDTO();
-        dto.setUserGroupId(entity.getUserGroupId());
-        dto.setCode(entity.getCode());
-        dto.setDescription(entity.getDescription());
-        dto.setUserGroupPermissionList(UserGroupPermissionBeanUtil.entityList2DTOList(entity.getUserGroupPermissionList()));
-        return dto;
+        if (entity != null){
+            UserGroupDTO dto = new UserGroupDTO();
+            dto.setUserGroupId(entity.getUserGroupId());
+            dto.setCode(entity.getCode());
+            dto.setDescription(entity.getDescription());
+            dto.setUserGroupPermissionList(UserGroupPermissionBeanUtil.entityList2DTOList(entity.getUserGroupPermissionList()));
+            return dto;
+        }
+        return null;
     }
 
     public static List<UserGroupDTO> entityList2DTOList(List<UserGroupEntity> entityList){
-        List<UserGroupDTO> dtoList = new ArrayList<UserGroupDTO>();
-        for (UserGroupEntity entity : entityList){
-            dtoList.add(UserGroupBeanUtil.entity2DTO(entity));
+        if (entityList != null){
+            List<UserGroupDTO> dtoList = new ArrayList<UserGroupDTO>();
+            for (UserGroupEntity entity : entityList){
+                dtoList.add(UserGroupBeanUtil.entity2DTO(entity));
+            }
+            return dtoList;
         }
-        return dtoList;
+        return null;
     }
 }

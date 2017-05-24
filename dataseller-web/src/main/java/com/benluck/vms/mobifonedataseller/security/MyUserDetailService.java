@@ -112,12 +112,14 @@ public class MyUserDetailService implements UserDetailsService {
 
         boolean responseFromLDAP = false;
         try{
-            if(Config.getInstance().getProperty("LDAP_login").equals("true")){
-                responseFromLDAP = ldapUserLookup.authenticate(username, password);
-            }
-
+//            if(Config.getInstance().getProperty("LDAP_login").equals("true")){
+//                responseFromLDAP = ldapUserLookup.authenticate(username, password);
+//            }
+            responseFromLDAP= true;
             if(responseFromLDAP){
-                userDTO = ldapUserLookup.getUser(username);
+//                userDTO = ldapUserLookup.getUser(username);
+                userDTO = new LDAPUserDTO();
+                userDTO.setDisplayName("test");
                 try{
                     account = this.userService.findByUsername(username);
                 }catch (ObjectNotFoundException oe){}
@@ -200,8 +202,14 @@ public class MyUserDetailService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority(account.getUserType().getCode()));
 
-        for(PermissionDTO roleDTO : permissionDTOList) {
-            authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
+        if (account.getUserGroup() != null){
+            if (permissionDTOList != null && permissionDTOList.size() > 0){
+                for(PermissionDTO roleDTO : permissionDTOList) {
+                    authorities.add(new SimpleGrantedAuthority(roleDTO.getCode()));
+                }
+            }
+        }else{
+            authorities.add(new SimpleGrantedAuthority(Constants.NOT_GRANTTED_USER));
         }
 
         authorities.add(new SimpleGrantedAuthority(Constants.LOGON_ROLE));

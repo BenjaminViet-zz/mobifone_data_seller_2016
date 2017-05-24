@@ -25,6 +25,7 @@
         <intercept-url pattern="/admin/**" access="hasAuthority('ADMIN')" />
         <intercept-url pattern="/user/**" access="hasAuthority('VMS_USER')" />
         <intercept-url pattern="/khdn/**" access="hasAuthority('KHDN')" />
+        <intercept-url pattern="/notgrantted_user/**" access="hasAuthority('LOGON')" />
         <intercept-url pattern="/notsupport_user/**" access="hasAuthority('LOGON')" />
         <intercept-url pattern="/login*" access="hasAnyAuthority('LOGON', 'ADMIN')" />
 

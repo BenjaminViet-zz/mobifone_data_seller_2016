@@ -149,7 +149,7 @@
                                             <fmt:message key="user.label.usergroup" />
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="nohtml form-control" cssStyle="width: 250px;">
+                                            <form:select id="userGroup" path="pojo.userGroup.userGroupId" cssClass="required nohtml form-control" cssStyle="width: 250px;">
                                                 <form:option value=""><fmt:message key="label.select" /></form:option>
                                                 <c:forEach items="${userGroups}" var="userGroup">
                                                     <option <c:if test="${userGroup.userGroupId eq item.pojo.userGroup.userGroupId}">selected="true"</c:if> value="${userGroup.userGroupId}">${userGroup.description}</option>

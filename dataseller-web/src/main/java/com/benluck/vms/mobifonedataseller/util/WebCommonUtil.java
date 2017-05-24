@@ -94,13 +94,16 @@ public class WebCommonUtil {
     }
 
     public static String getPrefixUrl(){
-        if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_ADMIN)){
+        if (SecurityUtils.userHasAuthority(Constants.NOT_GRANTTED_USER)){
+            return "/notgrantted_user";
+        }else if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_ADMIN)){
             return "/admin";
         }else if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_VMS_USER)){
             return "/user";
         }else if (SecurityUtils.userHasAuthority(Constants.USER_TYPE_KHDN)){
             return "/khdn";
         }
+
         return "/notsupport_user";
     }
 }

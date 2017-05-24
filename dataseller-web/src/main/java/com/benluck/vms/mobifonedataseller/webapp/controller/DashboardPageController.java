@@ -35,7 +35,7 @@ public class DashboardPageController extends ApplicationObjectSupport{
     @Autowired
     private NotificationManagementLocalBean notificationService;
 
-    @RequestMapping(value = {"/admin/notification.html", "/user/notification.html", "/khdn/notification.html", "/notsupport_user/notification.html"})
+    @RequestMapping(value = {"/admin/notification.html", "/user/notification.html", "/khdn/notification.html", "/notgrantted_user/notification.html", "/notsupport_user/notification.html"})
     public ModelAndView checkLogin(@ModelAttribute(Constants.FORM_MODEL_KEY)NotificationCommand command,
                                    HttpServletRequest request){
         ModelAndView mav = new ModelAndView("/admin/notification/dashboard");

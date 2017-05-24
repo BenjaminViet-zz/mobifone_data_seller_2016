@@ -104,11 +104,13 @@ public class UserManagementSessionBean implements UserManagementLocalBean{
         userTypeEntity.setUserTypeId(dto.getUserType().getUserTypeId());
         entity.setUserType(userTypeEntity);
 
-        UserGroupEntity userGroupEntity = new UserGroupEntity();
-        userGroupEntity.setUserGroupId(dto.getUserGroup().getUserGroupId());
-        userGroupEntity.setCode(dto.getUserGroup().getCode());
+        if (dto.getUserGroup() != null && dto.getUserGroup().getUserGroupId() != null){
+            UserGroupEntity userGroupEntity = new UserGroupEntity();
+            userGroupEntity.setUserGroupId(dto.getUserGroup().getUserGroupId());
+            userGroupEntity.setCode(dto.getUserGroup().getCode());
 
-        entity.setUserGroup(userGroupEntity);
+            entity.setUserGroup(userGroupEntity);
+        }
         return UserBeanUtil.entity2DTO(this.userService.save(entity));
     }
 
