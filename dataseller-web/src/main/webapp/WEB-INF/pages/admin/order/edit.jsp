@@ -72,7 +72,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required" onchange="javascript: updateTotalPaidPackageRemainingValue();">
+                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required">
                                 <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
                                     <option data-isdn="${KHDN.stb_vas}" <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
@@ -232,7 +232,7 @@
             data: params,
             success: function(r){
                 totalRemainingPaidPackageValue = r.value;
-                checkOrderCost();
+//                checkOrderCost();
             }
         });
     }
@@ -278,17 +278,17 @@
 
         $quantity.blur(function(){
             $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
-            checkOrderCost();
+//            checkOrderCost();
         });
 
         $quantity.keyup(function() {
             $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
-            checkOrderCost();
+//            checkOrderCost();
         });
 
         $unitPrice.keyup(function() {
             $calcOrderTotal.val( numberWithCommas( $quantity.val().replace(/\,/g, '')*1 * $unitPrice.val().replace(/\,/g, '')*1 )  );
-            checkOrderCost();
+//            checkOrderCost();
         });
 
         $packageDataMenu.on('change', function(){
