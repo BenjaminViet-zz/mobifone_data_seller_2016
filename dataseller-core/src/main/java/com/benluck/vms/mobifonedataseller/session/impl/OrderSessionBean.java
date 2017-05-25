@@ -1,5 +1,6 @@
 package com.benluck.vms.mobifonedataseller.session.impl;
 
+import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.domain.OrderEntity;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
 
@@ -29,5 +30,20 @@ public class OrderSessionBean extends AbstractSessionBean<OrderEntity, Long> imp
                 .setParameter("orderId", orderId)
                 .setParameter("shopCode", shopCode)
                 .getSingleResult();
+    }
+
+    @Override
+    public List<OrderEntity> findListByKHDNIdInWaitingStatus(Long khdnId) {
+        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity WHERE khdn.KHDNId = :khdnId AND orderStatus = :waitingStatus ORDER BY orderId ASC")
+                .setParameter("khdnId", khdnId)
+                .setParameter("waitingStatus", Constants.ORDER_STATUS_WAITING)
+                .getResultList();
+    }
+
+    @Override
+    public List<OrderEntity> findAllInWaitingStatus() {
+        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity WHERE orderStatus = :waitingStatus ORDER BY orderId ASC")
+                .setParameter("waitingStatus", Constants.ORDER_STATUS_WAITING)
+                .getResultList();
     }
 }

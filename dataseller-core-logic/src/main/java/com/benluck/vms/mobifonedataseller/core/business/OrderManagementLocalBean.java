@@ -55,4 +55,8 @@ public interface OrderManagementLocalBean {
     List<OrderDTO> fetchAllOrderList4KHDNByShopCode(String shopCode);
 
     OrderDTO findByIdAndShopCode(Long orderId, String shopCode);
+
+    List<OrderDTO> findListByKHDNIdInWaitingStatus(Long khdnId);
+
+    List<OrderDTO> findAllInWaitingStatus();
 }

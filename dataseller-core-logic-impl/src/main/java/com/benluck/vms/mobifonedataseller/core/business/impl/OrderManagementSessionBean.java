@@ -340,4 +340,14 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     public OrderDTO findByIdAndShopCode(Long orderId, String shopCode) {
         return OrderBeanUtil.entity2DTO(this.orderService.findByIdAndShopCode(orderId, shopCode));
     }
+
+    @Override
+    public List<OrderDTO> findListByKHDNIdInWaitingStatus(Long khdnId) {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.findListByKHDNIdInWaitingStatus(khdnId));
+    }
+
+    @Override
+    public List<OrderDTO> findAllInWaitingStatus() {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.findAllInWaitingStatus());
+    }
 }

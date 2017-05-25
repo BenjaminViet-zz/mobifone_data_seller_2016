@@ -77,7 +77,7 @@
                         <li><a><i class="fa fa-money" aria-hidden="true"></i> <fmt:message key="cost.manager" /> <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <security:authorize access="hasAuthority('PAYMENT_MANAGER')">
-                                    <li><a href="<c:url value="${prefix}/payment-history.html"/> "><fmt:message key="left_nav_payment_history" /> </a></li>
+                                    <li><a href="<c:url value="${prefix}/payment/list.html"/> "><fmt:message key="left_nav_payment_history" /> </a></li>
                                 </security:authorize>
                                 <security:authorize access="hasAuthority('EXPENSE_MANAGER')">
                                     <li><a href="<c:url value="${prefix}/expense-payment-management.html"/> "><fmt:message key="left_nav_payment_fee" /> </a></li>

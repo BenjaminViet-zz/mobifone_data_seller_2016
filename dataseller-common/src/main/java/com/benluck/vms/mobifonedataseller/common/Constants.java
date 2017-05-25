@@ -242,4 +242,12 @@ public class Constants {
     public static final Integer IMPORT_CARD_CODE_STEP_1_CHOOSE_FILE = 0;
     public static final Integer IMPORT_CARD_CODE_STEP_2_UPLOAD = 1;
     public static final String IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY = "IMPORT_USED_CARD_CODE_SESSION_CACHE_KEY";
+
+    // PAYMENT CONSTANTS
+    public static final Integer PAYMENT_STATUS_CREATED = 0;
+    public static final Integer PAYMENT_STATUS_PAID = 1;
+
+    // PAYMENT HISTORY CONTANTS
+    public static final Integer PAYMENT_HIS_UPDATE_INFO = 0;
+    public static final Integer PAYMENT_HIS_UPDATE_PAYMENT= 1;
 }

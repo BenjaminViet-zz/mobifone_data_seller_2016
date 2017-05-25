@@ -112,14 +112,11 @@ public class MyUserDetailService implements UserDetailsService {
 
         boolean responseFromLDAP = false;
         try{
-//            if(Config.getInstance().getProperty("LDAP_login").equals("true")){
-//                responseFromLDAP = ldapUserLookup.authenticate(username, password);
-//            }
-            responseFromLDAP= true;
+            if(Config.getInstance().getProperty("LDAP_login").equals("true")){
+                responseFromLDAP = ldapUserLookup.authenticate(username, password);
+            }
             if(responseFromLDAP){
-//                userDTO = ldapUserLookup.getUser(username);
-                userDTO = new LDAPUserDTO();
-                userDTO.setDisplayName("test");
+                userDTO = ldapUserLookup.getUser(username);
                 try{
                     account = this.userService.findByUsername(username);
                 }catch (ObjectNotFoundException oe){}

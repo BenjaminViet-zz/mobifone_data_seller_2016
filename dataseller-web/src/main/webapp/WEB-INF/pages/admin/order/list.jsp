@@ -19,15 +19,13 @@
         <h3><fmt:message key="admin.donhang.label.list" /></h3>
     </div>
 
-    <security:authorize access="hasAnyAuthority('ADMIN', 'VMS_USER', 'ORDER_MANAGER')">
-        <c:if test="${not empty hasImportedUsedCardCode && hasImportedUsedCardCode}">
-            <div class="title_right">
-                <div class="action-bar">
-                    <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="admin.donhang.label.new_order"/></a>
-                </div>
+    <c:if test="${not empty hasImportedUsedCardCode && hasImportedUsedCardCode}">
+        <div class="title_right">
+            <div class="action-bar">
+                <a class="btn btn-primary" href="${editUrl}"><i class="fa fa-plus" aria-hidden="true"></i> <fmt:message key="admin.donhang.label.new_order"/></a>
             </div>
-        </c:if>
-    </security:authorize>
+        </div>
+    </c:if>
 </div>
 <div class="clearfix"></div>
 <c:if test ="${not empty messageResponse}">
@@ -129,6 +127,9 @@
                                            id="tableList" pagesize="${items.maxPageItems}" export="false"
                                            class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width : 1700px;">
                                 <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center"><div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
+                                <display:column headerClass="table_header text-center" titleKey="admin.donhang.label.orderId">
+                                    ${tableList.orderId}
+                                </display:column>
                                 <display:column headerClass="table_header text-center" sortName="khdn.name" sortable="true" titleKey="admin.donhang.label.DN">
                                     <div style="width: 250px;">${tableList.khdn.name}</div>
                                 </display:column>
@@ -142,7 +143,7 @@
                                 </display:column>
                                 <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="unitPrice" titleKey="admin.donhang.label.UnitPrice">
                                     <div style="width: 150px;">
-                                        <fmt:formatNumber type="number" value="${tableList.unitPrice}" />
+                                        <fmt:formatNumber type="number" maxFractionDigits="2" value="${tableList.unitPrice}" />
                                     </div>
                                 </display:column>
                                 <display:column headerClass="table_header text-center" sortable="true" class="text-center" sortName="issuedDate" titleKey="admin.donhang.label.issueDate">

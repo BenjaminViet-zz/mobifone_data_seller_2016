@@ -19,6 +19,8 @@
         <class>com.benluck.vms.mobifonedataseller.domain.MBDCostEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.NotificationEntity</class>
         <class>com.benluck.vms.mobifonedataseller.domain.UsedCardCodeEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.PaymentEntity</class>
+        <class>com.benluck.vms.mobifonedataseller.domain.PaymentHistoryEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

@@ -32,9 +32,7 @@ import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -385,5 +383,18 @@ public class OrderController extends ApplicationObjectSupport{
         if(command.getShippingDate() != null){
             command.getPojo().setShippingDate(DateUtil.dateToTimestamp(command.getShippingDate(), Constants.VI_DATE_FORMAT));
         }
+    }
+
+    @RequestMapping(value = "/ajax/order/getListByKHDNid.html")
+    public @ResponseBody Map getListOrderByKHDNid(@RequestParam(value = "khdnId", required = false) Long khdnId){
+        Map<String, Object> mapRes = new HashMap<String, Object>();
+
+        if (khdnId != null){
+            mapRes.put("orderList", this.orderService.findListByKHDNIdInWaitingStatus(khdnId));
+        }else{
+            mapRes.put("orderList", this.orderService.findAllInWaitingStatus());
+        }
+
+        return mapRes;
     }
 }
