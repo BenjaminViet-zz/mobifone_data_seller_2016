@@ -146,7 +146,7 @@ public class OrderDTO implements Serializable{
     }
 
     public void setTotal(Double total) {
-        this.total = total;
+        this.total = quantity.intValue() * unitPrice.doubleValue();
     }
 
     public List<String> getDataCodes2Render() {

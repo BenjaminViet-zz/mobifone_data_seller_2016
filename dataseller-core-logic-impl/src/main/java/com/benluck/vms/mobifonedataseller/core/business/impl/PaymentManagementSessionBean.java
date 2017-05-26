@@ -69,7 +69,8 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
         entity.setKhdn(khdnEntity);
         entity.setOrder(orderEntity);
         entity.setCreatedBy(createdBy);
-        entity.setStatus(pojo.getStatus());
+        entity.setStatus(Constants.PAYMENT_STATUS_CREATED);
+
         entity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
         entity = this.paymentService.save(entity);
 
@@ -87,6 +88,7 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
 
         PaymentHistoryEntity entity = new PaymentHistoryEntity();
         entity.setPayment(paymentEntity);
+        entity.setPaymentDate(pojo.getPaymentDate());
         entity.setAmount(pojo.getAmount());
         entity.setCreatedBy(createdBy);
 
@@ -122,11 +124,14 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
     @Override
     public void updateItem(PaymentDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
         PaymentEntity paymentEntity = this.paymentService.findById(pojo.getPaymentId());
-        createHistory(paymentEntity, pojo);
 
-        if (checkPaidFull(paymentEntity)){
-            paymentEntity.setStatus(Constants.PAYMENT_STATUS_PAID);
-            this.paymentService.update(paymentEntity);
+        if ((pojo.getAmount() != null && pojo.getAmount().compareTo(0D) > 0) || (pojo.getPaymentDate() != null)){
+            createHistory(paymentEntity, pojo);
+
+            if (checkPaidFull(paymentEntity)){
+                paymentEntity.setStatus(Constants.PAYMENT_STATUS_PAID);
+                this.paymentService.update(paymentEntity);
+            }
         }
     }
 }

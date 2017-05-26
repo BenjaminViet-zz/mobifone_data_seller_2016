@@ -389,10 +389,16 @@ public class OrderController extends ApplicationObjectSupport{
     public @ResponseBody Map getListOrderByKHDNid(@RequestParam(value = "khdnId", required = false) Long khdnId){
         Map<String, Object> mapRes = new HashMap<String, Object>();
 
-        if (khdnId != null){
-            mapRes.put("orderList", this.orderService.findListByKHDNIdInWaitingStatus(khdnId));
-        }else{
-            mapRes.put("orderList", this.orderService.findAllInWaitingStatus());
+        try{
+            if (khdnId != null){
+                mapRes.put("orderList", this.orderService.findListByKHDNIdInWaitingStatus(khdnId));
+                mapRes.put("res", true);
+            }else{
+                mapRes.put("orderList", this.orderService.findAllInWaitingStatus());
+                mapRes.put("res", true);
+            }
+        }catch (Exception e){
+            mapRes.put("res", false);
         }
 
         return mapRes;

@@ -4,6 +4,7 @@ import com.benluck.vms.mobifonedataseller.core.dto.PaymentDTO;
 import com.benluck.vms.mobifonedataseller.domain.PaymentEntity;
 import com.benluck.vms.mobifonedataseller.domain.PaymentHistoryEntity;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class PaymentBeanUtil {
             dto.setCreatedDate(entity.getCreatedDate());
             dto.setStatus(entity.getStatus());
 
+            dto.setOrderTotal(dto.getOrder().getQuantity().intValue() * dto.getOrder().getUnitPrice().doubleValue());
+
             PaymentHistoryEntity lastPaymentHistory = null;
             if (entity.getPaymentHistoryList() != null && entity.getPaymentHistoryList().size() > 0){
                 Double paidAmount = 0D;
@@ -39,7 +42,13 @@ public class PaymentBeanUtil {
             }
 
             if (lastPaymentHistory != null){
-                dto.setPaymentDate(lastPaymentHistory.getCreatedDate());
+                dto.setPaymentDate(new Date(lastPaymentHistory.getCreatedDate().getTime()));
+            }
+
+            if (dto.getTotalPaidAmount().compareTo(0D) > 0){
+                dto.setRemainingAmount(dto.getOrderTotal() - dto.getTotalPaidAmount().doubleValue());
+            }else{
+                dto.setRemainingAmount(dto.getOrderTotal().doubleValue());
             }
 
             return dto;

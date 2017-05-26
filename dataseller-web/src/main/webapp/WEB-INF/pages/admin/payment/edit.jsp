@@ -43,57 +43,164 @@
     </c:if>
 </div>
 
+<c:set var="hasPermissio4PaymentStatusManager" value="${false}" />
+<security:authorize access="hasAuthority('PAYMENT_STATUS_MANAGER')">
+    <c:set var="hasPermissio4PaymentStatusManager" value="${true}" />
+</security:authorize>
+
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_content">
                 <form:form commandName="item" cssClass="form-horizontal form-label-left" id="formEdit" action="${formUrl}" method="post" validate="validate">
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="khdnMenu"><fmt:message key="payment.management.label.khdn" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="khdnMenu" path="pojo.khdn.KHDNId" cssClass="form-control required" onchange="javascript: reloadOrderListByChangeKHDNId();">
-                                <option value="-1"><fmt:message key="label.choose" /></option>
-                                <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
-                                </c:forEach>
-                            </form:select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.order" />
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="orderMenu" path="pojo.order.orderId" cssClass="form-control nohtml required">
-                                <option value="-1"><fmt:message key="label.choose" /></option>
-                                <c:forEach items="${orderList}" var="order">
-                                </c:forEach>
-                                    <option <c:if test="${item.pojo.order.orderId eq order.orderId}">selected="true"</c:if> value="${order.orderId}">${order.orderId}</option>
-                            </form:select>
-                        </div>
-                    </div>
-
-                    <security:authorize access="hasAuthority('PAYMENT_STATUS_MANAGER')">
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentDate"><fmt:message key="payment.management.label.payment_date" />
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                <div class="input-append date" >
-                                    <input name="paymentDate" id="paymentDate" class="prevent_type text-center form-control" type="text"
-                                           value="<fmt:formatDate pattern="${datePattern}" value="${item.paymentDate}" />" placeholder="${symbolDateEmpty}"/>
-                                    <span class="add-on" id="paymentDateIcon"><i class="icon-calendar"></i></span>
+                    <c:choose>
+                        <c:when test="${not empty item.pojo.paymentId}">
+                            <form:hidden path="pojo.khdn.KHDNId" />
+                            <form:hidden path="pojo.order.orderId" />
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="khdnMenu"><fmt:message key="payment.management.label.khdn" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <span class="form-control" disabled="true">${item.pojo.khdn.name}</span>
                                 </div>
                             </div>
-                        </div>
-                    </security:authorize>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.order" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <span class="form-control" disabled="true">${item.pojo.order.orderId}</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.order_amount" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <span class="form-control" disabled="true"><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.orderTotal}" /></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.totalPaidAmount" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <span class="form-control" disabled="true"><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.totalPaidAmount}" /></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.remainingAmount" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <span class="form-control" disabled="true"><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.remainingAmount}" /></span>
+                                </div>
+                            </div>
+
+                            <c:if test="${hasPermissio4PaymentStatusManager}">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount"><fmt:message key="payment.management.label.amount" />
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <form:input id="amount" path="pojo.amount" cssClass="nohtml form-control" />
+                                        <form:errors cssClass="error-inline-validate" path="pojo.amount" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentDate"><fmt:message key="payment.management.label.payment_date" />
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="input-append date" >
+                                            <input name="paymentDate" id="paymentDate" class="prevent_type text-center form-control" type="text"
+                                                   value="<fmt:formatDate pattern="${datePattern}" value="${item.paymentDate}" />" placeholder="${symbolDateEmpty}"/>
+                                            <span class="add-on" id="paymentDateIcon"><i class="icon-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="khdnMenu"><fmt:message key="payment.management.label.khdn" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <form:select id="khdnMenu" path="pojo.khdn.KHDNId" cssClass="form-control required" onchange="javascript: reloadOrderListByChangeKHDNId();">
+                                        <option value="-1"><fmt:message key="label.choose" /></option>
+                                        <c:forEach items="${KHDNList}" var="KHDN">
+                                            <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
+                                        </c:forEach>
+                                    </form:select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.order" />
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <form:select id="orderMenu" path="pojo.order.orderId" cssClass="form-control nohtml required">
+                                        <option value="-1"><fmt:message key="label.choose" /></option>
+                                        <c:forEach items="${orderList}" var="order">
+                                            <option <c:if test="${item.pojo.order.orderId eq order.orderId}">selected="true"</c:if> value="${order.orderId}">${order.orderId}</option>
+                                        </c:forEach>
+                                    </form:select>
+                                </div>
+                            </div>
+
+                            <%--<div class="form-group">--%>
+                                <%--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="orderMenu"><fmt:message key="payment.management.label.order_amount" />--%>
+                                <%--</label>--%>
+                                <%--<div class="col-md-6 col-sm-6 col-xs-12">--%>
+                                    <%--<span class="form-control" disabled="true"><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.orderTotal}" /></span>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+
+                            <c:if test="${hasPermissio4PaymentStatusManager}">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="amount"><fmt:message key="payment.management.label.amount" />
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <form:input id="amount" path="pojo.amount" cssClass="nohtml form-control" />
+                                        <form:errors cssClass="error-inline-validate" path="pojo.amount" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paymentDate"><fmt:message key="payment.management.label.payment_date" />
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div class="input-append date" >
+                                            <input name="paymentDate" id="paymentDate" class="prevent_type text-center form-control" type="text"
+                                                   value="<fmt:formatDate pattern="${datePattern}" value="${item.paymentDate}" />" placeholder="${symbolDateEmpty}"/>
+                                            <span class="add-on" id="paymentDateIcon"><i class="icon-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:otherwise>
+                    </c:choose>
 
                     <div class="form-group last">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <a href="${backUrl}" class="btn btn-success"><i class="fa fa-times" aria-hidden="true"></i> <fmt:message key="label.huy" /></a>&nbsp;
-                            <a id="btnSave" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            <a id="btnSave" <c:if test="${!hasPermissio4PaymentStatusManager}">style="display: none;"</c:if> class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 <c:choose>
-                                    <c:when test="${not empty item.pojo.paymentId}"><fmt:message key="label.update" /></c:when>
-                                    <c:otherwise><fmt:message key="label.save" /></c:otherwise>
+                                    <c:when test="${not empty item.pojo.paymentId}">
+                                        <c:choose>
+                                            <c:when test="${hasPermissio4PaymentStatusManager}">
+                                                <fmt:message key="payment.management.label.save_and_update_payment" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:message key="label.update" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${hasPermissio4PaymentStatusManager}">
+                                                <fmt:message key="payment.management.label.save_payment" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:message key="label.save" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:otherwise>
                                 </c:choose>
                             </a>
                         </div>
@@ -105,6 +212,12 @@
         </div>
     </div>
 </div>
+<fmt:message var="message" key="payment.management.msg.payment_amount_must_be_less_than_or_equal_to_remaining_amount">
+    <fmt:param>
+        <fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.remainingAmount}" />
+    </fmt:param>
+</fmt:message>
+
 
 <script type="text/javascript">
     var $amount = $('#amount'),
@@ -114,20 +227,46 @@
         $btnSave = $('#btnSave');
 
     $(document).ready(function(){
+        initDatePicker();
         bindMask();
         bindEvents();
     });
 
     function bindEvents(){
         $btnSave.click(function(e){
-            $form.submit();
+            if(checkAmountBeforeSubmit()){
+                $form.submit();
+            }
         });
     }
 
+    function checkAmountBeforeSubmit(){
+        <c:choose>
+            <c:when test="${not empty item.pojo.paymentId}">
+                if($amount.length){
+                    var amount = eval($amount.val().replace(/\,/g, ''));
+                    var remainingAmount = eval('<fmt:formatNumber type="number" maxFractionDigits="2" value="${item.pojo.remainingAmount}" />'.replace(/\,/g, ''));
+
+                    if(amount > remainingAmount){
+                        bootbox.alert('<fmt:message key="label.alert_title" />', '${message}', function(){});
+                        return false;
+                    }
+                }
+            </c:when>
+            <c:otherwise>
+
+            </c:otherwise>
+        </c:choose>
+
+        return true;
+    }
+
     function bindMask(){
-        $amount.mask('000,000,000,000,000,000', {
-            reverse: true
-        });
+        if($amount.length){
+            $amount.mask('000,000,000,000,000,000', {
+                reverse: true
+            });
+        }
     }
 
     function reloadOrderListByChangeKHDNId(){

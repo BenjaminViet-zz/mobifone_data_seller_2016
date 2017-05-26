@@ -1,6 +1,7 @@
 package com.benluck.vms.mobifonedataseller.core.dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -17,12 +18,14 @@ public class PaymentDTO implements Serializable{
     private Long paymentId;
     private KHDNDTO khdn;
     private OrderDTO order;
-    private Timestamp paymentDate;
+    private Date paymentDate;
     private Integer status;
     private Timestamp createdDate;
     private UserDTO createdBy;
     private List<PaymentHistoryDTO> paymentHistoryList;
+    private Double orderTotal;
     private Double totalPaidAmount = 0D;
+    private Double remainingAmount = 0D;
     private Double amount;
 
     public Long getPaymentId() {
@@ -49,11 +52,11 @@ public class PaymentDTO implements Serializable{
         this.order = order;
     }
 
-    public Timestamp getPaymentDate() {
+    public Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Timestamp paymentDate) {
+    public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
     }
 
@@ -103,5 +106,21 @@ public class PaymentDTO implements Serializable{
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public Double getRemainingAmount() {
+        return remainingAmount;
+    }
+
+    public void setRemainingAmount(Double remainingAmount) {
+        this.remainingAmount = remainingAmount;
+    }
+
+    public Double getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(Double orderTotal) {
+        this.orderTotal = orderTotal;
     }
 }

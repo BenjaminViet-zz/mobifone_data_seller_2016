@@ -6,6 +6,8 @@ import com.benluck.vms.mobifonedataseller.core.business.OrderManagementLocalBean
 import com.benluck.vms.mobifonedataseller.core.business.PaymentManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PaymentDTO;
 import com.benluck.vms.mobifonedataseller.core.dto.UserDTO;
+import com.benluck.vms.mobifonedataseller.editor.CustomCurrencyFormatEditor;
+import com.benluck.vms.mobifonedataseller.editor.CustomDateEditor;
 import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.util.RequestUtil;
 import com.benluck.vms.mobifonedataseller.util.WebCommonUtil;
@@ -18,12 +20,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +53,13 @@ public class PaymentController extends ApplicationObjectSupport{
     private OrderManagementLocalBean orderService;
     @Autowired
     private PaymentValidator validator;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new CustomDateEditor("dd/MM/yyyy"));
+        binder.registerCustomEditor(Double.class, new CustomCurrencyFormatEditor());
+        binder.registerCustomEditor(Integer.class, new CustomCurrencyFormatEditor());
+    }
 
     @RequestMapping(value = {"/admin/payment/list.html", "/user/payment/list.html", "/khdn/payment/list.html"})
     public ModelAndView list(@ModelAttribute(Constants.FORM_MODEL_KEY)PaymentCommand command,
@@ -120,6 +133,12 @@ public class PaymentController extends ApplicationObjectSupport{
         }
     }
 
+    private void convertDate2DateSQL(PaymentCommand command){
+        if (command.getPaymentDate() != null){
+            command.getPojo().setPaymentDate(new java.sql.Date(command.getPaymentDate().getTime()));
+        }
+    }
+
     @RequestMapping(value = {"/admin/payment/add.html", "/admin/payment/edit.html",
                             "/user/payment/add.html", "/user/payment/edit.html",
                             "/khdn/payment/add.html", "/khdn/payment/edit.html"})
@@ -138,8 +157,9 @@ public class PaymentController extends ApplicationObjectSupport{
         try{
             if (StringUtils.isNotBlank(crudaction)){
                 if (crudaction.equals("insert-update")){
+                    convertDate2DateSQL(command);
                     validator.validate(command, bindingResult);
-                    if (!bindingResult.hasErrors() && StringUtils.isNotBlank(command.getErrorMessage())){
+                    if (!bindingResult.hasErrors() && StringUtils.isBlank(command.getErrorMessage())){
                         UserDTO createdBy = new UserDTO();
                         createdBy.setUserId(SecurityUtils.getLoginUserId());
                         pojo.setCreatedBy(createdBy);
@@ -148,19 +168,23 @@ public class PaymentController extends ApplicationObjectSupport{
                             this.paymentService.updateItem(pojo);
 
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "info");
-                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
+                            redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                         }else{
                             this.paymentService.addItem(pojo);
                             redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "info");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                         }
 
-                        return new ModelAndView(new StringBuilder("redirect:/").append(WebCommonUtil.getPrefixUrl()).append("/payment/list.html").toString());
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/payment/list.html").toString());
                     }else if (StringUtils.isNotBlank(command.getErrorMessage())){
                         mav.addObject(Constants.ALERT_TYPE, "danger");
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
                 }
+            }
+
+            if (command.getPojo().getPaymentId() != null){
+                command.setPojo(this.paymentService.findById(command.getPojo().getPaymentId()));
             }
         }catch (Exception e){
             logger.error(e.getMessage());

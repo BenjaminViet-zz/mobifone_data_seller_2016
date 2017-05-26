@@ -34,16 +34,16 @@ public class OrderSessionBean extends AbstractSessionBean<OrderEntity, Long> imp
 
     @Override
     public List<OrderEntity> findListByKHDNIdInWaitingStatus(Long khdnId) {
-        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity WHERE khdn.KHDNId = :khdnId AND orderStatus = :waitingStatus ORDER BY orderId ASC")
+        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity p WHERE p.khdn.KHDNId = :khdnId AND p.orderStatus = :finishedStatus AND NOT EXISTS (SELECT 1 FROM PaymentEntity pa WHERE pa.order.orderId = p.orderId) ORDER BY orderId ASC")
                 .setParameter("khdnId", khdnId)
-                .setParameter("waitingStatus", Constants.ORDER_STATUS_WAITING)
+                .setParameter("finishedStatus", Constants.ORDER_STATUS_FINISH)
                 .getResultList();
     }
 
     @Override
     public List<OrderEntity> findAllInWaitingStatus() {
-        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity WHERE orderStatus = :waitingStatus ORDER BY orderId ASC")
-                .setParameter("waitingStatus", Constants.ORDER_STATUS_WAITING)
+        return (List<OrderEntity>)entityManager.createQuery("FROM OrderEntity p WHERE p.orderStatus = :finishedStatus AND NOT EXISTS (SELECT 1 FROM PaymentEntity pa WHERE pa.order.orderId = p.orderId) ORDER BY orderId ASC")
+                .setParameter("finishedStatus", Constants.ORDER_STATUS_FINISH)
                 .getResultList();
     }
 }

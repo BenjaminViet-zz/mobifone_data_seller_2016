@@ -73,7 +73,7 @@ public class PaymentValidator extends ApplicationObjectSupport implements Valida
     }
 
     private void checkRequiredFields(PaymentCommand command, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.khdn.khdnId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.khdn.khdnId")}, "non-empty value required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.khdn.KHDNId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.khdn.khdnId")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.order.orderId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.order.orderId")}, "non-empty value required.");
     }
 }

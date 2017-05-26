@@ -128,7 +128,7 @@
                                            class="table table-striped table-bordered" style="margin: 1em 0 1.5em; width : 1700px;">
                                 <display:column headerClass="table_header text-center" titleKey="label.stt" class="text-center"><div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div></display:column>
                                 <display:column headerClass="table_header text-center" titleKey="admin.donhang.label.orderId">
-                                    ${tableList.orderId}
+                                    <div style="width: 100px;">${tableList.orderId}</div>
                                 </display:column>
                                 <display:column headerClass="table_header text-center" sortName="khdn.name" sortable="true" titleKey="admin.donhang.label.DN">
                                     <div style="width: 250px;">${tableList.khdn.name}</div>
