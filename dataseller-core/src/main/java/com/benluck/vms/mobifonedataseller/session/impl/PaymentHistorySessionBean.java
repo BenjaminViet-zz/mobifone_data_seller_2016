@@ -2,8 +2,6 @@ package com.benluck.vms.mobifonedataseller.session.impl;
 
 import com.benluck.vms.mobifonedataseller.domain.PaymentHistoryEntity;
 import com.benluck.vms.mobifonedataseller.session.PaymentHistoryLocalBean;
-import sun.jvm.hotspot.opto.MachIfNode;
-
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import java.util.List;
