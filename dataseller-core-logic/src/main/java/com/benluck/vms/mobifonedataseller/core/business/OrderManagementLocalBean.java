@@ -59,4 +59,10 @@ public interface OrderManagementLocalBean {
     List<OrderDTO> findListByKHDNIdInWaitingStatus(Long khdnId);
 
     List<OrderDTO> findAllInWaitingStatus();
+
+    List<OrderDTO> findAll();
+
+    List<OrderDTO> findAllHasCreatedPayment();
+
+    List<OrderDTO> findListByKHDNIdHasPayment(Long khdnId);
 }

@@ -92,7 +92,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="admin.donhang.label.KHDN" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required" onchange="javascript: updateTotalPaidPackageRemainingValue();">
+                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control required">
                                 <option value="-1"><fmt:message key="label.choose" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
                                     <option data-isdn="${KHDN.stb_vas}" <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
@@ -242,31 +242,6 @@
             $pageMessageTitle.addClass('hide');
         }
     </c:if>
-    }
-
-    function updateTotalPaidPackageRemainingValue(){
-        if($khdnSelectMenu.val() == -1){
-            return;
-        }
-
-        var isdn = $khdnSelectMenu.find('option:selected').data('isdn');
-
-        var orderId = null;
-
-        <c:if test="${not empty item.pojo.orderId}">
-            orderId = ${item.pojo.orderId};
-        </c:if>
-
-        var params = {isdn: isdn, orderId: orderId}
-
-        $.ajax({
-            url: '<c:url value="/ajax/calculateTotalPaidPackageValue.html" />',
-            type: 'get',
-            data: params,
-            success: function(r){
-                totalRemainingPaidPackageValue = r.value;
-            }
-        });
     }
 
     function showLoading(){

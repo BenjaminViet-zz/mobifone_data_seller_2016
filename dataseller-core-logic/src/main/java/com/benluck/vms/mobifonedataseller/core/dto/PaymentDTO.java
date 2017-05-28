@@ -16,14 +16,13 @@ public class PaymentDTO implements Serializable{
     private static final long serialVersionUID = 3182321758436589514L;
 
     private Long paymentId;
-    private KHDNDTO khdn;
     private OrderDTO order;
     private Date paymentDate;
     private Integer status;
     private Timestamp createdDate;
     private UserDTO createdBy;
     private List<PaymentHistoryDTO> paymentHistoryList;
-    private Double orderTotal;
+    private Double orderTotal = 0D;
     private Double totalPaidAmount = 0D;
     private Double remainingAmount = 0D;
     private Double amount;
@@ -34,14 +33,6 @@ public class PaymentDTO implements Serializable{
 
     public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
-    }
-
-    public KHDNDTO getKhdn() {
-        return khdn;
-    }
-
-    public void setKhdn(KHDNDTO khdn) {
-        this.khdn = khdn;
     }
 
     public OrderDTO getOrder() {

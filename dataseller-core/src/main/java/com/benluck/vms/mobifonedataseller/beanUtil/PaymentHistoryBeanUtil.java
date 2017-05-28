@@ -21,12 +21,13 @@ public class PaymentHistoryBeanUtil {
 
             PaymentDTO paymentDTO = new PaymentDTO();
             paymentDTO.setPaymentId(entity.getPayment().getPaymentId());
-            paymentDTO.setKhdn(KHDNBeanUtil.entity2DTO(entity.getPayment().getKhdn()));
             paymentDTO.setOrder(OrderBeanUtil.entity2DTO(entity.getPayment().getOrder()));
             paymentDTO.setCreatedBy(UserBeanUtil.entity2DTO(entity.getCreatedBy()));
             paymentDTO.setCreatedDate(entity.getCreatedDate());
-            paymentDTO.setStatus(entity.getStatus());
+            paymentDTO.setStatus(entity.getPayment().getStatus());
             dto.setPayment(paymentDTO);
+
+            PaymentBeanUtil.updateOrderTotalAndCalculateRemainingAmount(entity.getPayment(), paymentDTO);
 
             dto.setPaymentHistoryId(entity.getPaymentHistoryId());
             dto.setAmount(entity.getAmount());
@@ -34,6 +35,8 @@ public class PaymentHistoryBeanUtil {
             dto.setCreatedBy(UserBeanUtil.entity2DTO(entity.getCreatedBy()));
             dto.setPaymentDate(entity.getPaymentDate());
             dto.setCreatedDate(entity.getCreatedDate());
+            dto.setLastModifiedDate(entity.getLastModifiedDate());
+            dto.setModifiedBy(UserBeanUtil.entity2DTO(entity.getModifiedBy()));
 
             return dto;
         }

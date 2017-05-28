@@ -46,4 +46,14 @@ public class OrderSessionBean extends AbstractSessionBean<OrderEntity, Long> imp
                 .setParameter("finishedStatus", Constants.ORDER_STATUS_FINISH)
                 .getResultList();
     }
+
+    @Override
+    public List<OrderEntity> findAllHasCreatedPayment() {
+        return (List<OrderEntity>)entityManager.createQuery(" FROM OrderEntity o WHERE EXISTS (SELECT 1 FROM PaymentEntity p WHERE p.order.orderId = o.orderId) ORDER BY o.orderId ASC ").getResultList();
+    }
+
+    @Override
+    public List<OrderEntity> findListByKHDNIdHasPayment(Long khdnId) {
+        return (List<OrderEntity>)entityManager.createQuery(" FROM OrderEntity o WHERE o.khdn.KHDNId = :khdnId AND EXISTS (SELECT 1 FROM PaymentEntity p WHERE p.order.orderId = o.orderId) ORDER BY o.orderId ASC ").setParameter("khdnId", khdnId).getResultList();
+    }
 }

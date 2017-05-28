@@ -19,4 +19,8 @@ public interface OrderLocalBean extends GenericSessionBean<OrderEntity, Long>{
     List<OrderEntity> findListByKHDNIdInWaitingStatus(Long khdnId);
 
     List<OrderEntity> findAllInWaitingStatus();
+
+    List<OrderEntity> findAllHasCreatedPayment();
+
+    List<OrderEntity> findListByKHDNIdHasPayment(Long khdnId);
 }

@@ -3,6 +3,7 @@ package com.benluck.vms.mobifonedataseller.webapp.validator;
 import com.benluck.vms.mobifonedataseller.common.Constants;
 import com.benluck.vms.mobifonedataseller.core.business.PaymentManagementLocalBean;
 import com.benluck.vms.mobifonedataseller.core.dto.PaymentDTO;
+import com.benluck.vms.mobifonedataseller.security.util.SecurityUtils;
 import com.benluck.vms.mobifonedataseller.webapp.command.PaymentCommand;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -51,7 +52,21 @@ public class PaymentValidator extends ApplicationObjectSupport implements Valida
                     checkRequiredFields(command, errors);
                 }
             }else if (crudaction.equals(Constants.ACTION_DELETE)){
-                checkPaymentStatus(command);
+                if (!SecurityUtils.userHasAuthority(Constants.PAYMENT_STATUS_MANAGER)){
+                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("payment.management.msg.require_payment_status_manager_permission_to_delete_payment"));
+                }
+            }
+        }else{
+            if (command.getPojo().getPaymentId() != null){
+                try{
+                    PaymentDTO paymentDTO = this.paymentService.findById(command.getPojo().getPaymentId());
+                    if (paymentDTO.getStatus().equals(Constants.PAYMENT_STATUS_PAID)){
+                        command.setErrorMessage(this.getMessageSourceAccessor().getMessage("payment_history.management.edit_page.msg.can_not_update_4_paid_payment"));
+                    }
+                }catch (Exception e){
+                    logger.error(e.getMessage());
+                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("payment.management.msg.not_found_payment", new Object[]{command.getPojo().getPaymentId()}));
+                }
             }
         }
     }
@@ -62,9 +77,6 @@ public class PaymentValidator extends ApplicationObjectSupport implements Valida
         }else{
             try{
                 PaymentDTO paymentDTO = this.paymentService.findById(command.getPojo().getPaymentId());
-                if (paymentDTO.getStatus().equals(Constants.PAYMENT_STATUS_PAID)){
-                    command.setErrorMessage(this.getMessageSourceAccessor().getMessage("payment.management.msg.can_not_delete_finish_payment"));
-                }
             }catch (ObjectNotFoundException one){
                 logger.error(one.getMessage());
                 command.setErrorMessage(this.getMessageSourceAccessor().getMessage("payment.management.msg.not_found_payment", new Object[]{command.getPojo().getPaymentId()}));
@@ -73,7 +85,8 @@ public class PaymentValidator extends ApplicationObjectSupport implements Valida
     }
 
     private void checkRequiredFields(PaymentCommand command, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.khdn.KHDNId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.khdn.khdnId")}, "non-empty value required.");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.order.orderId", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.order.orderId")}, "non-empty value required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.amount", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.amount")}, "non-empty value required.");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pojo.paymentDate", "errors.required", new Object[]{this.getMessageSourceAccessor().getMessage("pojo.paymentDate")}, "non-empty value required.");
     }
 }

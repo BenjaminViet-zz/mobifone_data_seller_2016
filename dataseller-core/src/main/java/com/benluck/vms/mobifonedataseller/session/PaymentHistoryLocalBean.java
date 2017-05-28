@@ -2,6 +2,8 @@ package com.benluck.vms.mobifonedataseller.session;
 
 import com.benluck.vms.mobifonedataseller.domain.PaymentHistoryEntity;
 
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: vietquocpham
@@ -11,4 +13,8 @@ import com.benluck.vms.mobifonedataseller.domain.PaymentHistoryEntity;
  */
 public interface PaymentHistoryLocalBean extends GenericSessionBean<PaymentHistoryEntity, Long>{
     void deleteByPaymentId(Long paymentId);
+
+    Object[] searchByCustomProperties(Map<String, Object> properties, String sortExpression, String sortDirection, Integer firstItem, Integer reportMaxPageItems);
+
+    Integer countHistoryRecordLines(Long paymentHistoryId);
 }

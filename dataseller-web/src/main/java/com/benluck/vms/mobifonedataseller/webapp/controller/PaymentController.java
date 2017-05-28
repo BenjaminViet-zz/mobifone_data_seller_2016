@@ -81,15 +81,17 @@ public class PaymentController extends ApplicationObjectSupport{
                     try{
                         paymentService.deleteItem(command.getPojo().getPaymentId());
 
-                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "info");
-                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_successfully", this.getMessageSourceAccessor().getMessage("payment.management.label.payment")));
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                     }catch (Exception e){
                         redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
-                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_exception", this.getMessageSourceAccessor().getMessage("payment.management.label.payment")));
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.delete_item_exception", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                     }
+                    return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/payment/list.html").toString());
                 }else if (StringUtils.isNotBlank(command.getErrorMessage())){
-                    mav.addObject(Constants.ALERT_TYPE, "danger");
-                    mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                    redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+                    redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                    return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/payment/list.html").toString());
                 }
             }
         }
@@ -101,7 +103,9 @@ public class PaymentController extends ApplicationObjectSupport{
 
     private void executeSearch(ModelAndView mav, HttpServletRequest request, PaymentCommand command){
         RequestUtil.initSearchBean(request, command);
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = buildProperties(command);
+        command.setSortExpression("createdDate");
+        command.setSortDirection(Constants.SORT_DESC);
 
         Object[] resultObject = paymentService.searchByProperties(properties, command.getSortExpression(), command.getSortDirection(), command.getFirstItem(), command.getMaxPageItems());
         command.setTotalItems(Integer.valueOf(resultObject[0].toString()));
@@ -113,8 +117,8 @@ public class PaymentController extends ApplicationObjectSupport{
         PaymentDTO pojo = command.getPojo();
         Map<String, Object> properties = new HashMap<String, Object>();
 
-        if (pojo.getKhdn() != null && pojo.getKhdn().getKHDNId() != null){
-            properties.put("khdn.KHDNId", pojo.getKhdn().getKHDNId());
+        if (pojo.getOrder() != null && pojo.getOrder().getKhdn() != null && pojo.getOrder().getKhdn().getKHDNId() != null){
+            properties.put("order.khdn.KHDNId", pojo.getOrder().getKhdn().getKHDNId());
         }
 
         if (pojo.getStatus() != null && pojo.getStatus().intValue() != -1){
@@ -126,11 +130,6 @@ public class PaymentController extends ApplicationObjectSupport{
 
     private void referenceData(ModelAndView mav, PaymentCommand command){
         mav.addObject("KHDNList", this.khdnService.findAll());
-        if (command.getPojo().getKhdn() != null && command.getPojo().getKhdn().getKHDNId() != null){
-            mav.addObject("orderList", this.orderService.findListByKHDNIdInWaitingStatus(command.getPojo().getKhdn().getKHDNId()));
-        }else{
-            mav.addObject("orderList", this.orderService.findAllInWaitingStatus());
-        }
     }
 
     private void convertDate2DateSQL(PaymentCommand command){
@@ -154,6 +153,11 @@ public class PaymentController extends ApplicationObjectSupport{
         String crudaction = command.getCrudaction();
         PaymentDTO pojo = command.getPojo();
 
+        if (pojo.getPaymentId() != null && !SecurityUtils.userHasAuthority(Constants.PAYMENT_STATUS_MANAGER)){
+            logger.warn("User: " + SecurityUtils.getPrincipal().getDisplayName() + ", userId: " + SecurityUtils.getLoginUserId() + " is trying to access non-authorized page: " + "/payment/edit.html page. ACCESS DENIED FOR BIDDEN!");
+            throw new ForBiddenException();
+        }
+
         try{
             if (StringUtils.isNotBlank(crudaction)){
                 if (crudaction.equals("insert-update")){
@@ -167,11 +171,11 @@ public class PaymentController extends ApplicationObjectSupport{
                         if (pojo.getPaymentId() != null){
                             this.paymentService.updateItem(pojo);
 
-                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "info");
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.update_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                         }else{
                             this.paymentService.addItem(pojo);
-                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "info");
+                            redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "success");
                             redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, this.getMessageSourceAccessor().getMessage("database.add_item_successfully", new Object[]{this.getMessageSourceAccessor().getMessage("payment.management.label.payment")}));
                         }
 
@@ -181,10 +185,17 @@ public class PaymentController extends ApplicationObjectSupport{
                         mav.addObject(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
                     }
                 }
-            }
-
-            if (command.getPojo().getPaymentId() != null){
-                command.setPojo(this.paymentService.findById(command.getPojo().getPaymentId()));
+            }else{
+                if (command.getPojo().getPaymentId() != null){
+                    validator.validate(command, bindingResult);
+                    if (!bindingResult.hasErrors() && StringUtils.isBlank(command.getErrorMessage())){
+                        command.setPojo(this.paymentService.findById(command.getPojo().getPaymentId()));
+                    }else if (StringUtils.isNotBlank(command.getErrorMessage())){
+                        redirectAttributes.addFlashAttribute(Constants.ALERT_TYPE, "danger");
+                        redirectAttributes.addFlashAttribute(Constants.MESSAGE_RESPONSE_MODEL_KEY, command.getErrorMessage());
+                        return new ModelAndView(new StringBuilder("redirect:").append(WebCommonUtil.getPrefixUrl()).append("/payment/list.html").toString());
+                    }
+                }
             }
         }catch (Exception e){
             logger.error(e.getMessage());

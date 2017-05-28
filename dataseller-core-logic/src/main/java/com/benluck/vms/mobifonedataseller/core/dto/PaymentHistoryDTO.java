@@ -21,6 +21,8 @@ public class PaymentHistoryDTO implements Serializable{
     private UserDTO createdBy;
     private Date paymentDate;
     private Timestamp createdDate;
+    private Timestamp lastModifiedDate;
+    private UserDTO modifiedBy;
 
     public Long getPaymentHistoryId() {
         return paymentHistoryId;
@@ -76,5 +78,21 @@ public class PaymentHistoryDTO implements Serializable{
 
     public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public Timestamp getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public UserDTO getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(UserDTO modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

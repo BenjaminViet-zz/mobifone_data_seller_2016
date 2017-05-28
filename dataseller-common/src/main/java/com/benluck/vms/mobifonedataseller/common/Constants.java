@@ -227,6 +227,7 @@ public class Constants {
     public static final String ORDER_STATUS_MANAGER = "ORDER_STATUS_MANAGER";
     public static final String GENERATE_CARD_CODE_MANAGER = "GENERATE_CARD_CODE_MANAGER";
     public static final String PAYMENT_MANAGER = "PAYMENT_MANAGER";
+    public static final String PAYMENT_STATUS_MANAGER = "PAYMENT_STATUS_MANAGER";
     public static final String EXPENSE_MANAGER = "EXPENSE_MANAGER";
     public static final String GENERAL_EXPENSE_REPORT_MANAGER = "GENERAL_EXPENSE_REPORT_MANAGER";
     public static final String DETAILED_EXPENSE_REPORT_MANAGER = "DETAILED_EXPENSE_REPORT_MANAGER";

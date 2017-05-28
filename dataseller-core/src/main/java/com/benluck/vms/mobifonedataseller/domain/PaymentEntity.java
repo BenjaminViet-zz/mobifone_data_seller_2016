@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 public class PaymentEntity {
     private Long paymentId;
-    private KHDNEntity khdn;
     private OrderEntity order;
     private Integer status;
     private Timestamp createdDate;
@@ -35,16 +34,6 @@ public class PaymentEntity {
 
     public void setPaymentId(Long paymentId) {
         this.paymentId = paymentId;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "KHDNID", referencedColumnName = "KHDNID")
-    public KHDNEntity getKhdn() {
-        return khdn;
-    }
-
-    public void setKhdn(KHDNEntity khdn) {
-        this.khdn = khdn;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

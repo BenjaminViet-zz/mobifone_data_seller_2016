@@ -12,7 +12,6 @@ import com.benluck.vms.mobifonedataseller.session.OrderHistoryLocalBean;
 import com.benluck.vms.mobifonedataseller.session.OrderLocalBean;
 import com.benluck.vms.mobifonedataseller.session.PackageDataLocalBean;
 import com.benluck.vms.mobifonedataseller.utils.MobiFoneSecurityBase64Util;
-import org.apache.commons.lang.StringUtils;
 
 import javax.ejb.*;
 import java.sql.Timestamp;
@@ -349,5 +348,20 @@ public class OrderManagementSessionBean implements OrderManagementLocalBean{
     @Override
     public List<OrderDTO> findAllInWaitingStatus() {
         return OrderBeanUtil.entityList2DTOList(this.orderService.findAllInWaitingStatus());
+    }
+
+    @Override
+    public List<OrderDTO> findAll() {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.findAll());
+    }
+
+    @Override
+    public List<OrderDTO> findAllHasCreatedPayment() {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.findAllHasCreatedPayment());
+    }
+
+    @Override
+    public List<OrderDTO> findListByKHDNIdHasPayment(Long khdnId) {
+        return OrderBeanUtil.entityList2DTOList(this.orderService.findListByKHDNIdHasPayment(khdnId));
     }
 }

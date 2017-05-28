@@ -54,10 +54,10 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="KHDN"><fmt:message key="payment.management.label.khdn" />
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <form:select id="KHDN" path="pojo.khdn.KHDNId" cssClass="form-control">
+                            <form:select id="KHDN" path="pojo.order.khdn.KHDNId" cssClass="form-control">
                                 <option value=""><fmt:message key="label.all" /></option>
                                 <c:forEach items="${KHDNList}" var="KHDN">
-                                    <option <c:if test="${item.pojo.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
+                                    <option <c:if test="${item.pojo.order.khdn.KHDNId eq KHDN.KHDNId}">selected="true"</c:if> value="${KHDN.KHDNId}">${KHDN.name}</option>
                                 </c:forEach>
                             </form:select>
                         </div>
@@ -96,7 +96,7 @@
                                 <div style="width: 50px;">${tableList_rowNum + (page * Constants.MAXPAGEITEMS)}</div>
                             </display:column>
                             <display:column headerClass="table_header text-center" titleKey="payment.management.label.khdn">
-                                <div style="width: 200px;">${tableList.khdn.name}</div>
+                                <div style="width: 200px;">${tableList.order.khdn.name}</div>
                             </display:column>
                             <display:column headerClass="table_header text-center" titleKey="payment.management.label.order">
                                 <div style="width: 100px;">${tableList.order.orderId}</div>
@@ -132,16 +132,18 @@
                                     </c:choose>
                                 </div>
                             </display:column>
-                            <display:column headerClass="table_header text-center" titleKey="payment.management.label.created_by" class="text-center">
+                            <display:column headerClass="table_header text-center" titleKey="payment.management.label.created_by">
                                 <div style="width: 200px;">${tableList.createdBy.displayName}</div>
                             </display:column>
                             <display:column headerClass="table_header  text-center" class="text-center" titleKey="label.action">
                                 <div style="width: 100px;">
-                                    <%--<a href="${historyUrl}?pojo.paymentId=${tableList.paymentId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="payment.management.label.history_review" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>--%>
-                                    <c:if test="${tableList.status ne Constants.PAYMENT_STATUS_PAID}">
-                                        <a href="${editUrl}?pojo.paymentId=${tableList.paymentId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.edit" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="${historyUrl}?pojo.payment.paymentId=${tableList.paymentId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="payment.management.label.history_review" />"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
+                                    <security:authorize access="hasAuthority('PAYMENT_STATUS_MANAGER')">
+                                        <c:if test="${tableList.status ne Constants.PAYMENT_STATUS_PAID}">
+                                            <a href="${editUrl}?pojo.paymentId=${tableList.paymentId}" class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="payment.management.label.update_payment" />"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                        </c:if>
                                         <a class="tip-top action-group" data-toggle="tooltip" title="<fmt:message key="label.delete" />" onclick="javascript: deletePayment(${tableList.paymentId});"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                    </c:if>
+                                    </security:authorize>
                                 </div>
                             </display:column>
 
@@ -238,11 +240,13 @@
         });
     }
 
-    function deletePayment(paymentId){
-        bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="label.confirm_operation_content" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
-            if(r){
-                document.location.href = '${formUrl}?pojo.paymentId=' + paymentId + '&crudaction=<%=Constants.ACTION_DELETE%>';
-            }
-        });
-    }
+    <security:authorize access="hasAuthority('PAYMENT_STATUS_MANAGER')">
+        function deletePayment(paymentId){
+            bootbox.confirm('<fmt:message key="label.confirm_title" />', '<fmt:message key="payment.management.msg.popup_delete_payment" />', '<fmt:message key="label.huy" />', '<fmt:message key="label.dong_y" />', function(r){
+                if(r){
+                    document.location.href = '${formUrl}?pojo.paymentId=' + paymentId + '&crudaction=<%=Constants.ACTION_DELETE%>';
+                }
+            });
+        }
+    </security:authorize>
 </script>

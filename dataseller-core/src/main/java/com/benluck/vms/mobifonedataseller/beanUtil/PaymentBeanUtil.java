@@ -20,12 +20,20 @@ public class PaymentBeanUtil {
         if (entity != null){
             PaymentDTO dto = new PaymentDTO();
             dto.setPaymentId(entity.getPaymentId());
-            dto.setKhdn(KHDNBeanUtil.entity2DTO(entity.getKhdn()));
             dto.setOrder(OrderBeanUtil.entity2DTO(entity.getOrder()));
             dto.setCreatedBy(UserBeanUtil.entity2DTO(entity.getCreatedBy()));
             dto.setCreatedDate(entity.getCreatedDate());
             dto.setStatus(entity.getStatus());
 
+            updateOrderTotalAndCalculateRemainingAmount(entity, dto);
+
+            return dto;
+        }
+        return null;
+    }
+
+    public static void updateOrderTotalAndCalculateRemainingAmount(PaymentEntity entity, PaymentDTO dto){
+        if (entity != null){
             dto.setOrderTotal(dto.getOrder().getQuantity().intValue() * dto.getOrder().getUnitPrice().doubleValue());
 
             PaymentHistoryEntity lastPaymentHistory = null;
@@ -50,10 +58,7 @@ public class PaymentBeanUtil {
             }else{
                 dto.setRemainingAmount(dto.getOrderTotal().doubleValue());
             }
-
-            return dto;
         }
-        return null;
     }
 
     public static List<PaymentDTO> entityList2DTOList(List<PaymentEntity> entityList){

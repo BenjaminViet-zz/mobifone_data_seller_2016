@@ -57,8 +57,6 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
     @Override
     public void addItem(PaymentDTO pojo) throws DuplicateKeyException {
         KHDNEntity khdnEntity = new KHDNEntity();
-        khdnEntity.setKHDNId(pojo.getKhdn().getKHDNId());
-
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(pojo.getOrder().getOrderId());
 
@@ -66,7 +64,6 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
         createdBy.setUserId(pojo.getCreatedBy().getUserId());
 
         PaymentEntity entity = new PaymentEntity();
-        entity.setKhdn(khdnEntity);
         entity.setOrder(orderEntity);
         entity.setCreatedBy(createdBy);
         entity.setStatus(Constants.PAYMENT_STATUS_CREATED);
@@ -92,7 +89,7 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
         entity.setAmount(pojo.getAmount());
         entity.setCreatedBy(createdBy);
 
-        if (pojo.getAmount() != null && pojo.getAmount().compareTo(0D) > 0){
+        if (pojo.getAmount() != null || pojo.getAmount().compareTo(0D) > 0){
             entity.setStatus(Constants.PAYMENT_HIS_UPDATE_PAYMENT);
         }else{
             entity.setStatus(Constants.PAYMENT_HIS_UPDATE_INFO);
@@ -125,13 +122,11 @@ public class PaymentManagementSessionBean implements PaymentManagementLocalBean{
     public void updateItem(PaymentDTO pojo) throws ObjectNotFoundException, DuplicateKeyException {
         PaymentEntity paymentEntity = this.paymentService.findById(pojo.getPaymentId());
 
-        if ((pojo.getAmount() != null && pojo.getAmount().compareTo(0D) > 0) || (pojo.getPaymentDate() != null)){
-            createHistory(paymentEntity, pojo);
+        createHistory(paymentEntity, pojo);
 
-            if (checkPaidFull(paymentEntity)){
-                paymentEntity.setStatus(Constants.PAYMENT_STATUS_PAID);
-                this.paymentService.update(paymentEntity);
-            }
+        if (checkPaidFull(paymentEntity)){
+            paymentEntity.setStatus(Constants.PAYMENT_STATUS_PAID);
+            this.paymentService.update(paymentEntity);
         }
     }
 }

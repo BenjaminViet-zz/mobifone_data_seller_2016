@@ -1,6 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<page:applyDecorator name="default">
+<page:applyDecorator name="admin">
 
 <head>
     <title><fmt:message key="403.title"/></title>

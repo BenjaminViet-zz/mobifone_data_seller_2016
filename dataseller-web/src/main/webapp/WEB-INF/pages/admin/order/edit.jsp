@@ -210,33 +210,6 @@
         </c:if>
     }
 
-    function updateTotalPaidPackageRemainingValue(){
-        var $khdnSelectMenu =  $khdnMenu;
-        var selectedKHDNId = $khdnSelectMenu.val();
-        if(selectedKHDNId == -1){
-            return;
-        }
-
-        var isdn = $khdnSelectMenu.find('option:selected').data('isdn');
-        var orderId = null;
-
-        <c:if test="${not empty item.pojo.orderId}">
-            orderId = ${item.pojo.orderId};
-        </c:if>
-
-        var params = {isdn: isdn, orderId: orderId}
-
-        $.ajax({
-            url: '<c:url value="/ajax/calculateTotalPaidPackageValue.html" />',
-            type: 'get',
-            data: params,
-            success: function(r){
-                totalRemainingPaidPackageValue = r.value;
-//                checkOrderCost();
-            }
-        });
-    }
-
     function storeDOMData(){
         $khdnMenu.find("option:not(:first-child)").each(function(index, el){
             var $optEl = $(el);

@@ -24,6 +24,8 @@ public class PaymentHistoryEntity {
     private UserEntity createdBy;
     private Date paymentDate;
     private Timestamp createdDate;
+    private Timestamp lastModifiedDate;
+    private UserEntity modifiedBy;
 
     @Column(name = "PAYMENTHISTORYID")
     @Id
@@ -97,6 +99,26 @@ public class PaymentHistoryEntity {
         this.createdDate = createdDate;
     }
 
+    @Column(name = "LASTMODIFIEDDATE")
+    @Basic
+    public Timestamp getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MODIFIEDBY", referencedColumnName = "USERID")
+    public UserEntity getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(UserEntity modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
     @Override
     public int hashCode() {
         int result = paymentHistoryId != null ? paymentHistoryId.hashCode() : 0;
@@ -104,6 +126,7 @@ public class PaymentHistoryEntity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (paymentDate != null ? paymentDate.hashCode() : 0);
         result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
+        result = 31 * result + (lastModifiedDate != null ? lastModifiedDate.hashCode() : 0);
         return result;
     }
 
@@ -119,6 +142,7 @@ public class PaymentHistoryEntity {
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (paymentDate != null ? !paymentDate.equals(that.paymentDate) : that.paymentDate != null) return false;
         if (createdDate != null ? !createdDate.equals(that.createdDate) : that.createdDate != null) return false;
+        if (lastModifiedDate != null ? !lastModifiedDate.equals(that.lastModifiedDate) : that.lastModifiedDate != null) return false;
 
         return true;
     }

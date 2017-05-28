@@ -403,4 +403,23 @@ public class OrderController extends ApplicationObjectSupport{
 
         return mapRes;
     }
+
+    @RequestMapping(value = "/ajax/order/getListByKHDNidHasPayment.html")
+    public @ResponseBody Map getListOrderByKHDNidAndPaid(@RequestParam(value = "khdnId", required = false) Long khdnId){
+        Map<String, Object> mapRes = new HashMap<String, Object>();
+
+        try{
+            if (khdnId != null){
+                mapRes.put("orderList", this.orderService.findListByKHDNIdHasPayment(khdnId));
+                mapRes.put("res", true);
+            }else{
+                mapRes.put("orderList", this.orderService.findAllHasCreatedPayment());
+                mapRes.put("res", true);
+            }
+        }catch (Exception e){
+            mapRes.put("res", false);
+        }
+
+        return mapRes;
+    }
 }
